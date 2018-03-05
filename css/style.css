@@ -1,0 +1,59 @@
+/* 各個瀏覽器中,元素的總寬度和高度中包含填充和邊框： */
+
+* {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* header網頁標題 */
+
+#header {
+    height: 50vh;
+    background-image: url("../jpg/dustin-lee-19667.jpg");
+    background-size: cover;
+    padding: 150px 0;
+    position: relative;
+    color: white;
+}
+
+.header-cover {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+}
+
+.header-content {
+    position: relative;
+    z-index: 3;
+}
+
+/* section網頁系統部分 */
+
+.system {
+    /* 對內的留白 padding: 上下 左右; */
+    padding-top: 15px;
+    margin-bottom: 30px;
+}
+
+.footer-list {
+    padding-left: 15px;
+}
+
+.choice_table {
+    background-color: #4792f5;
+    background-image: url("../jpg/28-512.jpg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    padding: 30px;
+    background-size: 100%;
+}
