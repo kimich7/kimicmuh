@@ -28,6 +28,7 @@
     <script src="./node_modules/wow.js/dist/wow.min.js"></script>
     <!-- 連結自己的JS -->
     <script src="./js/main.js"></script>
+    
 	<title>選擇表單</title>
 </head>
 
@@ -84,7 +85,7 @@
 			</p>
 			<!-- 點檢選擇系統 -->
 			<p>點檢選擇系統：
-				<select name="system">
+				<select name="system" id="system">
 					<option value= "">--請選擇系統--</option>
                     <?PHP 
 						foreach ($query_system as $systeminfo){
@@ -97,7 +98,7 @@
 			<p>選擇點檢設備：
 				<select name="equipment" id="equipment" >
 	                <option value= "">--請選擇設備--</option>
-                </select><p> 
+                </select><p>                 
 	            <script type="text/javascript">
 	                $('select[name=system]').change(function(){ //
                     var system_eq = $(this).val();					
@@ -112,13 +113,13 @@
                         success:function(data){
                             $('select[name=equipment]').html('<option value="">--請選擇設備--</option>');//連動的選單
                             $('select[name=equipment]').append(data);                    
-                    } , 
-                    error:function(xhr){										
-                        alert(xhr);
-                        alert("錯誤");
-                    }
+                        } , 
+                        error:function(xhr){										
+                            alert(xhr);
+                            alert("錯誤");
+                        }
                     });												
-                });        
+                }).change();        
                 </script>
 			</p>
 			<!-- 選擇班別 -->
