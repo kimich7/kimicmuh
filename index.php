@@ -28,7 +28,7 @@
     <script src="./node_modules/wow.js/dist/wow.min.js"></script>
     <!-- 連結自己的JS -->
     <script src="./js/main.js"></script>
-    <title>公務系統首頁</title>
+    <title>中國附醫工務系統首頁</title>
 </head>
 
 <body>
@@ -37,10 +37,11 @@
         <a class="navbar-brand" href="./index.php">
             <img src="./jpg/logo.png" alt="">
         </a>
+        <button class="navbar-toggler hidden-lg-up" type="button" data-toggle="collapse" data-target="#collapsibleNavId" aria-controls="collapsibleNavId"
+            aria-expanded="false" aria-label="Toggle navigation"></button>
         <div class="collapse navbar-collapse" id="collapsibleNavId">
-            <div class="navbar-nav mr-auto mt-lg-0"></div>
-            <!-- TODO將搜尋改為登入 -->
-            <form class="form-inline my-2 my-lg-0">
+            <!-- 將搜尋改為登入 -->
+            <form class="form-inline my-2 ml-auto my-lg-0">
               <span>使用者:
                 <input class="form-control mr-sm-2" type="text" placeholder="UserName">
               </span> 
@@ -103,7 +104,7 @@
                             <a class="text-dark" href="./mtupdata.php">工務設備保養紀錄文件修改表單</a>
                         </li>
                         <li class="list-group-item list-group-item-danger">
-                            <a class="text-dark" href="#">工務設備保養紀錄文件未簽核清單</a>
+                            <a class="text-dark" href="./mtlistcheck.php">工務設備保養紀錄文件未簽核清單</a>
                         </li>
                         <li class="list-group-item list-group-item-danger">
                             <a class="text-dark" href="#">工務設備保養異常紀錄</a>
