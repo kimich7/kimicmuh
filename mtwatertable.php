@@ -1,27 +1,45 @@
 <?php
     include("CMUHconndata.php");
-
     if (isset($_POST["action"])&&($_POST["action"]=="add")) {
-        $ref=$equipinfo["ref"];
-        $remark=$_POST["remark"];
-        $asn=$equipinfo["asn"];
-        for ($i=0; $i < $equipcheck_total_num; $i++) { 
-          switch ($sysNo) {
+        $sys_no=$_POST["sys"];//系統ID INT
+        
+        //Master輸入
+        $build_no=$_POST["build"];//棟別代號 narchar(5)
+        $date_ch=$_POST["date_c"];//檢點日期 date
+        
+        //Detail輸入
+        $shift_no=$_POST["shift"];//點檢班別ID INT
+        $remark=$_POST["remark"];//備註 NVARCHAR(50)
+        $equip_no=$_POST["equip"];//設備(鍋爐、給水、熱水......等等)ID INT
+        
+        $sql_equip_id = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE equipID='$equip_no'AND b_number='$build_no'";
+        $equip_ch=$pdo->query($sql_equip_id);
+        $equipcheck_num="SELECT COUNT(equipID) FROM FA.Equipment_Check WHERE equipID='$equip_no' AND b_number='$build_no'";
+        $equipcheck_total_num = Current($pdo->query($equipcheck_num)->fetch());        
+        for ($i=0; $i < $equipcheck_total_num; $i++) {
+            $equip_id=$equip_ch->fetch();
+            $ref_no = $equip_id['ref'];
+            $equip_check = $equip_id['equipCheckID'];
+            $ans_no=$_POST["$i"];            
+          switch ($sys_no) {
               case "1":
-                $sql_master_check="SELECT COUNT(b_number,rDate) FROM FA.Water_System_Record_Master WHERE b_number=$buildNo AND rDate=$check_date ";
+                $sql_master_check="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE b_number='$build_no' AND rDate='$date_ch' ";
                 $master_check_query=Current($pdo->query($sql_master_check)->fetch());;
-                if ($master_check_query ==0) {
-                    try{
-                        $sql_insert_master="INSERT INTO FA.Water_System_Record_Master(b_number,rDate) VALUES '$buildNo','$check_date' ";
-                        $insert_master =$pdo->exce($sql_insert_master);
-                    }catch(PDOException $q){
-                        print "Couldn't insert a row:".$q->getMessage();
-                    }                    
-                    $sql_select="SELECT scope_identity(FA.Water_System_Record_Master)";
+                if ($master_check_query ==0) {                    
+                    $sql_insert_master="INSERT INTO FA.Water_System_Record_Master(b_number,rDate) VALUES ('$build_no','$date_ch') ";
+                    $insert_master =$pdo->exec($sql_insert_master);                    
+                    $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE rDate='$date_ch'";
                     $select_master =$pdo->query($sql_select)->fetch();
-                    $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,equipID) VALUES ('$equipID','$ref','$shiftNo','檢查者','$remark','$select_master','','$equipNo')";
+                    $MasterID=$select_master['recordID'];                    
+                    $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,equipID) VALUES ($equip_check,'$ref_no',$shift_no,3,'$remark',$MasterID,'$ans_no',$equip_no)";
+                    $insert_detail =$pdo->exec($sql_insert_detail);
                 } else {
-                    $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail()";
+                    $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE rDate='$date_ch'";
+                    $select_master =$pdo->query($sql_select)->fetch();
+                    $MasterID=$select_master['recordID'];
+                    echo $MasterID."：Master表ID<br>";                    
+                    $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,equipID) VALUES ($equip_check,'$ref_no',$shift_no,3,'$remark',$MasterID,'$ans_no',$equip_no)";
+                    $insert_detail =$pdo->exec($sql_insert_detail);
                 }
                 break;
               case "2":
