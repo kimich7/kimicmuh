@@ -1,20 +1,26 @@
 <?php
     include("CMUHconndata.php");
     if (isset($_POST["action"])&&($_POST["action"]=="add")) {
-        $build_no=$_POST["build"];
-        $equip_no=$_POST["equip"];
-        $sys_no=$_POST["sys"];
-        $shift_no=$_POST["shift"];
-        $ref_no=$_POST["ref"];
-        $remark=$_POST["remark"];
-        $ans_no=$_POST["ans"];
-        $date_ch=$_POST["date_c"];
-        $equip_check=$_POST["equip_ch"];
-        var_dump($ans_no);
-        $equipcheck_num="SELECT COUNT(equipID) FROM FA.Equipment_Check WHERE equipID='$equip_no' AND b_number='$build_no'";
-        $equipcheck_total_num = Current($pdo->query($equipcheck_num)->fetch());
+        $sys_no=$_POST["sys"];//系統ID INT
         
-        for ($i=0; $i < $equipcheck_total_num; $i++) { 
+        //Master輸入
+        $build_no=$_POST["build"];//棟別代號 narchar(5)
+        $date_ch=$_POST["date_c"];//檢點日期 date
+        
+        //Detail輸入
+        $shift_no=$_POST["shift"];//點檢班別ID INT
+        $remark=$_POST["remark"];//備註 NVARCHAR(50)
+        $equip_no=$_POST["equip"];//設備(鍋爐、給水、熱水......等等)ID INT
+        
+        $sql_equip_id = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE equipID='$equip_no'AND b_number='$build_no'";
+        $equip_ch=$pdo->query($sql_equip_id);
+        $equipcheck_num="SELECT COUNT(equipID) FROM FA.Equipment_Check WHERE equipID='$equip_no' AND b_number='$build_no'";
+        $equipcheck_total_num = Current($pdo->query($equipcheck_num)->fetch());        
+        for ($i=0; $i < $equipcheck_total_num; $i++) {
+            $equip_id=$equip_ch->fetch();
+            $ref_no = $equip_id['ref'];
+            $equip_check = $equip_id['equipCheckID'];
+            $ans_no=$_POST["$i"];            
           switch ($sys_no) {
               case "1":
                 $sql_master_check="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE b_number='$build_no' AND rDate='$date_ch' ";
@@ -22,15 +28,18 @@
                 if ($master_check_query ==0) {                    
                     $sql_insert_master="INSERT INTO FA.Water_System_Record_Master(b_number,rDate) VALUES ('$build_no','$date_ch') ";
                     $insert_master =$pdo->exec($sql_insert_master);                    
-                    $sql_select="SELECT scope_identity()";
-                    $select_master =$pdo->query($sql_select)->fetch();                    
-                    $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,equipID) VALUES ($equip_check,'$ref_no',$shift_no,2,'$remark',$select_master,'$ans_no',$equip_no)";
-                    $insert_master =$pdo->exec($sql_insert_detail);
+                    $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE rDate='$date_ch'";
+                    $select_master =$pdo->query($sql_select)->fetch();
+                    $MasterID=$select_master['recordID'];                    
+                    $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,equipID) VALUES ($equip_check,'$ref_no',$shift_no,3,'$remark',$MasterID,'$ans_no',$equip_no)";
+                    $insert_detail =$pdo->exec($sql_insert_detail);
                 } else {
-                    $sql_select="SELECT scope_identity()";
-                    $select_master =$pdo->query($sql_select)->fetch();                    
-                    $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,equipID) VALUES ($equip_check,'$ref_no',$shift_no,2,'$remark',$select_master,'$ans_no',$equip_no)";
-                    $insert_master =$pdo->exec($sql_insert_detail);
+                    $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE rDate='$date_ch'";
+                    $select_master =$pdo->query($sql_select)->fetch();
+                    $MasterID=$select_master['recordID'];
+                    echo $MasterID."：Master表ID<br>";                    
+                    $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,equipID) VALUES ($equip_check,'$ref_no',$shift_no,3,'$remark',$MasterID,'$ans_no',$equip_no)";
+                    $insert_detail =$pdo->exec($sql_insert_detail);
                 }
                 break;
               case "2":
@@ -45,9 +54,8 @@
           }  
         }
         $pdo=null;
-       //header("Location: mtinsert.php");
+       header("Location: mtinsert.php");
     }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -95,8 +103,10 @@
         }
         $class=$shift_value['shiftName'];
     //檢查項目
-    $sql_equip_check = "SELECT equipCheckID,equipCheckName,ref  FROM FA.Equipment_Check WHERE equipID='$equipNo'AND b_number='$buildNo'";
-    $query_equip=$pdo->query($sql_equip_check)->fetchall();
+    $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE equipID='$equipNo'AND b_number='$buildNo'";
+    $query_equip=$pdo->query($sql_equip_check);//->fetchall();
+    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE equipID='$equipNo'AND b_number='$buildNo'";
+    $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
     
 ?>  
     <form action="" method="post" name="wa">
@@ -121,33 +131,28 @@
             <td align="center"><h4>結果</h4></td>
         </tr>
         <?php
-        $ref="";
-        $ans=[];
-        $equip_checkID=0;
-        foreach ($query_equip as $equipinfo) {
-            $equip_checkID=$equipinfo['equipCheckID'];
-        ?>
+        for ($i=0; $i < $equip_check_no; $i++) { 
+            $equipinfo=$query_equip->fetch(PDO::FETCH_ASSOC);
+            ?>
             <tr>
                 <td align='center'><?= $equipinfo['equipCheckName']?></td>
                 <td align='center'><?= $equipinfo["ref"]?></td>
                 <?php
+                
                 if ($equipinfo["ref"]=="V/X") { ?>
-                    <td align='center'><input type='checkbox' name="ans" value='true' >合格<input type='checkbox' name="ans" valee='false' >不合格</td>
+                    <td align='center'><input type='radio' name='<?= $i?>' value='true' >合格<input type='radio' name='<?= $i?>' valee='false' >不合格</td>
                 <?php                
                 } else { ?>
-                    <td align='center'><input type="text" name="ans" maxlength="20"></td>                
+                    <td align='center'><input type="text" name='<?= $i?>' maxlength="20"></td>                
                 <?php
                 }  
             echo"</tr>";
-            $ref=$equipinfo["ref"];
-            $ans=$_POST["ans"];
-        }          
-        ?>        
+            }
+        ?>          
         <tr>
             <td><h3>備註：</h3></td>
             <td colspan="2"><textarea name="remark" cols="70" rowa="50" >NULL</textarea></td>
         </tr>
-
         <tr>
             <td colspan="3" align="center">
                 <input type="hidden" name="action" value="add">
@@ -155,10 +160,7 @@
                 <input type="hidden" name="equip" value='<?= $equipNo ?>'>
                 <input type="hidden" name="sys" value='<?= $sysNo ?>'>
                 <input type="hidden" name="shift" value='<?= $shiftNo ?>'>
-                <input type="hidden" name="ref" value='<?= $ref ?>'>
-                <input type="hidden" name="ans" value='<?= $ans ?>'>
                 <input type="hidden" name="date_c" value='<?= $check_date ?>'>
-                <input type="hidden" name="equip_ch" value='<?= $equip_checkID ?>'>
                 <input type="submit" name="button" value="送出">
             </td>
         </tr>
@@ -166,19 +168,3 @@
     </form>
 </body>
 </html>
-
-<!-- php
-    foreach ($query_equip as $equipinfo) {
-            $equipID=$equipinfo['equipCheckID'];
-            echo"<tr>";
-                echo "<td align='center'>".$equipinfo['equipCheckName']."</td>";
-                echo "<td align='center'>".$equipinfo["ref"]."</td>";
-                if ($equipinfo["ref"]=="V/X") {
-                    echo "<td align='center'>"."<input type='checkbox' name='ans' value='true' >"."合格"."<input type='checkbox' name='ans' valee='false' >"."不合格"."</td>";                
-                } else {
-                    echo "<td align='center'>"."<input type=\".text.\" name=\".ans.\" maxlength=\".20.\">"."</td>";                
-                }  
-            echo"</tr>";
-            $ref=$equipinfo["ref"];
-        } 
-        ?>-->  
