@@ -28,7 +28,7 @@
     <script src="./node_modules/wow.js/dist/wow.min.js"></script>
     <!-- 連結自己的JS -->
     <script src="./js/main.js"></script>
-    <title>中國附醫工務系統首頁</title>
+    <title>設備保養表單未簽核清單</title>
 </head>
 
 <body>
@@ -41,7 +41,6 @@
             aria-expanded="false" aria-label="Toggle navigation"></button>
         <div class="collapse navbar-collapse" id="collapsibleNavId">
             <!-- 使用者登入 -->
-            <!-- form將輸入的值送到tlogin.php去,用POST的方式 -->
             <form action="tlogin.php" method="post" class="form-inline my-2 ml-auto my-lg-0">
                 <span>使用者帳號:
                     <input class="form-control mr-sm-2" type="text" placeholder="UserName" name="username">
@@ -63,81 +62,45 @@
     <!-- section網頁系統部分 -->
     <!-- .container自動於網站上幫你留白 -->
     <section class="container-fluid">
-        <div class="body row">
-            <!-- 工務設備運轉抄表文件及管理系統 -->
-            <div class="col-lg-4 system">
-                <h3 class="systitle  bg-success">工務設備運轉抄表文件及管理系統
-                    <span>
-                        <button type="button" data-toggle="collapse" data-target="#article1" class="btn btn-success">
-                            <i class="far fa-1x fa-caret-square-down"></i>
-                        </button>
-                    </span>
-                </h3>
-                <article class="my-3 collapse show" id="article1">
-                    <ul class="syslist list-group">
-                        <li class="list-group-item list-group-item-success">
-                            <a class="text-dark" href="#">工務設備運轉抄表文件新增表單</a>
-                        </li>
-                        <li class="list-group-item list-group-item-success">
-                            <a class="text-dark" href="#">工務設備運轉抄表文件修改表單</a>
-                        </li>
-                        <li class="list-group-item list-group-item-success">
-                            <a class="text-dark" href="#">工務設備運轉抄表文件未簽核清單</a>
-                        </li>
-                    </ul>
-                </article>
-            </div>
-            <!-- 工務設備保養紀錄文件及管理系統 -->
-            <div class="col-lg-4 system">
-                <h3 class="systitle  bg-danger">工務設備保養紀錄文件及管理系統
-                    <span>
-                        <button type="button" data-toggle="collapse" data-target="#article2" class="btn btn-danger">
-                            <i class="far fa-1x fa-caret-square-down"></i>
-                        </button>
-                    </span>
-                </h3>
-                <article class="my-3 collapse show" id="article2">
-                    <ul class="syslist list-group">
-                        <li class="list-group-item list-group-item-danger">
-                            <a class="text-dark" href="./mtinsert.php">工務設備保養紀錄文件新增表單</a>
-                        </li>
-                        <li class="list-group-item list-group-item-danger">
-                            <a class="text-dark" href="./mtupdata.php">工務設備保養紀錄文件修改表單</a>
-                        </li>
-                        <li class="list-group-item list-group-item-danger">
-                            <a class="text-dark" href="./mtlistcheck.php">工務設備保養紀錄文件未簽核清單</a>
-                        </li>
-                        <li class="list-group-item list-group-item-danger">
-                            <a class="text-dark" href="#">工務設備保養異常紀錄</a>
-                        </li>
-                    </ul>
-                </article>
-                <!-- 中央彙整系統 -->
-            </div>
-            <!-- 中央彙整系統 -->
-            <div class="col-lg-4 system">
-                <h3 class="systitle bg-primary">中央彙整系統
-                    <span>
-                        <button type="button" data-toggle="collapse" data-target="#article3" class="btn btn-primary">
-                            <i class="far fa-1x fa-caret-square-down"></i>
-                        </button>
-                    </span>
-                </h3>
-                <article class="my-3 collapse show" id="article3">
-                    <ul class="syslist list-group">
-                        <li class="list-group-item list-group-item-primary">
-                            <a class="text-dark" href="#">權限設定</a>
-                        </li>
-                        <li class="list-group-item list-group-item-primary">
-                            <a class="text-dark" href="#">帳號設定</a>
-                        </li>
-                        <li class="list-group-item list-group-item-primary">
-                            <a class="text-dark" href="#">密碼設定</a>
-                        </li>
-                    </ul>
-                </article>
-
-            </div>
+        <!-- 表單 -->
+        <h1 class="text-center">設備保養表單未簽核清單</h1>
+        <div class="list-group mx-5 my-5">
+            <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+            <a href="#" class="list-group-item list-group-item-action list-group-item-primary">This is a primary list group item</a>
+            <a href="#" class="list-group-item list-group-item-action list-group-item-secondary">This is a secondary list group item</a>
+            <a href="#" class="list-group-item list-group-item-action list-group-item-success">This is a success list group item</a>
+            <a href="#" class="list-group-item list-group-item-action list-group-item-danger">This is a danger list group item</a>
+            <a href="#" class="list-group-item list-group-item-action list-group-item-warning">This is a warning list group item</a>
+            <a href="#" class="list-group-item list-group-item-action list-group-item-info">This is a info list group item</a>
+            <a href="#" class="list-group-item list-group-item-action list-group-item-light">This is a light list group item</a>
+            <a href="#" class="list-group-item list-group-item-action list-group-item-dark">This is a dark list group item</a>
+        </div>
+        <!-- 換頁選單 -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">1</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">2</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">3</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </section>
 
     <!-- 網頁尾頁部分 -->
