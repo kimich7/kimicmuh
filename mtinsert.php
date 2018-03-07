@@ -45,14 +45,14 @@
         <button class="navbar-toggler hidden-lg-up" type="button" data-toggle="collapse" data-target="#collapsibleNavId" aria-controls="collapsibleNavId"
             aria-expanded="false" aria-label="Toggle navigation"></button>
         <div class="collapse navbar-collapse" id="collapsibleNavId">
-            <!-- 將搜尋改為登入 -->
-            <form class="form-inline my-2 ml-auto my-lg-0">
-              <span>使用者:
-                <input class="form-control mr-sm-2" type="text" placeholder="UserName">
-              </span> 
-              <span>密碼:
-                <input type="password" class="form-control mr-sm-2" id="inputPassword3" placeholder="Password">
-              </span> 
+            <!-- 使用者登入 -->
+            <form action="tlogin.php" method="post" class="form-inline my-2 ml-auto my-lg-0">
+                <span>使用者帳號:
+                    <input class="form-control mr-sm-2" type="text" placeholder="UserName" name="username">
+                </span>
+                <span>使用者密碼:
+                    <input type="password" class="form-control mr-sm-2" name="password" id="inputPassword3" placeholder="Password">
+                </span>
                 <button class="btn btn-outline-success  my-2 my-sm-0" type="submit">登入</button>
             </form>
         </div>
