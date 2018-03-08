@@ -44,9 +44,22 @@
     $system=$_POST['system'];
     $equipt=$_POST['equipment'];
     $shift=$_POST['class'];
+    
     switch ($system) {
         case '1':
-            $select_list="SELECT rDate FROM FA.Water_System_Record_Master WHERE rDate BETWEEN '$strDate' AND '$endDate'";
+            $num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE b_number='$build_no' AND rDate BETWEEN '$strDate' AND '$endDate'";
+            $num_query=Current($pdo->query($num)->fetch());                
+            for ($i=0; $i <$num_query ; $i++) { 
+                $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE b_number='$build_no' AND rDate BETWEEN '$strDate' AND '$endDate'";
+                $select_master =$pdo->query($sql_select)->fetch();            
+                $MasterID=$select_master['recordID'];
+                $Detail_num="SELECT COUNT(recordDetailID) FROM FA.Water_System_Record_Detail WHERE rDate BETWEEN '$strDate' AND '$endDate' AND recordID='$MasterID'";
+                $Detail_num_query=Current($pdo->query($Detail_num)->fetch());
+                for ($q=0; $q <$Detail_num_query ; $q++) { 
+                    $Detail="SELECT recordDetailID,rDate,equipID FROM FA.Water_System_Record_Detail WHERE rDate BETWEEN '$strDate' AND '$endDate' AND recordID='$MasterID'";
+                }
+            }
+            
             break;
         case '2':
             # code...

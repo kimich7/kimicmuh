@@ -28,17 +28,17 @@
                 if ($master_check_query ==0) {                    
                     $sql_insert_master="INSERT INTO FA.Water_System_Record_Master(b_number,rDate) VALUES ('$build_no','$date_ch') ";
                     $insert_master =$pdo->exec($sql_insert_master);                    
-                    $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE rDate='$date_ch'";
+                    $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE rDate='$date_ch' AND b_number='$build_no'";
                     $select_master =$pdo->query($sql_select)->fetch();
                     $MasterID=$select_master['recordID'];                    
-                    $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,equipID) VALUES ($equip_check,'$ref_no',$shift_no,3,'$remark',$MasterID,'$ans_no',$equip_no)";
+                    $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,equipID,rDate) VALUES ($equip_check,'$ref_no',$shift_no,3,'$remark',$MasterID,'$ans_no',$equip_no,'$date_ch')";
                     $insert_detail =$pdo->exec($sql_insert_detail);
                 } else {
-                    $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE rDate='$date_ch'";
+                    $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE rDate='$date_ch'AND b_number='$build_no'";
                     $select_master =$pdo->query($sql_select)->fetch();
                     $MasterID=$select_master['recordID'];
                     echo $MasterID."：Master表ID<br>";                    
-                    $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,equipID) VALUES ($equip_check,'$ref_no',$shift_no,3,'$remark',$MasterID,'$ans_no',$equip_no)";
+                    $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,equipID,rDate) VALUES ($equip_check,'$ref_no',$shift_no,3,'$remark',$MasterID,'$ans_no',$equip_no,'$date_ch')";
                     $insert_detail =$pdo->exec($sql_insert_detail);
                 }
                 break;
@@ -223,7 +223,7 @@
                     <input type="hidden" name="equip" value='<?= $equipNo ?>'>
                     <input type="hidden" name="sys" value='<?= $sysNo ?>'>
                     <input type="hidden" name="shift" value='<?= $shiftNo ?>'>
-                    <input type="hidden" name="date_c" value='<?= $check_date ?>'>
+                    <input type="hidden" name="date_c" value='<?= $check_date ?>'>                    
                     <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>
                 </form>
             </div>
