@@ -112,7 +112,6 @@
                         </li>
                     </ul>
                 </article>
-                <!-- 中央彙整系統 -->
             </div>
             <!-- 中央彙整系統 -->
             <div class="col-lg-4 system">

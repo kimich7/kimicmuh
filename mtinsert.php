@@ -141,9 +141,7 @@
                         </select>
                     </p>
                     <!-- 送出鍵 -->
-                    <p>
-                        <input name="送出" type="submit" value="送出">
-                    </p>
+                    <button class="my-3 px-3 py-1 btn-outline-danger text-white" type="submit">送出</button>
             </div>
         </div>
 
