@@ -64,9 +64,9 @@
         <div class="header-cover"></div>
     </header>
 
-    <!-- 將該網頁連結到mtwatertable.php -->
+    <!-- 將該網頁連結到mtlistupch.php -->
     <!-- form start -->
-    <form action="mtwatertable.php" method="post" name="mttable">
+    <form action="mtlistupch.php" method="post" name="mtlistupch">
         <div class="row">
             <div class="col-sm-12 col-md-10 col-lg-4 choice_table container my-5 border border-dark rounded text-white">
                 <!-- 副標題 -->
@@ -77,7 +77,7 @@
                 </P>
                 <!-- 選擇結束日期 -->
                 <P>選擇結束日期:
-                    <input type="date" name="datestr">
+                    <input type="date" name="dateend">
                 </P>
                 <!-- 選擇棟別 -->
                 <p>選擇棟別：
@@ -130,7 +130,7 @@
                                         alert("錯誤");
                                     }
                                 });
-                            });
+                            }).change();
                         </script>
                     </p>
                     <!-- 選擇班別 -->

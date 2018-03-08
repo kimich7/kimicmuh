@@ -1,3 +1,6 @@
+<?php
+    include("CMUHconndata.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,6 +35,32 @@
 </head>
 
 <body>
+<!--接收資料php-->
+    <?php
+    //接收資料
+    $strDate=$_POST['datestr'];
+    $endDate=$_POST['dateend'];
+    $building=$_POST['build'];
+    $system=$_POST['system'];
+    $equipt=$_POST['equipment'];
+    $shift=$_POST['class'];
+    switch ($system) {
+        case '1':
+            $select_list="SELECT rDate FROM FA.Water_System_Record_Master WHERE rDate BETWEEN '$strDate' AND '$endDate'";
+            break;
+        case '2':
+            # code...
+            break;
+        case '3':
+            # code...
+            break;
+        
+        default:
+            # code...
+            break;
+    }
+    $select_list_query=$pdo->query($select_list)->fetchAll();
+    ?>
     <!-- 導覽列 -->
     <nav class="navbar fixed-top navbar-expand-sm navbar-light bg-light">
         <a class="navbar-brand" href="./index.php">
@@ -62,19 +91,17 @@
     <!-- section網頁系統部分 -->
     <!-- .container自動於網站上幫你留白 -->
     <section class="container-fluid">
+    
         <!-- 表單 -->
         <h1 class="text-center">設備保養表單修改清單</h1>
         <div class="list-group mx-5 my-5">
-            <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
-            <a href="#" class="list-group-item list-group-item-action list-group-item-primary">This is a primary list group item</a>
-            <a href="#" class="list-group-item list-group-item-action list-group-item-secondary">This is a secondary list group item</a>
-            <a href="#" class="list-group-item list-group-item-action list-group-item-success">This is a success list group item</a>
-            <a href="#" class="list-group-item list-group-item-action list-group-item-danger">This is a danger list group item</a>
-            <a href="#" class="list-group-item list-group-item-action list-group-item-warning">This is a warning list group item</a>
-            <a href="#" class="list-group-item list-group-item-action list-group-item-info">This is a info list group item</a>
-            <a href="#" class="list-group-item list-group-item-action list-group-item-light">This is a light list group item</a>
-            <a href="#" class="list-group-item list-group-item-action list-group-item-dark">This is a dark list group item</a>
+        <?php
+        foreach ($select_list_query as $list_info) {
+            echo '<a href="#" class="list-group-item list-group-item-action">'.$list_info['rDate'].'</a>';
+        }  
+        ?>          
         </div>
+        
         <!-- 換頁選單 -->
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
@@ -102,7 +129,6 @@
             </ul>
         </nav>
     </section>
-
     <!-- 網頁尾頁部分 -->
     <!-- footer -->
     <footer id="footer" class="bg-secondary text-white pt-5">

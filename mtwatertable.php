@@ -1,16 +1,16 @@
 <?php
     include("CMUHconndata.php");
     if (isset($_POST["action"])&&($_POST["action"]=="add")) {
-        $sys_no=$_POST["sys"];//系統ID INT
+        $sys_no=$_POST["sys"];//系統ID 
         
         //Master輸入
-        $build_no=$_POST["build"];//棟別代號 narchar(5)
-        $date_ch=$_POST["date_c"];//檢點日期 date
+        $build_no=$_POST["build"];//棟別代號 
+        $date_ch=$_POST["date_c"];//檢點日期 
         
         //Detail輸入
-        $shift_no=$_POST["shift"];//點檢班別ID INT
-        $remark=$_POST["remark"];//備註 NVARCHAR(50)
-        $equip_no=$_POST["equip"];//設備(鍋爐、給水、熱水......等等)ID INT
+        $shift_no=$_POST["shift"];//點檢班別ID 
+        $remark=$_POST["remark"];//備註 
+        $equip_no=$_POST["equip"];//設備(鍋爐、給水、熱水......等等)ID 
         
         $sql_equip_id = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE equipID='$equip_no'AND b_number='$build_no'";
         $equip_ch=$pdo->query($sql_equip_id);
