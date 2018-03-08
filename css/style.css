@@ -57,3 +57,7 @@ body {
     padding: 30px;
     background-size: 100%;
 }
+
+.table_bg {
+    background-color: #edfcf8;
+}
