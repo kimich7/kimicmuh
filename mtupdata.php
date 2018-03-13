@@ -102,7 +102,7 @@
                     </select>
                 </p>
                 <!-- 選擇修改設備 -->
-                <p>選擇修改設備：
+                <!-- <p>選擇修改設備：
                     <select name="equipment" id="equipment">
                         <option value="">--請選擇設備--</option>
                     </select>
@@ -115,11 +115,9 @@
                                     method: 'post', //'post'
                                     cache: false,
                                     fileElementId: 'file',
-                                    data: {
-                                        "system_eq": system_eq
-                                    }, //{"傳送變數的名稱":傳送變數的值}
+                                    data: {"system_eq": system_eq}, //{"傳送變數的名稱":傳送變數的值}
                                     //dataType:'text',								
-                                    beforeSend: function () {}, //function 執行前的程式
+                                    //beforeSend: function () {}, //function 執行前的程式
                                     success: function (data) {
                                         $('select[name=equipment]').html(
                                             '<option value="">--請選擇設備--</option>'); //連動的選單
@@ -132,7 +130,7 @@
                                 });
                             }).change();
                         </script>
-                    </p>
+                    </p> -->
                     <!-- 選擇班別 -->
                     <p>選擇班別：
                         <select name="class">

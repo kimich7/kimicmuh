@@ -116,7 +116,7 @@
                                         "system_eq": system_eq
                                     }, //{"傳送變數的名稱":傳送變數的值}
                                     //dataType:'text',								
-                                    beforeSend: function () {}, //function 執行前的程式
+                                    //beforeSend: function () {}, //function 執行前的程式
                                     success: function (data) {
                                         $('select[name=equipment]').html(
                                             '<option value="">--請選擇設備--</option>'); //連動的選單
