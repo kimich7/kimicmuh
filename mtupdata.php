@@ -28,6 +28,7 @@
     <script src="./node_modules/wow.js/dist/wow.min.js"></script>
     <!-- 連結自己的JS -->
     <script src="./js/main.js"></script>
+    <script src="./js/jquery-3.3.1.min.js"></script>
     <title>設備保養表單修改選擇</title>
 </head>
 

@@ -197,7 +197,7 @@
                             ?>
                                     <td>
                                         <input type='radio' name='<?= $i?>' value='true'>合格
-                                        <input type='radio' name='<?= $i?>' valee='false'>不合格
+                                        <input type='radio' name='<?= $i?>' value='false'>不合格
                                     </td>
                                     <?php                
                             } else { 

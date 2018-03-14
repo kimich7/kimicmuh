@@ -27,6 +27,7 @@
     <!-- 連結wow.js的網址使得網站可以使用WOW的滾動動畫(必須連接animate.css) -->
     <script src="./node_modules/wow.js/dist/wow.min.js"></script>
     <!-- 連結自己的JS -->
+    <script src="./js/jquery-3.3.1.min.js"></script>
     <script src="./js/main.js"></script>
 
     <title>設備保養表單選擇</title>
