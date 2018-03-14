@@ -87,7 +87,7 @@
         <script src="./node_modules/wow.js/dist/wow.min.js"></script>
         <!-- 連結自己的JS -->
         <script src="./js/main.js"></script>
-        <title>中國附醫工務系統首頁</title>
+        <title>設備保養表單</title>
     </head>
 
     <body class="table_bg">

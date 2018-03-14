@@ -33,33 +33,9 @@
 
 <body>
     <!-- 導覽列 -->
-    <nav class="navbar fixed-top navbar-expand-sm navbar-light bg-light">
-        <a class="navbar-brand" href="./index.php">
-            <img src="./jpg/logo.png" alt="">
-        </a>
-        <button class="navbar-toggler hidden-lg-up" type="button" data-toggle="collapse" data-target="#collapsibleNavId" aria-controls="collapsibleNavId"
-            aria-expanded="false" aria-label="Toggle navigation"></button>
-        <div class="collapse navbar-collapse" id="collapsibleNavId">
-            <!-- 使用者登入 -->
-            <!-- form將輸入的值送到tlogin.php去,用POST的方式 -->
-            <form action="tlogin.php" method="post" class="form-inline my-2 ml-auto my-lg-0">
-                <span>使用者帳號:
-                    <input class="form-control mr-sm-2" type="text" placeholder="UserName" name="username">
-                </span>
-                <span>使用者密碼:
-                    <input type="password" class="form-control mr-sm-2" name="password" id="inputPassword3" placeholder="Password">
-                </span>
-                <button class="btn btn-outline-success  my-2 my-sm-0" type="submit">登入</button>
-            </form>
-        </div>
-    </nav>
+    <div id="navbar"></div>
     <!-- header網頁標題 -->
-    <header class="jumbotron text-center" id="header">
-        <div class="container header-content">
-            <h1 class="display-4 wow zoomIn data-wow-duration=" 5s " ">中國附醫工務系統</h1>
-        </div>
-        <div class="header-cover"></div>
-    </header>
+    <div id="header"></div>
     <!-- section網頁系統部分 -->
     <!-- .container自動於網站上幫你留白 -->
     <section class="container-fluid">
@@ -141,35 +117,7 @@
 
     <!-- 網頁尾頁部分 -->
     <!-- footer -->
-    <footer id="footer" class="bg-secondary text-white pt-5">
-        <!-- 設定以下四塊FooterList在電腦螢幕開啟時排成一個橫排 -->
-        <div class="row">
-            <div class="footer-list">
-                <h4 class="container-fluid">聯絡我們</h4>
-
-                <ul>
-                    <li>
-                        <a class="text-dark" href="mailto:service@brand.com">聯絡信箱: service@brand.com</a>
-                    </li>
-                    <li>
-                        <a class="text-dark" href="#">About Us</a>
-                    </li>
-                    <li>
-                        <a class="text-dark" href="#">Blog</a>
-                    </li>
-                    <li>
-                        <a class="text-dark" href="#">Press</a>
-                    </li>
-                    <li>
-                        <a class="text-dark" href="#">Bonus</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-end bg-dark mt-5 py-2">
-            <p class="text-center">&copy; Copy right 2018</p>
-        </div>
-    </footer>
+    <div id="footer"></div>
 </body>
 
 </html>
