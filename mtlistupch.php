@@ -6,8 +6,8 @@
     $endDate=$_POST['dateend'];
     $build_no=$_POST['build'];
     $system=$_POST['system'];
-    $equipt=$_POST['equipment'];
-    $shift=$_POST['class'];   
+    // $equipt=$_POST['equipment'];
+    // $shift=$_POST['class'];   
     
 ?>
 <!DOCTYPE html>
