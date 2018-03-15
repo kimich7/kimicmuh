@@ -1,3 +1,7 @@
+<?php
+    include("CMUHconndata.php");
+    include("fun.php");    
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -42,15 +46,15 @@
         <!-- 表單 -->
         <h1 class="text-center">設備保養表單未簽核清單</h1>
         <div class="list-group mx-5 my-5">
-            <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
-            <a href="#" class="list-group-item list-group-item-action list-group-item-primary">This is a primary list group item</a>
-            <a href="#" class="list-group-item list-group-item-action list-group-item-secondary">This is a secondary list group item</a>
-            <a href="#" class="list-group-item list-group-item-action list-group-item-success">This is a success list group item</a>
-            <a href="#" class="list-group-item list-group-item-action list-group-item-danger">This is a danger list group item</a>
-            <a href="#" class="list-group-item list-group-item-action list-group-item-warning">This is a warning list group item</a>
-            <a href="#" class="list-group-item list-group-item-action list-group-item-info">This is a info list group item</a>
-            <a href="#" class="list-group-item list-group-item-action list-group-item-light">This is a light list group item</a>
-            <a href="#" class="list-group-item list-group-item-action list-group-item-dark">This is a dark list group item</a>
+        <?php
+            $sys_water='FA.Water_System_Record_Master';
+            $search_water=sys_search($sys_water);
+            foreach ($search_water as $waterinfo) {
+                $buildName=sql_database('B_name','FA.Building','b_number',$waterinfo["b_number"]);
+                $rDate=$waterinfo["rDate"];
+                echo '<a href="#" class="list-group-item list-group-item-action">'.$buildName."-"."水系統-".$rDate.'</a>';
+            }            
+        ?>    
         </div>
         <!-- 換頁選單 -->
         <nav aria-label="Page navigation example">

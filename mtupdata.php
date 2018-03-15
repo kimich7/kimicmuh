@@ -28,6 +28,7 @@
     <script src="./node_modules/wow.js/dist/wow.min.js"></script>
     <!-- 連結自己的JS -->
     <script src="./js/main.js"></script>
+    <script src="./js/jquery-3.3.1.min.js"></script>
     <title>設備保養表單修改選擇</title>
 </head>
 
@@ -78,7 +79,7 @@
                     </select>
                 </p>
                 <!-- 選擇修改設備 -->
-                <p>選擇修改設備：
+                <!-- <p>選擇修改設備：
                     <select name="equipment" id="equipment">
                         <option value="">--請選擇設備--</option>
                     </select>
@@ -91,11 +92,9 @@
                                     method: 'post', //'post'
                                     cache: false,
                                     fileElementId: 'file',
-                                    data: {
-                                        "system_eq": system_eq
-                                    }, //{"傳送變數的名稱":傳送變數的值}
+                                    data: {"system_eq": system_eq}, //{"傳送變數的名稱":傳送變數的值}
                                     //dataType:'text',								
-                                    beforeSend: function () {}, //function 執行前的程式
+                                    //beforeSend: function () {}, //function 執行前的程式
                                     success: function (data) {
                                         $('select[name=equipment]').html(
                                             '<option value="">--請選擇設備--</option>'); //連動的選單
@@ -108,9 +107,9 @@
                                 });
                             }).change();
                         </script>
-                    </p>
+                    </p> -->
                     <!-- 選擇班別 -->
-                    <p>選擇班別：
+                    <!-- <p>選擇班別：
                         <select name="class">
                             <?PHP 
 					foreach ($query_shift as $shiftinfo){

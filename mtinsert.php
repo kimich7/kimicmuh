@@ -27,6 +27,7 @@
     <!-- 連結wow.js的網址使得網站可以使用WOW的滾動動畫(必須連接animate.css) -->
     <script src="./node_modules/wow.js/dist/wow.min.js"></script>
     <!-- 連結自己的JS -->
+    <script src="./js/jquery-3.3.1.min.js"></script>
     <script src="./js/main.js"></script>
 
     <title>設備保養表單選擇</title>
@@ -92,7 +93,7 @@
                                         "system_eq": system_eq
                                     }, //{"傳送變數的名稱":傳送變數的值}
                                     //dataType:'text',								
-                                    beforeSend: function () {}, //function 執行前的程式
+                                    //beforeSend: function () {}, //function 執行前的程式
                                     success: function (data) {
                                         $('select[name=equipment]').html(
                                             '<option value="">--請選擇設備--</option>'); //連動的選單

@@ -1,5 +1,14 @@
 <?php
     include("CMUHconndata.php");
+    include("fun.php");
+    //接收資料
+    $strDate=$_POST['datestr'];
+    $endDate=$_POST['dateend'];
+    $build_no=$_POST['build'];
+    $system=$_POST['system'];
+    $equipt=$_POST['equipment'];
+    $shift=$_POST['class'];   
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,45 +44,6 @@
 </head>
 
 <body>
-<!--接收資料php-->
-    <?php
-    //接收資料
-    $strDate=$_POST['datestr'];
-    $endDate=$_POST['dateend'];
-    $building=$_POST['build'];
-    $system=$_POST['system'];
-    $equipt=$_POST['equipment'];
-    $shift=$_POST['class'];
-    
-    switch ($system) {
-        case '1':
-            $num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE b_number='$build_no' AND rDate BETWEEN '$strDate' AND '$endDate'";
-            $num_query=Current($pdo->query($num)->fetch());                
-            for ($i=0; $i <$num_query ; $i++) { 
-                $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE b_number='$build_no' AND rDate BETWEEN '$strDate' AND '$endDate'";
-                $select_master =$pdo->query($sql_select)->fetch();            
-                $MasterID=$select_master['recordID'];
-                $Detail_num="SELECT COUNT(recordDetailID) FROM FA.Water_System_Record_Detail WHERE rDate BETWEEN '$strDate' AND '$endDate' AND recordID='$MasterID'";
-                $Detail_num_query=Current($pdo->query($Detail_num)->fetch());
-                for ($q=0; $q <$Detail_num_query ; $q++) { 
-                    $Detail="SELECT recordDetailID,rDate,equipID FROM FA.Water_System_Record_Detail WHERE rDate BETWEEN '$strDate' AND '$endDate' AND recordID='$MasterID'";
-                }
-            }
-            
-            break;
-        case '2':
-            # code...
-            break;
-        case '3':
-            # code...
-            break;
-        
-        default:
-            # code...
-            break;
-    }
-    $select_list_query=$pdo->query($select_list)->fetchAll();
-    ?>
     <!-- 導覽列 -->
     <div id="navbar"></div>
     <!-- header網頁標題 -->
@@ -86,8 +56,35 @@
         <h1 class="text-center">設備保養表單修改清單</h1>
         <div class="list-group mx-5 my-5">
         <?php
-        foreach ($select_list_query as $list_info) {
-            echo '<a href="#" class="list-group-item list-group-item-action">'.$list_info['rDate'].'</a>';
+        switch ($system) {
+        case '1':
+            $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE b_number='$build_no' AND rDate BETWEEN '$strDate' AND '$endDate'";
+            $select_master =$pdo->query($sql_select);                
+            while($row = $select_master->fetch()){
+                $MarsterID=$row['recordID'];
+                //$Detail="SELECT recordDetailID,equipCheckID,rDate,equipID FROM FA.Water_System_Record_Detail WHERE rDate BETWEEN '$strDate' AND '$endDate' AND recordID= $MarsterID ";
+                $Detail="SELECT DISTINCT equipID, rDate,shiftID FROM FA.Water_System_Record_Detail WHERE rDate BETWEEN '$strDate' AND '$endDate' AND recordID= $MarsterID ";
+                $Detail_query=$pdo->query($Detail);
+                while ($rowd = $Detail_query->fetch()) {
+                    $equip_sys= sql_database('equipName','FA.Equipment_System','equipID',$rowd["equipID"]);
+                    //$equip_che=sql_database('equipCheckName','FA.Equipment_Check','equipCheckID',$rowd["equipCheckID"]);
+                    $build_name=sql_database('B_name','FA.Building','b_number',$build_no);
+                    $shiftName=sql_database('shiftName','FA.Shift_Table','shiftID',$rowd["shiftID"]);
+                    //echo '<a href="#" class="list-group-item list-group-item-action">'.$rowd['rDate'].$build_name.'-水系統設備-'.$equip_sys.'-'.$equip_che.'</a>';
+                    echo "<a href='mtupdatatable.php?sys=".$system."& id=".$row['recordID']."& building=".$build_no."& rdate=".$rowd['rDate']."& equip=".$rowd["equipID"]."& shift=".$rowd["shiftID"]."' class=\"list-group-item list-group-item-action\">".$rowd['rDate'].$build_name.'-水系統設備-'.$equip_sys.'-'.$shiftName.'</a>';
+                }
+            }            
+            break;
+        case '2':
+            # code...
+            break;
+        case '3':
+            # code...
+            break;
+        
+        default:
+            # code...
+            break;    
         }  
         ?>          
         </div>
