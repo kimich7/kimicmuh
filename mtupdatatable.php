@@ -21,7 +21,7 @@ if (isset($_POST["action"])&&($_POST["action"]=="update")) {
     for ($i=0; $i  <$updata_qt ; $i++) {
         $q=100+$i;
         $rdID=$_POST["$q"];
-        $ans=$_POST["$i"];        
+        $ans=$_POST["$i"];
         $sql="UPDATE FA.Water_System_Record_Detail SET remark=:remark , checkResult=:checkResult WHERE recordDetailID=:ID";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':remark',$_POST["remark"],PDO::PARAM_STR);
@@ -32,9 +32,6 @@ if (isset($_POST["action"])&&($_POST["action"]=="update")) {
     $pdo=null;
     header("Location: mtupdata.php");    
  }
-
-
-
 
 ?>
 <!DOCTYPE html>

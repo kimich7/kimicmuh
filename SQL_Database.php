@@ -19,5 +19,6 @@ include("CMUHconndata.php");
     // 設定連結SQL資料庫內的Employee表格並取ename,passwoed兩個欄位的資料
     $sql_employee = "SELECT ename,passcard FROM FA.Employee";
     $query_employee=$pdo->query($sql_employee)->fetchAll();
+    
     $pdo=null;
 ?>

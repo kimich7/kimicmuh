@@ -133,7 +133,7 @@
                         </script>
                     </p> -->
                     <!-- 選擇班別 -->
-                    <p>選擇班別：
+                    <!-- <p>選擇班別：
                         <select name="class">
                             <?PHP 
 					foreach ($query_shift as $shiftinfo){
@@ -141,7 +141,7 @@
 					}		
 					?>
                         </select>
-                    </p>
+                    </p> -->
                     <!-- 送出鍵 -->
                     <p>
                         <input name="送出" type="submit" value="送出">

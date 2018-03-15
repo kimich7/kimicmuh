@@ -29,5 +29,13 @@
         $pdo=null;
         return $updata_qt;
     }
+
+    function sys_search($tbl){
+        include("CMUHconndata.php");
+        $search="SELECT b_number,rDate FROM $tbl WHERE check_number = NULL or check_manager IS NULL";
+        $query=$pdo->query($search)->fetchAll();
+        $pdo=null;
+        return $query;
+    }
 ?>
 

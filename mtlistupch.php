@@ -86,14 +86,15 @@
             while($row = $select_master->fetch()){
                 $MarsterID=$row['recordID'];
                 //$Detail="SELECT recordDetailID,equipCheckID,rDate,equipID FROM FA.Water_System_Record_Detail WHERE rDate BETWEEN '$strDate' AND '$endDate' AND recordID= $MarsterID ";
-                $Detail="SELECT DISTINCT equipID, rDate,ShiftID FROM FA.Water_System_Record_Detail WHERE rDate BETWEEN '$strDate' AND '$endDate' AND recordID= $MarsterID ";
+                $Detail="SELECT DISTINCT equipID, rDate,shiftID FROM FA.Water_System_Record_Detail WHERE rDate BETWEEN '$strDate' AND '$endDate' AND recordID= $MarsterID ";
                 $Detail_query=$pdo->query($Detail);
                 while ($rowd = $Detail_query->fetch()) {
                     $equip_sys= sql_database('equipName','FA.Equipment_System','equipID',$rowd["equipID"]);
                     //$equip_che=sql_database('equipCheckName','FA.Equipment_Check','equipCheckID',$rowd["equipCheckID"]);
                     $build_name=sql_database('B_name','FA.Building','b_number',$build_no);
+                    $shiftName=sql_database('shiftName','FA.Shift_Table','shiftID',$rowd["shiftID"]);
                     //echo '<a href="#" class="list-group-item list-group-item-action">'.$rowd['rDate'].$build_name.'-水系統設備-'.$equip_sys.'-'.$equip_che.'</a>';
-                    echo "<a href='mtupdatatable.php?sys=".$system."& id=".$row['recordID']."& building=".$build_no."& rdate=".$rowd['rDate']."& equip=".$rowd["equipID"]."& shift=".$rowd["ShiftID"]."' class=\"list-group-item list-group-item-action\">".$rowd['rDate'].$build_name.'-水系統設備-'.$equip_sys.'</a>';
+                    echo "<a href='mtupdatatable.php?sys=".$system."& id=".$row['recordID']."& building=".$build_no."& rdate=".$rowd['rDate']."& equip=".$rowd["equipID"]."& shift=".$rowd["shiftID"]."' class=\"list-group-item list-group-item-action\">".$rowd['rDate'].$build_name.'-水系統設備-'.$equip_sys.'-'.$shiftName.'</a>';
                 }
             }            
             break;
