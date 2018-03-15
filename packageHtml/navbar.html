@@ -6,15 +6,18 @@
         aria-expanded="false" aria-label="Toggle navigation"></button>
     <div class="collapse navbar-collapse" id="collapsibleNavId">
         <!-- 使用者登入 -->
-        <!-- form將輸入的值送到tlogin.php去,用POST的方式 -->
-        <form action="tlogin.php" method="post" class="form-inline my-2 ml-auto my-lg-0">
+        <form class="form-inline my-2 ml-auto my-lg-0" id="logIn">
             <span>使用者帳號:
                 <input class="form-control mr-sm-2" type="text" placeholder="UserName" name="username">
             </span>
             <span>使用者密碼:
-                <input type="password" class="form-control mr-sm-2" name="password" id="inputPassword3" placeholder="Password">
+                <input type="password" class="form-control mr-sm-2" name="password" placeholder="Password">
             </span>
             <button class="btn btn-outline-success  my-2 my-sm-0" type="submit">登入</button>
+        </form>
+        <form class="form-inline my-2 ml-auto my-lg-0" id="logOut">
+            <span class="mr-sm-2" id="result"></span>
+            <button class="btn btn-outline-success  my-2 my-sm-0" type="submit">登出</button>
         </form>
     </div>
 </nav>
