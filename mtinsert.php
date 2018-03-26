@@ -36,7 +36,7 @@
 <body>
     <!-- 連接SQL資料庫 -->
     <?PHP
-		include("SQL_Database.php");
+		include("php/SQL_Database.php");
 	?>
    <!-- 導覽列 -->
    <div id="navbar"></div>
@@ -80,33 +80,7 @@
                     <select name="equipment" id="equipment">
                         <option value="">--請選擇設備--</option>
                     </select>
-                    <p>
-                        <script type="text/javascript">
-                            $('select[name=system]').change(function () { //
-                                var system_eq = $(this).val();
-                                $.ajax({
-                                    url: "ajax_system.php", //url:'撈資料的php'
-                                    method: 'post', //'post'
-                                    cache: false,
-                                    fileElementId: 'file',
-                                    data: {
-                                        "system_eq": system_eq
-                                    }, //{"傳送變數的名稱":傳送變數的值}
-                                    //dataType:'text',								
-                                    //beforeSend: function () {}, //function 執行前的程式
-                                    success: function (data) {
-                                        $('select[name=equipment]').html(
-                                            '<option value="">--請選擇設備--</option>'); //連動的選單
-                                        $('select[name=equipment]').append(data);
-                                    },
-                                    error: function (xhr) {
-                                        alert(xhr);
-                                        alert("錯誤");
-                                    }
-                                });
-                            }).change();
-                        </script>
-                    </p>
+                </p>
                     <!-- 選擇班別 -->
                     <p>選擇班別：
                         <select name="class">

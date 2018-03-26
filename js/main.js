@@ -26,7 +26,7 @@ $(function () {
         // 利用ajax指令來傳遞logIn表單資料並回傳結果回ID為result的物件中
         $.ajax({
             type: "POST",
-            url: "tlogin.php",
+            url: "php/tlogin.php",
             data: $("#logIn").serialize(),
             success: function (msg) {
                 console.log(msg);
@@ -42,5 +42,29 @@ $(function () {
         $("#logIn").show();
         $("#logOut").hide();
     });
+    //mtinsert選擇設備
+    $('select[name=system]').change(function () { //
+        var system_eq = $(this).val();
+        $.ajax({
+            url: "php/ajax_system.php", //url:'撈資料的php'
+            method: 'post', //'post'
+            cache: false,
+            fileElementId: 'file',
+            data: {
+                "system_eq": system_eq
+            }, //{"傳送變數的名稱":傳送變數的值}
+            //dataType:'text',								
+            //beforeSend: function () {}, //function 執行前的程式
+            success: function (data) {
+                $('select[name=equipment]').html(
+                    '<option value="">--請選擇設備--</option>'); //連動的選單
+                $('select[name=equipment]').append(data);
+            },
+            error: function (xhr) {
+                alert(xhr);
+                alert("錯誤");
+            }
+        });
+    }).change();
 
 });

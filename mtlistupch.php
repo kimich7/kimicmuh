@@ -1,6 +1,6 @@
 <?php
-    include("CMUHconndata.php");
-    include("fun.php");
+    include("php/CMUHconndata.php");
+    include("php/fun.php");
     //接收資料
     $strDate=$_POST['datestr'];
     $endDate=$_POST['dateend'];

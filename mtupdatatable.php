@@ -1,6 +1,6 @@
 <?php
-include("CMUHconndata.php");
-include("fun.php");
+include("php/CMUHconndata.php");
+include("php/fun.php");
 //叫出資料
 $building=$_GET["building"];
 $rDate=$_GET["rdate"];
