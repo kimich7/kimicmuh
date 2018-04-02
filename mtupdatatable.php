@@ -1,6 +1,6 @@
 <?php
-include("CMUHconndata.php");
-include("fun.php");
+include("php/CMUHconndata.php");
+include("php/fun.php");
 //叫出資料
 $building=$_GET["building"];
 $rDate=$_GET["rdate"];
@@ -63,9 +63,9 @@ if (isset($_POST["action"])&&($_POST["action"]=="update")) {
         <script src="./node_modules/wow.js/dist/wow.min.js"></script>
         <!-- 連結自己的JS -->
         <script src="./js/main.js"></script>
-    <title>Document</title>
+    <title>設備保養修改表單</title>
 </head>
-<body>
+<body class="table_bg">
     <div class="container border border-info mt-5">
         <form action="" method="post" name="up">
             <h2 class="text-center font-weight-bold">

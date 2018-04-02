@@ -1,5 +1,5 @@
 <?php
-    include("CMUHconndata.php");
+    include("php/CMUHconndata.php");
     if (isset($_POST["action"])&&($_POST["action"]=="add")) {
         $sys_no=$_POST["sys"];//系統ID 
         

@@ -1,6 +1,6 @@
 <?php
-    include("CMUHconndata.php");
-    include("fun.php");    
+    include("php/CMUHconndata.php");
+    include("php/fun.php");    
 ?>
 <!DOCTYPE html>
 <html lang="en">

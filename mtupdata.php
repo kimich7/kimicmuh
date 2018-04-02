@@ -35,7 +35,7 @@
 <body>
     <!-- 連接SQL資料庫 -->
     <?PHP
-		include("SQL_Database.php");
+		include("php/SQL_Database.php");
 	?>
     <!-- 導覽列 -->
     <div id="navbar"></div>

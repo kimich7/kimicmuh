@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- 連結自製化的Bootatrap.css -->
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <!-- 連結Normalize.min.css的網址使得網站在各個瀏覽器看起來相同 -->
+    <link rel="stylesheet" href="./node_modules/normalize.css/normalize.css">
+    <!-- 連結fontawesome的網址使得網站可以使用fontawesome的icon -->
+    <link href="./node_modules/fontawesome-free-5.0.6/web-fonts-with-css/css/fontawesome-all.min.css" rel="stylesheet">
+    <!-- 如果連結了客(自)製化的Bootstrap,原先連接的版本要註解掉 -->
+    <!-- 連結Bootstrap的網址使得網站可以使用Bootstrap語法 -->
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> -->
+    <!-- 連結animate的網址使得網站可以使用animate語法 -->
+    <link rel="stylesheet" href="./node_modules/animate.css/animate.min.css">
+    <!-- 連結自己的CSS -->
+    <link rel="stylesheet" href="./css/style.css">
+    <!-- 連結Bootstrap jQuery的網址使得網站可以使用JS, Popper.js, and jQuery語法 -->
+    <!-- 並把jQuery變更為完整的jQuery -->
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>被變更的 -->
+    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- 連結wow.js的網址使得網站可以使用WOW的滾動動畫(必須連接animate.css) -->
+    <script src="./node_modules/wow.js/dist/wow.min.js"></script>
+    <!-- 連結自己的JS -->
+    <script src="./js/main.js"></script>
+    <title>中國附醫工務系統首頁</title>
+</head>
+
+<body>
+    <!-- 導覽列 -->
+    <div id="navbar"></div>
+    <!-- header網頁標題 -->
+    <div id="header"></div>
+    <!-- section網頁系統部分 -->
+    <!-- .container自動於網站上幫你留白 -->
+    <section>
+        <div id="resultdate" class="resultdate text-right mr-5"></div>
+        <div class="row">
+            <!-- 主選單:工務設備運轉抄表文件及管理系統 -->
+            <div class="mainMenu">
+                <div class="text-muted">
+                    <i class="fas fa-7x fa-file-alt my-3"></i>
+                    <h2>工務設備運轉抄表文件及管理系統</h2>
+                    <button type="button" class="mainBtn" data-toggle="modal" data-target="#ModalCenter1">
+                        點我進入
+                    </button>
+                </div>
+            </div>
+            <!-- 主選單:工務設備保養紀錄文件及管理系統 -->
+            <div class="mainMenu">
+                <div class="text-muted">
+                    <i class="fas fa-7x fa-file-alt my-3"></i>
+                    <h2>工務設備保養紀錄文件及管理系統</h2>
+                    <button type="button" class="mainBtn" data-toggle="modal" data-target="#ModalCenter2">
+                        點我進入
+                    </button>
+                </div>
+            </div>
+            <!-- 主選單:異常反應系統 -->
+            <div class="mainMenu">
+                <div class="text-muted">
+                    <i class="fas fa-7x fa-bell my-3"></i>
+                    <h2>異常反應系統</h2>
+                    <button type="button" class="mainBtn mt-5" data-toggle="modal" data-target="#ModalCenter3">
+                        點我進入
+                    </button>
+                </div>
+            </div>
+            <!-- 主選單:中央彙整系統 -->
+            <div class="mainMenu">
+                <div class="text-muted">
+                    <i class="fas fa-7x fa-cog my-3"></i>
+                    <h2>中央彙整系統</h2>
+                    <button type="button" data-toggle="collapse" data-target="#article3" class="mainBtn mt-5">
+                        點我進入
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- 運轉抄表選擇日期/班別 -->
+        <div class="modal fade" id="ModalCenter1" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLongTitle">選擇日期/班別</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <span>日期</span>
+                        <!-- TODO:將Value用變數來取代 -->
+                        <input class="form-control d-block" type="date" name="rankdate" id="rank1date">
+                        <div class="form-group">
+                            <label for="rank1">班別</label>
+                            <select class="form-control" id="rank1" name="rank">
+                                <option selected>請選擇</option>
+                                <option value="早班">早班</option>
+                                <option value="中班">中班</option>
+                                <option value="晚班">晚班</option>
+                                <option value="巡檢">巡檢</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                        <button type="button" data-toggle="collapse" data-dismiss="modal" data-target="#article1" class="btn btn-primary" id="cardSendBtn">
+                            送出
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 設備保養選擇日期/班別 -->
+        <div class="modal fade" id="ModalCenter2" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLongTitle">選擇日期/班別</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <span>日期</span>
+                        <!-- TODO:將Value用變數來取代 -->
+                        <input class="form-control d-block" type="date" name="" id="rankmtdate" value="2018-03-20">
+                        <div class="form-group">
+                            <label for="rankmt">班別</label>
+                            <select class="form-control" id="rankmt">
+                                <option selected>請選擇</option>
+                                <option value="1">早班</option>
+                                <option value="2">中班</option>
+                                <option value="3">晚班</option>
+                                <option value="4">巡檢</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                        <!-- TODO:送出鈕按下時,關閉卡片然後將表單數值放在畫面右上角 -->
+                        <button type="button" data-toggle="collapse" data-target="#article2" class="btn btn-primary cardSendBtn">
+                            送出
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 異常表單 -->
+        <div class="modal fade" id="ModalCenter3" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLongTitle">異常表單</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <span>日期</span>
+                        <input class="form-control d-block" type="date" name="" id="errordate">
+                        <div class="form-group">
+                            <label for="errortext">異常情況描述</label>
+                            <textarea class="form-control" id="errortext" rows="3"></textarea>
+                        </div>
+                        <form>
+                            <div class="form-group">
+                                <label for="FormControlFile1">異常檔案上傳</label>
+                                <input type="file" class="form-control-file" id="FormControlFile1">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                        <!-- TODO:送出到資料庫 -->
+                        <button type="button" class="btn btn-primary">送出</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 運轉抄表系統選單 -->
+        <!-- TODO:li的部分超連結與資料都要改用變數 -->
+        <article class="my-3 collapse" id="article1">
+            <ul class="syslist list-group">
+                <li class="list-group-item">
+                    <a class="text-dark" href="#">工務設備運轉抄表文件新增表單</a>
+                </li>
+                <li class="list-group-item">
+                    <a class="text-dark" href="#">工務設備運轉抄表文件修改表單</a>
+                </li>
+                <li class="list-group-item">
+                    <a class="text-dark" href="#">工務設備運轉抄表文件未簽核清單</a>
+                </li>
+            </ul>
+        </article>
+        <!-- 設備保養系統選單 -->
+        <article class="my-3 collapse" id="article2">
+            <ul class="syslist list-group">
+                <li class="list-group-item">
+                    <a class="text-dark" href="./mtinsert.php">工務設備保養紀錄文件新增表單</a>
+                </li>
+                <li class="list-group-item">
+                    <a class="text-dark" href="./mtupdata.php">工務設備保養紀錄文件修改表單</a>
+                </li>
+                <li class="list-group-item">
+                    <a class="text-dark" href="./mtlistcheck.php">工務設備保養紀錄文件未簽核清單</a>
+                </li>
+            </ul>
+        </article>
+        <!-- 中央彙整系統選單 -->
+        <article class="my-3 collapse" id="article3">
+            <ul class="syslist list-group">
+                <li class="list-group-item">
+                    <a class="text-dark" href="#">權限設定</a>
+                </li>
+                <li class="list-group-item">
+                    <a class="text-dark" href="#">帳號設定</a>
+                </li>
+                <li class="list-group-item">
+                    <a class="text-dark" href="#">密碼設定</a>
+                </li>
+            </ul>
+        </article>
+    </section>
+
+    <!-- 網頁尾頁部分 -->
+    <!-- footer -->
+    <div id="footer"></div>
+</body>
+
+</html>
