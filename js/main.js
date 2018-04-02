@@ -66,5 +66,19 @@ $(function () {
             }
         });
     }).change();
+    //選擇mainMenu新增Class(套用Bootstrap)
+    $(".mainMenu").addClass("col-lg-2 col-md-5 col-sm-5  mx-auto my-5 py-3 text-center");
+    //選擇mainBtn新增Class(套用Bootstrap)
+    $(".mainBtn").addClass(" mx-auto w-50 d-block btn btn-outline-primary");
+    //用getJSON來取得日期
+    $("#cardSendBtn").click(function (e) {
+        e.preventDefault();
+        $.getJSON("php/test.php", {
+            rankdate: $("#rank1date").val(),
+            rank: $("#rank1").val()
+        }, function (data) {
+            $("#resultdate").text(data);
+        });
+    });
 
 });
