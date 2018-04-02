@@ -14,10 +14,6 @@ $(function () {
     });
     $("#header").load("packageHtml/header.html");
     $("#footer").load("packageHtml/footer.html");
-    // 使用getJSON讀取data.json內的title資料
-    $.getJSON("json/login.json", function (data) {
-        $(".title").text(data);
-    });
     //登入功能
     // 登入表單提交時要執行ajax指令並將登入隱藏/登出顯示
     $("#logIn").submit(function (event) {
@@ -71,7 +67,7 @@ $(function () {
     //選擇mainBtn新增Class(套用Bootstrap)
     $(".mainBtn").addClass(" mx-auto w-50 d-block btn btn-outline-primary");
     //用getJSON來取得日期
-    $("#cardSendBtn").click(function (e) {
+    $(".cardSendBtn").click(function (e) {
         e.preventDefault();
         $.getJSON("php/test.php", {
             rankdate: $("#rank1date").val(),
@@ -80,5 +76,54 @@ $(function () {
             $("#resultdate").text(data);
         });
     });
+    //送出按出時#article1新增屬性show按點我進入屬性show移除
+    $("#cardSendBtn1").click(function () {
+        $("#article1").addClass(" show");
+    });
+    $("#mainBtn1").click(function () {
+        $("#article1").removeClass(" show");
+    });
+    //送出按出時#article1新增屬性show按點我進入屬性show移除
+    $("#cardSendBtn2").click(function () {
+        $("#article2").addClass(" show");
+    });
+    $("#mainBtn2").click(function () {
+        $("#article2").removeClass(" show");
+    });
+    // 使用getJSON讀取index1.json內的title資料
+    $.getJSON("json/index1.json", function (data) {
+        var $syslist1 = $("#syslist1");
+        for (var i = 0; i < data.length; i++) {
+            $syslist1.append(
+                $("<li>").addClass("list-group-item").append(
+                    $("<a>").addClass("text-dark").attr("href", data[i].url).text(data[i].name)
+                )
+            );
 
+        }
+    });
+    // 使用getJSON讀取index2.json內的title資料
+    $.getJSON("json/index2.json", function (data) {
+        var $syslist2 = $("#syslist2");
+        for (var i = 0; i < data.length; i++) {
+            $syslist2.append(
+                $("<li>").addClass("list-group-item").append(
+                    $("<a>").addClass("text-dark").attr("href", data[i].url).text(data[i].name)
+                )
+            );
+
+        }
+    });
+    // 使用getJSON讀取index3.json內的title資料
+    $.getJSON("json/index3.json", function (data) {
+        var $syslist3 = $("#syslist3");
+        for (var i = 0; i < data.length; i++) {
+            $syslist3.append(
+                $("<li>").addClass("list-group-item").append(
+                    $("<a>").addClass("text-dark").attr("href", data[i].url).text(data[i].name)
+                )
+            );
+
+        }
+    });
 });
