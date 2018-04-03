@@ -42,49 +42,52 @@
         <div id="resultdate" class="resultdate text-right mr-5"></div>
         <div class="row">
             <!-- 主選單:工務設備運轉抄表文件及管理系統 -->
-            <div class="mainMenu">
+            <div class="mainMenu col-lg-2 col-md-5 col-sm-5  mx-auto my-5 py-3 text-center">
                 <div class="text-muted">
                     <i class="fas fa-7x fa-file-alt my-3"></i>
                     <h2>工務設備運轉抄表文件及管理系統</h2>
                     <!-- 點我進入關閉list article1 -->
-                    <button type="button" class="mainBtn" data-toggle="modal" data-target="#ModalCenter1" id="mainBtn1">
+                    <button type="button" class="mainBtn mx-auto w-50 d-block btn btn-outline-primary" data-toggle="modal" data-target="#ModalCenter1"
+                        id="mainBtn1">
                         點我進入
                     </button>
                 </div>
             </div>
             <!-- 主選單:工務設備保養紀錄文件及管理系統 -->
-            <div class="mainMenu">
+            <div class="mainMenu col-lg-2 col-md-5 col-sm-5  mx-auto my-5 py-3 text-center">
                 <div class="text-muted">
                     <i class="fas fa-7x fa-file-alt my-3"></i>
                     <h2>工務設備保養紀錄文件及管理系統</h2>
                     <!-- 點我進入關閉list article2 -->
-                    <button type="button" class="mainBtn" data-toggle="modal" data-target="#ModalCenter2" id="mainBtn2">
+                    <button type="button" class="mainBtn mx-auto w-50 d-block btn btn-outline-primary" data-toggle="modal" data-target="#ModalCenter2"
+                        id="mainBtn2">
                         點我進入
                     </button>
 
                 </div>
             </div>
             <!-- 主選單:異常反應系統 -->
-            <div class="mainMenu">
+            <div class="mainMenu col-lg-2 col-md-5 col-sm-5  mx-auto my-5 py-3 text-center">
                 <div class="text-muted">
                     <i class="fas fa-7x fa-bell my-3"></i>
                     <h2>異常反應系統</h2>
-                    <button type="button" class="mainBtn mt-5" data-toggle="modal" data-target="#ModalCenter3">
+                    <button type="button" class="mainBtn mt-5 mx-auto w-50 d-block btn btn-outline-primary" data-toggle="modal" data-target="#ModalCenter3">
                         點我進入
                     </button>
                 </div>
             </div>
             <!-- 主選單:中央彙整系統 -->
-            <div class="mainMenu">
+            <div class="mainMenu col-lg-2 col-md-5 col-sm-5  mx-auto my-5 py-3 text-center">
                 <div class="text-muted">
                     <i class="fas fa-7x fa-cog my-3"></i>
                     <h2>中央彙整系統</h2>
-                    <button type="button" data-toggle="collapse" data-target="#article3" class="mainBtn mt-5">
+                    <button type="button" data-toggle="collapse" data-target="#article3" class="mainBtn mt-5 mx-auto w-50 d-block btn btn-outline-primary">
                         點我進入
                     </button>
                 </div>
             </div>
         </div>
+        <div id="getdate" class="text-right mr-5"></div>
         <!-- 運轉抄表選擇日期/班別 -->
         <div class="modal fade" id="ModalCenter1" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -97,16 +100,15 @@
                     </div>
                     <div class="modal-body">
                         <span>日期</span>
-                        <!-- TODO:將Value用變數來取代 -->
-                        <input class="form-control d-block" type="date" name="rankdate" id="rank1date" value="2018-03-20">
+                        <input class="form-control d-block presentTime" type="date" name="rankdate" id="rank1date">
                         <div class="form-group">
                             <label for="rank1">班別</label>
                             <select class="form-control" id="rank1" name="rank">
                                 <option selected>請選擇</option>
-                                <option value="早班">早班</option>
-                                <option value="中班">中班</option>
-                                <option value="晚班">晚班</option>
-                                <option value="巡檢">巡檢</option>
+                                <option value="1">早班</option>
+                                <option value="2">中班</option>
+                                <option value="3">晚班</option>
+                                <option value="4">巡檢</option>
                             </select>
                         </div>
                     </div>
@@ -132,8 +134,7 @@
                     </div>
                     <div class="modal-body">
                         <span>日期</span>
-                        <!-- TODO:將Value用變數來取代 -->
-                        <input class="form-control d-block" type="date" name="" id="rankmtdate" value="2018-03-20">
+                        <input class="form-control d-block presentTime" type="date" name="" id="rankmtdate">
                         <div class="form-group">
                             <label for="rankmt">班別</label>
                             <select class="form-control" id="rankmt">
