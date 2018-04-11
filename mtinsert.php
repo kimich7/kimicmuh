@@ -34,7 +34,7 @@
 </head>
 
 <body>
-    <!-- 連接SQL資料庫 -->
+    <!-- TODO:連接SQL資料庫 -->s
     <?PHP
 		include("php/SQL_Database.php");
 	?>

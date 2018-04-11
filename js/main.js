@@ -45,25 +45,32 @@ $(function () {
     //mtinsert選擇設備
     $('select[name=system]').change(function () { //
         var system_eq = $(this).val();
-        $.ajax({
-            url: "php/ajax_system.php", //url:'撈資料的php'
-            method: 'post', //'post'
-            cache: false,
-            fileElementId: 'file',
-            data: {
-                "system_eq": system_eq
-            }, //{"傳送變數的名稱":傳送變數的值}
-            //dataType:'text',								
-            //beforeSend: function () {}, //function 執行前的程式
-            success: function (data) {
-                $('select[name=equipment]').html(
-                    '<option value="">--請選擇設備--</option>'); //連動的選單
-                $('select[name=equipment]').append(data);
-            },
-            error: function (xhr) {
-                alert(xhr);
-                alert("錯誤");
-            }
+        // $.ajax({
+        //     url: "php/ajax_system.php", //url:'撈資料的php'
+        //     method: 'post', //'post'
+        //     cache: false,
+        //     fileElementId: 'file',
+        //     data: {
+        //         "system_eq": system_eq
+        //     }, //{"傳送變數的名稱":傳送變數的值}
+        //     //dataType:'text',								
+        //     //beforeSend: function () {}, //function 執行前的程式
+        //     success: function (data) {
+        //         $('select[name=equipment]').html(
+        //             '<option value="">--請選擇設備--</option>'); //連動的選單
+        //         $('select[name=equipment]').append(data);
+        //     },
+        //     error: function (xhr) {
+        //         alert(xhr);
+        //         alert("錯誤");
+        //     }
+        // });
+        $.getJSON("php/ajax_system.php", {
+            "system_eq": system_eq
+        }, function (data) {
+            for (let i = 0; i < data.length; i++) {
+                $("#equipment").append('<option value="' + data[i]["equipID"] + '">' + data[i]["equipName"] + '</option>');                
+            }            
         });
     }).change();
     //選擇mainMenu新增Class(套用Bootstrap)
