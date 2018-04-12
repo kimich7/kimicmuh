@@ -14,10 +14,6 @@ $(function () {
     });
     $("#header").load("packageHtml/header.html");
     $("#footer").load("packageHtml/footer.html");
-    // 使用getJSON讀取data.json內的title資料
-    $.getJSON("json/login.json", function (data) {
-        $(".title").text(data);
-    });
     //登入功能
     // 登入表單提交時要執行ajax指令並將登入隱藏/登出顯示
     $("#logIn").submit(function (event) {
@@ -47,8 +43,8 @@ $(function () {
     $(".mainMenu").addClass("col-lg-2 col-md-5 col-sm-5  mx-auto my-5 py-3 text-center");
     //選擇mainBtn新增Class(套用Bootstrap)
     $(".mainBtn").addClass(" mx-auto w-50 d-block btn btn-outline-primary");
-    //用getJSON來取得日期
-    $("#cardSendBtn").click(function (e) {
+    //用getJSON來取得運轉抄表日期
+    $("#cardSendBtn1").click(function (e) {
         e.preventDefault();
         $.getJSON("php/test.php", {
             rankdate: $("#rank1date").val(),
@@ -57,6 +53,77 @@ $(function () {
             $("#resultdate").text(data);
         });
     });
+    //用getJSON來取得設備保養日期
+    $("#cardSendBtn2").click(function (e) {
+        e.preventDefault();
+        $.getJSON("php/test.php", {
+            rankdate: $("#rankmtdate").val(),
+            rank: $("#rankmt").val()
+        }, function (data) {
+            $("#resultdate").text(data);
+        });
+    });
+    //送出按出時#article1新增屬性show按點我進入屬性show移除
+    $("#cardSendBtn1").click(function () {
+        $("#article1").addClass(" show");
+    });
+    $("#mainBtn1").click(function () {
+        $("#article1").removeClass(" show");
+    });
+    //送出按出時#article2新增屬性show按點我進入屬性show移除
+    $("#cardSendBtn2").click(function () {
+        $("#article2").addClass(" show");
+    });
+    $("#mainBtn2").click(function () {
+        $("#article2").removeClass(" show");
+    });
+    // 使用getJSON讀取index1.json內的title資料
+    $.getJSON("json/index1.json", function (data) {
+        var $syslist1 = $("#syslist1");
+        for (var i = 0; i < data.length; i++) {
+            $syslist1.append(
+                $("<li>").addClass("list-group-item").append(
+                    $("<a>").addClass("text-dark").attr("href", data[i].url).text(data[i].name)
+                )
+            );
+
+        }
+    });
+    // 使用getJSON讀取index2.json內的title資料
+    $.getJSON("json/index2.json", function (data) {
+        var $syslist2 = $("#syslist2");
+        for (var i = 0; i < data.length; i++) {
+            $syslist2.append(
+                $("<li>").addClass("list-group-item").append(
+                    $("<a>").addClass("text-dark").attr("href", data[i].url).text(data[i].name)
+                )
+            );
+
+        }
+    });
+    // 使用getJSON讀取index3.json內的title資料
+    $.getJSON("json/index3.json", function (data) {
+        var $syslist3 = $("#syslist3");
+        for (var i = 0; i < data.length; i++) {
+            $syslist3.append(
+                $("<li>").addClass("list-group-item").append(
+                    $("<a>").addClass("text-dark").attr("href", data[i].url).text(data[i].name)
+                )
+            );
+
+        }
+    });
+    //抓取當前時間並寫進時間選單內
+    var presentYear = new Date().getFullYear();
+    var presentMonth = new Date().getMonth() + 1;
+    var presentDate = new Date().getDate();
+    if (presentMonth < 10) {
+        presentMonth = "0" + presentMonth;
+    }
+    if (presentDate < 10) {
+        presentDate = "0" + presentDate;
+    }
+    $(".presentTime").attr("value", presentYear + "-" + presentMonth + "-" + presentDate);
 
     $.getJSON("php/data.php", {
         colID: 'b_number',
@@ -67,37 +134,17 @@ $(function () {
         }
     });
 
-        $.getJSON("php/data.php", {
-            colID: 'sysID',
-            colName: 'sysName'
-        }, function (data) {
-            for (let i = 0; i < data.length; i++) {
-                $(".system").append('<option value="' + data[i]["sysID"] + '">' + data[i]["sysName"] + '</option>');
-            }
-        });
+    $.getJSON("php/data.php", {
+        colID: 'sysID',
+        colName: 'sysName'
+    }, function (data) {
+        for (let i = 0; i < data.length; i++) {
+            $(".system").append('<option value="' + data[i]["sysID"] + '">' + data[i]["sysName"] + '</option>');
+        }
+    });
     //mtinsert選擇設備
     $('select[name=system]').change(function () { //
         var system_eq = $(this).val();
-        // $.ajax({
-        //     url: "php/ajax_system.php", //url:'撈資料的php'
-        //     method: 'post', //'post'
-        //     cache: false,
-        //     fileElementId: 'file',
-        //     data: {
-        //         "system_eq": system_eq
-        //     }, //{"傳送變數的名稱":傳送變數的值}
-        //     //dataType:'text',								
-        //     //beforeSend: function () {}, //function 執行前的程式
-        //     success: function (data) {
-        //         $('select[name=equipment]').html(
-        //             '<option value="">--請選擇設備--</option>'); //連動的選單
-        //         $('select[name=equipment]').append(data);
-        //     },
-        //     error: function (xhr) {
-        //         alert(xhr);
-        //         alert("錯誤");
-        //     }
-        // });
         $.getJSON("php/ajax_system.php", {
             "system_eq": system_eq
         }, function (data) {
