@@ -37,5 +37,17 @@
         $pdo=null;
         return $query;
     }
+
+    function database($colID,$colName,$query){        
+    include("SQL_Database.php");
+    $dataArray=array();
+    $dataArray1=array();
+    foreach ($query as $datainfo) {
+       $dataArray["$colID"] = $datainfo["$colID"];
+       $dataArray["$colName"]=$datainfo["$colName"];
+       $dataArray2=array_push($dataArray1,$dataArray);
+    }
+    return json_encode($dataArray1,JSON_UNESCAPED_UNICODE);
+    }
 ?>
 

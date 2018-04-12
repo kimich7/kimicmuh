@@ -1,12 +1,16 @@
 <?php
+    include("fun.php");
     include("SQL_Database.php");
-    $sysArray=array();
-    $sysArray1=array();
-    
-    foreach ($query_system  as $systeminfo) {
-       $sysArray['sysID'] = $systeminfo['sysID'];
-       $sysArray['sysName']=$systeminfo['sysName'];
-       $sysArray2=array_push($sysArray1,$sysArray);
-    }
-    echo json_encode($sysArray1,JSON_UNESCAPED_UNICODE);
+     $colID = $_GET['colID'];
+     $colName = $_GET['colName'];
+     switch ($colID) {
+         case 'b_number':
+             $query=$query_build;
+             break;
+         case 'sysID':
+             $query=$query_system;
+             break;
+     }     
+    $data=database($colID,$colName,$query);
+    echo $data;
 ?>

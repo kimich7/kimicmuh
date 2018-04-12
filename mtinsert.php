@@ -55,23 +55,23 @@
                 </P>
                 <!-- 選擇棟別 -->
                 <p>選擇棟別：
-                    <select name="build">
+                    <select name="build" id="build">
                         <option value="">--請選擇棟別--</option>
                         <?PHP 
-						foreach ($query_build as $buildinfo){
-						echo "<option value= ".$buildinfo['b_number'].">".$buildinfo['B_name']."</option>";
-						}		
+						// foreach ($query_build as $buildinfo){
+						// echo "<option value= ".$buildinfo['b_number'].">".$buildinfo['B_name']."</option>";
+						// }		
 					?>
                     </select>
                 </p>
                 <!-- 點檢選擇系統 -->
                 <p>點檢選擇系統：
-                    <select name="system" id="system">
+                    <select name="system" class="system">
                         <option value="">--請選擇系統--</option>
                         <?PHP 
-						foreach ($query_system as $systeminfo){
-						echo "<option value= ".$systeminfo['sysID'].">".$systeminfo['sysName']."</option>";
-						}		
+						// foreach ($query_system as $systeminfo){
+						// echo "<option value= ".$systeminfo['sysID'].">".$systeminfo['sysName']."</option>";
+						// }		
 					?>
                     </select>
                 </p>
