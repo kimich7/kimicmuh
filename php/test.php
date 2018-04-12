@@ -16,5 +16,10 @@ switch ($rank) {
     $class = "巡檢";
     break;
     }
-echo json_encode($date.$class,JSON_UNESCAPED_UNICODE);
+// echo json_encode($date.$class,JSON_UNESCAPED_UNICODE);
+$result = array();
+$result['date'] = $date;
+$result['class'] = $class;
+// echo $result;
+echo json_encode($result['date'].$result['class']);
 ?>

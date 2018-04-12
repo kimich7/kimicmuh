@@ -89,7 +89,7 @@ $(function () {
     $("#mainBtn1").click(function () {
         $("#article1").removeClass(" show");
     });
-    //送出按出時#article1新增屬性show按點我進入屬性show移除
+    //送出按出時#article2新增屬性show按點我進入屬性show移除
     $("#cardSendBtn2").click(function () {
         $("#article2").addClass(" show");
     });
