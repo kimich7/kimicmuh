@@ -44,7 +44,6 @@
     <div id="header"></div>
     <!-- 將該網頁連結到mtwatertable.php -->
     <!-- form start -->
-    <!-- TODO:重新制定form表單格式,傾向Bootstrap的原始風格 -->
     <form action="mtwatertable.php" method="post" name="mttable">
         <div class="row">
             <div class="col-sm-12 col-md-10 col-lg-4 choice_table container my-5 border border-dark rounded text-white">
@@ -58,7 +57,6 @@
                 <p>選擇棟別：
                     <select name="build" id="build">
                         <option value="">--請選擇棟別--</option>
-                        <!-- TODO:將PHP與Html完全分離 -->
                         <?PHP 
 						// foreach ($query_build as $buildinfo){
 						// echo "<option value= ".$buildinfo['b_number'].">".$buildinfo['B_name']."</option>";
@@ -68,9 +66,8 @@
                 </p>
                 <!-- 點檢選擇系統 -->
                 <p>點檢選擇系統：
-                    <select name="system" class="system">
+                    <select name="system" id="system">
                         <option value="">--請選擇系統--</option>
-                        <!-- TODO:將PHP與Html完全分離 -->
                         <?PHP 
 						// foreach ($query_system as $systeminfo){
 						// echo "<option value= ".$systeminfo['sysID'].">".$systeminfo['sysName']."</option>";
@@ -78,17 +75,22 @@
 					?>
                     </select>
                 </p>
+                <!-- 選擇樓層 -->
+                <p>選擇設備樓層：
+                    <select name="buildingfloor" id="buildingfloor">
+                        <option value="">--請選擇樓層--</option>
+                    </select>
+                </p>
+
                 <!-- 選擇點檢設備 -->
                 <p>選擇點檢設備：
                     <select name="equipment" id="equipment">
-                        <!-- TODO:這裡使用ajax技術產生,也要一併考量進去 -->
                         <option value="">--請選擇設備--</option>
                     </select>
                 </p>
                     <!-- 選擇班別 -->
                     <p>選擇班別：
                         <select name="class">
-                            <!-- TODO:將PHP與Html完全分離 -->
                             <?PHP 
 					foreach ($query_shift as $shiftinfo){
 					echo "<option value= ".$shiftinfo['shiftID'].">".$shiftinfo['shiftName']."</option>";
