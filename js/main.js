@@ -146,6 +146,20 @@ $(function () {
             $("#system").append('<option value="' + data[i]["sysID"] + '">' + data[i]["sysName"] + '</option>');
         }
     });
+
+    //mtinsert選擇樓層
+    $("#system, #build").change(function () { //
+        var system_eq = $("#system").val();
+        var building_eq = $("#build").val();
+        $.getJSON("php/zone.php", {
+            "system_eq": system_eq,
+            "build_eq": building_eq
+        }, function (data) {
+            for (let i = 0; i < data.length; i++) {
+                $("#buildingfloor").append('<option value="' + data[i]["floorID"] + '">' + data[i]["floorName"] + '</option>');
+            }
+        });
+    }).change();
     //mtinsert選擇設備
     $('select[name=system]').change(function () { //
         var system_eq = $(this).val();
