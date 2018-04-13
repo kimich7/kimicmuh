@@ -10,6 +10,9 @@
          case 'sysID':
              $query=$query_system;
              break;
+         case 'shiftID':
+             $query=$query_shift;
+             break;
      }     
     $data=database($colID,$colName,$query);
     echo $data;

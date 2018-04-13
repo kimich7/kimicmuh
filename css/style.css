@@ -47,11 +47,13 @@ body {
     padding-left: 15px;
 }
 
+.back {
+    background-image: url("../jpg/erez-attias-58871-unsplash.jpg");
+    background-size: cover;
+    padding: 1em;
+}
+
 .choice_table {
-    background-color: #4792f5;
-    background-image: url("../jpg/28-512.jpg");
-    background-repeat: no-repeat;
-    background-position: center center;
+    background-color: rgba(0, 0, 0, 0.7);
     padding: 30px;
-    background-size: 100%;
 }

@@ -1,10 +1,10 @@
 [{
         "name": "工務設備保養紀錄文件新增表單",
-        "url": "mtinsert.php"
+        "url": "mtinsert.html"
     },
     {
         "name": "工務設備保養紀錄文件修改表單",
-        "url": "mtupdata.php"
+        "url": "mtupdata.html"
     },
     {
         "name": "工務設備保養紀錄文件未簽核清單",

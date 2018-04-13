@@ -1,5 +1,6 @@
 //當畫面元素載入完成後才執行主程式
 $(function () {
+    //===================================全域開始===================================
     //啟用wow.js
     new WOW().init();
     // 動態載入頁首頁尾
@@ -14,6 +15,8 @@ $(function () {
     });
     $("#header").load("packageHtml/header.html");
     $("#footer").load("packageHtml/footer.html");
+    //===================================全域結束===================================
+    //===================================首頁開始===================================
     //登入功能
     // 登入表單提交時要執行ajax指令並將登入隱藏/登出顯示
     $("#logIn").submit(function (event) {
@@ -38,7 +41,6 @@ $(function () {
         $("#logIn").show();
         $("#logOut").hide();
     });
-
     //選擇mainMenu新增Class(套用Bootstrap)
     $(".mainMenu").addClass("col-lg-2 col-md-5 col-sm-5  mx-auto my-5 py-3 text-center");
     //選擇mainBtn新增Class(套用Bootstrap)
@@ -124,22 +126,24 @@ $(function () {
         presentDate = "0" + presentDate;
     }
     $(".presentTime").attr("value", presentYear + "-" + presentMonth + "-" + presentDate);
-
+    //===================================首頁結束===================================
+    //===================================mtinsert開始(與mtupdata共用)===================================
+    //用getJSON讀取data內的資料(棟別)
     $.getJSON("php/data.php", {
         colID: 'b_number',
         colName: 'B_name'
     }, function (data) {
-        for (let a = 0; a < data.length; a++) {
-            $("#build").append('<option value="' + data[a]["b_number"] + '">' + data[a]["B_name"] + '</option>');
+        for (let i = 0; i < data.length; i++) {
+            $("#build").append('<option value="' + data[i]["b_number"] + '">' + data[i]["B_name"] + '</option>');
         }
     });
-
+    //用getJSON讀取data內的資料(系統)
     $.getJSON("php/data.php", {
         colID: 'sysID',
         colName: 'sysName'
     }, function (data) {
         for (let i = 0; i < data.length; i++) {
-            $(".system").append('<option value="' + data[i]["sysID"] + '">' + data[i]["sysName"] + '</option>');
+            $("#system").append('<option value="' + data[i]["sysID"] + '">' + data[i]["sysName"] + '</option>');
         }
     });
     //mtinsert選擇設備
@@ -153,5 +157,14 @@ $(function () {
             }
         });
     }).change();
-
+    //用getJSON讀取data內的資料(班別)
+    $.getJSON("php/data.php", {
+        colID: 'shiftID',
+        colName: 'shiftName'
+    }, function (data) {
+        for (let i = 0; i < data.length; i++) {
+            $("#Three_shifts").append('<option value="' + data[i]["shiftID"] + '">' + data[i]["shiftName"] + '</option>');
+        }
+    });
+    //===================================mtinsert結束(與mtupdata共用)===================================
 });

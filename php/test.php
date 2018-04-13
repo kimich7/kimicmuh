@@ -7,7 +7,7 @@ switch ($rank) {
     $class = "早班";
     break;
     case '2':
-    $class = "午班";
+    $class = "中班";
     break;
     case '3':
     $class = "晚班";
