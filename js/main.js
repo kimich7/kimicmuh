@@ -152,8 +152,10 @@ $(function () {
         $.getJSON("php/ajax_system.php", {
             "system_eq": system_eq
         }, function (data) {
+            var html = "";
             for (let i = 0; i < data.length; i++) {
-                $("#equipment").append('<option value="' + data[i]["equipID"] + '">' + data[i]["equipName"] + '</option>');
+                html += "<option value=\"" + data[i]["equipID "] + "\">" + data[i]["equipName"] + "</option>";
+                $("#equipment").html(html);
             }
         });
     }).change();
