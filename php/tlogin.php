@@ -1,28 +1,28 @@
 <!-- 連接SQL資料庫 -->
 <?PHP
-	include("SQL_Database.php");
+    include("CMUHconndata.php");
+    include("fun.php");
 ?>
 <!-- PHP表單登入功能 -->
 <?php
-    $username = trim($_POST['username']);
+session_start();
+$login_success=false;
+if (isset($_POST['username']) && isset($_POST['password'])) {
+    $userID = trim($_POST['username']);
     $password = trim($_POST['password']);
     $login_success=false;
-    for ($i=0; $i < sizeof($query_employee) ; $i++) 
-    {
-        $user_check = $query_employee[$i]['ename'];
-        $password_check = $query_employee[$i]['passcard'];
-            if ($username == $user_check && $password == $password_check)
-                {
-                    $login_success=true;
-                    break;
-                }
-    }
-    if($login_success==true){
-        echo "歡迎登入".$user_check;
-    }else{
+    $log_str="SELECT e_number,passcard,cname FROM FA.Employee WHERE e_number = '$userID' AND passcard = '$password'";
+    $log_query=$pdo->query($log_str)->fetchAll();
+    $username=sql_database('cname','FA.Employee','e_number',$userID);
+    if (count($log_query)==0) {
         echo "登入失敗";
+    } else {
+        $_SESSION["loginMember"] = $username;
+        $_SESSION["loginPassword"] = $password;
+        $login_success=true;
+        echo "歡迎登入".$username;
     }
-        
+}        
 ?>
 
  
