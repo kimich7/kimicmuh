@@ -48,7 +48,7 @@ $(function () {
     //用getJSON來取得運轉抄表日期
     $("#cardSendBtn1").click(function (e) {
         e.preventDefault();
-        $.getJSON("php/test.php", {
+        $.getJSON("php/data_class.php", {
             rankdate: $("#rank1date").val(),
             rank: $("#rank1").val()
         }, function (data) {
@@ -58,7 +58,7 @@ $(function () {
     //用getJSON來取得設備保養日期
     $("#cardSendBtn2").click(function (e) {
         e.preventDefault();
-        $.getJSON("php/test.php", {
+        $.getJSON("php/data_class.php", {
             rankdate: $("#rankmtdate").val(),
             rank: $("#rankmt").val()
         }, function (data) {
@@ -88,7 +88,6 @@ $(function () {
                     $("<a>").addClass("text-dark").attr("href", data[i].url).text(data[i].name)
                 )
             );
-
         }
     });
     // 使用getJSON讀取index2.json內的title資料
@@ -128,6 +127,14 @@ $(function () {
     $(".presentTime").attr("value", presentYear + "-" + presentMonth + "-" + presentDate);
     //===================================首頁結束===================================
     //===================================mtinsert開始(與mtupdata共用)===================================
+    //取得日期
+    $.getJSON("php/cookiedata.php",function(data){
+        $("#bday").attr("value", data[0]['date']);
+    })
+    //取得班別
+    $.getJSON("php/cookiedata.php", function (data) {
+         $("#Three_shifts").html('<option value="' + data[0]["class"] + '">' + data[0]["shiftclass"] +"</option>");
+    })    
     //用getJSON讀取data內的資料(棟別)
     $.getJSON("php/data.php", {
         colID: 'b_number',

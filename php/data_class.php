@@ -1,4 +1,10 @@
 <?php
+
+// if (empty($_COOKIE['date'])) {
+    setcookie('date',$_GET["rankdate"],time()+3600);
+    setcookie('shift',$_GET["rank"],time()+3600);
+//     echo '我是空值的選項';
+// }
 $date = $_GET["rankdate"];
 $rank = $_GET["rank"];
 $class = "";
