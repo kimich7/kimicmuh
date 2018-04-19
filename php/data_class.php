@@ -1,9 +1,8 @@
 <?php
 
 // if (empty($_COOKIE['date'])) {
-    setcookie('date',$_GET["rankdate"],time()+3600);
-    setcookie('shift',$_GET["rank"],time()+3600);
-//     echo '我是空值的選項';
+    setcookie('date',$_GET["rankdate"]);
+    setcookie('shift',$_GET["rank"]);    
 // }
 $date = $_GET["rankdate"];
 $rank = $_GET["rank"];
@@ -23,6 +22,7 @@ switch ($rank) {
     break;
     }
 // echo json_encode($date.$class,JSON_UNESCAPED_UNICODE);
+setcookie('className',$class);
 $result = array();
 $result['date'] = $date;
 $result['class'] = $class;

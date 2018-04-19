@@ -1,5 +1,9 @@
 <?php
     include("php/CMUHconndata.php");
+    include("php/fun.php");
+    // setcookie('date',$_POST["bday"]);
+    // setcookie('shift',$_POST["class"]);
+    
     if (isset($_POST["action"])&&($_POST["action"]=="add")) {
         $sys_no=$_POST["sys"];//系統ID 
         
@@ -98,40 +102,33 @@
             $sysNo=$_POST["system"];
             $equipNo=$_POST["equipment"];
             $shiftNo=$_POST["class"];
+            $floorID=$_POST["buildingfloor"];
             //SQL Binding
             //篩選出棟別
-            $sql_build="SELECT B_name FROM FA.Building WHERE b_number ='$buildNo' ";
-            $building = $pdo->query($sql_build)->fetchall();
-            foreach ($building as $build_value) {
-                $build_value['B_name'];
-                }
-            $build=$build_value['B_name'];        
+            $build=sql_database('B_name','FA.Building','b_number',$buildNo);         
             //篩選出系統別
-            $sql_sys = "SELECT sysName FROM FA.Equipment_System_Group WHERE sysID='$sysNo'";
-            $sys = $pdo->query($sql_sys)->fetchall();
-            foreach ($sys as $sys_value) {
-                $sys_value['sysName'];
-                }
-            $system=$sys_value['sysName'];   
+            $system=sql_database('sysName','FA.Equipment_System_Group','sysID',$sysNo);
+            //篩選出樓層別
+            $system=sql_database('floorName','FA.BuildingFloor','floorID',$floorID);
             //篩選出設備別
-            $sql_equip="SELECT equipName FROM FA.Equipment_System WHERE equipID='$equipNo'";
-            $equip= $pdo->query($sql_equip)->fetchall();
-            foreach ($equip as $equip_value) {
-                $equip_value['equipName'];
-                }
-            $equipment=$equip_value['equipName']; 
+            $equipment=sql_database('equipName','FA.Equipment_System','equipID',$equipNo); 
             //篩選出班別
-            $sql_shift ="SELECT shiftName FROM FA.Shift_Table WHERE shiftID='$shiftNo'";
-            $shift=$pdo->query($sql_shift)->fetchall();
-            foreach ($shift as $shift_value) {
-                $shift_value['shiftName'];
-                }
-                $class=$shift_value['shiftName'];
+            $class=sql_database('shiftName','FA.Shift_Table','shiftID',$shiftNo);
+            setcookie('className',$class);    
             //檢查項目
-            $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE equipID='$equipNo'AND b_number='$buildNo'";
-            $query_equip=$pdo->query($sql_equip_check);//->fetchall();
-            $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE equipID='$equipNo'AND b_number='$buildNo'";
-            $equip_check_no=Current($pdo->query($equip_check_num)->fetch()); 
+            if (empty($equipNo)) {
+                $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo'";
+                $query_equip=$pdo->query($sql_equip_check);
+                $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo'";
+                $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
+            } else {
+                $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID='$equipNo'AND b_number='$buildNo'";
+                $query_equip=$pdo->query($sql_equip_check);
+                $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID='$equipNo'AND b_number='$buildNo'";
+                $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
+            }
+            
+             
         ?>
             <div class="container border border-info mt-5">
                 <form action="" method="post" name="wa">
