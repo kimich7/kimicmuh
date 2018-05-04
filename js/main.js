@@ -166,12 +166,19 @@ $(function () {
     $(".f1").change(function () { //
         var system_eq = $("#system").val();
         var building_eq = $("#build").val();
+        var choiceNo = 0;
+        if (system_eq == 4) {
+            choiceNo = 1;
+        }
         $.getJSON("php/zone.php", {
             "system_eq": system_eq,
-            "build_eq": building_eq
+            "build_eq": building_eq,
+            "choiceNo": choiceNo
         }, function (data) {
+            var html = '<option value=""> 請選擇樓層 </option>';
             for (let i = 0; i < data.length; i++) {
-                $("#buildingfloor").append('<option value="' + data[i]["floorID"] + '">' + data[i]["floorName"] + '</option>');
+                html += "<option value=\"" + data[i]["floorID"] + "\">" + data[i]["floorName"] + "</option>";
+                $("#buildingfloor").html(html);
             }
         });
     }).change();
@@ -180,17 +187,30 @@ $(function () {
         var system_eq = $("#system").val();
         var building_eq = $("#build").val();
         var floor_eq = $("#buildingfloor").val();
+        var choiceNo = 0;
+        if (system_eq==4) {
+            choiceNo = 1;
+        }
         $.getJSON("php/ajax_system.php", {
             "system_eq": system_eq,
             "build_eq": building_eq,
-            "floor_eq": floor_eq
+            "floor_eq": floor_eq,
+            "choiceNo": choiceNo
         }, function (data) {
             //$("#equipment").html('<option value=""> 請選擇設備 </option>');
-            var html = '<option value=""> 請選擇設備 </option>';
-            for (let i = 0; i < data.length; i++) {
-                html += "<option value=\"" + data[i]["equipID"] + "\">" + data[i]["equipName"] + "</option>";                
-                $("#equipment").html(html);
+            var html = '<option value=""> 請選擇設備/區域 </option>';
+            if (choiceNo == 1) {
+                for (let i = 0; i < data.length; i++) {
+                    html += "<option value=\"" + data[i]["zoneNo"] + "\">" + data[i]["zoneName"] + "</option>";
+                    $("#equipment").html(html);
+                }
+            } else {
+                for (let i = 0; i < data.length; i++) {
+                    html += "<option value=\"" + data[i]["equipID"] + "\">" + data[i]["equipName"] + "</option>";
+                    $("#equipment").html(html);
+                }
             }
+            
         });
     }).change();
     //用getJSON讀取data內的資料(班別)
