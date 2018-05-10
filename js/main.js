@@ -4,43 +4,33 @@ $(function () {
     //啟用wow.js
     new WOW().init();
     // 動態載入頁首頁尾
-    // 下方的ajax用來取代$("#navbar").load("packageHtml/navbar.html");
-    $.ajax({
-        url: "packageHtml/navbar.html",
-        cache: true,
-        async: false,
-        success: function (html) {
-            $("#navbar").html(html);
-        }
-    });
     $("#header").load("packageHtml/header.html");
     $("#footer").load("packageHtml/footer.html");
     //===================================全域結束===================================
     //===================================首頁開始===================================
     //登入功能
+    //==================================================================================
     // 登入表單提交時要執行ajax指令並將登入隱藏/登出顯示
-    $("#logIn").submit(function (event) {
-        // 阻止元素發生默認的行為
-        event.preventDefault();
-        // 利用ajax指令來傳遞logIn表單資料並回傳結果回ID為result的物件中
-        $.ajax({
-            type: "POST",
-            url: "php/tlogin.php",
-            data: $("#logIn").serialize(),
-            success: function (msg) {
-                console.log(msg);
-                $("#result").html(msg);
-            }
-        });
-        $("#logIn").hide();
-        $("#logOut").show();
+    $.getJSON("php/sessionData.php", function (data) {
+        if (data["login_success"] == false) {
+            $("#result").html("帳號或密碼錯誤，請重新輸入");
+        } else {
+            $("#result").html("歡迎登入");
+            $("#logInBtn").toggleClass("d-none");
+            $("#logOutBtn").toggleClass("d-none");
+        }
     });
     // 登出表單提交時要執行將登入顯示/登出隱藏
-    $("#logOut").submit(function (event) {
-        event.preventDefault();
-        $("#logIn").show();
-        $("#logOut").hide();
+    $("#logOutBtn").click(function () {
+        $.getJSON("php/sessionUnset.php", {
+            logOutValue: 1
+        }, function (data) {
+            if (data == 1000) {
+                location.reload();
+            }
+        });
     });
+    //=======================================================================================
     //選擇mainMenu新增Class(套用Bootstrap)
     $(".mainMenu").addClass("col-lg-2 col-md-5 col-sm-5  mx-auto my-5 py-3 text-center");
     //選擇mainBtn新增Class(套用Bootstrap)
@@ -128,13 +118,13 @@ $(function () {
     //===================================首頁結束===================================
     //===================================mtinsert開始(與mtupdata共用)===================================
     //取得日期
-    $.getJSON("php/cookiedata.php",function(data){
+    $.getJSON("php/cookiedata.php", function (data) {
         $("#bday").attr("value", data[0]['date']);
-    })
+    });
     //取得班別
     $.getJSON("php/cookiedata.php", function (data) {
-         $("#Three_shifts").html('<option value="' + data[0]["class"] + '">' + data[0]["shiftclass"] +"</option>");
-    })    
+        $("#Three_shifts").html('<option value="' + data[0]["class"] + '">' + data[0]["shiftclass"] + "</option>");
+    });
     //用getJSON讀取data內的資料(棟別)
     $.getJSON("php/data.php", {
         colID: 'b_number',
@@ -162,8 +152,11 @@ $(function () {
             "system_eq": system_eq,
             "build_eq": building_eq
         }, function (data) {
+            var html = "";
             for (let i = 0; i < data.length; i++) {
-                $("#buildingfloor").append('<option value="' + data[i]["floorID"] + '">' + data[i]["floorName"] + '</option>');
+                html += "<option value=\"" + data[i]["floorID "] + "\">" + data[i]["floorName"] + "</option>";
+                $("#buildingfloor").html(html);
+                6
             }
         });
     }).change();

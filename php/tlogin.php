@@ -14,15 +14,17 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     $log_query=$pdo->query($log_str)->fetchAll();
     $username=sql_database('cname','FA.Employee','e_number',$userID);
     if (count($log_query)==0) {
-        echo "登入失敗";
+        $_SESSION["login_success"] = $login_success;
+        header('Location:../login.html'); 
     } else {
         $_SESSION["loginMember"] = $username;
         $_SESSION["loginPassword"] = $password;     
         $login_success=true;
         $_SESSION["login_success"] = $login_success;
-        echo "歡迎登入".$username;
+        header('Location:../index.html'); 
     }
-}        
+};
+   
 ?>
 
  

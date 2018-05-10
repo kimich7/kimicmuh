@@ -32,14 +32,21 @@
 </head>
 
 <body>
-    <!-- 導覽列 -->
-    <div id="navbar"></div>
     <!-- header網頁標題 -->
     <div id="header"></div>
     <!-- section網頁系統部分 -->
     <!-- .container自動於網站上幫你留白 -->
     <section>
-        <div id="resultdate" class="resultdate text-right mr-5"></div>
+        <div class="d-flex justify-content-between">
+            <div>
+                <p id="result" class="ml-4 d-inline"></p>
+                <p id="resultdate" class="ml-4 resultdate d-inline"></p>
+            </div>
+            <div>
+                <a class="btn btn-outline-primary" href="./login.html" id="logInBtn">登入</a>
+                <button class="btn btn-outline-primary d-none" id="logOutBtn">登出</button>
+            </div>
+        </div>
         <div class="row">
             <!-- 主選單:工務設備運轉抄表文件及管理系統 -->
             <div class="mainMenu">

@@ -44,8 +44,6 @@
 </head>
 
 <body>
-    <!-- 導覽列 -->
-    <div id="navbar"></div>
     <!-- header網頁標題 -->
     <div id="header"></div>
     <!-- section網頁系統部分 -->

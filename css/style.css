@@ -13,10 +13,6 @@ body {
 
 /* header網頁標題 */
 
-#logOut {
-    display: none;
-}
-
 .header {
     height: 50vh;
     background-image: url("../jpg/dustin-lee-19667.jpg");
