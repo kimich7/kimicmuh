@@ -46,10 +46,10 @@
                     <h2 class="text-center mb-4">表單修改選擇</h2>
                     <!-- 保養日期開始 -->
                     <P>保養日期開始: </P>
-                    <input class="form-control mb-3" type="date" name="datestr">
+                    <input class="form-control mb-3" type="date" id="datestr" name="datestr">
                     <!-- 保養日期結束 -->
                     <P>保養日期結束: </P>
-                    <input class="form-control mb-3" type="date" name="dateend">
+                    <input class="form-control mb-3" type="date" id="dateend" name="dateend">
                     <!-- 選擇班別 -->
                     <p>選擇班別：</p>
                     <select class="form-control mb-3" name="class" id="Three_shifts">
@@ -62,13 +62,18 @@
                     </select>
                     <!-- 點檢選擇系統 -->
                     <p>點檢選擇系統：</p>
-                    <select class="form-control mb-3" name="system" id="system">
+                    <select class="form-control mb-3 f1 f2" name="system" id="system">
                         <option selected>請選擇系統</option>
+                    </select>
+                    <!-- 選擇樓層 -->
+                    <p>選擇設備樓層：</p>
+                    <select class="form-control mb-3 f2" name="buildingfloor" id="buildingfloor">
+                        <option value="">請選擇樓層</option>
                     </select>
                     <!-- 選擇點檢設備 -->
                     <p>選擇點檢設備： </p>
                     <select class="form-control mb-3" name="equipment" id="equipment">
-                        <option selected>請選擇設備</option>
+                        <option selected>請選擇設備/區域</option>
                     </select>
                     <!-- 送出鍵 -->
                     <div class="d-flex justify-content-end">
