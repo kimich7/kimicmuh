@@ -31,19 +31,21 @@
     <title>中國附醫工務系統登入頁面</title>
 </head>
 
-<body>
+<body class="login-bg">
     <!-- section網頁系統部分 -->
-    <!-- .container自動於網站上幫你留白 -->
     <section>
-        <div class="container">
+        <div class="container logintable text-white align-middle">
+            <h2 class="text-center">中國附醫工務系統登入</h2>
             <form action="php/tlogin.php" method="POST" id="logIn">
                 <p>使用者帳號:</p>
-                <input class="form-control" type="text" placeholder="UserName" name="username" required/>
+                <input class="form-control my-2" type="text" placeholder="UserName" name="username" required/>
                 <p>使用者密碼:</p>
-                <input type="password" class="form-control" name="password" placeholder="Password" required/>
-                <button class="btn btn-outline-success" type="submit">提交</button>
+                <input type="password" class="form-control my-2" name="password" placeholder="Password" required/>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-outline-muted my-2" type="submit">提交</button>
+                </div>
             </form>
-            <p id="result"></p>
+            <p class="text-center text-danger" id="result"></p>
         </div>
     </section>
 </body>

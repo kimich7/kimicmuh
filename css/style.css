@@ -11,6 +11,24 @@ body {
     overflow-x: hidden;
 }
 
+.login-bg {
+    height: 100vh;
+    background-image: url("../jpg/jon-flobrant-49795-unsplash.jpg");
+    background-size: cover;
+    background-position: center center;
+}
+
+.logintable {
+    height: 300px;
+    width: 400px;
+    background-color: rgba(0, 0, 0, 0.7);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -200px;
+    margin-top: -150px;
+}
+
 /* header網頁標題 */
 
 .header {

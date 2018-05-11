@@ -9,15 +9,30 @@ $(function () {
     //===================================全域結束===================================
     //===================================首頁開始===================================
     //登入功能
-    //==================================================================================
-    // 登入表單提交時要執行ajax指令並將登入隱藏/登出顯示
+    // 登入表單提交時要執行getJSON指令
     $.getJSON("php/sessionData.php", function (data) {
+        var $Name = data["loginMember"];
         if (data["login_success"] == false) {
             $("#result").html("帳號或密碼錯誤，請重新輸入");
         } else {
-            $("#result").html("歡迎登入");
+            $("#result").html("歡迎登入," + $Name);
+            //登入隱藏/登出顯示
             $("#logInBtn").toggleClass("d-none");
             $("#logOutBtn").toggleClass("d-none");
+        }
+        switch (data["loginAutho"]) {
+            case 1:
+                $(".autho1,.autho2,.autho3,.autho4").removeAttr("disabled");
+                break;
+            case 2:
+                $(".autho2,.autho3,.autho4").removeAttr("disabled");
+                break;
+            case 3:
+                $(".autho3,.autho4").removeAttr("disabled");
+                break;
+            case 4:
+                $(".autho4").removeAttr("disabled");
+                break;
         }
     });
     // 登出表單提交時要執行將登入顯示/登出隱藏
@@ -30,7 +45,6 @@ $(function () {
             }
         });
     });
-    //=======================================================================================
     //選擇mainMenu新增Class(套用Bootstrap)
     $(".mainMenu").addClass("col-lg-2 col-md-5 col-sm-5  mx-auto my-5 py-3 text-center");
     //選擇mainBtn新增Class(套用Bootstrap)
@@ -124,15 +138,20 @@ $(function () {
     //取得班別
     $.getJSON("php/cookiedata.php", function (data) {
         $("#Three_shifts").html('<option value="' + data[0]["class"] + '">' + data[0]["shiftclass"] + "</option>");
+    });
+    //用getJSON讀取data內的資料(班別)
+    $("#Three_shifts").one("click", function () {
         $.getJSON("php/data.php", {
             colID: 'shiftID',
             colName: 'shiftName'
         }, function (data) {
+            var html = '<option selected> 請選擇班別 </option>';
             for (let i = 0; i < data.length; i++) {
-                $("#Three_shifts").append('<option value="' + data[i]["shiftID"] + '">' + data[i]["shiftName"] + '</option>');
+                html += "<option value=\"" + data[i]["shiftID"] + "\">" + data[i]["shiftName"] + "</option>";
+                $("#Three_shifts").html(html);
             }
         });
-    })
+    });
     //用getJSON讀取data內的資料(棟別)
     $.getJSON("php/data.php", {
         colID: 'b_number',
@@ -153,7 +172,7 @@ $(function () {
     });
 
     //mtinsert選擇樓層
-    $(".f1").change(function () { //
+    $(".f1").change(function () {
         var system_eq = $("#system").val();
         var building_eq = $("#build").val();
         var choiceNo = 0;
@@ -165,15 +184,15 @@ $(function () {
             "build_eq": building_eq,
             "choiceNo": choiceNo
         }, function (data) {
-            var html = '<option value=""> 請選擇樓層 </option>';
+            var html = '<option selected> 請選擇樓層 </option>';
             for (let i = 0; i < data.length; i++) {
                 html += "<option value=\"" + data[i]["floorID"] + "\">" + data[i]["floorName"] + "</option>";
                 $("#buildingfloor").html(html);
             }
         });
-    }).change();
+    });
     //mtinsert選擇設備
-    $(".f2").change(function () { //
+    $(".f2").change(function () {
         var system_eq = $("#system").val();
         var building_eq = $("#build").val();
         var floor_eq = $("#buildingfloor").val();
@@ -187,8 +206,7 @@ $(function () {
             "floor_eq": floor_eq,
             "choiceNo": choiceNo
         }, function (data) {
-            //$("#equipment").html('<option value=""> 請選擇設備 </option>');
-            var html = '<option value=""> 請選擇設備/區域 </option>';
+            var html = '<option selected> 請選擇設備/區域 </option>';
             if (choiceNo == 1) {
                 for (let i = 0; i < data.length; i++) {
                     html += "<option value=\"" + data[i]["zoneNo"] + "\">" + data[i]["zoneName"] + "</option>";
@@ -202,15 +220,6 @@ $(function () {
             }
 
         });
-    }).change();
-    //用getJSON讀取data內的資料(班別)
-    // $.getJSON("php/data.php", {
-    //     colID: 'shiftID',
-    //     colName: 'shiftName'
-    // }, function (data) {
-    //     for (let i = 0; i < data.length; i++) {
-    //         $("#Three_shifts").append('<option value="' + data[i]["shiftID"] + '">' + data[i]["shiftName"] + '</option>');
-    //     }
-    // });
+    });
     //===================================mtinsert結束(與mtupdata共用)===================================
 });
