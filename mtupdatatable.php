@@ -57,7 +57,7 @@ if (isset($_POST["action"])&&($_POST["action"]=="update")) {
         <!-- 並把jQuery變更為完整的jQuery -->
         <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>被變更的 -->
         <script src="./node_modules/jquery/dist/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="./node_modules/popper.js/dist/umd/popper.min.js"></script>
         <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
         <!-- 連結wow.js的網址使得網站可以使用WOW的滾動動畫(必須連接animate.css) -->
         <script src="./node_modules/wow.js/dist/wow.min.js"></script>

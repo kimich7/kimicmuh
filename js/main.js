@@ -6,33 +6,38 @@ $(function () {
     // 動態載入頁首頁尾
     $("#header").load("packageHtml/header.html");
     $("#footer").load("packageHtml/footer.html");
+    $('[data-toggle="tooltip"]').tooltip();
     //===================================全域結束===================================
     //===================================首頁開始===================================
     //登入功能
     // 登入表單提交時要執行getJSON指令
     $.getJSON("php/sessionData.php", function (data) {
-        var $Name = data["loginMember"];
-        if (data["login_success"] == false) {
+        var $Name = data[0]["loginMember"];
+        if (data[0]["login_success"] == false) {
             $("#result").html("帳號或密碼錯誤，請重新輸入");
         } else {
             $("#result").html("歡迎登入," + $Name);
             //登入隱藏/登出顯示
             $("#logInBtn").toggleClass("d-none");
             $("#logOutBtn").toggleClass("d-none");
-        }
-        switch (data["loginAutho"]) {
-            case 1:
-                $(".autho1,.autho2,.autho3,.autho4").removeAttr("disabled");
-                break;
-            case 2:
-                $(".autho2,.autho3,.autho4").removeAttr("disabled");
-                break;
-            case 3:
-                $(".autho3,.autho4").removeAttr("disabled");
-                break;
-            case 4:
-                $(".autho4").removeAttr("disabled");
-                break;
+            switch (data[0]["login_authority"]) {
+                case "1":
+                    $(".autho1,.autho2,.autho3,.autho4").removeAttr("disabled").removeAttr("style");
+                    $(".billBoard1,.billBoard2,.billBoard3,.billBoard4").tooltip('dispose');
+                    break;
+                case "2":
+                    $(".autho2,.autho3,.autho4").removeAttr("disabled").removeAttr("style");
+                    $(".billBoard2,.billBoard3,.billBoard4").tooltip('dispose');
+                    break;
+                case "3":
+                    $(".autho3,.autho4").removeAttr("disabled").removeAttr("style");
+                    $(".billBoard3,.billBoard4").tooltip('dispose');
+                    break;
+                case "4":
+                    $(".autho4").removeAttr("disabled").removeAttr("style");
+                    $(".billBoard4").tooltip('dispose');
+                    break;
+            }
         }
     });
     // 登出表單提交時要執行將登入顯示/登出隱藏

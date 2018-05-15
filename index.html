@@ -22,7 +22,7 @@
     <!-- 並把jQuery變更為完整的jQuery -->
     <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>被變更的 -->
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="./node_modules/popper.js/dist/umd/popper.min.js"></script>
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- 連結wow.js的網址使得網站可以使用WOW的滾動動畫(必須連接animate.css) -->
     <script src="./node_modules/wow.js/dist/wow.min.js"></script>
@@ -54,9 +54,10 @@
                     <i class="fas fa-7x fa-file-alt my-3"></i>
                     <h2>工務設備運轉抄表文件及管理系統</h2>
                     <!-- 點我進入關閉list article1 -->
-                    <button type="button" class="mainBtn autho3" data-toggle="modal" data-target="#ModalCenter1" id="mainBtn1" disabled>
-                        點我進入
-                    </button>
+                    <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
+                        <button style="pointer-events: none;" type="button" class="mainBtn autho3" data-toggle="modal" data-target="#ModalCenter1"
+                            id="mainBtn1" disabled>點我進入</button>
+                    </span>
                 </div>
             </div>
             <!-- 主選單:工務設備保養紀錄文件及管理系統 -->
@@ -65,10 +66,10 @@
                     <i class="fas fa-7x fa-file-alt my-3"></i>
                     <h2>工務設備保養紀錄文件及管理系統</h2>
                     <!-- 點我進入關閉list article2 -->
-                    <button type="button" class="mainBtn autho3" data-toggle="modal" data-target="#ModalCenter2" id="mainBtn2" disabled>
-                        點我進入
-                    </button>
-
+                    <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
+                        <button style="pointer-events: none;" type="button" class="mainBtn autho3" data-toggle="modal" data-target="#ModalCenter2"
+                            id="mainBtn2" disabled>點我進入</button>
+                    </span>
                 </div>
             </div>
             <!-- 主選單:異常反應系統 -->
@@ -76,9 +77,10 @@
                 <div class="text-muted">
                     <i class="fas fa-7x fa-bell my-3"></i>
                     <h2>異常反應系統</h2>
-                    <button type="button" class="mainBtn autho3 mt-5" data-toggle="modal" data-target="#ModalCenter3" disabled>
-                        點我進入
-                    </button>
+                    <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
+                        <button style="pointer-events: none;" type="button" class="mainBtn autho3 mt-5" data-toggle="modal" data-target="#ModalCenter3"
+                            disabled>點我進入</button>
+                    </span>
                 </div>
             </div>
             <!-- 主選單:中央彙整系統 -->
@@ -86,9 +88,10 @@
                 <div class="text-muted">
                     <i class="fas fa-7x fa-cog my-3"></i>
                     <h2>中央彙整系統</h2>
-                    <button type="button" data-toggle="collapse" data-target="#article3" class="mainBtn autho1 mt-5" disabled>
-                        點我進入
-                    </button>
+                    <span class="billBoard1" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
+                        <button style="pointer-events: none;" type="button" data-toggle="collapse" data-target="#article3" class="mainBtn autho1 mt-5"
+                            disabled>點我進入</button>
+                    </span>
                 </div>
             </div>
         </div>
@@ -120,9 +123,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
                         <!-- 送出鍵開啟list article1-->
-                        <button type="button" data-dismiss="modal" class="btn btn-primary cardSendBtn" id="cardSendBtn1">
-                            送出
-                        </button>
+                        <button type="button" data-dismiss="modal" class="btn btn-primary cardSendBtn" id="cardSendBtn1">送出</button>
                     </div>
                 </div>
             </div>
@@ -154,9 +155,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
                         <!-- 送出鍵開啟list article2-->
-                        <button type="button" data-dismiss="modal" class="btn btn-primary cardSendBtn" id="cardSendBtn2">
-                            送出
-                        </button>
+                        <button type="button" data-dismiss="modal" class="btn btn-primary cardSendBtn" id="cardSendBtn2">送出</button>
                     </div>
                 </div>
             </div>
