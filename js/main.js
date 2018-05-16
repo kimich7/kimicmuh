@@ -129,7 +129,7 @@ $(function () {
     //===================================mtinsert開始(與mtupdata共用)===================================
     //取得日期
     $.getJSON("php/cookiedata.php",function(data){
-        $("#bday").attr("value", data[0]['date']);
+        $("#bday").attr("value", data[0]['date']);//將一開始存入的時間放到mtinsert.html的#bday(抄表日期)的控制項
     })
     //取得班別
     $.getJSON("php/cookiedata.php", function (data) {
@@ -222,5 +222,5 @@ $(function () {
     //         $("#Three_shifts").append('<option value="' + data[i]["shiftID"] + '">' + data[i]["shiftName"] + '</option>');
     //     }
     // });
-    //===================================mtinsert結束(與mtupdata共用)===================================
+    //===================================mtinsert結束(與mtupdata共用)===================================s
 });

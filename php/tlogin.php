@@ -22,6 +22,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         $_SESSION["login_success"] = $login_success;
         echo "歡迎登入".$username;
     }
+    
 }        
 ?>
 
