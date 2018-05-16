@@ -8,10 +8,11 @@
         return $view;
     }
 
-    function updata_select($tbl,$date,$equip,$Mid){
+    function updata_select($tbl,$Mid){
         include("CMUHconndata.php");
         //$updata_view=array();
-        $updata="SELECT recordDetailID,equipCheckID,ref,r_member,remark,checkResult FROM $tbl WHERE rDate='$date' AND equipID=$equip AND recordID=$Mid";
+        //$updata="SELECT recordDetailID,equipCheckID,ref,r_member,remark,checkResult FROM $tbl WHERE rDate='$date' AND equipID=$equip AND recordID=$Mid";
+        $updata="SELECT recordDetailID,equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate FROM $tbl WHERE recordID = $Mid";
         $updata_query=$pdo->query($updata)->fetchAll();
         //$updata_query=$pdo->query($updata);
         $pdo=null;
@@ -22,9 +23,10 @@
         return $updata_query;
     } 
 
-    function updata_num($tbl,$date,$equip,$Mid){
+    function updata_num($tbl,$Mid){
         include("CMUHconndata.php");
-        $updata="SELECT COUNT(equipCheckID) FROM $tbl WHERE rDate='$date' AND equipID=$equip AND recordID=$Mid";
+        //$updata="SELECT COUNT(equipCheckID) FROM $tbl WHERE rDate='$date' AND equipID=$equip AND recordID=$Mid";
+        $updata="SELECT COUNT(equipCheckID) FROM $tbl WHERE recordID = $Mid";
         $updata_qt=Current($pdo->query($updata)->fetch());
         $pdo=null;
         return $updata_qt;
@@ -48,6 +50,21 @@
        $dataArray2=array_push($dataArray1,$dataArray);
     }
     return json_encode($dataArray1,JSON_UNESCAPED_UNICODE);
+    }
+
+    function num($str){
+        include("CMUHconndata.php");
+        $num="$str";
+        $num_qt=Current($pdo->query($num)->fetch());
+        $pdo=null;
+        return $num_qt;
+    }
+    function item($str){
+        include("CMUHconndata.php");
+        $item="$str";
+        $item_qt=$pdo->query($item)->fetchAll();
+        $pdo=null;
+        return $item_qt;
     }
 ?>
 
