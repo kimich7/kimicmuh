@@ -1,8 +1,6 @@
 //當畫面元素載入完成後才執行主程式
 $(function () {
     //===================================全域開始===================================
-    //啟用wow.js
-    new WOW().init();
     // 動態載入頁首頁尾
     $("#header").load("packageHtml/header.html");
     $("#footer").load("packageHtml/footer.html");
