@@ -223,14 +223,6 @@
                     <p class="d-inline text-primary"><?= $check_date ?></p>
                 </div>
             </div>
-            <!-- <div class="my-3">
-                <p class="d-inline font-weight-bold">
-                    設備：
-                </p>
-                <p class="d-inline text-primary">
-                    <?//= $equipment ?>
-                </p>
-            </div> -->
             <!-- 表格主體 -->
             <table class="table my-5">
                 <thead>
@@ -243,25 +235,21 @@
                     $equipinfo=$query_equip->fetch(PDO::FETCH_ASSOC);
                 ?>
                 <tbody class="text-primary">
-                    <td>
-                        <?= $equipinfo['equipCheckName']?>
-                    </td>
-                    <td>
-                        <?= $equipinfo["ref"]?>
-                    </td>
+                    <td><?= $equipinfo['equipCheckName']?></td>
+                    <td><?= $equipinfo["ref"]?></td>
                 <?php
                 if ($equipinfo["ref"]=="V/X") { 
                 ?>
-                        <td>
-                            <input type='radio' name='<?= $i?>' value='true'>合格
-                            <input type='radio' name='<?= $i?>' value='false'>不合格
-                        </td>
+                    <td>
+                        <input type='radio' name='<?= $i?>' value='true'>合格
+                        <input type='radio' name='<?= $i?>' value='false'>不合格
+                    </td>
                 <?php                
                 } else { 
                 ?>
-                        <td>
-                            <input type="text" name='<?= $i?>' maxlength="20">
-                        </td>
+                    <td>
+                        <input type="text" name='<?= $i?>' maxlength="20">
+                    </td>
                 <?php
                 }  
                 echo"</tr>";
