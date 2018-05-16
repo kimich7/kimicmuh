@@ -1,5 +1,5 @@
 <?php
-include("CMUHconndata.php");
+    include("CMUHconndata.php");
     //select building
     $sql_build="SELECT b_number,B_name FROM FA.Building";
     $query_build=$pdo->query($sql_build)->fetchAll();

@@ -16,12 +16,12 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     $loginAutho=sql_database('rank','FA.Employee','e_number',$userID);
     if (count($log_query)==0) {
         $_SESSION["login_success"] = $login_success;
-        $_SESSION["loginMember"] = $username;
+        $_SESSION["login_member"] = $username;
         $_SESSION["login_authority"] = $loginAutho;
         header('Location:../login.html'); 
     } else {
-        $_SESSION["loginMember"] = $username;
-        $_SESSION["loginPassword"] = $password;     
+        $_SESSION["login_member"] = $username;
+        $_SESSION["login_password"] = $password;     
         $login_success=true;
         $_SESSION["login_success"] = $login_success;
         $_SESSION["login_authority"] = $loginAutho;

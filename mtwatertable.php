@@ -128,192 +128,170 @@
        header("Location: mtinsert.html");
     }
 ?>
-    <!DOCTYPE html>
-    <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <!-- 連結自製化的Bootatrap.css -->
-        <link rel="stylesheet" href="./css/bootstrap.css">
-        <!-- 連結Normalize.min.css的網址使得網站在各個瀏覽器看起來相同 -->
-        <link rel="stylesheet" href="./node_modules/normalize.css/normalize.css">
-        <!-- 連結fontawesome的網址使得網站可以使用fontawesome的icon -->
-        <link href="./node_modules/fontawesome-free-5.0.6/web-fonts-with-css/css/fontawesome-all.min.css" rel="stylesheet">
-        <!-- 如果連結了客(自)製化的Bootstrap,原先連接的版本要註解掉 -->
-        <!-- 連結Bootstrap的網址使得網站可以使用Bootstrap語法 -->
-        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> -->
-        <!-- 連結animate的網址使得網站可以使用animate語法 -->
-        <link rel="stylesheet" href="./node_modules/animate.css/animate.min.css">
-        <!-- 連結自己的CSS -->
-        <link rel="stylesheet" href="./css/style.css">
-        <!-- 連結Bootstrap jQuery的網址使得網站可以使用JS, Popper.js, and jQuery語法 -->
-        <!-- 並把jQuery變更為完整的jQuery -->
-        <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>被變更的 -->
-        <script src="./node_modules/jquery/dist/jquery.min.js"></script>
-        <script src="./node_modules/popper.js/dist/umd/popper.min.js"></script>
-        <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-        <!-- 連結wow.js的網址使得網站可以使用WOW的滾動動畫(必須連接animate.css) -->
-        <script src="./node_modules/wow.js/dist/wow.min.js"></script>
-        <!-- 連結自己的JS -->
-        <script src="./js/main.js"></script>
-        <title>設備保養表單</title>
-    </head>
+<!DOCTYPE html>
+<html lang="en">
 
-    <body class="table_bg">
-        <?PHP
-            //mtinsert資料帶入
-            $check_date=$_POST["bday"];
-            $buildNo=$_POST["build"];
-            $sysNo=$_POST["system"];
-            $equipNo=$_POST["equipment"];
-            $shiftNo=$_POST["class"];
-            $floorID=$_POST["buildingfloor"];
-            //SQL Binding
-            //篩選出棟別
-            $build=sql_database('B_name','FA.Building','b_number',$buildNo);         
-            //篩選出系統別
-            $system=sql_database('sysName','FA.Equipment_System_Group','sysID',$sysNo);
-            //篩選出樓層別
-            $system=sql_database('floorName','FA.BuildingFloor','floorID',$floorID);
-            //篩選出設備別
-            if ($sysNo==4) {
-                $equipment=sql_database('zoneName','FA.Zonefloor','floorID',$equipNo);
-            } else {
-                $equipment=sql_database('equipName','FA.Equipment_System','equipID',$equipNo);
-            }
-            //篩選出班別
-            $class=sql_database('shiftName','FA.Shift_Table','shiftID',$shiftNo);
-            setcookie('className',$class);    
-            //檢查項目
-            switch ($sysNo) {
-                case "4":
-                    if (empty($equipNo)) {
-                        $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check_elec WHERE floorID='$floorID'AND b_number='$buildNo'";
-                        $query_equip=$pdo->query($sql_equip_check);
-                        $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check_elec WHERE floorID='$floorID'AND b_number='$buildNo'";
-                        $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-                    } else {
-                        $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check_elec WHERE floorID='$floorID'AND zoneNo='$equipNo'AND b_number='$buildNo'";
-                        $query_equip=$pdo->query($sql_equip_check);
-                        $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check_elec WHERE floorID='$floorID'AND zoneNo='$equipNo'AND b_number='$buildNo'";
-                        $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-                    }
-                    break;
-                default:
-                    if (empty($equipNo)) {
-                        $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo'";
-                        $query_equip=$pdo->query($sql_equip_check);
-                        $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo'";
-                        $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-                    } else {
-                        $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID='$equipNo'AND b_number='$buildNo'";
-                        $query_equip=$pdo->query($sql_equip_check);
-                        $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID='$equipNo'AND b_number='$buildNo'";
-                        $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-                    }
-                    break;
-            }     
-        ?>
-            <div class="container border border-info mt-5">
-                <form action="" method="post" name="wa">
-                    <h2 class="text-center font-weight-bold">
-                        中國醫藥大學附設醫院-
-                        <?= $build ?>--
-                            <?= $system ?>
-                    </h2>
-                    <div class="row my-3">
-                        <div class="col">
-                            <p class="d-inline font-weight-bold">
-                                班別：
-                            </p>
-                            <p class="d-inline text-primary">
-                                <?= $class ?>
-                            </p>
-                        </div>
-                        <div class="col text-center">
-                            <p class="d-inline font-weight-bold">
-                                檢查者：
-                            </p>
-                            <p class="d-inline text-primary">
-                                <?= '檢查者' ?>
-                            </p>
-                        </div>
-                        <div class="col text-right">
-                            <p class="d-inline font-weight-bold">
-                                檢查日期：
-                            </p>
-                            <p class="d-inline text-primary">
-                                <?= $check_date ?>
-                            </p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- 連結外部的CSS -->
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <link rel="stylesheet" href="./node_modules/normalize.css/normalize.css">
+    <link href="./node_modules/fontawesome-free-5.0.6/web-fonts-with-css/css/fontawesome-all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./node_modules/animate.css/animate.min.css">
+    <!-- 連結自己的CSS -->
+    <link rel="stylesheet" href="./css/style.css">
+    <!-- 連結外部的JS -->
+    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="./node_modules/popper.js/dist/umd/popper.min.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="./node_modules/wow.js/dist/wow.min.js"></script>
+    <!-- 連結自己的JS -->
+    <script src="./js/main.js"></script>
+    <title>設備保養表單</title>
+</head>
 
-                        </div>
-                    </div>
-                    <!-- <div class="my-3">
-                        <p class="d-inline font-weight-bold">
-                            設備：
-                        </p>
-                        <p class="d-inline text-primary">
-                            <?//= $equipment ?>
-                        </p>
-                    </div> -->
-                    <table class="table my-5">
-                        <thead>
-                            <th>檢查項目</th>
-                            <th>參考值</th>
-                            <th>結果</th>
-                        </thead>
-                        <?php
-                        for ($i=0; $i < $equip_check_no; $i++) { 
-                            $equipinfo=$query_equip->fetch(PDO::FETCH_ASSOC);
-                        ?>
-                            <tbody class="text-primary">
-                                <td>
-                                    <?= $equipinfo['equipCheckName']?>
-                                </td>
-                                <td>
-                                    <?= $equipinfo["ref"]?>
-                                </td>
-                                <?php
-                            if ($equipinfo["ref"]=="V/X") { 
-                            ?>
-                                    <td>
-                                        <input type='radio' name='<?= $i?>' value='true'>合格
-                                        <input type='radio' name='<?= $i?>' value='false'>不合格
-                                    </td>
-                                    <?php                
-                            } else { 
-                            ?>
-                                    <td>
-                                        <input type="text" name='<?= $i?>' maxlength="20">
-                                    </td>
-                                    <?php
-                            }  
-                            echo"</tr>";
-                            }
-                            ?>
-                            </tbody>
-                    </table>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">備註：</span>
-                        </div>
-                        <textarea class="form-control" name="remark" aria-label="With textarea"></textarea>
-                    </div>
-                    <input type="hidden" name="action" value="add">
-                    <input type="hidden" name="build" value='<?= $buildNo ?>'>
-                    <input type="hidden" name="equip" value='<?= $equipNo ?>'>
-                    <input type="hidden" name="sys" value='<?= $sysNo ?>'>
-                    <input type="hidden" name="shift" value='<?= $shiftNo ?>'>
-                    <input type="hidden" name="date_c" value='<?= $check_date ?>'>
-                    <input type="hidden" name="loop_num" value='<?= $equip_check_no ?>'>
-                    <input type="hidden" name="floorID" value='<?= $floorID ?>'>
-                                        
-                    <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>
-                </form>
+<body class="table_bg">
+    <?PHP
+        //mtinsert資料帶入
+        $check_date=$_POST["bday"];
+        $buildNo=$_POST["build"];
+        $sysNo=$_POST["system"];
+        $equipNo=$_POST["equipment"];
+        $shiftNo=$_POST["class"];
+        $floorID=$_POST["buildingfloor"];
+        //SQL Binding
+        //篩選出棟別
+        $build=sql_database('B_name','FA.Building','b_number',$buildNo);         
+        //篩選出系統別
+        $system=sql_database('sysName','FA.Equipment_System_Group','sysID',$sysNo);
+        //篩選出樓層別
+        $system=sql_database('floorName','FA.BuildingFloor','floorID',$floorID);
+        //篩選出設備別
+        if ($sysNo==4) {
+            $equipment=sql_database('zoneName','FA.Zonefloor','floorID',$equipNo);
+        } else {
+            $equipment=sql_database('equipName','FA.Equipment_System','equipID',$equipNo);
+        }
+        //篩選出班別
+        $class=sql_database('shiftName','FA.Shift_Table','shiftID',$shiftNo);
+        setcookie('className',$class);    
+        //檢查項目
+        switch ($sysNo) {
+            case "4":
+                if (empty($equipNo)) {
+                    $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check_elec WHERE floorID='$floorID'AND b_number='$buildNo'";
+                    $query_equip=$pdo->query($sql_equip_check);
+                    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check_elec WHERE floorID='$floorID'AND b_number='$buildNo'";
+                    $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
+                } else {
+                    $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check_elec WHERE floorID='$floorID'AND zoneNo='$equipNo'AND b_number='$buildNo'";
+                    $query_equip=$pdo->query($sql_equip_check);
+                    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check_elec WHERE floorID='$floorID'AND zoneNo='$equipNo'AND b_number='$buildNo'";
+                    $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
+                }
+                break;
+            default:
+                if (empty($equipNo)) {
+                    $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo'";
+                    $query_equip=$pdo->query($sql_equip_check);
+                    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo'";
+                    $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
+                } else {
+                    $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID='$equipNo'AND b_number='$buildNo'";
+                    $query_equip=$pdo->query($sql_equip_check);
+                    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID='$equipNo'AND b_number='$buildNo'";
+                    $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
+                }
+                break;
+        }     
+    ?>
+    <div class="container border border-info mt-5">
+        <form action="" method="post" name="wa">
+            <h2 class="text-center font-weight-bold">中國醫藥大學附設醫院-<?= $build ?>--<?= $system ?></h2>
+            <!-- 班別/檢查者/日期欄 -->
+            <div class="row my-3">
+                <div class="col">
+                    <p class="d-inline font-weight-bold">班別：</p>
+                    <p class="d-inline text-primary"><?= $class ?></p>
+                </div>
+                <div class="col text-center">
+                    <p class="d-inline font-weight-bold">檢查者：</p>
+                    <p class="d-inline text-primary"><?= '檢查者' ?></p>
+                </div>
+                <div class="col text-right">
+                    <p class="d-inline font-weight-bold">檢查日期：</p>
+                    <p class="d-inline text-primary"><?= $check_date ?></p>
+                </div>
             </div>
+            <!-- <div class="my-3">
+                <p class="d-inline font-weight-bold">
+                    設備：
+                </p>
+                <p class="d-inline text-primary">
+                    <?//= $equipment ?>
+                </p>
+            </div> -->
+            <!-- 表格主體 -->
+            <table class="table my-5">
+                <thead>
+                    <th>檢查項目</th>
+                    <th>參考值</th>
+                    <th>結果</th>
+                </thead>
+                <?php
+                for ($i=0; $i < $equip_check_no; $i++) { 
+                    $equipinfo=$query_equip->fetch(PDO::FETCH_ASSOC);
+                ?>
+                <tbody class="text-primary">
+                    <td>
+                        <?= $equipinfo['equipCheckName']?>
+                    </td>
+                    <td>
+                        <?= $equipinfo["ref"]?>
+                    </td>
+                <?php
+                if ($equipinfo["ref"]=="V/X") { 
+                ?>
+                        <td>
+                            <input type='radio' name='<?= $i?>' value='true'>合格
+                            <input type='radio' name='<?= $i?>' value='false'>不合格
+                        </td>
+                <?php                
+                } else { 
+                ?>
+                        <td>
+                            <input type="text" name='<?= $i?>' maxlength="20">
+                        </td>
+                <?php
+                }  
+                echo"</tr>";
+                }
+                ?>
+                </tbody>
+            </table>
+            <!-- 備註欄 -->
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">備註：</span>
+                </div>
+                <textarea class="form-control" name="remark" aria-label="With textarea"></textarea>
+            </div>
+            <!-- 傳送值到資料庫中 -->
+            <input type="hidden" name="action" value="add">
+            <input type="hidden" name="build" value='<?= $buildNo ?>'>
+            <input type="hidden" name="equip" value='<?= $equipNo ?>'>
+            <input type="hidden" name="sys" value='<?= $sysNo ?>'>
+            <input type="hidden" name="shift" value='<?= $shiftNo ?>'>
+            <input type="hidden" name="date_c" value='<?= $check_date ?>'>
+            <input type="hidden" name="loop_num" value='<?= $equip_check_no ?>'>
+            <input type="hidden" name="floorID" value='<?= $floorID ?>'>
+            <!-- 送出鈕 -->                               
+            <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>
+        </form>
+    </div>
+</body>
 
-    </body>
-
-    </html>
+</html>

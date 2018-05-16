@@ -12,7 +12,7 @@ $(function () {
     //登入功能
     // 登入表單提交時要執行getJSON指令
     $.getJSON("php/sessionData.php", function (data) {
-        var $Name = data[0]["loginMember"];
+        var $Name = data[0]["login_member"];
         if (data[0]["login_success"] == false) {
             $("#result").html("帳號或密碼錯誤，請重新輸入");
         } else {
