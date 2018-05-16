@@ -27,7 +27,6 @@
     <!-- 連結wow.js的網址使得網站可以使用WOW的滾動動畫(必須連接animate.css) -->
     <script src="./node_modules/wow.js/dist/wow.min.js"></script>
     <!-- 連結自己的JS -->
-    <script src="./js/jquery-3.3.1.min.js"></script>
     <script src="./js/main.js"></script>
 
     <title>設備保養表單選擇</title>
@@ -38,50 +37,52 @@
     <div id="header"></div>
     <!-- 將該網頁連結到mtwatertable.php -->
     <!-- form start -->
-    <form action="mtwatertable.php" method="post" name="mttable">
-        <div class="row">
-            <div class="col-lg-6 col-sm-10 back container w-50 my-4 rounded">
-                <div class="choice_table rounded text-white">
-                    <!-- 副標題 -->
-                    <h2 class="text-center mb-4">選擇表單</h2>
-                    <!-- 保養日期 -->
-                    <P>保養日期: </P>
-                    <input class="form-control mb-3" type="date" name="bday" id="bday">
-                    <!-- 選擇班別 -->
-                    <p>選擇班別：</p>
-                    <select class="form-control mb-3" name="class" id="Three_shifts">
-                        <option selected>請選擇班別</option>
-                    </select>
-                    <!-- 選擇棟別 -->
-                    <p>選擇棟別：</p>
-                    <select class="form-control mb-3 f1 f2" name="build" id="build">
-                        <option selected>請選擇棟別</option>
-                    </select>
-                    <!-- 點檢選擇系統 -->
-                    <p>點檢選擇系統：</p>
-                    <select class="form-control mb-3 f1 f2 " name="system" id="system">
-                        <option selected>請選擇系統</option>
-                    </select>
-                    <!-- 選擇樓層 -->
-                    <p>選擇設備樓層：</p>
-                    <select class="form-control mb-3 f2" name="buildingfloor" id="buildingfloor">
-                        <option value="">請選擇樓層</option>
-                    </select>
-                    <!-- 選擇點檢設備 -->
-                    <p>選擇點檢設備： </p>
-                    <select class="form-control mb-3" name="equipment" id="equipment">
-                        <option selected>請選擇設備/區域</option>
-                    </select>
-                    <!-- 送出鍵 -->
-                    <div class="d-flex justify-content-end">
-                        <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                            <button style="pointer-events: none;" type="submit" class="btn btn-primary mt-4 autho3" disabled>送出</button>
-                        </span>
+    <section>
+        <form action="mtwatertable.php" method="post" name="mttable">
+            <div class="row">
+                <div class="col-lg-6 col-sm-10 back container w-50 my-4 rounded">
+                    <div class="choice_table rounded text-white">
+                        <!-- 副標題 -->
+                        <h2 class="text-center mb-4">選擇表單</h2>
+                        <!-- 保養日期 -->
+                        <P>保養日期: </P>
+                        <input class="form-control mb-3" type="date" name="bday" id="bday">
+                        <!-- 選擇班別 -->
+                        <p>選擇班別：</p>
+                        <select class="form-control mb-3" name="class" id="Three_shifts">
+                            <option selected>請選擇班別</option>
+                        </select>
+                        <!-- 選擇棟別 -->
+                        <p>選擇棟別：</p>
+                        <select class="form-control mb-3 f1 f2" name="build" id="build">
+                            <option selected>請選擇棟別</option>
+                        </select>
+                        <!-- 點檢選擇系統 -->
+                        <p>點檢選擇系統：</p>
+                        <select class="form-control mb-3 f1 f2 " name="system" id="system">
+                            <option selected>請選擇系統</option>
+                        </select>
+                        <!-- 選擇樓層 -->
+                        <p>選擇設備樓層：</p>
+                        <select class="form-control mb-3 f2" name="buildingfloor" id="buildingfloor">
+                            <option value="">請選擇樓層</option>
+                        </select>
+                        <!-- 選擇點檢設備 -->
+                        <p>選擇點檢設備： </p>
+                        <select class="form-control mb-3" name="equipment" id="equipment">
+                            <option selected>請選擇設備/區域</option>
+                        </select>
+                        <!-- 送出鍵 -->
+                        <div class="d-flex justify-content-end">
+                            <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
+                                <button style="pointer-events: none;" type="submit" class="btn btn-primary mt-4 autho3" disabled>送出</button>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </section>
     <!-- form end -->
     <!-- 網頁尾頁部分 -->
     <!-- footer -->
