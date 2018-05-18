@@ -39,6 +39,7 @@
     <!-- 連結外部的CSS -->
     <link rel="stylesheet" href="./css/bootstrap.css">
     <link href="./node_modules/fontawesome-free-5.0.6/web-fonts-with-css/css/fontawesome-all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./node_modules/normalize.css/normalize.css">
     <!-- 連結自己的CSS -->
     <link rel="stylesheet" href="./css/style.css">
     <!-- 連結外部的JS -->
