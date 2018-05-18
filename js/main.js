@@ -209,7 +209,7 @@ $(function () {
             "floor_eq": floor_eq,
             "choiceNo": choiceNo
         }, function (data) {
-            var html = '<option selected> 請選擇設備/區域 </option>';
+            var html = '<option value=""> 請選擇設備/區域 </option>';
             if (choiceNo == 1) {
                 for (let i = 0; i < data.length; i++) {
                     html += "<option value=\"" + data[i]["zoneNo"] + "\">" + data[i]["zoneName"] + "</option>";
