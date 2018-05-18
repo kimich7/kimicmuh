@@ -8,24 +8,36 @@
     $rDate=$_GET["r_date"];
     $bname=sql_database('B_name','FA.Building','b_number',$buildNo);
     $sysname=sql_database('sysName','FA.Equipment_System_Group','sysID',$sysNo);
-
     $updata_qt=updata_num('FA.Water_System_Record_Detail',$MasterID);//迴圈數量
     $updatainfo=updata_select('FA.Water_System_Record_Detail',$MasterID);//我要的東西
-
-    if (isset($_POST["action"])&&($_POST["action"]=="update")) {
-    for ($i=0; $i  <$updata_qt ; $i++) {
-    $q=100+$i;
-    $rdID=$_POST["$q"];
-    $ans=$_POST["$i"];
-    $sql="UPDATE FA.Water_System_Record_Detail SET remark=:remark , checkResult=:checkResult WHERE recordDetailID=:ID";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindParam(':remark',$_POST["remark"],PDO::PARAM_STR);
-    $stmt->bindParam(':checkResult',$ans,PDO::PARAM_STR);
-    $stmt->bindParam(':ID',$rdID,PDO::PARAM_INT);
-    $stmt->execute();      
+    switch ($sysNo) {
+        case '1':
+            $systemTable='FA.Water_System_Record_Detail';
+            break;
+        case '2':
+            $systemTable='FA.Air_System_Record_Detail';
+            break;
+        case '3':
+            $systemTable='FA.AirCond_System_Record_Detail';
+            break;
+        case '4':
+            $systemTable='FA.HL_Vol_System_Record_Detail';
+            break;
     }
-    $pdo=null;
-    header("Location: mtupdata.php");    
+    if (isset($_POST["action"])&&($_POST["action"]=="update")) {
+        for ($i=0; $i  <$updata_qt ; $i++) {
+            $q=100+$i;
+            $rdID=$_POST["$q"];
+            $ans=$_POST["$i"];
+            $sql="UPDATE FA.Water_System_Record_Detail SET remark=:remark , checkResult=:checkResult WHERE recordDetailID=:ID";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':remark',$_POST["remark"],PDO::PARAM_STR);
+            $stmt->bindParam(':checkResult',$ans,PDO::PARAM_STR);
+            $stmt->bindParam(':ID',$rdID,PDO::PARAM_INT);
+            $stmt->execute();      
+        }
+        $pdo=null;
+        header("Location: mtupdata.php");    
     }
 ?>
 
@@ -57,11 +69,7 @@
             <h2 class="text-center font-weight-bold">中國醫藥大學附設醫院-<?= $bname ?>--<?= $sysname ?></h2>
             <!-- 班別/檢查者/日期欄 -->
             <div class="row my-3">
-                <div class="col">
-                <p class="d-inline font-weight-bold">班別：</p>
-                <p class="d-inline text-primary"><?= $shiftname ?></p>
-                </div>
-                <div class="col text-center">
+                <div class="col text-left">
                 <p class="d-inline font-weight-bold">檢查者：</p>
                 <p class="d-inline text-primary"><?= '檢查者' ?></p>
                 </div>
@@ -79,119 +87,135 @@
                     <th>中班結果</th>
                     <th>晚班結果</th>
                 </thead>
-                <tbody class="text-primary">
+                <tbody class="text-primary row">
                     <!-- 檢查項目/參考值 -->
-                    <td>
+                    <td class="col-ml-6">
                         <table>
-                            <?php
-                            $updatainfo=updata_select('FA.Water_System_Record_Detail',$MasterID);//我要的東西
-                            $itme=item("SELECT DISTINCT equipCheckID,ref FROM FA.Water_System_Record_Detail WHERE recordID=$MasterID");
-                            $num=num("SELECT COUNT(equipCheckID) FROM FA.Water_System_Record_Detail WHERE recordID=$MasterID");
-                            ?>                        
-                            <?php
-                            for ($a=0; $a < ($num/3); $a++) {                            
-                            $checkName=sql_database('equipCheckName','FA.Equipment_Check','equipCheckID',$itme[$a]["equipCheckID"]);
+                            <?php 
+                                //$updatainfo=updata_select($systemTable,$MasterID);//我要的東西
+                                $itme=item("SELECT DISTINCT equipCheckID,ref FROM $systemTable WHERE recordID=$MasterID");
+                                $num=num("SELECT COUNT(equipCheckID) FROM $systemTable WHERE recordID=$MasterID");
+                                $checkName=array();
+                                for ($a=0; $a < ($num/3); $a++) {                            
+                                $checkName[$a]=sql_database('equipCheckName','FA.Equipment_Check','equipCheckID',$itme[$a]["equipCheckID"]);
+                                //PRINT_R($checkName);
                             ?>
                             <tr>
                                 <!--檢查項目-->
-                                <td><?= $checkName ?></td>
+                                <td><?= $checkName[$a]?></td>
                                 <!--參考值-->
-                                <td><?= $updatainfo[$a]["ref"]?></td>
+                                <td><?= $itme[$a]["ref"]?></td>
                             </tr>
                             <?php
-                            }
-                            for ($b=0; $b < $num; $b++) { 
-                            $q=100+$b;
+                                }
+                                for ($b=0; $b < $num; $b++) { 
+                                $q=100+$b;
                             ?>                        
                             <input type="hidden" name='<?= $q ?>' value='<?= $updatainfo[$b]["recordDetailID"]?>'>
                             <?php                           
-                            }
+                                }
                             ?>
                         </table>
                     </td>
                     <!-- 早班結果 -->
-                    <td>
+                    <td class="col-ml-2">
                         <table>
-                            <?php
-                            $ans1=item("SELECT equipCheckID,checkResult FROM FA.Water_System_Record_Detail WHERE recordID=$MasterID AND shiftID=1");
-                            for ($a=0; $a < $num/3; $a++) {
-                            if ($ans1[$a]["equipCheckID"]==$checkName[$a]["equipCheckID"]) {
-                            if ($updatainfo[$a]["ref"]=="V/X") { 
+                            <?php                            
+                                $ans1=item("SELECT equipCheckID,checkResult FROM $systemTable WHERE recordID=$MasterID AND shiftID=1");
+                                for ($a=0; $a < $num/3; $a++) {
+                                    for ($i=0; $i < $num/3 ;) { 
+                                        if ($itme[$a]["equipCheckID"] == $ans1[$i]["equipCheckID"]) {
+                                            if ($itme[$a]["ref"]=="V/X") {
                             ?>
                             <tr>
                                 <td>
-                                <input type='radio' name='<?= $a?>' value='true' <?PHP if( $ans1[$a]["checkResult"]=="true") echo "checked";?>>合格
-                                <input type='radio' name='<?= $a?>' value='false' <?PHP if($ans1[$a]["checkResult"]=="false") echo "checked";?>>不合格
+                                <input type='radio' name='<?= $a."A"?>' value='true' <?PHP if($ans1[$i]["checkResult"]=="true") echo "checked";?>>合格
+                                <input type='radio' name='<?= $a."A"?>' value='false' <?PHP if($ans1[$i]["checkResult"]=="false") echo "checked";?>>不合格
                                 </td>
                             </tr>
                             <?php
-                            } else {
-                            ?>              
+                                            } else {
+                            ?>
                             <tr>
-                                <td><input type="text" name='<?= $a?>' maxlength="20" value='<?= $ans1[$a]["checkResult"]?>'></td>
+                                <td><input type="text" name='<?= $a?>' maxlength="20" value='<?= $ans1[$i]["checkResult"]?>'></td>
                             </tr>
                             <?php
-                            }
-                            }
-                            }
+                                            }
+                                            break;                                            
+                                        } else {
+                                            $i++;                                               
+                                        }
+                                    }
+                                }    
+                                    // if ($ans1[$a]["equipCheckID"]==$itme[$i]["equipCheckID"]) {
+                                    //     if ($itme[$a]["ref"]=="V/X") { 
                             ?>
+                            <!-- 斷點 -->
                         </table>
                     </td>
                     <!-- 中班結果 -->
-                    <td>
+                    <td  class="col-ml-2">
                         <table>
                             <?php
-                            $ans1=item("SELECT equipCheckID,checkResult FROM FA.Water_System_Record_Detail WHERE recordID=$MasterID AND shiftID=2");
-                            for ($a=0; $a < $num/3; $a++) {
-                            if ($ans1[$a]["equipCheckID"]==$checkName[$a]["equipCheckID"]) {
-                            if ($updatainfo[$a]["ref"]=="V/X") { 
-                                ?>
+                                $ans2=item("SELECT equipCheckID,checkResult FROM $systemTable WHERE recordID=$MasterID AND shiftID=2");
+                                for ($a=0; $a < $num/3; $a++) {
+                                    for ($i=0; $i < $num/3 ;) { 
+                                        if ($itme[$a]["equipCheckID"] == $ans2[$i]["equipCheckID"]) {
+                                            if ($itme[$a]["ref"]=="V/X") {
+                            ?>
                             <tr>
                                 <td>
-                                <input type='radio' name='<?= $a?>' value='true' <?PHP if( $ans1[$a]["checkResult"]=="true") echo "checked";?>>合格
-                                <input type='radio' name='<?= $a?>' value='false' <?PHP if($ans1[$a]["checkResult"]=="false") echo "checked";?>>不合格
+                                <input type='radio' name='<?= $a."B"?>' value='true' <?PHP if($ans2[$i]["checkResult"]=="true") echo "checked";?>>合格
+                                <input type='radio' name='<?= $a."B"?>' value='false' <?PHP if($ans2[$i]["checkResult"]=="false") echo "checked";?>>不合格
                                 </td>
                             </tr>
                             <?php
-                            } else {
-                            ?>              
+                                            } else {
+                            ?>
                             <tr>
-                                <td>
-                                <input type="text" name='<?= $a?>' maxlength="20" value='<?= $ans1[$a]["checkResult"]?>'>
-                                </td>
+                                <td><input type="text" name='<?= $a?>' maxlength="20" value='<?= $ans2[$i]["checkResult"]?>'></td>
                             </tr>
                             <?php
-                            }
-                            }
-                            }
+                                            }
+                                            break;                                            
+                                        } else {
+                                            $i++;                                               
+                                        }
+                                    }
+                                }    
                             ?>
                         </table>
                     </td>
                     <!-- 晚班結果 -->
-                    <td>
+                    <td  class="col-ml-2">
                         <table>
                             <?php
-                            $ans1=item("SELECT equipCheckID,checkResult FROM FA.Water_System_Record_Detail WHERE recordID=$MasterID AND shiftID=3");
-                            for ($a=0; $a < $num/3; $a++) {
-                            if ($ans1[$a]["equipCheckID"]==$checkName[$a]["equipCheckID"]) {
-                            if ($updatainfo[$a]["ref"]=="V/X") { 
+                                $ans3=item("SELECT equipCheckID,checkResult FROM $systemTable WHERE recordID=$MasterID AND shiftID=3");
+                                for ($a=0; $a < $num/3; $a++) {
+                                    for ($i=0; $i < $num/3 ;) { 
+                                        if ($itme[$a]["equipCheckID"] == $ans3[$i]["equipCheckID"]) {
+                                            if ($itme[$a]["ref"]=="V/X") {
                             ?>
                             <tr>
                                 <td>
-                                <input type='radio' name='<?= $a?>' value='true' <?PHP if( $ans1[$a]["checkResult"]=="true") echo "checked";?>>合格
-                                <input type='radio' name='<?= $a?>' value='false' <?PHP if($ans1[$a]["checkResult"]=="false") echo "checked";?>>不合格
+                                <input type='radio' name='<?= $a."C"?>' value='true' <?PHP if($ans3[$i]["checkResult"]=="true") echo "checked";?>>合格
+                                <input type='radio' name='<?= $a."C"?>' value='false' <?PHP if($ans3[$i]["checkResult"]=="false") echo "checked";?>>不合格
                                 </td>
                             </tr>
                             <?php
-                            } else {
-                            ?>              
+                                            } else {
+                            ?>
                             <tr>
-                                <td><input type="text" name='<?= $a?>' maxlength="20" value='<?= $ans1[$a]["checkResult"]?>'></td>
+                                <td><input type="text" name='<?= $a?>' maxlength="20" value='<?= $ans3[$i]["checkResult"]?>'></td>
                             </tr>
                             <?php
-                            }
-                            }
-                            }
+                                            }
+                                            break;                                            
+                                        } else {
+                                            $i++;                                               
+                                        }
+                                    }
+                                }    
                             ?>
                         </table>
                     </td>
@@ -213,4 +237,3 @@
 </body>
 
 </html>
-
