@@ -10,22 +10,14 @@
 
     function updata_select($tbl,$Mid){
         include("CMUHconndata.php");
-        //$updata_view=array();
-        //$updata="SELECT recordDetailID,equipCheckID,ref,r_member,remark,checkResult FROM $tbl WHERE rDate='$date' AND equipID=$equip AND recordID=$Mid";
         $updata="SELECT recordDetailID,equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate FROM $tbl WHERE recordID = $Mid";
         $updata_query=$pdo->query($updata)->fetchAll();
-        //$updata_query=$pdo->query($updata);
         $pdo=null;
-        // foreach ($updata_query as $updatainfo) {
-        //     ECHO $updatainfo["equipCheckID"].'</br>';
-        // }
-        //$updata_view = $updata_query;
         return $updata_query;
     } 
 
     function updata_num($tbl,$Mid){
         include("CMUHconndata.php");
-        //$updata="SELECT COUNT(equipCheckID) FROM $tbl WHERE rDate='$date' AND equipID=$equip AND recordID=$Mid";
         $updata="SELECT COUNT(equipCheckID) FROM $tbl WHERE recordID = $Mid";
         $updata_qt=Current($pdo->query($updata)->fetch());
         $pdo=null;

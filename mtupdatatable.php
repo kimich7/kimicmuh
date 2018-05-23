@@ -1,35 +1,42 @@
 <?php
     include("php/CMUHconndata.php");
     include("php/fun.php");
+    
     //叫出資料
     $MasterID=$_GET["id"];
     $buildNo = $_GET["build"];
     $sysNo= $_GET["sys"];
     $rDate=$_GET["r_date"];
-    $bname=sql_database('B_name','FA.Building','b_number',$buildNo);
-    $sysname=sql_database('sysName','FA.Equipment_System_Group','sysID',$sysNo);
-    $updata_qt=updata_num('FA.Water_System_Record_Detail',$MasterID);//迴圈數量
-    $updatainfo=updata_select('FA.Water_System_Record_Detail',$MasterID);//我要的東西
     switch ($sysNo) {
         case '1':
             $systemTable='FA.Water_System_Record_Detail';
+            $equipTable='FA.Equipment_Check';
             break;
         case '2':
             $systemTable='FA.Air_System_Record_Detail';
+            $equipTable='FA.Equipment_Check';
             break;
         case '3':
             $systemTable='FA.AirCond_System_Record_Detail';
+            $equipTable='FA.Equipment_Check';
             break;
         case '4':
             $systemTable='FA.HL_Vol_System_Record_Detail';
+            $equipTable='FA.Equipment_Check_elec';
             break;
     }
-    if (isset($_POST["action"])&&($_POST["action"]=="update")) {
+    $bname=sql_database('B_name','FA.Building','b_number',$buildNo);
+    $sysname=sql_database('sysName','FA.Equipment_System_Group','sysID',$sysNo);
+    $updata_qt=updata_num($systemTable,$MasterID);//迴圈數量
+    $updatainfo=updata_select($systemTable,$MasterID);//我要的東西
+    
+    if (isset($_POST["action"])&&($_POST["action"]=="update")) {        
         for ($i=0; $i  <$updata_qt ; $i++) {
-            $q=100+$i;
+            $q=200+$i;
+            $an=$i;
             $rdID=$_POST["$q"];
-            $ans=$_POST["$i"];
-            $sql="UPDATE FA.Water_System_Record_Detail SET remark=:remark , checkResult=:checkResult WHERE recordDetailID=:ID";
+            $ans=$_POST["$an"];
+            $sql="UPDATE $systemTable SET remark=:remark , checkResult=:checkResult WHERE recordDetailID=:ID";
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':remark',$_POST["remark"],PDO::PARAM_STR);
             $stmt->bindParam(':checkResult',$ans,PDO::PARAM_STR);
@@ -37,7 +44,7 @@
             $stmt->execute();      
         }
         $pdo=null;
-        header("Location: mtupdata.php");    
+        header("Location: mtupdata.html");    
     }
 ?>
 
@@ -71,7 +78,7 @@
             <div class="row my-3">
                 <div class="col text-left">
                 <p class="d-inline font-weight-bold">檢查者：</p>
-                <p class="d-inline text-primary"><?= '檢查者' ?></p>
+                <p class="d-inline text-primary" name="reMumber"><?= '檢查者' ?></p>
                 </div>
                 <div class="col text-right">
                 <p class="d-inline font-weight-bold">檢查日期：</p>
@@ -97,7 +104,7 @@
                         $num=num("SELECT COUNT(equipCheckID) FROM $systemTable WHERE recordID=$MasterID");
                         $checkName=array();
                         for ($a=0; $a < ($num/3); $a++) {                            
-                        $checkName[$a]=sql_database('equipCheckName','FA.Equipment_Check','equipCheckID',$itme[$a]["equipCheckID"]);
+                        $checkName[$a]=sql_database('equipCheckName',$equipTable,'equipCheckID',$itme[$a]["equipCheckID"]);                        
                     ?>
                     <tr>
                         <!--檢查項目-->
@@ -105,16 +112,13 @@
                         <!--參考值-->
                         <td><?= $itme[$a]["ref"]?></td>
                     </tr>
-                    <?php
+                    <?php                           
                         }
-                        for ($b=0; $b < $num; $b++) { 
-                        $q=100+$b;
-                        ?>                        
-                        <input type="hidden" name='<?= $q ?>' value='<?= $updatainfo[$b]["recordDetailID"]?>'>
-                        <?php                           
-                        }
-                    ?> 
+                    ?>
                     </tbody>
+                    <tfoot class="text-primary">
+                        <td>巡檢人員</td>
+                    </tfoot>
                 </table> 
                 <!-- 早班結果 -->
                 <table id="tfresult1" class="table col-xl-2 col-lg-2 col-md-4">
@@ -124,25 +128,30 @@
                     <tbody class="text-primary">
                         <?php                            
                         $ans1=item("SELECT equipCheckID,checkResult FROM $systemTable WHERE recordID=$MasterID AND shiftID=1");
+                        $user_1=sql_database('cname','FA.Employee','e_number',$ans1[0]['r_member']);
                         for ($a=0; $a < $num/3; $a++) {
-                        for ($i=0; $i < $num/3 ;) { 
+                            $q=$a+200;
+                            $an=$a;//結果答案
+                            for ($i=0; $i < $num/3 ;) { 
                         if ($itme[$a]["equipCheckID"] == $ans1[$i]["equipCheckID"]) {
                         if ($itme[$a]["ref"]=="V/X") {
                         ?>
                         <tr>
                             <td>
-                                <input type='radio' name='<?= $a."A"?>' value='true' <?PHP if($ans1[$i]["checkResult"]=="true") echo "checked";?>>合格
-                                <input type='radio' name='<?= $a."A"?>' value='false' <?PHP if($ans1[$i]["checkResult"]=="false") echo "checked";?>>不合格
+                                <input type='radio' name='<?= $an?>' value='true' <?PHP if($ans1[$i]["checkResult"]=="true") echo "checked";?>>合格
+                                <input type='radio' name='<?= $an?>' value='false' <?PHP if($ans1[$i]["checkResult"]=="false") echo "checked";?>>不合格
                             </td> 
                         </tr>               
                         <?php
                             } else {
                         ?>
                         <tr>
-                            <td><input type="text" name='<?= $a?>' maxlength="20" value='<?= $ans1[$i]["checkResult"]?>'></td>
+                            <td><input type="text" name='<?= $an?>' maxlength="20" value='<?= $ans1[$i]["checkResult"]?>'></td>
                         </tr>
                         <?php
-                            }
+                            } ?>
+                            <input type='hidden' name='<?= $q?>' value='<?= $ans1[$i]['recordDetailID']?>'>
+                            <?php
                             break;                                            
                             } else {
                             $i++;                                               
@@ -151,6 +160,9 @@
                             }    
                         ?>
                     </tbody>
+                    <tfoot class="text-primary">
+                        <td><?= $user_1?></td>
+                    </tfoot>
                 </table>
                 <!-- 中班結果 -->
                 <table id="tfresult2" class="table col-xl-2 col-lg-2 col-md-4">
@@ -160,15 +172,18 @@
                     <tbody class="text-primary">
                         <?php
                             $ans2=item("SELECT equipCheckID,checkResult FROM $systemTable WHERE recordID=$MasterID AND shiftID=2");
+                            $user_2=sql_database('cname','FA.Employee','e_number',$ans2[0]['r_member']);
                             for ($a=0; $a < $num/3; $a++) {
+                                $an=$a+($num/3);
+                                $q=$a+200+($num/3);
                             for ($i=0; $i < $num/3 ;) { 
                             if ($itme[$a]["equipCheckID"] == $ans2[$i]["equipCheckID"]) {
                             if ($itme[$a]["ref"]=="V/X") {
                         ?>
                         <tr>
                             <td>
-                                <input type='radio' name='<?= $a."B"?>' value='true' <?PHP if($ans2[$i]["checkResult"]=="true") echo "checked";?>>合格
-                                <input type='radio' name='<?= $a."B"?>' value='false' <?PHP if($ans2[$i]["checkResult"]=="false") echo "checked";?>>不合格
+                                <input type='radio' name='<?= $an?>' value='true' <?PHP if($ans2[$i]["checkResult"]=="true") echo "checked";?>>合格
+                                <input type='radio' name='<?= $an?>' value='false' <?PHP if($ans2[$i]["checkResult"]=="false") echo "checked";?>>不合格
                             </td>
                         </tr>
                         
@@ -176,10 +191,12 @@
                             } else {
                         ?>
                         <tr>
-                            <td><input type="text" name='<?= $a?>' maxlength="20" value='<?= $ans2[$i]["checkResult"]?>'></td>
+                            <td><input type="text" name='<?= $an?>' maxlength="20" value='<?= $ans2[$i]["checkResult"]?>'></td>
                         </tr>
                         <?php
-                            }
+                            } ?>
+                            <input type='hidden' name='<?= $q?>' value='<?= $ans2[$i]['recordDetailID']?>'>
+                            <?php
                             break;                                            
                             } else {
                             $i++;                                               
@@ -188,6 +205,9 @@
                             }    
                         ?>
                     </tbody>
+                    <tfoot class="text-primary">
+                        <td><?= $user_2?></td>
+                    </tfoot>
                 </table>
                  <!-- 晚班結果 -->    
                 <table id="tfresult3" class="table col-xl-2 col-lg-2 col-md-4">
@@ -196,27 +216,31 @@
                     </thead>
                     <tbody class="text-primary">
                     <?php
-                        $ans3=item("SELECT equipCheckID,checkResult FROM $systemTable WHERE recordID=$MasterID AND shiftID=3");
+                        $ans3=item("SELECT recordDetailID,equipCheckID,checkResult,r_member FROM $systemTable WHERE recordID=$MasterID AND shiftID=3");
+                        $user_3=sql_database('cname','FA.Employee','e_number',$ans3[0]['r_member']);
                         for ($a=0; $a < $num/3; $a++) {
-                        for ($i=0; $i < $num/3 ;) { 
-                        if ($itme[$a]["equipCheckID"] == $ans3[$i]["equipCheckID"]) {
-                        if ($itme[$a]["ref"]=="V/X") {
+                            $an=$a+(($num/3)+($num/3));
+                            $q=$a+200+(($num/3)+($num/3));
+                            for ($i=0; $i < $num/3 ;) { 
+                                if ($itme[$a]["equipCheckID"] == $ans3[$i]["equipCheckID"]) {
+                                    if ($itme[$a]["ref"]=="V/X") {
                     ?>
                     <tr>
                         <td>
-                            <input type='radio' name='<?= $a."C"?>' value='true' <?PHP if($ans3[$i]["checkResult"]=="true") echo "checked";?>>合格
-                            <input type='radio' name='<?= $a."C"?>' value='false' <?PHP if($ans3[$i]["checkResult"]=="false") echo "checked";?>>不合格
+                        <input type='radio' name='<?= $an?>' value='true' <?PHP if($ans3[$i]["checkResult"]=="true") echo "checked";?>>合格
+                        <input type='radio' name='<?= $an?>' value='false' <?PHP if($ans3[$i]["checkResult"]=="false") echo "checked";?>>不合格
                         </td>
                     </tr>
-
                     <?php
                         } else {
                     ?>
                     <tr>
-                        <td><input type="text" name='<?= $a?>' maxlength="20" value='<?= $ans3[$i]["checkResult"]?>'></td>
+                    <td><input type="text" name='<?= $an?>' maxlength="20" value='<?= $ans3[$i]["checkResult"]?>'></td>
                     </tr>
                     <?php
-                        }
+                        }?>
+                        <input type='hidden' name='<?= $q?>' value='<?= $ans3[$i]['recordDetailID']?>'>
+                        <?php
                         break;                                            
                         } else {
                         $i++;                                               
@@ -225,6 +249,9 @@
                         }    
                     ?>
                     </tbody>
+                    <tfoot class="text-primary">
+                        <td><?= $user_3?></td>
+                    </tfoot>
                 </table>
             </div>
                  
