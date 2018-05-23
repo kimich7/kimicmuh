@@ -127,7 +127,7 @@
                     </thead>
                     <tbody class="text-primary">
                         <?php                            
-                        $ans1=item("SELECT equipCheckID,checkResult FROM $systemTable WHERE recordID=$MasterID AND shiftID=1");
+                        $ans1=item("SELECT recordDetailID,equipCheckID,checkResult,r_member FROM $systemTable WHERE recordID=$MasterID AND shiftID=1");
                         $user_1=sql_database('cname','FA.Employee','e_number',$ans1[0]['r_member']);
                         for ($a=0; $a < $num/3; $a++) {
                             $q=$a+200;
@@ -171,7 +171,7 @@
                     </thead>
                     <tbody class="text-primary">
                         <?php
-                            $ans2=item("SELECT equipCheckID,checkResult FROM $systemTable WHERE recordID=$MasterID AND shiftID=2");
+                            $ans2=item("SELECT recordDetailID,equipCheckID,checkResult,r_member FROM $systemTable WHERE recordID=$MasterID AND shiftID=2");
                             $user_2=sql_database('cname','FA.Employee','e_number',$ans2[0]['r_member']);
                             for ($a=0; $a < $num/3; $a++) {
                                 $an=$a+($num/3);
