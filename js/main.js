@@ -224,5 +224,32 @@ $(function () {
 
         });
     });
+    //偵測螢幕寬，然後出現按鈕選單
+    var $tall = window.screen.width;
+    if ($tall <= 912) {
+        $("#tfbtn1").removeClass("d-none");
+        $("#tfbtn2").removeClass("d-none");
+        $("#tfbtn3").removeClass("d-none");
+        $("#tfresult2").addClass("d-none");
+        $("#tfresult3").addClass("d-none");
+    }
+    $("#tfbtn1").click(function (e) {
+        e.preventDefault();
+        $("#tfresult1").removeClass("d-none");
+        $("#tfresult2").addClass("d-none");
+        $("#tfresult3").addClass("d-none");
+    });
+    $("#tfbtn2").click(function (e) {
+        e.preventDefault();
+        $("#tfresult1").addClass("d-none");
+        $("#tfresult2").removeClass("d-none");
+        $("#tfresult3").addClass("d-none");
+    });
+    $("#tfbtn3").click(function (e) {
+        e.preventDefault();
+        $("#tfresult1").addClass("d-none");
+        $("#tfresult2").addClass("d-none");
+        $("#tfresult3").removeClass("d-none");
+    });
     //===================================mtinsert結束(與mtupdata共用)===================================
 });

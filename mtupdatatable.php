@@ -78,149 +78,156 @@
                 <p class="d-inline text-primary"><?= $rDate ?></p>
                 </div>
             </div>
+            <div class="d-flex justify-content-end">
+            <button class="btn btn-primary my-2 mr-2 d-none" id="tfbtn1">早班結果</button>
+            <button class="btn btn-primary my-2 mr-2 d-none" id="tfbtn2">午班結果</button>
+            <button class="btn btn-primary my-2 mr-2 d-none" id="tfbtn3">晚班結果</button>
+            </div>
             <!-- 表格主體 -->
-            <table class="table my-5">
-                <thead>
-                    <th>檢查項目</th>
-                    <th>參考值</th>
-                    <th>早班結果</th>
-                    <th>中班結果</th>
-                    <th>晚班結果</th>
-                </thead>
-                <tbody class="text-primary row">
-                    <!-- 檢查項目/參考值 -->
-                    <td class="col-ml-6">
-                        <table>
-                            <?php 
-                                //$updatainfo=updata_select($systemTable,$MasterID);//我要的東西
-                                $itme=item("SELECT DISTINCT equipCheckID,ref FROM $systemTable WHERE recordID=$MasterID");
-                                $num=num("SELECT COUNT(equipCheckID) FROM $systemTable WHERE recordID=$MasterID");
-                                $checkName=array();
-                                for ($a=0; $a < ($num/3); $a++) {                            
-                                $checkName[$a]=sql_database('equipCheckName','FA.Equipment_Check','equipCheckID',$itme[$a]["equipCheckID"]);
-                                //PRINT_R($checkName);
-                            ?>
-                            <tr>
-                                <!--檢查項目-->
-                                <td><?= $checkName[$a]?></td>
-                                <!--參考值-->
-                                <td><?= $itme[$a]["ref"]?></td>
-                            </tr>
-                            <?php
-                                }
-                                for ($b=0; $b < $num; $b++) { 
-                                $q=100+$b;
-                            ?>                        
-                            <input type="hidden" name='<?= $q ?>' value='<?= $updatainfo[$b]["recordDetailID"]?>'>
-                            <?php                           
-                                }
-                            ?>
-                        </table>
-                    </td>
-                    <!-- 早班結果 -->
-                    <td class="col-ml-2">
-                        <table>
-                            <?php                            
-                                $ans1=item("SELECT equipCheckID,checkResult FROM $systemTable WHERE recordID=$MasterID AND shiftID=1");
-                                for ($a=0; $a < $num/3; $a++) {
-                                    for ($i=0; $i < $num/3 ;) { 
-                                        if ($itme[$a]["equipCheckID"] == $ans1[$i]["equipCheckID"]) {
-                                            if ($itme[$a]["ref"]=="V/X") {
-                            ?>
-                            <tr>
-                                <td>
+            <div class="row container">
+                <!-- 檢查項目/參考值 -->
+                <table class="table col-xl-4 col-lg-4 col-md-8">
+                    <thead>
+                        <th>檢查項目</th>
+                        <th>參考值</th>
+                    </thead>
+                    <tbody class="text-primary">
+                    <?php 
+                        $itme=item("SELECT DISTINCT equipCheckID,ref FROM $systemTable WHERE recordID=$MasterID");
+                        $num=num("SELECT COUNT(equipCheckID) FROM $systemTable WHERE recordID=$MasterID");
+                        $checkName=array();
+                        for ($a=0; $a < ($num/3); $a++) {                            
+                        $checkName[$a]=sql_database('equipCheckName','FA.Equipment_Check','equipCheckID',$itme[$a]["equipCheckID"]);
+                    ?>
+                    <tr>
+                        <!--檢查項目-->
+                        <td><?= $checkName[$a]?></td>
+                        <!--參考值-->
+                        <td><?= $itme[$a]["ref"]?></td>
+                    </tr>
+                    <?php
+                        }
+                        for ($b=0; $b < $num; $b++) { 
+                        $q=100+$b;
+                        ?>                        
+                        <input type="hidden" name='<?= $q ?>' value='<?= $updatainfo[$b]["recordDetailID"]?>'>
+                        <?php                           
+                        }
+                    ?> 
+                    </tbody>
+                </table> 
+                <!-- 早班結果 -->
+                <table id="tfresult1" class="table col-xl-2 col-lg-2 col-md-4">
+                    <thead>
+                        <th>早班結果</th>
+                    </thead>
+                    <tbody class="text-primary">
+                        <?php                            
+                        $ans1=item("SELECT equipCheckID,checkResult FROM $systemTable WHERE recordID=$MasterID AND shiftID=1");
+                        for ($a=0; $a < $num/3; $a++) {
+                        for ($i=0; $i < $num/3 ;) { 
+                        if ($itme[$a]["equipCheckID"] == $ans1[$i]["equipCheckID"]) {
+                        if ($itme[$a]["ref"]=="V/X") {
+                        ?>
+                        <tr>
+                            <td>
                                 <input type='radio' name='<?= $a."A"?>' value='true' <?PHP if($ans1[$i]["checkResult"]=="true") echo "checked";?>>合格
                                 <input type='radio' name='<?= $a."A"?>' value='false' <?PHP if($ans1[$i]["checkResult"]=="false") echo "checked";?>>不合格
-                                </td>
-                            </tr>
-                            <?php
-                                            } else {
-                            ?>
-                            <tr>
-                                <td><input type="text" name='<?= $a?>' maxlength="20" value='<?= $ans1[$i]["checkResult"]?>'></td>
-                            </tr>
-                            <?php
-                                            }
-                                            break;                                            
-                                        } else {
-                                            $i++;                                               
-                                        }
-                                    }
-                                }    
-                                    // if ($ans1[$a]["equipCheckID"]==$itme[$i]["equipCheckID"]) {
-                                    //     if ($itme[$a]["ref"]=="V/X") { 
-                            ?>
-                            <!-- 斷點 -->
-                        </table>
-                    </td>
-                    <!-- 中班結果 -->
-                    <td  class="col-ml-2">
-                        <table>
-                            <?php
-                                $ans2=item("SELECT equipCheckID,checkResult FROM $systemTable WHERE recordID=$MasterID AND shiftID=2");
-                                for ($a=0; $a < $num/3; $a++) {
-                                    for ($i=0; $i < $num/3 ;) { 
-                                        if ($itme[$a]["equipCheckID"] == $ans2[$i]["equipCheckID"]) {
-                                            if ($itme[$a]["ref"]=="V/X") {
-                            ?>
-                            <tr>
-                                <td>
+                            </td> 
+                        </tr>               
+                        <?php
+                            } else {
+                        ?>
+                        <tr>
+                            <td><input type="text" name='<?= $a?>' maxlength="20" value='<?= $ans1[$i]["checkResult"]?>'></td>
+                        </tr>
+                        <?php
+                            }
+                            break;                                            
+                            } else {
+                            $i++;                                               
+                            }
+                            }
+                            }    
+                        ?>
+                    </tbody>
+                </table>
+                <!-- 中班結果 -->
+                <table id="tfresult2" class="table col-xl-2 col-lg-2 col-md-4">
+                    <thead>
+                        <th>中班結果</th>
+                    </thead>
+                    <tbody class="text-primary">
+                        <?php
+                            $ans2=item("SELECT equipCheckID,checkResult FROM $systemTable WHERE recordID=$MasterID AND shiftID=2");
+                            for ($a=0; $a < $num/3; $a++) {
+                            for ($i=0; $i < $num/3 ;) { 
+                            if ($itme[$a]["equipCheckID"] == $ans2[$i]["equipCheckID"]) {
+                            if ($itme[$a]["ref"]=="V/X") {
+                        ?>
+                        <tr>
+                            <td>
                                 <input type='radio' name='<?= $a."B"?>' value='true' <?PHP if($ans2[$i]["checkResult"]=="true") echo "checked";?>>合格
                                 <input type='radio' name='<?= $a."B"?>' value='false' <?PHP if($ans2[$i]["checkResult"]=="false") echo "checked";?>>不合格
-                                </td>
-                            </tr>
-                            <?php
-                                            } else {
-                            ?>
-                            <tr>
-                                <td><input type="text" name='<?= $a?>' maxlength="20" value='<?= $ans2[$i]["checkResult"]?>'></td>
-                            </tr>
-                            <?php
-                                            }
-                                            break;                                            
-                                        } else {
-                                            $i++;                                               
-                                        }
-                                    }
-                                }    
-                            ?>
-                        </table>
-                    </td>
-                    <!-- 晚班結果 -->
-                    <td  class="col-ml-2">
-                        <table>
-                            <?php
-                                $ans3=item("SELECT equipCheckID,checkResult FROM $systemTable WHERE recordID=$MasterID AND shiftID=3");
-                                for ($a=0; $a < $num/3; $a++) {
-                                    for ($i=0; $i < $num/3 ;) { 
-                                        if ($itme[$a]["equipCheckID"] == $ans3[$i]["equipCheckID"]) {
-                                            if ($itme[$a]["ref"]=="V/X") {
-                            ?>
-                            <tr>
-                                <td>
-                                <input type='radio' name='<?= $a."C"?>' value='true' <?PHP if($ans3[$i]["checkResult"]=="true") echo "checked";?>>合格
-                                <input type='radio' name='<?= $a."C"?>' value='false' <?PHP if($ans3[$i]["checkResult"]=="false") echo "checked";?>>不合格
-                                </td>
-                            </tr>
-                            <?php
-                                            } else {
-                            ?>
-                            <tr>
-                                <td><input type="text" name='<?= $a?>' maxlength="20" value='<?= $ans3[$i]["checkResult"]?>'></td>
-                            </tr>
-                            <?php
-                                            }
-                                            break;                                            
-                                        } else {
-                                            $i++;                                               
-                                        }
-                                    }
-                                }    
-                            ?>
-                        </table>
-                    </td>
-                </tbody>
-            </table>
+                            </td>
+                        </tr>
+                        
+                        <?php
+                            } else {
+                        ?>
+                        <tr>
+                            <td><input type="text" name='<?= $a?>' maxlength="20" value='<?= $ans2[$i]["checkResult"]?>'></td>
+                        </tr>
+                        <?php
+                            }
+                            break;                                            
+                            } else {
+                            $i++;                                               
+                            }
+                            }
+                            }    
+                        ?>
+                    </tbody>
+                </table>
+                 <!-- 晚班結果 -->    
+                <table id="tfresult3" class="table col-xl-2 col-lg-2 col-md-4">
+                    <thead>
+                        <th>晚班結果</th>
+                    </thead>
+                    <tbody class="text-primary">
+                    <?php
+                        $ans3=item("SELECT equipCheckID,checkResult FROM $systemTable WHERE recordID=$MasterID AND shiftID=3");
+                        for ($a=0; $a < $num/3; $a++) {
+                        for ($i=0; $i < $num/3 ;) { 
+                        if ($itme[$a]["equipCheckID"] == $ans3[$i]["equipCheckID"]) {
+                        if ($itme[$a]["ref"]=="V/X") {
+                    ?>
+                    <tr>
+                        <td>
+                            <input type='radio' name='<?= $a."C"?>' value='true' <?PHP if($ans3[$i]["checkResult"]=="true") echo "checked";?>>合格
+                            <input type='radio' name='<?= $a."C"?>' value='false' <?PHP if($ans3[$i]["checkResult"]=="false") echo "checked";?>>不合格
+                        </td>
+                    </tr>
+
+                    <?php
+                        } else {
+                    ?>
+                    <tr>
+                        <td><input type="text" name='<?= $a?>' maxlength="20" value='<?= $ans3[$i]["checkResult"]?>'></td>
+                    </tr>
+                    <?php
+                        }
+                        break;                                            
+                        } else {
+                        $i++;                                               
+                        }
+                        }
+                        }    
+                    ?>
+                    </tbody>
+                </table>
+            </div>
+                 
             <!-- 備註欄 -->
             <div class="input-group">
                 <div class="input-group-prepend">
@@ -231,7 +238,9 @@
             <!-- 傳送值到資料庫中 -->
             <input type="hidden" name="action" value="update">
             <!-- 送出鈕 -->
-            <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>
+            <div class="d-flex justify-content-end">
+                <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>
+            </div>
         </form>
     </div>
 </body>
