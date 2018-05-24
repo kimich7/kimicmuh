@@ -87,13 +87,13 @@
             </div>
             <div class="d-flex justify-content-end">
             <button class="btn btn-primary my-2 mr-2 d-none" id="tfbtn1">早班結果</button>
-            <button class="btn btn-primary my-2 mr-2 d-none" id="tfbtn2">午班結果</button>
+            <button class="btn btn-primary my-2 mr-2 d-none" id="tfbtn2">中班結果</button>
             <button class="btn btn-primary my-2 mr-2 d-none" id="tfbtn3">晚班結果</button>
             </div>
             <!-- 表格主體 -->
             <div class="row container">
                 <!-- 檢查項目/參考值 -->
-                <table class="table col-xl-4 col-lg-4 col-md-8">
+                <table class="table col-xl-4 col-lg-4 col-md-8 col-sm-12 col-12">
                     <thead>
                         <th>檢查項目</th>
                         <th>參考值</th>
@@ -121,7 +121,7 @@
                     </tfoot>
                 </table> 
                 <!-- 早班結果 -->
-                <table id="tfresult1" class="table col-xl-2 col-lg-2 col-md-4">
+                <table id="tfresult1" class="table col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12">
                     <thead>
                         <th>早班結果</th>
                     </thead>
@@ -165,7 +165,7 @@
                     </tfoot>
                 </table>
                 <!-- 中班結果 -->
-                <table id="tfresult2" class="table col-xl-2 col-lg-2 col-md-4">
+                <table id="tfresult2" class="table col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12">
                     <thead>
                         <th>中班結果</th>
                     </thead>
@@ -210,7 +210,7 @@
                     </tfoot>
                 </table>
                  <!-- 晚班結果 -->    
-                <table id="tfresult3" class="table col-xl-2 col-lg-2 col-md-4">
+                <table id="tfresult3" class="table col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12">
                     <thead>
                         <th>晚班結果</th>
                     </thead>
