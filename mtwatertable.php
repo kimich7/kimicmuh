@@ -58,13 +58,13 @@
                         $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE rDate='$date_ch' AND b_number='$build_no'";
                         $select_master =$pdo->query($sql_select)->fetch();
                         $MasterID=$select_master['recordID'];                    
-                        $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate) VALUES ($equip_check,'$ref_no',$shift_no,$userID,'$remark',$MasterID,'$ans_no','$floorID','$date_ch')";
+                        $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch')";
                         $insert_detail =$pdo->exec($sql_insert_detail);
                     } else {
                         $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE rDate='$date_ch'AND b_number='$build_no'";
                         $select_master =$pdo->query($sql_select)->fetch();
                         $MasterID=$select_master['recordID'];                  
-                        $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate) VALUES ($equip_check,'$ref_no',$shift_no,$userID,'$remark',$MasterID,'$ans_no','$floorID','$date_ch')";
+                        $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch')";
                         $insert_detail =$pdo->exec($sql_insert_detail);
                     }
                     break;
@@ -77,13 +77,13 @@
                         $sql_select="SELECT recordID FROM FA.Air_System_Record_Master WHERE rDate='$date_ch' AND b_number='$build_no'";
                         $select_master =$pdo->query($sql_select)->fetch();
                         $MasterID=$select_master['recordID'];                    
-                        $sql_insert_detail="INSERT INTO FA.Air_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate) VALUES ($equip_check,'$ref_no',$shift_no,$userID,'$remark',$MasterID,'$ans_no','$floorID','$date_ch')";
+                        $sql_insert_detail="INSERT INTO FA.Air_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch')";
                         $insert_detail =$pdo->exec($sql_insert_detail);
                     } else {
                         $sql_select="SELECT recordID FROM FA.Air_System_Record_Master WHERE rDate='$date_ch'AND b_number='$build_no'";
                         $select_master =$pdo->query($sql_select)->fetch();
                         $MasterID=$select_master['recordID'];                    
-                        $sql_insert_detail="INSERT INTO FA.Air_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate) VALUES ($equip_check,'$ref_no',$shift_no,$userID,'$remark',$MasterID,'$ans_no','$floorID','$date_ch')";
+                        $sql_insert_detail="INSERT INTO FA.Air_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch')";
                         $insert_detail =$pdo->exec($sql_insert_detail);
                     }
                     break;
@@ -96,13 +96,13 @@
                         $sql_select="SELECT recordID FROM FA.AirCond_System_Record_Master WHERE rDate='$date_ch' AND b_number='$build_no'";
                         $select_master =$pdo->query($sql_select)->fetch();
                         $MasterID=$select_master['recordID'];                    
-                        $sql_insert_detail="INSERT INTO FA.AirCond_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate) VALUES ($equip_check,'$ref_no',$shift_no,$userID,'$remark',$MasterID,'$ans_no','$floorID','$date_ch')";
+                        $sql_insert_detail="INSERT INTO FA.AirCond_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch')";
                         $insert_detail =$pdo->exec($sql_insert_detail);
                     } else {
                         $sql_select="SELECT recordID FROM FA.AirCond_System_Record_Master WHERE rDate='$date_ch'AND b_number='$build_no'";
                         $select_master =$pdo->query($sql_select)->fetch();
                         $MasterID=$select_master['recordID'];                    
-                        $sql_insert_detail="INSERT INTO FA.AirCond_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate) VALUES ($equip_check,'$ref_no',$shift_no,$userID,'$remark',$MasterID,'$ans_no','$floorID','$date_ch')";
+                        $sql_insert_detail="INSERT INTO FA.AirCond_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch')";
                         $insert_detail =$pdo->exec($sql_insert_detail);
                     }                  
                     break;
@@ -115,13 +115,13 @@
                         $sql_select="SELECT recordID FROM FA.HL_Vol_System_Record_Master WHERE rDate='$date_ch' AND b_number='$build_no'";
                         $select_master =$pdo->query($sql_select)->fetch();
                         $MasterID=$select_master['recordID'];                   
-                        $sql_insert_detail="INSERT INTO FA.HL_Vol_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate) VALUES ($equip_check,'$ref_no',$shift_no,$userID,'$remark',$MasterID,'$ans_no','$floorID','$date_ch')";
+                        $sql_insert_detail="INSERT INTO FA.HL_Vol_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch')";
                         $insert_detail =$pdo->exec($sql_insert_detail);
                     } else {
                         $sql_select="SELECT recordID FROM FA.HL_Vol_System_Record_Master WHERE rDate='$date_ch'AND b_number='$build_no'";
                         $select_master =$pdo->query($sql_select)->fetch();
                         $MasterID=$select_master['recordID'];
-                        $sql_insert_detail="INSERT INTO FA.HL_Vol_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate) VALUES ($equip_check,'$ref_no',$shift_no,$userID,'$remark',$MasterID,'$ans_no','$floorID','$date_ch')";
+                        $sql_insert_detail="INSERT INTO FA.HL_Vol_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch')";
                         $insert_detail =$pdo->exec($sql_insert_detail);
                     }                  
                     break;
@@ -224,7 +224,7 @@
                     <p class="d-inline text-primary"><?= $class ?></p>
                 </div>
                 <div class="col text-center">
-                    <p class="d-inline font-weight-bold">檢查者：</p>
+                    <p class="d-inline font-weight-bold">巡檢人員：</p>
                     <p class="d-inline text-primary"><?= $user ?></p>
                 </div>
                 <div class="col text-right">
@@ -282,8 +282,10 @@
             <input type="hidden" name="date_c" value='<?= $check_date ?>'>
             <input type="hidden" name="loop_num" value='<?= $equip_check_no ?>'>
             <input type="hidden" name="floorID" value='<?= $floorID ?>'>
-            <!-- 送出鈕 -->                               
-            <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>
+            <!-- 送出鈕 -->    
+            <div class="d-flex justify-content-end">
+                <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>
+            </div>                           
         </form>
     </div>
 </body>

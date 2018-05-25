@@ -224,6 +224,16 @@ $(function () {
 
         });
     });
+    $("#reupdata").click(function () {
+        var system_eq = $("#system").val();
+        var building_eq = $("#build").val();
+        var floor_eq = $("#buildingfloor").val();
+        var rdate = $("#bday").val();
+        var equipment = $("#equipment").val();
+        var shift = $("#Three_shifts").val();
+        //$("#reupdata").attr("href","reupdata.php?date=\""+rdate+"\"\& systemID=\""+system_eq+"\"\& shifts=\""+shift+"\"\& build=\""+building_eq+"\"\& floor=\""+floor_eq+"\"\& equipment=\""+equipment);
+        $("#reupdata").attr("href", "reupdata.php?date=" + rdate + "& systemID=" + system_eq + " & shift=" + shift + " & build=" + building_eq + " & floor=" + floor_eq + " & equipment=" + equipment + "");
+    })
     //偵測螢幕寬，然後出現按鈕選單
     var $tall = window.screen.width;
     if ($tall <= 912) {

@@ -133,8 +133,8 @@
                             $q=$a+200;
                             $an=$a;//結果答案
                             for ($i=0; $i < $num/3 ;) { 
-                        if ($itme[$a]["equipCheckID"] == $ans1[$i]["equipCheckID"]) {
-                        if ($itme[$a]["ref"]=="V/X") {
+                                if ($itme[$a]["equipCheckID"] == $ans1[$i]["equipCheckID"]) {
+                                    if ($itme[$a]["ref"]=="V/X") {
                         ?>
                         <tr>
                             <td>
@@ -143,21 +143,21 @@
                             </td> 
                         </tr>               
                         <?php
-                            } else {
+                                    } else {
                         ?>
                         <tr>
                             <td><input type="text" name='<?= $an?>' maxlength="20" value='<?= $ans1[$i]["checkResult"]?>'></td>
                         </tr>
                         <?php
-                            } ?>
-                            <input type='hidden' name='<?= $q?>' value='<?= $ans1[$i]['recordDetailID']?>'>
+                                    } ?>
+                                    <input type='hidden' name='<?= $q?>' value='<?= $ans1[$i]['recordDetailID']?>'>
                             <?php
-                            break;                                            
-                            } else {
-                            $i++;                                               
+                                break;                                            
+                                } else {
+                                    $i++;                                               
+                                }
                             }
-                            }
-                            }    
+                        }    
                         ?>
                     </tbody>
                     <tfoot class="text-primary">
@@ -176,9 +176,9 @@
                             for ($a=0; $a < $num/3; $a++) {
                                 $an=$a+($num/3);
                                 $q=$a+200+($num/3);
-                            for ($i=0; $i < $num/3 ;) { 
-                            if ($itme[$a]["equipCheckID"] == $ans2[$i]["equipCheckID"]) {
-                            if ($itme[$a]["ref"]=="V/X") {
+                                for ($i=0; $i < $num/3 ;) { 
+                                    if ($itme[$a]["equipCheckID"] == $ans2[$i]["equipCheckID"]) {
+                                    if ($itme[$a]["ref"]=="V/X") {
                         ?>
                         <tr>
                             <td>
@@ -188,20 +188,20 @@
                         </tr>
                         
                         <?php
-                            } else {
+                                    } else {
                         ?>
                         <tr>
                             <td><input type="text" name='<?= $an?>' maxlength="20" value='<?= $ans2[$i]["checkResult"]?>'></td>
                         </tr>
                         <?php
-                            } ?>
-                            <input type='hidden' name='<?= $q?>' value='<?= $ans2[$i]['recordDetailID']?>'>
-                            <?php
-                            break;                                            
-                            } else {
-                            $i++;                                               
-                            }
-                            }
+                                    } ?>
+                                <input type='hidden' name='<?= $q?>' value='<?= $ans2[$i]['recordDetailID']?>'>
+                        <?php
+                                    break;                                            
+                                    } else {
+                                $i++;                                               
+                                    }
+                                }
                             }    
                         ?>
                     </tbody>
@@ -227,25 +227,25 @@
                     ?>
                     <tr>
                         <td>
-                        <input type='radio' name='<?= $an?>' value='true' <?PHP if($ans3[$i]["checkResult"]=="true") echo "checked";?>>合格
-                        <input type='radio' name='<?= $an?>' value='false' <?PHP if($ans3[$i]["checkResult"]=="false") echo "checked";?>>不合格
+                            <input type='radio' name='<?= $an?>' value='true' <?PHP if($ans3[$i]["checkResult"]=="true") echo "checked";?>>合格
+                            <input type='radio' name='<?= $an?>' value='false' <?PHP if($ans3[$i]["checkResult"]=="false") echo "checked";?>>不合格
                         </td>
                     </tr>
                     <?php
-                        } else {
+                                    } else {
                     ?>
                     <tr>
-                    <td><input type="text" name='<?= $an?>' maxlength="20" value='<?= $ans3[$i]["checkResult"]?>'></td>
+                        <td><input type="text" name='<?= $an?>' maxlength="20" value='<?= $ans3[$i]["checkResult"]?>'></td>
                     </tr>
                     <?php
-                        }?>
+                                    }?>
                         <input type='hidden' name='<?= $q?>' value='<?= $ans3[$i]['recordDetailID']?>'>
                         <?php
-                        break;                                            
-                        } else {
-                        $i++;                                               
-                        }
-                        }
+                                    break;                                            
+                                } else {
+                                    $i++;                                               
+                                }
+                            }
                         }    
                     ?>
                     </tbody>
