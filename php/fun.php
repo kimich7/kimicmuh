@@ -10,7 +10,8 @@
 
     function updata_select($tbl,$Mid){
         include("CMUHconndata.php");
-        $updata="SELECT recordDetailID,equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate FROM $tbl WHERE recordID = $Mid";
+
+        $updata="SELECT * FROM $tbl WHERE recordID = $Mid";
         $updata_query=$pdo->query($updata)->fetchAll();
         $pdo=null;
         return $updata_query;
@@ -57,6 +58,36 @@
         $item_qt=$pdo->query($item)->fetchAll();
         $pdo=null;
         return $item_qt;
+    }
+
+    function sysTable($sysID){
+        $table=array();
+        switch ($sysID) {
+            case '1':
+                $systemDetail='FA.Water_System_Record_Detail';
+                $systemMaster='FA.Water_System_Record_Master';
+                $equipTable='FA.Equipment_Check';
+                break;
+            case '2':
+                $systemDetail='FA.Air_System_Record_Detail';
+                $systemMaster='FA.Air_System_Record_Master';
+                $equipTable='FA.Equipment_Check';
+                break;
+            case '3':
+                $systemDetail='FA.AirCond_System_Record_Detail';
+                $systemMaster='FA..AirCond_System_Record_Master';
+                $equipTable='FA.Equipment_Check';
+                break;
+            case '4':
+                $systemDetail='FA.HL_Vol_System_Record_Detail';
+                $systemMaster='FA.HL_Vol_System_Record_Master';
+                $equipTable='FA.Equipment_Check_elec';
+                break;
+        }
+        $table['master']=$systemMaster;
+        $table['detail']=$systemDetail;
+        $table['equip']=$equipTable;
+        return $table;
     }
 ?>
 
