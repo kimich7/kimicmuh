@@ -89,5 +89,25 @@
         $table['equip']=$equipTable;
         return $table;
     }
+
+    function equipCheckSearch($sys_no,$equip_no){
+        switch ($sys_no) {
+            case '4':
+                if (empty($equip_no)) {
+                    $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check_elec WHERE floorID='$floorID'AND b_number='$build_no' AND sysID='$sys_no'";
+                } else {
+                    $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check_elec WHERE floorID='$floorID'AND zoneNo='$equip_no'AND b_number='$build_no' AND sysID='$sys_no'";
+                }
+                break;            
+            default:
+                if (empty($equip_no)) {
+                    $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$build_no' AND sysID='$sys_no'";
+                } else {
+                    $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID='$equip_no'AND b_number='$build_no' AND sysID='$sys_no'";
+                }
+                break;
+        }
+        return $sql_equip_check;
+    }
 ?>
 
