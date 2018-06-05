@@ -49,7 +49,7 @@ $(function () {
         });
     });
     //選擇mainMenu新增Class(套用Bootstrap)
-    $(".mainMenu").addClass("col-lg-2 col-md-5 col-sm-5  mx-auto my-5 py-3 text-center");
+    $(".mainMenu").addClass("col-xl-2 col-lg-2 col-md-5 col-sm-5 col-10 mx-auto my-5 py-3 text-center");
     //選擇mainBtn新增Class(套用Bootstrap)
     $(".mainBtn").addClass(" mx-auto w-50 d-block btn btn-outline-primary");
     //用getJSON來取得運轉抄表日期
@@ -236,6 +236,7 @@ $(function () {
     })
     //偵測螢幕寬，然後出現按鈕選單
     var $tall = window.screen.width;
+    //微軟平板長為912，寬為1368
     if ($tall <= 912) {
         $("#tfbtn1").removeClass("d-none");
         $("#tfbtn2").removeClass("d-none");
