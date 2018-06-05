@@ -1,6 +1,42 @@
 <?php
     include("php/CMUHconndata.php");
-    include("php/fun.php");    
+    include("php/fun.php");
+
+    
+    if (isset($_POST["action"])&&($_POST["action"]=="check")) {
+        $total_num=$_POST["total_num"];
+        for ($i=0; $i  <$total_num ; $i++) {
+            $a=$i;
+            $j=$i+1000;
+            $k=$i+2000;            
+            if (isset($_POST["$j"])) {
+                $memberCheck=1;
+            } else {
+                $memberCheck=0;
+            }
+            if (isset($_POST["$a"])) {
+                $managerCheck=1;
+            } else {
+                $managerCheck=0;
+            }            
+
+            // $memberCheck=$_POST["$j"];
+            // $managerCheck=$_POST["$a"];
+            $rdID=$_POST["$k"];
+            
+
+            $sql="UPDATE FA.Water_System_Record_Master SET check_number=:check_number , check_manager=:check_manager WHERE recordID=:ID";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':check_number',$memberCheck,PDO::PARAM_STR);
+            $stmt->bindParam(':check_manager',$managerCheck,PDO::PARAM_STR);
+            $stmt->bindParam(':ID',$rdID,PDO::PARAM_INT);
+            $stmt->execute();      
+        }
+
+        $pdo=null;
+        header("Location: mtlistcheck.php");
+        //header("Location: index.html");  
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,25 +65,125 @@
     <header>
        <div id="header"></div>
     </header>
+    <form action="" method="post" name="checklist">
     <!-- 未簽核清單 -->
     <section class="container-fluid">
         <h1 class="text-center">設備保養表單未簽核清單</h1>
         <div class="list-group mx-5 my-5">
         <?php
-            $sys_water='FA.Water_System_Record_Master';
-            $search_water=sys_search($sys_water);
-            foreach ($search_water as $waterinfo) {
-                $buildName=sql_database('B_name','FA.Building','b_number',$waterinfo["b_number"]);
-                $rDate=$waterinfo["rDate"];
-                echo '<a href="#" class="list-group-item list-group-item-action">'.$buildName."-"."水系統-".$rDate.'</a>';
-            }            
-        ?>    
+        $pageRow_record=30;//每頁的筆數
+        $page_num=1;//預設的頁數
+        //更新$page_num        
+        if (isset($_GET['page'])) {
+            $page_num=$_GET['page'];
+        }
+        $startRow_record=($page_num-1)*$pageRow_record;
+            // $sys_water='FA.Water_System_Record_Master';
+            // $sys_air='FA.Air_System_Record_Master';
+            // $sys_aircond='FA.AirCond_System_Record_Master';
+            // $sys_elec='FA.HL_Vol_System_Record_Master';
+        //所有的資料
+        $sqlstr_total="SELECT * FROM FA.Water_System_Record_Master WHERE check_number IS NULL or check_number=0 or check_manager IS NULL or check_manager=0";
+        //篩選後給每頁的筆數
+        $sqlstr_page="SELECT * FROM FA.Water_System_Record_Master WHERE check_number IS NULL or check_number=0 or check_manager IS NULL or check_manager=0 ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+        //總資料數量
+        $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE check_number IS NULL or check_number=0 or check_manager IS NULL or check_manager=0";
+
+        $sql_page=$pdo->query($sqlstr_page);
+        $sql_total=$pdo->query($sqlstr_total);
+        $total_num=CURRENT($pdo->query($totalstr_num)->fetch());
+        
+        //本業開始的筆數
+        $i=0;
+        $j=1000;
+        $k=2000;
+        $a=0;
+        echo '<table border="1" align="center" width="80%">';
+        echo '<thead align="center">';
+        echo '<th>項  目</th>';
+        echo '<th>主  管</th>';
+        echo '<th>檢查人</th>';
+        echo '</thead>';
+        echo '<tbody class="text-primary">';
+        $mgcheck="mgcheck";
+        $mbcheck="mbcheck";
+        while ($data_page = $sql_page->fetch()) {
+            $a=$i;
+            echo '<tr>';
+            $buildName=sql_database('B_name','FA.Building','b_number',$data_page['b_number']);
+                echo "<td width='80%'><a href='mtchecktable.php?id=\"".$data_page['recordID']."\"&build=\"".$data_page['b_number']."\"&r_date=\"".$data_page['rDate']."\"&member=\"".$data_page['r_member']."\"&manage=\"".$data_page['managerID']."\"&checkMember=\"".$data_page['check_number']."\"&checkManager=\"".$data_page['check_manager']."\"' class=\".list-group-item list-group-item-action.\">".$buildName."-水系統-".$data_page['rDate'].'</a></td>';
+                echo '<td width="10%" align="center">';
+                if ($data_page['check_manager']==true) {
+                    echo "<input type='checkbox' name=\"".$a."\" value=\"".$mgcheck."\" checked>";
+                } else {
+                    echo "<input type='checkbox' name=\"".$a."\" value=\"".$mgcheck."\">";
+                }   
+                echo '</td>';
+                echo '<td width="10%" align="center">';
+                if ($data_page['check_number']==true) {
+                    echo "<input type='checkbox' name=\"".$j."\" value=\"".$mbcheck."\" checked>";
+                } else {
+                    echo "<input type='checkbox' name=\"".$j."\" value=\"".$mbcheck."\">";
+                }  
+                echo '</td>';
+                $q=$data_page['recordID'];
+                echo "<input type='hidden' name=\"".$k."\" value=\"".$q."\">";
+            $i++;
+            $j++;
+            $k++;
+            
+            echo '</tr>';
+        }
+        echo '</tbody>';
+        echo '</table>';
+        
+        //計算總頁數
+        $total_page=ceil($total_num/$pageRow_record);
+        echo '<table border="0" align="center">';    
+            echo '<tr>';
+                echo '<td><h5>'.'未簽核清單共計'.$total_num.'筆(共'.$total_page.'頁)'.'</h5></td>';
+            echo '</tr>';
+        echo '</table>';
+        echo '<table border="0" align="center">';
+            echo '<tr>';
+                if ($page_num>1) {
+                    $prev=$page_num-1;
+                    echo '<td><a href="mtlistcheck.php?page=1">'."[第一頁]".'</a></td>';
+                    echo "<td><a href=\"mtlistcheck.php?page={$prev}\">"."[<<<上一頁]".'</a></td>';
+                }
+                if ($page_num<$total_page) {
+                    $next=$page_num+1;
+                    echo "<td>"."<a href=\"mtlistcheck.php?page={$next}\">"."[下一頁>>>]".'</a></td>';
+                    echo "<td><a href=\"mtlistcheck.php?page=$total_page\">".'[最末頁]'.'</a></td>';
+                }
+            echo '</tr>';
+        echo '</table>';
+        echo '<nav aria-label="Page navigation example" >';
+                echo '<ul class="pagination">';
+                        for ($i=1; $i <= $total_page; $i++) {
+                            if ($i==$page_num) {
+                                echo "<li class=\"page-item\"><span class='page-link text-danger' href=#><b>{$i}</b></span></li>";
+                            } else {
+                                echo "<li class=\"page-item\"><a class='page-link' href=\"mtlistcheck.php?page={$i}\">{$i}</a></li>";
+                            }
+                        }
+                echo '</ul>';
+        echo '</nav>';
+        ?>
+        </div>
+        <input type="hidden" name="total_num" value="<?= $total_num?>">;
+        <input type="hidden" name="action" value="check">
+        <!-- 送出鈕 -->
+        <div class="d-flex justify-content-end">
+            <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>
         </div>
     </section>
+    </form>
     <!-- footer網頁尾頁 -->
     <footer>
         <div id="footer"></div>
     </footer>
+    
 </body>
 
 </html>
