@@ -8,7 +8,10 @@
         for ($i=0; $i  <$total_num ; $i++) {
             $a=$i;
             $j=$i+1000;
-            $k=$i+2000;            
+            $k=$i+2000;
+            echo "我是j：".$_POST["$j"].'<br>'; 
+            echo "我是a：".$_POST["$a"].'<br>';  
+            echo "我是k：".$_POST["$k"].'<br>';           
             if (isset($_POST["$j"])) {
                 $memberCheck=1;
             } else {
