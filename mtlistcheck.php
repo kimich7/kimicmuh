@@ -20,8 +20,8 @@
                 $managerCheck=0;
             }            
 
-            $memberCheck=$_POST["$j"];
-            $managerCheck=$_POST["$a"];
+            // $memberCheck=$_POST["$j"];
+            // $managerCheck=$_POST["$a"];
             $rdID=$_POST["$k"];
             
 
