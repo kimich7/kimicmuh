@@ -70,14 +70,20 @@
                 $equipTable='FA.Equipment_Check';
                 break;
             case '2':
-                $systemDetail='FA.Air_System_Record_Detail';
-                $systemMaster='FA.Air_System_Record_Master';
+                $systemDetail='FA.Water_System_Record_Detail';
+                $systemMaster='FA.Water_System_Record_Master';
                 $equipTable='FA.Equipment_Check';
+                // $systemDetail='FA.Air_System_Record_Detail';
+                // $systemMaster='FA.Air_System_Record_Master';
+                // $equipTable='FA.Equipment_Check';
                 break;
             case '3':
-                $systemDetail='FA.AirCond_System_Record_Detail';
-                $systemMaster='FA..AirCond_System_Record_Master';
+                $systemDetail='FA.Water_System_Record_Detail';
+                $systemMaster='FA.Water_System_Record_Master';
                 $equipTable='FA.Equipment_Check';
+                // $systemDetail='FA.AirCond_System_Record_Detail';
+                // $systemMaster='FA..AirCond_System_Record_Master';
+                // $equipTable='FA.Equipment_Check';
                 break;
             case '4':
                 $systemDetail='FA.HL_Vol_System_Record_Detail';

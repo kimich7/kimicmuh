@@ -20,8 +20,8 @@
                 $managerCheck=0;
             }            
 
-            // $memberCheck=$_POST["$j"];
-            // $managerCheck=$_POST["$a"];
+            $memberCheck=$_POST["$j"];
+            $managerCheck=$_POST["$a"];
             $rdID=$_POST["$k"];
             
 
@@ -111,7 +111,9 @@
             $a=$i;
             echo '<tr>';
             $buildName=sql_database('B_name','FA.Building','b_number',$data_page['b_number']);
-                echo "<td width='80%'><a href='mtchecktable.php?id=\"".$data_page['recordID']."\"&build=\"".$data_page['b_number']."\"&r_date=\"".$data_page['rDate']."\"&member=\"".$data_page['r_member']."\"&manage=\"".$data_page['managerID']."\"&checkMember=\"".$data_page['check_number']."\"&checkManager=\"".$data_page['check_manager']."\"' class=\".list-group-item list-group-item-action.\">".$buildName."-水系統-".$data_page['rDate'].'</a></td>';
+            $sysName=sql_database('sysName','FA.Equipment_System_Group','sysID',$data_page['sysID']);
+                echo "<td width='80%'><a href='mtchecktable.php?id=\"".$data_page['recordID']."\"&build=\"".$data_page['b_number']."\"&r_date=\"".$data_page['rDate']."\"&member=\"".$data_page['r_member']."\"&manage=\"".$data_page['managerID']."\"&checkMember=\"".$data_page['check_number']."\"&checkManager=\"".$data_page['check_manager']."\"&sysID=\"".$data_page['sysID']."\"' class=\".list-group-item list-group-item-action.\">".$buildName."-".$sysName."-".$data_page['rDate'].'</a></td>';
+                
                 echo '<td width="10%" align="center">';
                 if ($data_page['check_manager']==true) {
                     echo "<input type='checkbox' name=\"".$a."\" value=\"".$mgcheck."\" checked>";

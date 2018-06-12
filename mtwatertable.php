@@ -49,82 +49,44 @@
             $ref_no = $equip_id['ref'];
             $equip_check = $equip_id['equipCheckID'];
             $ans_no=$_POST["$i"];
+            $sql_master_check="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE b_number='$build_no' AND rDate='$date_ch' AND sysID=$sys_no ";
+            $master_check_query=Current($pdo->query($sql_master_check)->fetch());;
+
             switch ($sys_no) {
-                case "1":
-                    $sql_master_check="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE b_number='$build_no' AND rDate='$date_ch' ";
-                    $master_check_query=Current($pdo->query($sql_master_check)->fetch());;
+                case "4":
                     if ($master_check_query ==0) {                    
-                        $sql_insert_master="INSERT INTO FA.Water_System_Record_Master(b_number,rDate) VALUES ('$build_no','$date_ch') ";
+                        $sql_insert_master="INSERT INTO FA.Water_System_Record_Master(b_number,rDate,sysID) VALUES ('$build_no','$date_ch',$sys_no) ";
                         $insert_master =$pdo->exec($sql_insert_master);                    
-                        $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE rDate='$date_ch' AND b_number='$build_no'";
+                        $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE sysID=$sys_no AND rDate='$date_ch' AND b_number='$build_no'";
+                        $select_master =$pdo->query($sql_select)->fetch();
+                        $MasterID=$select_master['recordID'];                   
+                        $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
+                        $insert_detail =$pdo->exec($sql_insert_detail);
+                    } else {
+                        $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE sysID=$sys_no AND rDate='$date_ch' AND b_number='$build_no'";
+                        $select_master =$pdo->query($sql_select)->fetch();
+                        $MasterID=$select_master['recordID'];
+                        $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
+                        $insert_detail =$pdo->exec($sql_insert_detail);
+                    }                  
+                    break;
+
+                default:
+                    if ($master_check_query ==0) {                    
+                        $sql_insert_master="INSERT INTO FA.Water_System_Record_Master(b_number,rDate,sysID) VALUES ('$build_no','$date_ch',$sys_no) ";
+                        $insert_master =$pdo->exec($sql_insert_master);                    
+                        $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE sysID=$sys_no AND rDate='$date_ch' AND b_number='$build_no'";
                         $select_master =$pdo->query($sql_select)->fetch();
                         $MasterID=$select_master['recordID'];                    
                         $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
                         $insert_detail =$pdo->exec($sql_insert_detail);
                     } else {
-                        $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE rDate='$date_ch'AND b_number='$build_no'";
+                        $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE rDate='$date_ch'AND b_number='$build_no' AND sysID=$sys_no";
                         $select_master =$pdo->query($sql_select)->fetch();
                         $MasterID=$select_master['recordID'];                  
                         $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
                         $insert_detail =$pdo->exec($sql_insert_detail);
                     }
-                    break;
-                case "2":
-                    $sql_master_check="SELECT COUNT(recordID) FROM FA.Air_System_Record_Master WHERE b_number='$build_no' AND rDate='$date_ch' ";
-                    $master_check_query=Current($pdo->query($sql_master_check)->fetch());;
-                    if ($master_check_query ==0) {                    
-                        $sql_insert_master="INSERT INTO FA.Air_System_Record_Master(b_number,rDate) VALUES ('$build_no','$date_ch') ";
-                        $insert_master =$pdo->exec($sql_insert_master);                    
-                        $sql_select="SELECT recordID FROM FA.Air_System_Record_Master WHERE rDate='$date_ch' AND b_number='$build_no'";
-                        $select_master =$pdo->query($sql_select)->fetch();
-                        $MasterID=$select_master['recordID'];                    
-                        $sql_insert_detail="INSERT INTO FA.Air_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
-                        $insert_detail =$pdo->exec($sql_insert_detail);
-                    } else {
-                        $sql_select="SELECT recordID FROM FA.Air_System_Record_Master WHERE rDate='$date_ch'AND b_number='$build_no'";
-                        $select_master =$pdo->query($sql_select)->fetch();
-                        $MasterID=$select_master['recordID'];                    
-                        $sql_insert_detail="INSERT INTO FA.Air_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
-                        $insert_detail =$pdo->exec($sql_insert_detail);
-                    }
-                    break;
-                case "$userID":
-                    $sql_master_check="SELECT COUNT(recordID) FROM FA.AirCond_System_Record_Master WHERE b_number='$build_no' AND rDate='$date_ch' ";
-                    $master_check_query=Current($pdo->query($sql_master_check)->fetch());;
-                    if ($master_check_query ==0) {                    
-                        $sql_insert_master="INSERT INTO FA.AirCond_System_Record_Master(b_number,rDate) VALUES ('$build_no','$date_ch') ";
-                        $insert_master =$pdo->exec($sql_insert_master);                    
-                        $sql_select="SELECT recordID FROM FA.AirCond_System_Record_Master WHERE rDate='$date_ch' AND b_number='$build_no'";
-                        $select_master =$pdo->query($sql_select)->fetch();
-                        $MasterID=$select_master['recordID'];                    
-                        $sql_insert_detail="INSERT INTO FA.AirCond_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
-                        $insert_detail =$pdo->exec($sql_insert_detail);
-                    } else {
-                        $sql_select="SELECT recordID FROM FA.AirCond_System_Record_Master WHERE rDate='$date_ch'AND b_number='$build_no'";
-                        $select_master =$pdo->query($sql_select)->fetch();
-                        $MasterID=$select_master['recordID'];                    
-                        $sql_insert_detail="INSERT INTO FA.AirCond_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
-                        $insert_detail =$pdo->exec($sql_insert_detail);
-                    }                  
-                    break;
-                case "4":
-                    $sql_master_check="SELECT COUNT(recordID) FROM FA.HL_Vol_System_Record_Master WHERE b_number='$build_no' AND rDate='$date_ch' ";
-                    $master_check_query=Current($pdo->query($sql_master_check)->fetch());;
-                    if ($master_check_query ==0) {                    
-                        $sql_insert_master="INSERT INTO FA.HL_Vol_System_Record_Master(b_number,rDate) VALUES ('$build_no','$date_ch') ";
-                        $insert_master =$pdo->exec($sql_insert_master);                    
-                        $sql_select="SELECT recordID FROM FA.HL_Vol_System_Record_Master WHERE rDate='$date_ch' AND b_number='$build_no'";
-                        $select_master =$pdo->query($sql_select)->fetch();
-                        $MasterID=$select_master['recordID'];                   
-                        $sql_insert_detail="INSERT INTO FA.HL_Vol_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
-                        $insert_detail =$pdo->exec($sql_insert_detail);
-                    } else {
-                        $sql_select="SELECT recordID FROM FA.HL_Vol_System_Record_Master WHERE rDate='$date_ch'AND b_number='$build_no'";
-                        $select_master =$pdo->query($sql_select)->fetch();
-                        $MasterID=$select_master['recordID'];
-                        $sql_insert_detail="INSERT INTO FA.HL_Vol_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
-                        $insert_detail =$pdo->exec($sql_insert_detail);
-                    }                  
                     break;
             }  
         }
@@ -172,16 +134,7 @@
         //篩選出樓層別
         $system=sql_database('floorName','FA.BuildingFloor','floorID',$floorID);
         //篩選出設備別
-        if (empty($equipNo)) {
-            switch ($sysNo) {
-                case '4':
-                    $equipment=sql_database('zoneName','FA.Zonefloor','floorID',$equipNo);
-                    break;                
-                default:
-                    $equipment=sql_database('equipName','FA.Equipment_System','equipID',$equipNo);
-                    break;
-            }
-        }
+
         //篩選出班別
         $class=sql_database('shiftName','FA.Shift_Table','shiftID',$shiftNo);
         setcookie('className',$class);    
@@ -189,14 +142,15 @@
         switch ($sysNo) {
             case "4":
                 if (empty($equipNo)) {
-                    $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check_elec WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID='$sysNo'";
+                    $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID='$sysNo'";
                     $query_equip=$pdo->query($sql_equip_check);
-                    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check_elec WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID='$sysNo'";
+                    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID='$sysNo'";
                     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
+                    $equipment=sql_database('zoneName','FA.Zonefloor','floorID',$equipNo);
                 } else {
-                    $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check_elec WHERE floorID='$floorID'AND zoneNo='$equipNo'AND b_number='$buildNo' AND sysID='$sysNo'";
+                    $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND zoneNo='$equipNo'AND b_number='$buildNo' AND sysID='$sysNo'";
                     $query_equip=$pdo->query($sql_equip_check);
-                    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check_elec WHERE floorID='$floorID'AND zoneNo='$equipNo'AND b_number='$buildNo' AND sysID='$sysNo'";
+                    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND zoneNo='$equipNo'AND b_number='$buildNo' AND sysID='$sysNo'";
                     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
                 }
                 break;
@@ -206,6 +160,7 @@
                     $query_equip=$pdo->query($sql_equip_check);
                     $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID='$sysNo'";
                     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
+                    $equipment=sql_database('equipName','FA.Equipment_System','equipID',$equipNo);
                 } else {
                     $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID='$equipNo'AND b_number='$buildNo' AND sysID='$sysNo'";
                     $query_equip=$pdo->query($sql_equip_check);

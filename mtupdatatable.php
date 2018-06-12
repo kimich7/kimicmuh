@@ -7,24 +7,9 @@
     $buildNo = $_GET["build"];
     $sysNo= $_GET["sys"];
     $rDate=$_GET["r_date"];
-    switch ($sysNo) {
-        case '1':
-            $systemTable='FA.Water_System_Record_Detail';
-            $equipTable='FA.Equipment_Check';
-            break;
-        case '2':
-            $systemTable='FA.Air_System_Record_Detail';
-            $equipTable='FA.Equipment_Check';
-            break;
-        case '3':
-            $systemTable='FA.AirCond_System_Record_Detail';
-            $equipTable='FA.Equipment_Check';
-            break;
-        case '4':
-            $systemTable='FA.HL_Vol_System_Record_Detail';
-            $equipTable='FA.Equipment_Check_elec';
-            break;
-    }
+    $systemTable='FA.Water_System_Record_Detail';
+    $equipTable='FA.Equipment_Check';
+           
     $bname=sql_database('B_name','FA.Building','b_number',$buildNo);
     $sysname=sql_database('sysName','FA.Equipment_System_Group','sysID',$sysNo);
     $updata_qt=updata_num($systemTable,$MasterID);//迴圈數量
@@ -78,7 +63,7 @@
             <div class="row my-3">
                 <div class="col text-left">
                 <p class="d-inline font-weight-bold">檢查者：</p>
-                <p class="d-inline text-primary" name="reMumber"><?= '檢查者' ?></p>
+                <p class="d-inline text-primary" name="reMumber"><?= '' ?></p>
                 </div>
                 <div class="col text-right">
                 <p class="d-inline font-weight-bold">檢查日期：</p>

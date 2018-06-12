@@ -11,13 +11,12 @@ $buildID =$_GET['build'];
 $floorID =$_GET['floor'];
 $rDate =$_GET['date'];
 $equipID =$_GET['equipment'];
-$shiftID =$_GET['shift'];  
-$sysTable=array();
-$sysTable=sysTable($sysID);//取得四大系統與點檢項目的資料表名稱
-    $masterTable=$sysTable["master"];
-    $detailTable=$sysTable["detail"];
-    $equipTable=$sysTable["equip"];
-$sql_str="SELECT recordID,rDate FROM $masterTable WHERE b_number='$buildID' AND rDate ='$rDate'";//篩選出需要的主表明細
+$shiftID =$_GET['shift'];
+$detailTable='FA.Water_System_Record_Detail';
+$masterTable='FA.Water_System_Record_Master';
+$equipTable='FA.Equipment_Check';
+
+$sql_str="SELECT recordID,rDate FROM $masterTable WHERE sysID=$sysID AND b_number='$buildID' AND rDate ='$rDate'";//篩選出需要的主表明細
 $sql_query=$pdo->query($sql_str)->fetch();
 $MasterID=$sql_query["recordID"];
 
@@ -177,8 +176,10 @@ if (isset($_POST["action"])&&($_POST["action"]=="update")) {
                     </div>
                     <textarea class="form-control" name="remark" aria-label="With textarea"><?= $updatainfo[0]["remark"] ?></textarea>
                 </div>
-                    <input type="hidden" name="action" value="update">                                        
+                    <input type="hidden" name="action" value="update"> 
+                <div class="d-flex justify-content-end">                                       
                     <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>
+                </div>
         </form>
         <?php } ?>    
     </div>

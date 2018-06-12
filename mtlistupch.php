@@ -41,49 +41,57 @@
         <h1 class="text-center">設備保養表單修改清單</h1>
         <div class="list-group mx-5 my-5">
         <?php
-        switch ($system) {
-        case '1':
-            $sql_select="SELECT recordID,rDate FROM FA.Water_System_Record_Master WHERE b_number='$build_no' AND rDate BETWEEN '$strDate' AND '$endDate'";
+            $sql_select="SELECT recordID,rDate FROM FA.Water_System_Record_Master WHERE sysID=$system AND b_number='$build_no' AND rDate BETWEEN '$strDate' AND '$endDate'";
             $select_master =$pdo->query($sql_select);                
             while($row = $select_master->fetch()){
                 $MarsterID=$row['recordID'];
                 $Date = $row['rDate'];
                 $build_name=sql_database('B_name','FA.Building','b_number',$build_no);
                 echo "<a href='mtupdatatable.php?sys=".$system."& id=".$MarsterID."& build=".$build_no."& r_date=".$Date."' class=\"list-group-item list-group-item-action\">".$Date.$build_name.'-水系統設備'.'</a>';
-                }                        
-            break;
-        case '2':
-            $sql_select="SELECT recordID,rDate FROM FA.Air_System_Record_Master WHERE b_number='$build_no' AND rDate BETWEEN '$strDate' AND '$endDate'";
-            $select_master =$pdo->query($sql_select);                
-            while($row = $select_master->fetch()){
-                $MarsterID=$row['recordID'];
-                $Date = $row['rDate'];
-                $build_name=sql_database('B_name','FA.Building','b_number',$build_no);
-                echo "<a href='mtupdatatable.php?sys=".$system."& id=".$MarsterID."& build=".$build_no."& r_date=".$Date."' class=\"list-group-item list-group-item-action\">".$Date.$build_name.'-醫療氣體設備'.'</a>';
-                }                        
-            break;
-        case '3':
-            $sql_select="SELECT recordID,rDate FROM FA.AirCond_System_Record_Master WHERE b_number='$build_no' AND rDate BETWEEN '$strDate' AND '$endDate'";
-            $select_master =$pdo->query($sql_select);                
-            while($row = $select_master->fetch()){
-                $MarsterID=$row['recordID'];
-                $Date = $row['rDate'];
-                $build_name=sql_database('B_name','FA.Building','b_number',$build_no);
-                echo "<a href='mtupdatatable.php?sys=".$system."& id=".$MarsterID."& build=".$build_no."& r_date=".$Date."' class=\"list-group-item list-group-item-action\">".$Date.$build_name.'-空調系統設備'.'</a>';
                 }
-            break;
+        // switch ($system) {
+        // case '1':
+        //     $sql_select="SELECT recordID,rDate FROM FA.Water_System_Record_Master WHERE b_number='$build_no' AND rDate BETWEEN '$strDate' AND '$endDate'";
+        //     $select_master =$pdo->query($sql_select);                
+        //     while($row = $select_master->fetch()){
+        //         $MarsterID=$row['recordID'];
+        //         $Date = $row['rDate'];
+        //         $build_name=sql_database('B_name','FA.Building','b_number',$build_no);
+        //         echo "<a href='mtupdatatable.php?sys=".$system."& id=".$MarsterID."& build=".$build_no."& r_date=".$Date."' class=\"list-group-item list-group-item-action\">".$Date.$build_name.'-水系統設備'.'</a>';
+        //         }                        
+        //     break;
+        // case '2':
+        //     $sql_select="SELECT recordID,rDate FROM FA.Air_System_Record_Master WHERE b_number='$build_no' AND rDate BETWEEN '$strDate' AND '$endDate'";
+        //     $select_master =$pdo->query($sql_select);                
+        //     while($row = $select_master->fetch()){
+        //         $MarsterID=$row['recordID'];
+        //         $Date = $row['rDate'];
+        //         $build_name=sql_database('B_name','FA.Building','b_number',$build_no);
+        //         echo "<a href='mtupdatatable.php?sys=".$system."& id=".$MarsterID."& build=".$build_no."& r_date=".$Date."' class=\"list-group-item list-group-item-action\">".$Date.$build_name.'-醫療氣體設備'.'</a>';
+        //         }                        
+        //     break;
+        // case '3':
+        //     $sql_select="SELECT recordID,rDate FROM FA.AirCond_System_Record_Master WHERE b_number='$build_no' AND rDate BETWEEN '$strDate' AND '$endDate'";
+        //     $select_master =$pdo->query($sql_select);                
+        //     while($row = $select_master->fetch()){
+        //         $MarsterID=$row['recordID'];
+        //         $Date = $row['rDate'];
+        //         $build_name=sql_database('B_name','FA.Building','b_number',$build_no);
+        //         echo "<a href='mtupdatatable.php?sys=".$system."& id=".$MarsterID."& build=".$build_no."& r_date=".$Date."' class=\"list-group-item list-group-item-action\">".$Date.$build_name.'-空調系統設備'.'</a>';
+        //         }
+        //     break;
         
-        default:
-            $sql_select="SELECT recordID,rDate FROM FA.HL_Vol_System_Record_Master WHERE b_number='$build_no' AND rDate BETWEEN '$strDate' AND '$endDate'";
-            $select_master =$pdo->query($sql_select);                
-            while($row = $select_master->fetch()){
-                $MarsterID=$row['recordID'];
-                $Date = $row['rDate'];
-                $build_name=sql_database('B_name','FA.Building','b_number',$build_no);
-                echo "<a href='mtupdatatable.php?sys=".$system."& id=".$MarsterID."& build=".$build_no."& r_date=".$Date."' class=\"list-group-item list-group-item-action\">".$Date.$build_name.'-高低壓電氣設備'.'</a>';
-                }
-            break;    
-        }  
+        // default:
+        //     $sql_select="SELECT recordID,rDate FROM FA.HL_Vol_System_Record_Master WHERE b_number='$build_no' AND rDate BETWEEN '$strDate' AND '$endDate'";
+        //     $select_master =$pdo->query($sql_select);                
+        //     while($row = $select_master->fetch()){
+        //         $MarsterID=$row['recordID'];
+        //         $Date = $row['rDate'];
+        //         $build_name=sql_database('B_name','FA.Building','b_number',$build_no);
+        //         echo "<a href='mtupdatatable.php?sys=".$system."& id=".$MarsterID."& build=".$build_no."& r_date=".$Date."' class=\"list-group-item list-group-item-action\">".$Date.$build_name.'-高低壓電氣設備'.'</a>';
+        //         }
+        //     break;    
+        // }  
         ?>          
         </div>
     </section>
