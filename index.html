@@ -45,9 +45,8 @@
             <div class="text-muted">
                 <i class="fas fa-7x fa-file-alt my-3"></i>
                 <h2>工務設備運轉抄表文件及管理系統</h2>
-                <!-- 點我進入關閉list article1 -->
                 <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                    <button style="pointer-events: none;" type="button" class="mainBtn autho3" data-toggle="modal" data-target="#ModalCenter1"
+                    <button style="pointer-events: none;" type="button" class="mainBtn autho3" data-toggle="collapse" data-target="#article1"
                         id="mainBtn1" disabled>點我進入</button>
                 </span>
             </div>
@@ -55,6 +54,15 @@
             <div>
                 <article class="my-3 collapse" id="article1">
                     <ul class="syslist list-group" id="syslist1"></ul>
+                    <li class="list-group-item">
+                        <a href="" class="text-dark maindata0" data-toggle="modal" data-target="#ModalCenter1"></a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="" class="text-dark maindata1" data-toggle="modal" data-target="#ModalCenter1"></a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="text-dark maindata2"></a>
+                    </li>
                 </article>
             </div>
         </div>
@@ -63,9 +71,8 @@
             <div class="text-muted">
                 <i class="fas fa-7x fa-file-alt my-3"></i>
                 <h2>工務設備保養紀錄文件及管理系統</h2>
-                <!-- 點我進入關閉list article2 -->
                 <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                    <button style="pointer-events: none;" type="button" class="mainBtn autho3" data-toggle="modal" data-target="#ModalCenter2"
+                    <button style="pointer-events: none;" type="button" class="mainBtn autho3" data-toggle="collapse" data-target="#article2"
                         id="mainBtn2" disabled>點我進入</button>
                 </span>
             </div>
@@ -73,6 +80,15 @@
             <div>
                 <article class="my-3 collapse" id="article2">
                     <ul class="syslist list-group" id="syslist2"></ul>
+                    <li class="list-group-item">
+                        <a href="" class="text-dark maindata3" data-toggle="modal" data-target="#ModalCenter1"></a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="" class="text-dark maindata4" data-toggle="modal" data-target="#ModalCenter1"></a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="text-dark maindata5"></a>
+                    </li>
                 </article>
             </div>
         </div>
@@ -101,13 +117,22 @@
             <div>
                 <article class="my-3 collapse" id="article3">
                     <ul class="syslist list-group" id="syslist3"></ul>
+                    <li class="list-group-item">
+                        <a class="text-dark maindata6"></a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="text-dark maindata7"></a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="text-dark maindata8"></a>
+                    </li>
                 </article>
             </div>
         </div>
     </div>
-    <!-- 主選單卡片(Modal) -->
+    <!-- 卡片(Modal) -->
     <section>
-        <!-- 運轉抄表選擇日期/班別 -->
+        <!-- 主選單 -->
         <div class="modal fade" id="ModalCenter1" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -133,45 +158,12 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                        <!-- 送出鍵開啟list article1-->
-                        <button type="button" data-dismiss="modal" class="btn btn-primary cardSendBtn" id="cardSendBtn1">送出</button>
+                        <a type="button" class="btn btn-primary" id="cardSendBtn1">送出</a>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- 設備保養選擇日期/班別 -->
-        <div class="modal fade" id="ModalCenter2" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="ModalLongTitle">選擇日期/班別</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <span>日期</span>
-                        <input class="form-control d-block presentTime" type="date" name="" id="rankmtdate">
-                        <div class="form-group">
-                            <label for="rankmt">班別</label>
-                            <select class="form-control" id="rankmt">
-                                <option selected>請選擇</option>
-                                <option value="1">早班</option>
-                                <option value="2">中班</option>
-                                <option value="3">晚班</option>
-                                <option value="4">巡檢</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                        <!-- 送出鍵開啟list article2-->
-                        <button type="button" data-dismiss="modal" class="btn btn-primary cardSendBtn" id="cardSendBtn2">送出</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- 異常表單卡片 -->
+        <!-- 異常表單 -->
         <div class="modal fade" id="ModalCenter3" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
