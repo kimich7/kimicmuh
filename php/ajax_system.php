@@ -19,7 +19,7 @@
                 $equipArray2=array_push($equipArray1,$equipArray);
             }
         } else {
-            $str="SELECT DISTINCT a.zoneNo,zoneName FROM FA.Zonefloor AS a INNER JOIN FA.Equipment_Check_elec as b ON a.zoneNo = b.zoneNo WHERE b.b_number ='$buildNo' AND b.sysID =$systemNo AND b.floorID='$floorNo'";
+            $str="SELECT DISTINCT a.zoneNo,zoneName FROM FA.Zonefloor AS a INNER JOIN FA.Equipment_Check as b ON a.zoneNo = b.zoneNo WHERE b.b_number ='$buildNo' AND b.sysID =$systemNo AND b.floorID='$floorNo'";
             $query_equipment =$pdo->query($str)->fetchAll();
             foreach ($query_equipment as $equipInfo) {
                 $equipArray['zoneNo']=$equipInfo['zoneNo'];

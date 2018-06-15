@@ -148,9 +148,9 @@
                     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
                     $equipment=sql_database('zoneName','FA.Zonefloor','floorID',$equipNo);
                 } else {
-                    $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND zoneNo='$equipNo'AND b_number='$buildNo' AND sysID='$sysNo'";
+                    $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND zoneNo=$equipNo AND b_number='$buildNo' AND sysID=$sysNo";
                     $query_equip=$pdo->query($sql_equip_check);
-                    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND zoneNo='$equipNo'AND b_number='$buildNo' AND sysID='$sysNo'";
+                    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND zoneNo=$equipNo AND b_number='$buildNo' AND sysID=$sysNo";
                     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
                 }
                 break;
