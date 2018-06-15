@@ -54,8 +54,7 @@ $(function () {
     //選擇mainBtn新增Class(套用Bootstrap)
     $(".mainBtn").addClass(" mx-auto w-50 d-block btn btn-outline-primary");
     //用getJSON來取得運轉抄表日期
-    $("#cardSendBtn1").click(function (e) {
-        e.preventDefault();
+    $("#cardSendBtn1").click(function () {
         $.getJSON("php/data_class.php", {
             rankdate: $("#rank1date").val(),
             rank: $("#rank1").val()
@@ -63,64 +62,31 @@ $(function () {
             $("#resultdate").text(data);
         });
     });
-    //用getJSON來取得設備保養日期
-    $("#cardSendBtn2").click(function (e) {
-        e.preventDefault();
-        $.getJSON("php/data_class.php", {
-            rankdate: $("#rankmtdate").val(),
-            rank: $("#rankmt").val()
-        }, function (data) {
-            $("#resultdate").text(data);
+    // 使用getJSON讀取mainlist.json內的title資料
+    $.getJSON("json/mainlist.json", function (data) {
+        for (let i = 0; i < data.length; i++) {
+            $(".maindata" + i).html(data[i].name).attr("href", data[i].url);
+        }
+    });
+    $(".maindata0").click(function () {
+        $.getJSON("json/mainlist.json", function (data) {
+            $("#cardSendBtn1").attr("href", data[0].url);
         });
     });
-    //送出按出時#article1新增屬性show按點我進入屬性show移除
-    $("#cardSendBtn1").click(function () {
-        $("#article1").addClass(" show");
+    $(".maindata1").click(function () {
+        $.getJSON("json/mainlist.json", function (data) {
+            $("#cardSendBtn1").attr("href", data[1].url);
+        });
     });
-    $("#mainBtn1").click(function () {
-        $("#article1").removeClass(" show");
+    $(".maindata3").click(function () {
+        $.getJSON("json/mainlist.json", function (data) {
+            $("#cardSendBtn1").attr("href", data[3].url);
+        });
     });
-    //送出按出時#article2新增屬性show按點我進入屬性show移除
-    $("#cardSendBtn2").click(function () {
-        $("#article2").addClass(" show");
-    });
-    $("#mainBtn2").click(function () {
-        $("#article2").removeClass(" show");
-    });
-    // 使用getJSON讀取index1.json內的title資料
-    $.getJSON("json/index1.json", function (data) {
-        var $syslist1 = $("#syslist1");
-        for (var i = 0; i < data.length; i++) {
-            $syslist1.append(
-                $("<li>").addClass("list-group-item").append(
-                    $("<a>").addClass("text-dark").attr("href", data[i].url).text(data[i].name)
-                )
-            );
-        }
-    });
-    // 使用getJSON讀取index2.json內的title資料
-    $.getJSON("json/index2.json", function (data) {
-        var $syslist2 = $("#syslist2");
-        for (var i = 0; i < data.length; i++) {
-            $syslist2.append(
-                $("<li>").addClass("list-group-item").append(
-                    $("<a>").addClass("text-dark").attr("href", data[i].url).text(data[i].name)
-                )
-            );
-
-        }
-    });
-    // 使用getJSON讀取index3.json內的title資料
-    $.getJSON("json/index3.json", function (data) {
-        var $syslist3 = $("#syslist3");
-        for (var i = 0; i < data.length; i++) {
-            $syslist3.append(
-                $("<li>").addClass("list-group-item").append(
-                    $("<a>").addClass("text-dark").attr("href", data[i].url).text(data[i].name)
-                )
-            );
-
-        }
+    $(".maindata4").click(function () {
+        $.getJSON("json/mainlist.json", function (data) {
+            $("#cardSendBtn1").attr("href", data[4].url);
+        });
     });
     //抓取當前時間並寫進時間選單內
     var presentYear = new Date().getFullYear();
