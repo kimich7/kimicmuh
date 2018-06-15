@@ -61,40 +61,23 @@
         return $item_qt;
     }
 
-    function sysTable($sysID){
-        $table=array();
-        switch ($sysID) {
-            case '1':
-                $systemDetail='FA.Water_System_Record_Detail';
-                $systemMaster='FA.Water_System_Record_Master';
-                $equipTable='FA.Equipment_Check';
-                break;
-            case '2':
-                $systemDetail='FA.Water_System_Record_Detail';
-                $systemMaster='FA.Water_System_Record_Master';
-                $equipTable='FA.Equipment_Check';
-                // $systemDetail='FA.Air_System_Record_Detail';
-                // $systemMaster='FA.Air_System_Record_Master';
-                // $equipTable='FA.Equipment_Check';
-                break;
-            case '3':
-                $systemDetail='FA.Water_System_Record_Detail';
-                $systemMaster='FA.Water_System_Record_Master';
-                $equipTable='FA.Equipment_Check';
-                // $systemDetail='FA.AirCond_System_Record_Detail';
-                // $systemMaster='FA..AirCond_System_Record_Master';
-                // $equipTable='FA.Equipment_Check';
-                break;
-            case '4':
-                $systemDetail='FA.HL_Vol_System_Record_Detail';
-                $systemMaster='FA.HL_Vol_System_Record_Master';
-                $equipTable='FA.Equipment_Check_elec';
-                break;
-        }
-        $table['master']=$systemMaster;
-        $table['detail']=$systemDetail;
-        $table['equip']=$equipTable;
-        return $table;
+    function rank($userID){
+        include("CMUHconndata.php");
+        $str="SELECT rank FROM FA.Employee WHERE e_number = '$userID'";
+        $str_query=$pdo->query($str)->fetch();
+        return $rank=$str_query['rank'];
+    }
+    function rankStatus($recordID){
+        include("CMUHconndata.php");
+        $status=array();
+        $strStatus="SELECT r_member,managerID,check_number,check_manager FROM FA.Water_System_Record_Master WHERE recordID=$recordID";
+        $strStatus_query=$pdo->query($strStatus)->fetch();
+        $status['mgrCheck']=$strStatus_query['check_manager'];
+        $status['eeCheck']=$strStatus_query['check_number'];
+        $status['employeeID']=$strStatus_query['r_member'];
+        $status['managerID']=$strStatus_query['managerID'];
+        return $status;
+
     }
 
     function equipCheckSearch($sys_no,$equip_no){

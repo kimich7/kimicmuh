@@ -13,29 +13,46 @@
     $sysNo=str_replace("\"", "", $sysNo);
     $rDate=$_GET["r_date"];
     $rDate=str_replace("\"", "", $rDate);
+    $sysMaster='FA.Water_System_Record_Master';
     $systemTable='FA.Water_System_Record_Detail';
     $equipTable='FA.Equipment_Check';
-           
+
+    $userRank=rank($checkuserID);//登入者的等級
+    if ($userRank<3) {//主管登錄
+        $tatus=rankStatus($MasterID);
+            $eeID=$tatus['employeeID'];
+        $eeName=sql_database('cname','FA.Employee','e_number',$eeID);        
+    } else {//檢查者登錄
+        $managerID = '';        
+    }
     $bname=sql_database('B_name','FA.Building','b_number',$buildNo);
     $sysname=sql_database('sysName','FA.Equipment_System_Group','sysID',$sysNo);
     $updata_qt=updata_num($systemTable,$MasterID);//迴圈數量
     $updatainfo=updata_select($systemTable,$MasterID);//我要的東西
     
-    if (isset($_POST["action"])&&($_POST["action"]=="update")) {        
-        for ($i=0; $i  <$updata_qt ; $i++) {
-            $q=200+$i;
-            $an=$i;
-            $rdID=$_POST["$q"];
-            $ans=$_POST["$an"];
-            $sql="UPDATE $systemTable SET remark=:remark , checkResult=:checkResult WHERE recordDetailID=:ID";
+    if (isset($_POST["action"])&&($_POST["action"]=="update")) {
+        $recordID=$_POST['MasterID'];        
+        if ($userRank<3) {//主管登錄
+            if (isset($_POST["mgrCheck"])) {
+                $check_manager=1;           
+            }
+            $sql="UPDATE $sysMaster SET managerID=:managerID , check_manager=:check_manager WHERE recordID=:ID";
             $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':remark',$_POST["remark"],PDO::PARAM_STR);
-            $stmt->bindParam(':checkResult',$ans,PDO::PARAM_STR);
-            $stmt->bindParam(':ID',$rdID,PDO::PARAM_INT);
-            $stmt->execute();      
+            $stmt->bindParam(':managerID',$checkuserID,PDO::PARAM_STR);
+            $stmt->bindParam(':check_manager',$check_manager,PDO::PARAM_STR);
+        } else {//檢查者登錄
+            if (isset($_POST["eeCheck"])) {
+                $check_employee=1;           
+            }
+            $sql="UPDATE $sysMaster SET r_member=:r_member , check_number=:check_number WHERE recordID=:ID";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindParam(':r_member',$checkuserID,PDO::PARAM_STR);
+            $stmt->bindParam(':check_number',$check_employee,PDO::PARAM_STR);
         }
+            $stmt->bindParam(':ID',$recordID,PDO::PARAM_INT);
+            $stmt->execute();      
         $pdo=null;
-        header("Location: mtupdata.html");    
+        header("Location: mtlistcheck.php");    
     }
 ?>
 
@@ -67,12 +84,8 @@
             <h2 class="text-center font-weight-bold">中國醫藥大學附設醫院-<?= $bname ?>--<?= $sysname ?></h2>
             <!-- 班別/檢查者/日期欄 -->
             <div class="row my-3">
-                <div class="col text-left">
-                <p class="d-inline font-weight-bold">檢查者：</p>
-                <p class="d-inline text-primary" name="reMumber"><?= $checkuser ?></p>
-                </div>
                 <div class="col text-right">
-                <p class="d-inline font-weight-bold">檢查日期：</p>
+                <p class="d-inline font-weight-bold">巡檢日期：</p>
                 <p class="d-inline text-primary"><?= $rDate ?></p>
                 </div>
             </div>
@@ -253,16 +266,37 @@
                 </div>
                 <textarea class="form-control" name="remark" aria-label="With textarea" ><?= $updatainfo[0]["remark"] ?></textarea>
             </div>
-            <dIV>
-                <table>
-                    <tr>
-                        <td>主管：</td>
-                        <td></td>
-                        <td>檢查人：</td>
-                        <td><?= $checkuser?></td>
-                    </tr>
-                </table>
-            </div>
+            <input type='hidden' name='MasterID' value='<?= $MasterID?>'>
+            <?php
+                if ($userRank<3) {//主管等級
+                echo '<div class="row my-3">';
+                    echo '<div class="col text-left">';
+                    echo '<p class="d-inline font-weight-bold">主管：</p>';
+                    echo '<p class="d-inline text-primary">'.$checkuser.'</p>';
+                    echo '<p class="d-inline font-weight-bold" name="reMumber"><input type="checkbox" name="mgrCheck" value="mgcheck">主管確認</p>';
+                    echo '</div>';
+                    echo '<div class="col text-right">';
+                    echo '<p class="d-inline font-weight-bold">檢查者：</p>';
+                    echo '<p class="d-inline text-primary" name="reMumber">'.$eeName.'</p>';
+                    echo '<p class="d-inline font-weight-bold" name="reMumber"><input type="checkbox" name="eeCheck" value="mbcheck" checked disabled >檢查人確認</p>';
+                    echo '</div>';
+                echo '</div>' ;
+                } else {//檢查者登錄
+                echo '<div class="row my-3">';
+                    echo '<div class="col text-left">';
+                    echo '<p class="d-inline font-weight-bold">主管：</p>';
+                    echo '<p class="d-inline text-primary">'.$managerID.'</p>';
+                    echo '<p class="d-inline font-weight-bold" name="reMumber"><input type="checkbox" name="mgrCheck" value="mgcheck" disabled>主管確認</p>';
+                    echo '</div>';
+                    echo '<div class="col text-right">';
+                    echo '<p class="d-inline font-weight-bold">檢查者：</p>';
+                    echo '<p class="d-inline text-primary" name="reMumber">'.$checkuser.'</p>';
+                    echo '<p class="d-inline font-weight-bold" name="reMumber"><input type="checkbox" name="eeCheck" value="mbcheck">檢查人確認</p>';
+                    echo '</div>';
+                echo '</div>' ;  
+                }                
+            ?>
+            
             <!-- 傳送值到資料庫中 -->
             <input type="hidden" name="action" value="update">
             <!-- 送出鈕 -->

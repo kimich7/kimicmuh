@@ -1,17 +1,17 @@
 <?php
     include("php/CMUHconndata.php");
     include("php/fun.php");
-
-    
+    session_start();
+    $checkuser=$_SESSION["login_member"];
+    $checkuserID=sql_database('e_number','FA.Employee','cname',$checkuser);
+    $str_member="SELECT * FROM FA.Employee WHERE e_number='$checkuserID'";
+    $member=$pdo->query($str_member)->fetch();
     if (isset($_POST["action"])&&($_POST["action"]=="check")) {
         $total_num=$_POST["total_num"];
-        for ($i=0; $i  <$total_num ; $i++) {
-            $a=$i;
+        for ($i=0; $i<$total_num ; $i++) { 
             $j=$i+1000;
-            $k=$i+2000;
-            echo "我是j：".$_POST["$j"].'<br>'; 
-            echo "我是a：".$_POST["$a"].'<br>';  
-            echo "我是k：".$_POST["$k"].'<br>';           
+            $k=$i+2000;                    
+            $a=$i;
             if (isset($_POST["$j"])) {
                 $memberCheck=1;
             } else {
@@ -21,24 +21,30 @@
                 $managerCheck=1;
             } else {
                 $managerCheck=0;
-            }            
-
-            // $memberCheck=$_POST["$j"];
-            // $managerCheck=$_POST["$a"];
-            $rdID=$_POST["$k"];
-            
-
-            $sql="UPDATE FA.Water_System_Record_Master SET check_number=:check_number , check_manager=:check_manager WHERE recordID=:ID";
-            $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':check_number',$memberCheck,PDO::PARAM_STR);
-            $stmt->bindParam(':check_manager',$managerCheck,PDO::PARAM_STR);
+            }
+            if (isset($_POST["$k"])) {
+                $rdID=$_POST["$k"];
+            }else{
+                break;
+            }
+            if ($member['rank']<3) {
+                $sql="UPDATE FA.Water_System_Record_Master SET  check_manager=:check_manager,managerID=:managerID WHERE recordID=:ID";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindParam(':check_manager',$managerCheck,PDO::PARAM_STR);
+                $stmt->bindParam(':managerID',$checkuserID,PDO::PARAM_STR);
+            } else {
+                $sql="UPDATE FA.Water_System_Record_Master SET  check_number=:check_number,r_member=:r_member WHERE recordID=:ID";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindParam(':check_number',$memberCheck,PDO::PARAM_STR);
+                $stmt->bindParam(':r_member',$checkuserID,PDO::PARAM_STR);
+            }
             $stmt->bindParam(':ID',$rdID,PDO::PARAM_INT);
-            $stmt->execute();      
+            $stmt->execute();
+            $j=$i+1000;
+            $k=$i+2000;     
         }
-
         $pdo=null;
-        header("Location: mtlistcheck.php");
-        //header("Location: index.html");  
+        header("Location:mtlistcheck.php");
     }
 ?>
 <!DOCTYPE html>
@@ -74,32 +80,36 @@
         <h1 class="text-center">設備保養表單未簽核清單</h1>
         <div class="list-group mx-5 my-5">
         <?php
-        $pageRow_record=30;//每頁的筆數
+        $pageRow_record=10;//每頁的筆數
         $page_num=1;//預設的頁數
         //更新$page_num        
         if (isset($_GET['page'])) {
             $page_num=$_GET['page'];
         }
         $startRow_record=($page_num-1)*$pageRow_record;
-            // $sys_water='FA.Water_System_Record_Master';
-            // $sys_air='FA.Air_System_Record_Master';
-            // $sys_aircond='FA.AirCond_System_Record_Master';
-            // $sys_elec='FA.HL_Vol_System_Record_Master';
-        //所有的資料
-        $sqlstr_total="SELECT * FROM FA.Water_System_Record_Master WHERE check_number IS NULL or check_number=0 or check_manager IS NULL or check_manager=0";
-        //篩選後給每頁的筆數
-        $sqlstr_page="SELECT * FROM FA.Water_System_Record_Master WHERE check_number IS NULL or check_number=0 or check_manager IS NULL or check_manager=0 ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
-        //總資料數量
-        $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE check_number IS NULL or check_number=0 or check_manager IS NULL or check_manager=0";
-
+        if ($member['rank']<3) {
+            //所有的資料 (check_manager IS NULL or check_manager=0) and
+            $sqlstr_total="SELECT * FROM FA.Water_System_Record_Master WHERE (check_number=1) and (check_manager IS NULL or check_manager=0)";
+            //篩選後給每頁的筆數
+            $sqlstr_page="SELECT * FROM FA.Water_System_Record_Master WHERE (check_number=1) and (check_manager IS NULL or check_manager=0) ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+            //總資料數量
+            $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE (check_number=1) and (check_manager IS NULL or check_manager=0)";
+        } else {
+            //所有的資料
+            $sqlstr_total="SELECT * FROM FA.Water_System_Record_Master WHERE check_number IS NULL or check_number=0 or check_manager IS NULL or check_manager=0";
+            //篩選後給每頁的筆數
+            $sqlstr_page="SELECT * FROM FA.Water_System_Record_Master WHERE check_number IS NULL or check_number=0 or check_manager IS NULL or check_manager=0 ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+            //總資料數量
+            $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE check_number IS NULL or check_number=0 or check_manager IS NULL or check_manager=0";
+        }
         $sql_page=$pdo->query($sqlstr_page);
         $sql_total=$pdo->query($sqlstr_total);
         $total_num=CURRENT($pdo->query($totalstr_num)->fetch());
         
         //本業開始的筆數
         $i=0;
-        $j=1000;
-        $k=2000;
+        $j=$i+1000;
+        $k=$i+2000;
         $a=0;
         echo '<table border="1" align="center" width="80%">';
         echo '<thead align="center">';
@@ -116,19 +126,18 @@
             $buildName=sql_database('B_name','FA.Building','b_number',$data_page['b_number']);
             $sysName=sql_database('sysName','FA.Equipment_System_Group','sysID',$data_page['sysID']);
                 echo "<td width='80%'><a href='mtchecktable.php?id=\"".$data_page['recordID']."\"&build=\"".$data_page['b_number']."\"&r_date=\"".$data_page['rDate']."\"&member=\"".$data_page['r_member']."\"&manage=\"".$data_page['managerID']."\"&checkMember=\"".$data_page['check_number']."\"&checkManager=\"".$data_page['check_manager']."\"&sysID=\"".$data_page['sysID']."\"' class=\".list-group-item list-group-item-action.\">".$buildName."-".$sysName."-".$data_page['rDate'].'</a></td>';
-                
                 echo '<td width="10%" align="center">';
-                if ($data_page['check_manager']==true) {
-                    echo "<input type='checkbox' name=\"".$a."\" value=\"".$mgcheck."\" checked>";
+                if ($data_page['check_manager']==1) {
+                    echo "<input type='checkbox' class='managerCheck' name=\"".$a."\" value=\"".$mgcheck."\" checked disabled>";
                 } else {
-                    echo "<input type='checkbox' name=\"".$a."\" value=\"".$mgcheck."\">";
+                    echo "<input type='checkbox' class='managerCheck' name=\"".$a."\" value=\"".$mgcheck."\" disabled>";
                 }   
                 echo '</td>';
                 echo '<td width="10%" align="center">';
-                if ($data_page['check_number']==true) {
-                    echo "<input type='checkbox' name=\"".$j."\" value=\"".$mbcheck."\" checked>";
+                if ($data_page['check_number']==1) {
+                    echo "<input type='checkbox' class='employeeCheck' name=\"".$j."\" value=\"".$mbcheck."\" checked disabled>";
                 } else {
-                    echo "<input type='checkbox' name=\"".$j."\" value=\"".$mbcheck."\">";
+                    echo "<input type='checkbox' class='employeeCheck' name=\"".$j."\" value=\"".$mbcheck."\" disabled>";
                 }  
                 echo '</td>';
                 $q=$data_page['recordID'];
@@ -136,7 +145,6 @@
             $i++;
             $j++;
             $k++;
-            
             echo '</tr>';
         }
         echo '</tbody>';
@@ -188,7 +196,5 @@
     <footer>
         <div id="footer"></div>
     </footer>
-    
 </body>
-
 </html>
