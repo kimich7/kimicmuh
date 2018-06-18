@@ -6,6 +6,7 @@
     $endDate=$_POST['dateend'];
     $build_no=$_POST['build'];
     $system=$_POST['system'];
+    $sysName=sql_database('sysName','FA.Equipment_System_Group','sysID',$system);
     // $equipt=$_POST['equipment'];
     // $shift=$_POST['class'];   
     
@@ -47,7 +48,7 @@
                 $MarsterID=$row['recordID'];
                 $Date = $row['rDate'];
                 $build_name=sql_database('B_name','FA.Building','b_number',$build_no);
-                echo "<a href='mtupdatatable.php?sys=".$system."& id=".$MarsterID."& build=".$build_no."& r_date=".$Date."' class=\"list-group-item list-group-item-action\">".$Date.$build_name.'-水系統設備'.'</a>';
+                echo "<a href='mtupdatatable.php?sys=".$system."& id=".$MarsterID."& build=".$build_no."& r_date=".$Date."' class=\"list-group-item list-group-item-action\">".$Date.$build_name.'-'.$sysName.'</a>';
                 }        
         ?>          
         </div>

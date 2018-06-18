@@ -19,8 +19,13 @@
         for ($i=0; $i  <$updata_qt ; $i++) {
             $q=200+$i;
             $an=$i;
+            if (isset($_POST["$an"])) {
+                $ans=$_POST["$an"];
+            } else {
+                $ans=0;
+            }
             $rdID=$_POST["$q"];
-            $ans=$_POST["$an"];
+            //$ans=$_POST["$an"];
             $sql="UPDATE $systemTable SET remark=:remark , checkResult=:checkResult WHERE recordDetailID=:ID";
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':remark',$_POST["remark"],PDO::PARAM_STR);
