@@ -83,7 +83,7 @@
                     } else {
                         $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE rDate='$date_ch'AND b_number='$build_no' AND sysID=$sys_no";
                         $select_master =$pdo->query($sql_select)->fetch();
-                        $MasterID=$select_master['recordID'];                  
+                        $MasterID=$select_master['recordID'];
                         $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
                         $insert_detail =$pdo->exec($sql_insert_detail);
                     }
