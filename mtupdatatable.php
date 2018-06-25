@@ -24,7 +24,12 @@
             } else {
                 $ans=0;
             }
-            $rdID=$_POST["$q"];
+            if (isset($_POST["$k"])) {
+                $rdID=$_POST["$q"];
+            }else{
+                break;
+            }
+            //$rdID=$_POST["$q"];
             //$ans=$_POST["$an"];
             $sql="UPDATE $systemTable SET remark=:remark , checkResult=:checkResult WHERE recordDetailID=:ID";
             $stmt = $pdo->prepare($sql);

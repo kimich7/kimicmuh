@@ -22,17 +22,17 @@
         $loop_count=$_POST["loop_num"];//迴圈數量
         $floorID = $_POST["floorID"];//樓層資訊
 
-        switch ($sys_no) {
-            case '4':
-                if (empty($equip_no)) {
-                    $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check_elec WHERE floorID='$floorID'AND b_number='$build_no' AND sysID='$sys_no'";
-                    $equip_ch=$pdo->query($sql_equip_check);
-                } else {
-                    $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check_elec WHERE floorID='$floorID'AND zoneNo='$equip_no'AND b_number='$build_no' AND sysID='$sys_no'";
-                    $equip_ch=$pdo->query($sql_equip_check);
-                }
-                break;            
-            default:
+        // switch ($sys_no) {
+        //     case '4':
+        //         if (empty($equip_no)) {
+        //             $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check_elec WHERE floorID='$floorID'AND b_number='$build_no' AND sysID='$sys_no'";
+        //             $equip_ch=$pdo->query($sql_equip_check);
+        //         } else {
+        //             $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check_elec WHERE floorID='$floorID'AND zoneNo='$equip_no'AND b_number='$build_no' AND sysID='$sys_no'";
+        //             $equip_ch=$pdo->query($sql_equip_check);
+        //         }
+        //         break;            
+        //     default:
                 if (empty($equip_no)) {
                     $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$build_no' AND sysID='$sys_no'";
                     $equip_ch=$pdo->query($sql_equip_check);
@@ -40,8 +40,8 @@
                     $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID='$equip_no'AND b_number='$build_no' AND sysID='$sys_no'";
                     $equip_ch=$pdo->query($sql_equip_check);
                 }
-                break;
-        }
+        //         break;
+        // }
         
        
         for ($i=0; $i < $loop_count; $i++) {
@@ -50,8 +50,9 @@
             $equip_check = $equip_id['equipCheckID'];
             $ans_no=$_POST["$i"];
             $sql_master_check="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE b_number='$build_no' AND rDate='$date_ch' AND sysID=$sys_no ";
-            $master_check_query=Current($pdo->query($sql_master_check)->fetch());;
+            $master_check_query=Current($pdo->query($sql_master_check)->fetch());
 
+            //最後如果沒問題的話可以把這個Switch的條件拿掉，因為目前兩個條件的內容是一樣的
             switch ($sys_no) {
                 case "4":
                     if ($master_check_query ==0) {                    

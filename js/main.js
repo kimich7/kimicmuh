@@ -101,6 +101,8 @@ $(function () {
     $(".presentTime").attr("value", presentYear + "-" + presentMonth + "-" + presentDate);
     //===================================首頁結束===================================
     //===================================mtinsert開始(與mtupdata共用)===================================
+    //新增表單的分頁
+    $('#tablepanel').tabs();
     //取得日期
     $.getJSON("php/cookiedata.php", function (data) {
         $("#bday").attr("value", data[0]['date']);
@@ -140,26 +142,32 @@ $(function () {
             $("#system").append('<option value="' + data[i]["sysID"] + '">' + data[i]["sysName"] + '</option>');
         }
     });
-
     //mtinsert選擇樓層
     $(".f1").change(function () {
         var system_eq = $("#system").val();
         var building_eq = $("#build").val();
-        var choiceNo = 0;
-        if (system_eq == 4) {
-            choiceNo = 1;
-        }
-        $.getJSON("php/zone.php", {
-            "system_eq": system_eq,
-            "build_eq": building_eq,
-            "choiceNo": choiceNo
-        }, function (data) {
-            var html = '<option selected> 請選擇樓層 </option>';
-            for (let i = 0; i < data.length; i++) {
-                html += "<option value=\"" + data[i]["floorID"] + "\">" + data[i]["floorName"] + "</option>";
-                $("#buildingfloor").html(html);
-            }
-        });
+        var rDate = $("#bday").val();
+        var now_class = $("#Three_shifts").val();
+        var insert_revise = 0;
+        if ($("#revise").click(function () {
+                insert_revise = 1;
+            }))
+            // if (system_eq == 4) {
+            //     choiceNo = 1;
+            // }
+            $.getJSON("php/zone.php", {
+                "system_eq": system_eq,
+                "build_eq": building_eq,
+                "rDate": rDate,
+                "now_class": now_class,
+                "insert_revise": insert_revise
+            }, function (data) {
+                var html = '<option selected> 請選擇樓層 </option>';
+                for (let i = 0; i < data.length; i++) {
+                    html += "<option value=\"" + data[i]["floorID"] + "\">" + data[i]["floorName"] + "</option>";
+                    $("#buildingfloor").html(html);
+                }
+            });
     });
     //mtinsert選擇設備
     $(".f2").change(function () {
