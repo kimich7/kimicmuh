@@ -101,8 +101,7 @@ $(function () {
     $(".presentTime").attr("value", presentYear + "-" + presentMonth + "-" + presentDate);
     //===================================首頁結束===================================
     //===================================mtinsert開始(與mtupdata共用)===================================
-    //新增表單的分頁
-    $('#tablepanel').tabs();
+
     //取得日期
     $.getJSON("php/cookiedata.php", function (data) {
         $("#bday").attr("value", data[0]['date']);
@@ -124,6 +123,7 @@ $(function () {
             }
         });
     });
+
     //用getJSON讀取data內的資料(棟別)
     $.getJSON("php/data.php", {
         colID: 'b_number',
@@ -148,26 +148,23 @@ $(function () {
         var building_eq = $("#build").val();
         var rDate = $("#bday").val();
         var now_class = $("#Three_shifts").val();
-        var insert_revise = 0;
-        if ($("#revise").click(function () {
-                insert_revise = 1;
-            }))
-            // if (system_eq == 4) {
-            //     choiceNo = 1;
-            // }
-            $.getJSON("php/zone.php", {
-                "system_eq": system_eq,
-                "build_eq": building_eq,
-                "rDate": rDate,
-                "now_class": now_class,
-                "insert_revise": insert_revise
-            }, function (data) {
-                var html = '<option selected> 請選擇樓層 </option>';
-                for (let i = 0; i < data.length; i++) {
-                    html += "<option value=\"" + data[i]["floorID"] + "\">" + data[i]["floorName"] + "</option>";
-                    $("#buildingfloor").html(html);
-                }
-            });
+
+        // if (system_eq == 4) {
+        //     choiceNo = 1;
+        // }
+        $.getJSON("php/zone.php", {
+            "system_eq": system_eq,
+            "build_eq": building_eq,
+            "rDate": rDate,
+            "now_class": now_class,
+            // "insert_revise": insert_revise
+        }, function (data) {
+            var html = '<option selected> 請選擇樓層 </option>';
+            for (let i = 0; i < data.length; i++) {
+                html += "<option value=\"" + data[i]["floorID"] + "\">" + data[i]["floorName"] + "</option>";
+                $("#buildingfloor").html(html);
+            }
+        });
     });
     //mtinsert選擇設備
     $(".f2").change(function () {
@@ -207,7 +204,7 @@ $(function () {
         var equipment = $("#equipment").val();
         var shift = $("#Three_shifts").val();
         //$("#reupdata").attr("href","reupdata.php?date=\""+rdate+"\"\& systemID=\""+system_eq+"\"\& shifts=\""+shift+"\"\& build=\""+building_eq+"\"\& floor=\""+floor_eq+"\"\& equipment=\""+equipment);
-        $("#reupdata").attr("href", "reupdata.php?date=" + rdate + "& systemID=" + system_eq + " & shift=" + shift + " & build=" + building_eq + " & floor=" + floor_eq + " & equipment=" + equipment + "");
+        $("#reupdata").attr("href", "reupdata.php?date=" + rdate + "&systemID=" + system_eq + "&shift=" + shift + "&build=" + building_eq + "&floor=" + floor_eq + "&equipment=" + equipment + "");
     })
     //偵測螢幕寬，然後出現按鈕選單
     var $tall = window.screen.width;

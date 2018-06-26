@@ -33,13 +33,13 @@
         //         }
         //         break;            
         //     default:
-                if (empty($equip_no)) {
-                    $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$build_no' AND sysID='$sys_no'";
-                    $equip_ch=$pdo->query($sql_equip_check);
-                } else {
-                    $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID='$equip_no'AND b_number='$build_no' AND sysID='$sys_no'";
-                    $equip_ch=$pdo->query($sql_equip_check);
-                }
+        if (empty($equip_no)) {
+            $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$build_no' AND sysID='$sys_no'";
+            $equip_ch=$pdo->query($sql_equip_check);
+        } else {
+            $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID='$equip_no'AND b_number='$build_no' AND sysID='$sys_no'";
+            $equip_ch=$pdo->query($sql_equip_check);
+        }
         //         break;
         // }
         
@@ -133,7 +133,7 @@
         //篩選出系統別
         $system=sql_database('sysName','FA.Equipment_System_Group','sysID',$sysNo);
         //篩選出樓層別
-        $system=sql_database('floorName','FA.BuildingFloor','floorID',$floorID);
+        $floorName=sql_database('floorName','FA.BuildingFloor','floorID',$floorID);
         //篩選出設備別
 
         //篩選出班別
@@ -143,9 +143,9 @@
         switch ($sysNo) {
             case "4":
                 if (empty($equipNo)) {
-                    $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID='$sysNo'";
+                    $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
                     $query_equip=$pdo->query($sql_equip_check);
-                    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID='$sysNo'";
+                    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
                     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
                     $equipment=sql_database('zoneName','FA.Zonefloor','floorID',$equipNo);
                 } else {
@@ -157,19 +157,19 @@
                 break;
             default:
                 if (empty($equipNo)) {
-                    $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID='$sysNo'";
+                    $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
                     $query_equip=$pdo->query($sql_equip_check);
-                    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID='$sysNo'";
+                    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
                     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
                     $equipment=sql_database('equipName','FA.Equipment_System','equipID',$equipNo);
                 } else {
-                    $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID='$equipNo'AND b_number='$buildNo' AND sysID='$sysNo'";
+                    $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID=$equipNo AND b_number='$buildNo' AND sysID=$sysNo";
                     $query_equip=$pdo->query($sql_equip_check);
-                    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID='$equipNo'AND b_number='$buildNo' AND sysID='$sysNo'";
+                    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID=$equipNo AND b_number='$buildNo' AND sysID=$sysNo";
                     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
                 }
                 break;
-        }     
+        }   
     ?>
     <div class="container border border-info mt-5">
         <form action="" method="post" name="wa">
@@ -200,6 +200,8 @@
                 for ($i=0; $i < $equip_check_no; $i++) { 
                     $equipinfo=$query_equip->fetch(PDO::FETCH_ASSOC);
                 ?>
+                 
+         
                 <tbody class="text-primary">
                     <td><?= $equipinfo['equipCheckName']?></td>
                     <td><?= $equipinfo["ref"]?></td>
@@ -220,6 +222,7 @@
                 }  
                 echo"</tr>";
                 }
+                print_r($equipinfo);
                 ?>
                 </tbody>
             </table>

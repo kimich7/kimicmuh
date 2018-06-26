@@ -15,8 +15,6 @@
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script src="./node_modules/popper.js/dist/umd/popper.min.js"></script>
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="./node_modules/jquery_ui/jquery_ui.js"></script>
-    jquery-ui.js
     <!-- 連結自己的JS -->
     <script src="./js/main.js"></script>
     <title>設備保養表單選擇</title>
@@ -33,95 +31,42 @@
             <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-10 col-sm-10 col-12 back container w-50 my-4 rounded">
                     <div id="tablepanel" class="choice_table rounded text-white">
-                        <ul>
-                            <li>
-                                <a href="#insert">
-                                    <h3>新增抄表</h3>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#revise">
-                                    <h3>抄表修改</h3>
-                                </a>
-                            </li>
-                        </ul>
-                        <div id="insert">
-                            <!-- 副標題 -->
-                            <h2 class="text-center mb-4">選擇抄表表單</h2>
-                            <!-- 工作日期 -->
-                            <P>工作日期: </P>
-                            <input class="form-control mb-3" type="date" name="bday" id="bday">
-                            <!-- 選擇班別 -->
-                            <p>選擇班別：</p>
-                            <select class="form-control mb-3" name="class" id="Three_shifts">
-                                <option selected>請選擇班別</option>
-                            </select>
-                            <!-- 選擇棟別 -->
-                            <p>選擇棟別：</p>
-                            <select class="form-control mb-3 f1 f2" name="build" id="build">
-                                <option selected>請選擇棟別</option>
-                            </select>
-                            <!-- 選擇點檢系統 -->
-                            <p>選擇點檢系統：</p>
-                            <select class="form-control mb-3 f1 f2 " name="system" id="system">
-                                <option selected>請選擇系統</option>
-                            </select>
-                            <!-- 選擇樓層 -->
-                            <p>選擇設備樓層：</p>
-                            <select class="form-control mb-3 f2" name="buildingfloor" id="buildingfloor">
-                                <option value="">請選擇樓層</option>
-                            </select>
-                            <!-- 選擇點檢設備 -->
-                            <p>選擇點檢設備： </p>
-                            <select class="form-control mb-3" name="equipment" id="equipment">
-                                <option selected>請選擇設備/區域</option>
-                            </select>
-                            <!-- 送出鍵 -->
-                            <div class="d-flex justify-content-end">
-                                <!-- <a href="#" type="button" id="reupdata" class="btn btn-primary mt-4 rounded d-block mr-3">修改</a> -->
-                                <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                                    <button style="pointer-events: none;" type="submit" class="btn btn-primary mt-4 autho3" disabled>送出</button>
-                                </span>
-                            </div>
-                        </div>
-                        <div id="revise">
-                            <!-- 副標題 -->
-                            <h2 class="text-center mb-4">選擇修改表單</h2>
-                            <!-- 工作日期 -->
-                            <P>工作日期: </P>
-                            <input class="form-control mb-3" type="date" name="bday" id="bday">
-                            <!-- 選擇班別 -->
-                            <p>選擇班別：</p>
-                            <select class="form-control mb-3" name="class" id="Three_shifts">
-                                <option selected>請選擇班別</option>
-                            </select>
-                            <!-- 選擇棟別 -->
-                            <p>選擇棟別：</p>
-                            <select class="form-control mb-3 f1 f2" name="build" id="build">
-                                <option selected>請選擇棟別</option>
-                            </select>
-                            <!-- 選擇點檢系統 -->
-                            <p>選擇點檢系統：</p>
-                            <select class="form-control mb-3 f1 f2 " name="system" id="system">
-                                <option selected>請選擇系統</option>
-                            </select>
-                            <!-- 選擇樓層 -->
-                            <p>選擇設備樓層：</p>
-                            <select class="form-control mb-3 f2" name="buildingfloor" id="buildingfloor">
-                                <option value="">請選擇樓層</option>
-                            </select>
-                            <!-- 選擇點檢設備 -->
-                            <p>選擇點檢設備： </p>
-                            <select class="form-control mb-3" name="equipment" id="equipment">
-                                <option selected>請選擇設備/區域</option>
-                            </select>
-                            <!-- 送出鍵 -->
-                            <div class="d-flex justify-content-end">
-                                <!-- <a href="#" type="button" id="reupdata" class="btn btn-primary mt-4 rounded d-block mr-3">修改</a> -->
-                                <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                                    <a href="#" type="button" id="reupdata" class="btn btn-primary mt-4 rounded d-block mr-3">修改</a>
-                                </span>
-                            </div>
+                        <!-- 副標題 -->
+                        <h2 class="text-center mb-4">選擇抄表表單</h2>
+                        <!-- 工作日期 -->
+                        <P>工作日期: </P>
+                        <input class="form-control mb-3" type="date" name="bday" id="bday">
+                        <!-- 選擇班別 -->
+                        <p>選擇班別：</p>
+                        <select class="form-control mb-3" name="class" id="Three_shifts">
+                            <option selected>請選擇班別</option>
+                        </select>
+                        <!-- 選擇棟別 -->
+                        <p>選擇棟別：</p>
+                        <select class="form-control mb-3 f1 f2" name="build" id="build">
+                            <option selected>請選擇棟別</option>
+                        </select>
+                        <!-- 選擇點檢系統 -->
+                        <p>選擇點檢系統：</p>
+                        <select class="form-control mb-3 f1 f2 " name="system" id="system">
+                            <option selected>請選擇系統</option>
+                        </select>
+                        <!-- 選擇樓層 -->
+                        <p>選擇設備樓層：</p>
+                        <select class="form-control mb-3 f2" name="buildingfloor" id="buildingfloor">
+                            <option value="">請選擇樓層</option>
+                        </select>
+                        <!-- 選擇點檢設備 -->
+                        <p>選擇點檢設備： </p>
+                        <select class="form-control mb-3" name="equipment" id="equipment">
+                            <option selected>請選擇設備/區域</option>
+                        </select>
+                        <!-- 送出鍵 -->
+                        <div class="d-flex justify-content-end">
+                            <a href="#" type="button" id="reupdata" class="btn btn-primary mt-4 rounded d-block mr-3">修改</a>
+                            <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
+                                <button style="pointer-events: none;" type="submit" class="btn btn-primary mt-4 autho3" disabled>送出</button>
+                            </span>
                         </div>
                     </div>
                 </div>

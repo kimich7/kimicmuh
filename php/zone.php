@@ -6,7 +6,7 @@
             $buildNo=$_REQUEST['build_eq'];
             $rDate = $_REQUEST['rDate'];
             $class = $_REQUEST['now_class'];
-            $revise=$_REQUEST['insert_revise'];
+            // $revise=$_REQUEST['insert_revise'];
         }
         //==========(作品分類)===========//
         $dataArray=array();
@@ -24,12 +24,9 @@
             $seach_check=Current($pdo->query($seach)->fetch());
         }        
         
-        if ($master_check_query==0 or $seach_check==0 or $revise==1) {
+        if ($master_check_query==0 or $seach_check==0) {
             $str="SELECT DISTINCT a.floorID,floorName FROM FA.BuildingFloor AS a INNER JOIN FA.Equipment_Check as b ON a.floorID = b.floorID WHERE b.b_number ='$buildNo' AND b.sysID =$systemNo";
         } else {
-            // $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE b_number='$buildNo' AND rDate='$rDate' AND sysID=$systemNo";
-            // $select_master =$pdo->query($sql_select)->fetch();
-            // $MasterID=$select_master['recordID'];
             $num="SELECT COUNT( DISTINCT floorID) FROM FA.Water_System_Record_Detail WHERE  recordID = $MasterID";
             $str="SELECT DISTINCT a.floorID,floorName FROM FA.BuildingFloor AS a INNER JOIN FA.Equipment_Check as b ON a.floorID = b.floorID WHERE b.b_number ='$buildNo' AND b.sysID =$systemNo AND a.floorID NOT IN  (SELECT DISTINCT floorID FROM FA.Water_System_Record_Detail WHERE recordID=$MasterID)";
         }
