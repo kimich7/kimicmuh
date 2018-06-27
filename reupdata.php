@@ -154,14 +154,14 @@ if (isset($_POST["action"])&&($_POST["action"]=="update")) {
 
                 </div>
             </div>
-            <div class="my-3">
+            <!-- <div class="my-3">
                 <p class="d-inline font-weight-bold">
                     設備：
                 </p>
                 <p class="d-inline text-primary">
-                    <?= $equipName ?>
+                    <//?= $equipName ?>
                 </p>
-            </div>
+            </div> -->
             <table class="table my-5">
                 <thead>
                     <th>檢查項目</th>

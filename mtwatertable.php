@@ -169,7 +169,7 @@
                     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
                 }
                 break;
-        }   
+        }     
     ?>
     <div class="container border border-info mt-5">
         <form action="" method="post" name="wa">
@@ -200,8 +200,6 @@
                 for ($i=0; $i < $equip_check_no; $i++) { 
                     $equipinfo=$query_equip->fetch(PDO::FETCH_ASSOC);
                 ?>
-                 
-         
                 <tbody class="text-primary">
                     <td><?= $equipinfo['equipCheckName']?></td>
                     <td><?= $equipinfo["ref"]?></td>
@@ -222,7 +220,6 @@
                 }  
                 echo"</tr>";
                 }
-                print_r($equipinfo);
                 ?>
                 </tbody>
             </table>
