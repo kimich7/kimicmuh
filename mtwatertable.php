@@ -92,7 +92,8 @@
             }  
         }
         $pdo=null;
-       header("Location: mtinsert.html");
+        echo "<script>window.close();</script>";
+       //header("Location: mtinsert.html");
     }
 ?>
 

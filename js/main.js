@@ -170,6 +170,8 @@ $(function () {
     $(".f2").change(function () {
         var system_eq = $("#system").val();
         var building_eq = $("#build").val();
+        var rDate = $("#bday").val();
+        var now_class = $("#Three_shifts").val();
         var floor_eq = $("#buildingfloor").val();
         var choiceNo = 0;
         if (system_eq == 4) {
@@ -179,6 +181,8 @@ $(function () {
             "system_eq": system_eq,
             "build_eq": building_eq,
             "floor_eq": floor_eq,
+            "rDate": rDate,
+            "now_class": now_class,
             "choiceNo": choiceNo
         }, function (data) {
             var html = '<option value=""> 請選擇設備/區域 </option>';
