@@ -43,7 +43,7 @@
         //         break;
         // }
         
-       
+        $err=0;
         for ($i=0; $i < $loop_count; $i++) {
             $equip_id=$equip_ch->fetch();
             $ref_no = $equip_id['ref'];
@@ -51,6 +51,10 @@
             $ans_no=$_POST["$i"];
             $sql_master_check="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE b_number='$build_no' AND rDate='$date_ch' AND sysID=$sys_no ";
             $master_check_query=Current($pdo->query($sql_master_check)->fetch());
+            if (empty($ans_no)) {
+                $ans_no=null;
+                $err=$err+1;
+            }
 
             //最後如果沒問題的話可以把這個Switch的條件拿掉，因為目前兩個條件的內容是一樣的
             switch ($sys_no) {
@@ -92,6 +96,12 @@
             }  
         }
         $pdo=null;
+        // if ($err>=1) {
+        //     header("Location: ./php/manager.php");;
+        // } else {
+        //     echo "<script>window.close();</script>";
+        // }
+        
         echo "<script>window.close();</script>";
        //header("Location: mtinsert.html");
     }
