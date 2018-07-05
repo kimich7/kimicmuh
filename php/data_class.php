@@ -1,6 +1,7 @@
 <?php
 setcookie('date',$_GET["rankdate"]);
 setcookie('shift',$_GET["rank"]); 
+// setcookie('className',$class);
 $date = $_GET["rankdate"];
 $rank = $_GET["rank"];
 $class = "";
