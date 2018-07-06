@@ -13,6 +13,9 @@
          case 'shiftID':
              $query=$query_shift;
              break;
+         case 'c_number':
+             $query=$query_courtyard;
+             break;        
      }     
     $data=database($colID,$colName,$query);
     echo $data;

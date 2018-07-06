@@ -39,7 +39,7 @@ $(function () {
         }
     });
 
-    // 登出表單提交時要執行將登入顯示/登出隱藏
+    // 登出表單提交時要執行將登入顯示/登出隱藏    
     $("#logOutBtn").click(function () {
         $.getJSON("php/sessionUnset.php", {
             logOutValue: 1
@@ -54,14 +54,24 @@ $(function () {
     //選擇mainBtn新增Class(套用Bootstrap)
     $(".mainBtn").addClass(" mx-auto w-50 d-block btn btn-outline-primary");
     //用getJSON來取得運轉抄表日期
-    $("#cardSendBtn1").click(function () {
+    $(".cookiecs").change(function () {
         $.getJSON("php/data_class.php", {
             rankdate: $("#rank1date").val(),
-            rank: $("#rank1").val()
+            rank: $("#rank1").val(),
+            courtyard: $("#courtyard").val()
         }, function (data) {
             $("#resultdate").text(data);
         });
-    });
+    })
+    // $("#cardSendBtn1").click(function () {
+    //     $.getJSON("php/data_class.php", {
+    //         rankdate: $("#rank1date").val(),
+    //         rank: $("#rank1").val()
+    //     }, function (data) {
+    //         $("#resultdate").text(data);
+    //     });
+    // });
+
     // 使用getJSON讀取mainlist.json內的title資料
     $.getJSON("json/mainlist.json", function (data) {
         for (let i = 0; i < data.length; i++) {
@@ -110,6 +120,23 @@ $(function () {
     $.getJSON("php/cookiedata.php", function (data) {
         $("#Three_shifts").html('<option value="' + data[0]["class"] + '">' + data[0]["shiftclass"] + "</option>");
     });
+    //取得院區
+    $.getJSON("php/cookiedata.php", function (data) {
+        $("#courtyard").html('<option value="' + data[0]["courtyardID"] + '">' + data[0]["courtyardName"] + "</option>");
+    });
+    //用getJSON讀取data內的資料(院區)
+    $("#courtyard").one("click", function () {
+        $.getJSON("php/data.php", {
+            colID: 'c_number',
+            colName: 'courtyard'
+        }, function (data) {
+            var html = '<option selected> 請選擇院區 </option>';
+            for (let i = 0; i < data.length; i++) {
+                html += "<option value=\"" + data[i]["c_number"] + "\">" + data[i]["courtyard"] + "</option>";
+                $("#courtyard").html(html);
+            }
+        });
+    });
     //用getJSON讀取data內的資料(班別)
     $("#Three_shifts").one("click", function () {
         $.getJSON("php/data.php", {
@@ -134,14 +161,14 @@ $(function () {
         }
     });
     //用getJSON讀取data內的資料(系統)
-    $.getJSON("php/data.php", {
-        colID: 'sysID',
-        colName: 'sysName'
-    }, function (data) {
-        for (let i = 0; i < data.length; i++) {
-            $("#system").append('<option value="' + data[i]["sysID"] + '">' + data[i]["sysName"] + '</option>');
-        }
-    });
+    // $.getJSON("php/data.php", {
+    //     colID: 'sysID',
+    //     colName: 'sysName'
+    // }, function (data) {
+    //     for (let i = 0; i < data.length; i++) {
+    //         $("#system").append('<option value="' + data[i]["sysID"] + '">' + data[i]["sysName"] + '</option>');
+    //     }
+    // });
     //mtinsert選擇樓層
     $(".f1").change(function () {
         var system_eq = $("#system").val();
@@ -200,6 +227,8 @@ $(function () {
 
         });
     });
+
+    //個人八小時內的修改
     $("#reupdata").click(function () {
         var system_eq = $("#system").val();
         var building_eq = $("#build").val();

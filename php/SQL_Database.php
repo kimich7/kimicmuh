@@ -16,6 +16,10 @@
     $sql_shift = "SELECT shiftID,shiftName FROM FA.Shift_Table";
     $query_shift=$pdo->query($sql_shift)->fetchAll();
 
+    //select courtyard
+    $sql_courtyard = "SELECT c_number,courtyard FROM FA.Courtyard";
+    $query_courtyard=$pdo->query($sql_courtyard)->fetchAll();
+
     // 設定連結SQL資料庫內的Employee表格並取ename,passwoed兩個欄位的資料
     // $sql_employee = "SELECT cname,passcard FROM FA.Employee";
     // $query_employee=$pdo->query($sql_employee)->fetchAll();

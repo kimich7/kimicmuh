@@ -1,10 +1,13 @@
 <?php
 setcookie('date',$_GET["rankdate"]);
-setcookie('shift',$_GET["rank"]); 
+setcookie('shift',$_GET["rank"]);
+setcookie('courtyard',$_GET["courtyard"]); 
 // setcookie('className',$class);
 $date = $_GET["rankdate"];
 $rank = $_GET["rank"];
+$courtyardID = $_GET["courtyard"];
 $class = "";
+$courtyardName="";
 switch ($rank) {
     case '1':
     $class = "早班";
@@ -19,7 +22,14 @@ switch ($rank) {
     $class = "巡檢";
     break;
 }
+if ($courtyardID==1) {
+    $courtyardName='學士院區';
+} else {
+    $courtyardName='五權院區';
+}
+
 setcookie('className',$class);
+setcookie('courtyardName',$courtyardName);
 $result = array();
 $result['date'] = $date;
 $result['class'] = $class;

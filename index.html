@@ -144,10 +144,18 @@
                     </div>
                     <div class="modal-body">
                         <span>日期</span>
-                        <input class="form-control d-block presentTime" type="date" name="rankdate" id="rank1date">
+                        <input class="form-control d-block presentTime cookiecs" type="date" name="rankdate" id="rank1date">
+                        <div class="form-group">
+                            <label for="courtyard">院區</label>
+                            <select class="form-control cookiecs" id="courtyard" name="courtyard">
+                                <option selected>請選擇</option>
+                                <option value="1">學士院區</option>
+                                <option value="2">五權院區</option>
+                            </select>
+                        </div>
                         <div class="form-group">
                             <label for="rank1">班別</label>
-                            <select class="form-control" id="rank1" name="rank">
+                            <select class="form-control cookiecs" id="rank1" name="rank">
                                 <option selected>請選擇</option>
                                 <option value="1">早班</option>
                                 <option value="2">中班</option>
