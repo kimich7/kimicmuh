@@ -6,6 +6,7 @@ setcookie('courtyard',$_GET["courtyard"]);
 $date = $_GET["rankdate"];
 $rank = $_GET["rank"];
 $courtyardID = $_GET["courtyard"];
+ECHO $courtyardID;
 $class = "";
 $courtyardName="";
 switch ($rank) {

@@ -58,7 +58,7 @@ $(function () {
         $.getJSON("php/data_class.php", {
             rankdate: $("#rank1date").val(),
             rank: $("#rank1").val(),
-            courtyard: $("#courtyard").val()
+            courtyard: $("#cydID").val()
         }, function (data) {
             $("#resultdate").text(data);
         });
@@ -152,14 +152,30 @@ $(function () {
     });
 
     //用getJSON讀取data內的資料(棟別)
-    $.getJSON("php/data.php", {
+    $.getJSON("php/insertdata.php", {
         colID: 'b_number',
-        colName: 'B_name'
+        colName: 'B_name',
+        seachNo: '1'
     }, function (data) {
         for (let i = 0; i < data.length; i++) {
             $("#build").append('<option value="' + data[i]["b_number"] + '">' + data[i]["B_name"] + '</option>');
         }
     });
+    $("#courtyard").change(function () {
+        var cyID = $("#courtyard").val();
+        $.getJSON("php/insertdata.php", {
+            colID: 'b_number',
+            colName: 'B_name',
+            cyID: cyID,
+            seachNo: '2'
+        }, function (data) {
+            var html = '<option selected> 請選大樓 </option>';
+            for (let i = 0; i < data.length; i++) {
+                html += "<option value=\"" + data[i]["b_number"] + "\">" + data[i]["B_name"] + "</option>";
+                $("#build").html(html);
+            }
+        });
+    })
     //用getJSON讀取data內的資料(系統)
     // $.getJSON("php/data.php", {
     //     colID: 'sysID',
