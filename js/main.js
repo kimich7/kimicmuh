@@ -186,29 +186,58 @@ $(function () {
     //     }
     // });
     //mtinsert選擇樓層
-    $(".f1").change(function () {
-        var system_eq = $("#system").val();
-        var building_eq = $("#build").val();
-        var rDate = $("#bday").val();
-        var now_class = $("#Three_shifts").val();
-
-        // if (system_eq == 4) {
-        //     choiceNo = 1;
-        // }
-        $.getJSON("php/zone.php", {
-            "system_eq": system_eq,
-            "build_eq": building_eq,
-            "rDate": rDate,
-            "now_class": now_class,
-            // "insert_revise": insert_revise
+    $("#build").change(function () {
+        var buildNo = $("#build").val();
+        $.getJSON("php/insertfloor.php", {
+            "buildNo": buildNo
         }, function (data) {
-            var html = '<option selected> 請選擇樓層 </option>';
+            var html = '<option value="" selected> 請選擇樓層 </option>';
             for (let i = 0; i < data.length; i++) {
                 html += "<option value=\"" + data[i]["floorID"] + "\">" + data[i]["floorName"] + "</option>";
                 $("#buildingfloor").html(html);
             }
-        });
-    });
+        })
+    })
+
+    //mtinsert依據所選的樓層選系統
+    $("#buildingfloor").change(function () {
+        var floorID = $("#buildingfloor").val();
+        $.getJSON("php/insertsystem.php", {
+            "floorID": floorID
+        }, function (data) {
+            var html = '<option value="" selected> 請選擇系統 </option>';
+            for (let i = 0; i < data.length; i++) {
+                html += "<option value=\"" + data[i]["sysID"] + "\">" + data[i]["sysName"] + "</option>";
+                $("#system").html(html);
+            }
+        })
+
+    })
+
+    //mtinsert選擇樓層
+    // $(".f1").change(function () {
+    //     var system_eq = $("#system").val();
+    //     var building_eq = $("#build").val();
+    //     var rDate = $("#bday").val();
+    //     var now_class = $("#Three_shifts").val();
+
+    // if (system_eq == 4) {
+    //     choiceNo = 1;
+    // }
+    //     $.getJSON("php/zone.php", {
+    //         "system_eq": system_eq,
+    //         "build_eq": building_eq,
+    //         "rDate": rDate,
+    //         "now_class": now_class,
+    //         // "insert_revise": insert_revise
+    //     }, function (data) {
+    //         var html = '<option selected> 請選擇樓層 </option>';
+    //         for (let i = 0; i < data.length; i++) {
+    //             html += "<option value=\"" + data[i]["floorID"] + "\">" + data[i]["floorName"] + "</option>";
+    //             $("#buildingfloor").html(html);
+    //         }
+    //     });
+    // });
     //mtinsert選擇設備
     $(".f2").change(function () {
         var system_eq = $("#system").val();

@@ -57,9 +57,7 @@
             }
 
             //最後如果沒問題的話可以把這個Switch的條件拿掉，因為目前兩個條件的內容是一樣的
-            switch ($sys_no) {
-                case "4":
-                    if ($master_check_query ==0) {                    
+            if ($master_check_query ==0) {                    
                         $sql_insert_master="INSERT INTO FA.Water_System_Record_Master(b_number,rDate,sysID) VALUES ('$build_no','$date_ch',$sys_no) ";
                         $insert_master =$pdo->exec($sql_insert_master);                    
                         $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE sysID=$sys_no AND rDate='$date_ch' AND b_number='$build_no'";
@@ -73,27 +71,44 @@
                         $MasterID=$select_master['recordID'];
                         $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
                         $insert_detail =$pdo->exec($sql_insert_detail);
-                    }                  
-                    break;
+                    }  
+            // switch ($sys_no) {
+            //     case "4":
+            //         if ($master_check_query ==0) {                    
+            //             $sql_insert_master="INSERT INTO FA.Water_System_Record_Master(b_number,rDate,sysID) VALUES ('$build_no','$date_ch',$sys_no) ";
+            //             $insert_master =$pdo->exec($sql_insert_master);                    
+            //             $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE sysID=$sys_no AND rDate='$date_ch' AND b_number='$build_no'";
+            //             $select_master =$pdo->query($sql_select)->fetch();
+            //             $MasterID=$select_master['recordID'];                   
+            //             $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
+            //             $insert_detail =$pdo->exec($sql_insert_detail);
+            //         } else {
+            //             $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE sysID=$sys_no AND rDate='$date_ch' AND b_number='$build_no'";
+            //             $select_master =$pdo->query($sql_select)->fetch();
+            //             $MasterID=$select_master['recordID'];
+            //             $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
+            //             $insert_detail =$pdo->exec($sql_insert_detail);
+            //         }                  
+            //         break;
 
-                default:
-                    if ($master_check_query ==0) {                    
-                        $sql_insert_master="INSERT INTO FA.Water_System_Record_Master(b_number,rDate,sysID) VALUES ('$build_no','$date_ch',$sys_no) ";
-                        $insert_master =$pdo->exec($sql_insert_master);                    
-                        $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE sysID=$sys_no AND rDate='$date_ch' AND b_number='$build_no'";
-                        $select_master =$pdo->query($sql_select)->fetch();
-                        $MasterID=$select_master['recordID'];                    
-                        $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
-                        $insert_detail =$pdo->exec($sql_insert_detail);
-                    } else {
-                        $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE rDate='$date_ch'AND b_number='$build_no' AND sysID=$sys_no";
-                        $select_master =$pdo->query($sql_select)->fetch();
-                        $MasterID=$select_master['recordID'];
-                        $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
-                        $insert_detail =$pdo->exec($sql_insert_detail);
-                    }
-                    break;
-            }  
+            //     default:
+            //         if ($master_check_query ==0) {                    
+            //             $sql_insert_master="INSERT INTO FA.Water_System_Record_Master(b_number,rDate,sysID) VALUES ('$build_no','$date_ch',$sys_no) ";
+            //             $insert_master =$pdo->exec($sql_insert_master);                    
+            //             $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE sysID=$sys_no AND rDate='$date_ch' AND b_number='$build_no'";
+            //             $select_master =$pdo->query($sql_select)->fetch();
+            //             $MasterID=$select_master['recordID'];                    
+            //             $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
+            //             $insert_detail =$pdo->exec($sql_insert_detail);
+            //         } else {
+            //             $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE rDate='$date_ch'AND b_number='$build_no' AND sysID=$sys_no";
+            //             $select_master =$pdo->query($sql_select)->fetch();
+            //             $MasterID=$select_master['recordID'];
+            //             $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
+            //             $insert_detail =$pdo->exec($sql_insert_detail);
+            //         }
+            //         break;
+            // }  
         }
         $pdo=null;
         if ($err>=1) {
