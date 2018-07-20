@@ -111,21 +111,28 @@ $(function () {
     $(".presentTime").attr("value", presentYear + "-" + presentMonth + "-" + presentDate);
     //===================================首頁結束===================================
     //===================================mtinsert開始(與mtupdata共用)===================================
+    $(document).ready(function () {
+        $('#tablepanel').tabs();
+    })
 
-    //取得日期
+    //取得預載資料
     $.getJSON("php/cookiedata.php", function (data) {
+        //取得日期
         $("#bday").attr("value", data[0]['date']);
-    });
-    //取得班別
-    $.getJSON("php/cookiedata.php", function (data) {
+        //取得班別
         $("#Three_shifts").html('<option value="' + data[0]["class"] + '">' + data[0]["shiftclass"] + "</option>");
-    });
-    //取得院區
-    $.getJSON("php/cookiedata.php", function (data) {
+        //取得院區
         $("#courtyard").html('<option value="' + data[0]["courtyardID"] + '">' + data[0]["courtyardName"] + "</option>");
+        //取得日期(修改)
+        $("#ubday").attr("value", data[0]['date']);
+        //取得班別(修改)
+        $("#uThree_shifts").html('<option value="' + data[0]["class"] + '">' + data[0]["shiftclass"] + "</option>");
+        //取得院區(修改)
+        $("#ucourtyard").html('<option value="' + data[0]["courtyardID"] + '">' + data[0]["courtyardName"] + "</option>");
     });
+
     //用getJSON讀取data內的資料(院區)
-    $("#courtyard").one("click", function () {
+    $("#courtyard,#ucourtyar").one("click", function () {
         $.getJSON("php/data.php", {
             colID: 'c_number',
             colName: 'courtyard'
@@ -134,11 +141,12 @@ $(function () {
             for (let i = 0; i < data.length; i++) {
                 html += "<option value=\"" + data[i]["c_number"] + "\">" + data[i]["courtyard"] + "</option>";
                 $("#courtyard").html(html);
+                $("#ucourtyard").html(html);
             }
         });
     });
     //用getJSON讀取data內的資料(班別)
-    $("#Three_shifts").one("click", function () {
+    $("#Three_shifts,#uThree_shifts").one("click", function () {
         $.getJSON("php/data.php", {
             colID: 'shiftID',
             colName: 'shiftName'
@@ -147,6 +155,7 @@ $(function () {
             for (let i = 0; i < data.length; i++) {
                 html += "<option value=\"" + data[i]["shiftID"] + "\">" + data[i]["shiftName"] + "</option>";
                 $("#Three_shifts").html(html);
+                $("#uThree_shifts").html(html);
             }
         });
     });
@@ -159,6 +168,7 @@ $(function () {
     }, function (data) {
         for (let i = 0; i < data.length; i++) {
             $("#build").append('<option value="' + data[i]["b_number"] + '">' + data[i]["B_name"] + '</option>');
+            $("#ubuild").append('<option value="' + data[i]["b_number"] + '">' + data[i]["B_name"] + '</option>');
         }
     });
     $("#courtyard").change(function () {
@@ -173,6 +183,22 @@ $(function () {
             for (let i = 0; i < data.length; i++) {
                 html += "<option value=\"" + data[i]["b_number"] + "\">" + data[i]["B_name"] + "</option>";
                 $("#build").html(html);
+            }
+        });
+    })
+
+    $("#ucourtyard").change(function () {
+        var cyID = $("#ucourtyard").val();
+        $.getJSON("php/insertdata.php", {
+            colID: 'b_number',
+            colName: 'B_name',
+            cyID: cyID,
+            seachNo: '2'
+        }, function (data) {
+            var html = '<option selected> 請選大樓 </option>';
+            for (let i = 0; i < data.length; i++) {
+                html += "<option value=\"" + data[i]["b_number"] + "\">" + data[i]["B_name"] + "</option>";
+                $("#ubuild").html(html);
             }
         });
     })
@@ -199,11 +225,29 @@ $(function () {
         })
     })
 
+    //mtinsert修改的選擇樓層
+    $("#ubuild").change(function () {
+        var ubuildNo = $("#ubuild").val();
+        $.getJSON("php/uinsertfloor.php", {
+            "ubuildNo": ubuildNo
+        }, function (data) {
+            var html = '<option value="" selected> 請選擇樓層 </option>';
+            for (let i = 0; i < data.length; i++) {
+                html += "<option value=\"" + data[i]["floorID"] + "\">" + data[i]["floorName"] + "</option>";
+                $("#ubuildingfloor").html(html);
+            }
+        })
+    })
+
     //mtinsert依據所選的樓層選系統
     $("#buildingfloor").change(function () {
         var floorID = $("#buildingfloor").val();
+        var rDate = $("#bday").val();
+        var shiftID = $("#Three_shifts").val();
         $.getJSON("php/insertsystem.php", {
-            "floorID": floorID
+            "floorID": floorID,
+            "rDate": rDate,
+            "shiftID": shiftID
         }, function (data) {
             var html = '<option value="" selected> 請選擇系統 </option>';
             for (let i = 0; i < data.length; i++) {
@@ -211,7 +255,19 @@ $(function () {
                 $("#system").html(html);
             }
         })
-
+    })
+    //mtinsert_UP依據所選的樓層選系統
+    $("#ubuildingfloor").change(function () {
+        var ufloorID = $("#ubuildingfloor").val();
+        $.getJSON("php/uinsertsystem.php", {
+            "ufloorID": ufloorID
+        }, function (data) {
+            var html = '<option value="" selected> 請選擇系統 </option>';
+            for (let i = 0; i < data.length; i++) {
+                html += "<option value=\"" + data[i]["sysID"] + "\">" + data[i]["sysName"] + "</option>";
+                $("#usystem").html(html);
+            }
+        })
     })
 
     //mtinsert選擇樓層
@@ -275,12 +331,12 @@ $(function () {
 
     //個人八小時內的修改
     $("#reupdata").click(function () {
-        var system_eq = $("#system").val();
-        var building_eq = $("#build").val();
-        var floor_eq = $("#buildingfloor").val();
-        var rdate = $("#bday").val();
-        var equipment = $("#equipment").val();
-        var shift = $("#Three_shifts").val();
+        var system_eq = $("#usystem").val();
+        var building_eq = $("#ubuild").val();
+        var floor_eq = $("#ubuildingfloor").val();
+        var rdate = $("#ubday").val();
+        var equipment = $("#uequipment").val();
+        var shift = $("#uThree_shifts").val();
         //$("#reupdata").attr("href","reupdata.php?date=\""+rdate+"\"\& systemID=\""+system_eq+"\"\& shifts=\""+shift+"\"\& build=\""+building_eq+"\"\& floor=\""+floor_eq+"\"\& equipment=\""+equipment);
         $("#reupdata").attr("href", "reupdata.php?date=" + rdate + "&systemID=" + system_eq + "&shift=" + shift + "&build=" + building_eq + "&floor=" + floor_eq + "&equipment=" + equipment + "");
     })

@@ -16,10 +16,6 @@ $detailTable='FA.Water_System_Record_Detail';
 $masterTable='FA.Water_System_Record_Master';
 $equipTable='FA.Equipment_Check';
 
-$sql_str="SELECT recordID,rDate FROM $masterTable WHERE sysID=$sysID AND b_number='$buildID' AND rDate ='$rDate'";//篩選出需要的主表明細
-$sql_query=$pdo->query($sql_str)->fetch();
-$MasterID=$sql_query["recordID"];
-
 switch ($sysID) {
     case "4":
         if (empty($equipID)) {
@@ -49,20 +45,24 @@ switch ($sysID) {
             $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
         }
         break;
-}     
+}
 
-$buildName=sql_database('B_name','FA.Building','b_number',$buildID);
-//$equipName=sql_database('equipName','FA.Equipment_System','equipID',$equipID);
-$shiftName=sql_database('shiftName','FA.Shift_Table','shiftID',$shiftID);
-$sysName=sql_database('sysName','FA.Equipment_System_Group','sysID',$sysID);
+$sql_str="SELECT recordID,rDate FROM $masterTable WHERE sysID=$sysID AND b_number='$buildID' AND rDate ='$rDate'";//篩選出需要的主表明細
+$sql_query=$pdo->query($sql_str)->fetch();
+$MasterID=$sql_query["recordID"];
+if (!empty($MasterID)) {
+    $buildName=sql_database('B_name','FA.Building','b_number',$buildID);
+    //$equipName=sql_database('equipName','FA.Equipment_System','equipID',$equipID);
+    $shiftName=sql_database('shiftName','FA.Shift_Table','shiftID',$shiftID);
+    $sysName=sql_database('sysName','FA.Equipment_System_Group','sysID',$sysID);
+    $updata_qt=num("SELECT COUNT(equipCheckID) FROM $detailTable WHERE recordID = $MasterID AND shiftID =$shiftID AND floorID = '$floorID'");
+    $updatainfo=item("SELECT * FROM $detailTable WHERE recordID = $MasterID AND shiftID =$shiftID AND floorID = '$floorID' ");
+    $user=sql_database('cname','FA.Employee','e_number',$updatainfo[0]['r_member']);
+    $dataTime=$updatainfo[0]['rTime'];
+    $r_member=$updatainfo[0]['r_member'];
+    $allowTime=(strtotime($nowTime)-strtotime($dataTime))/3600;
+}
 
-
-$updata_qt=num("SELECT COUNT(equipCheckID) FROM $detailTable WHERE recordID = $MasterID AND shiftID =$shiftID AND floorID = '$floorID'");
-$updatainfo=item("SELECT * FROM $detailTable WHERE recordID = $MasterID AND shiftID =$shiftID AND floorID = '$floorID' ");
-$user=sql_database('cname','FA.Employee','e_number',$updatainfo[0]['r_member']);
-$dataTime=$updatainfo[0]['rTime'];
-$r_member=$updatainfo[0]['r_member'];
-$allowTime=(strtotime($nowTime)-strtotime($dataTime))/3600;
 
 if (isset($_POST["action"])&&($_POST["action"]=="update")) {
     for ($i=0; $i  <$updata_qt ; $i++) {
@@ -115,7 +115,11 @@ if (isset($_POST["action"])&&($_POST["action"]=="update")) {
 <body>
     <div class="container border border-info mt-5">
         <?php
-            if ($allowTime>8 || $r_member!=$userID ) {
+            if (empty($MasterID)) {
+                echo '<h1>資料庫無此筆資料，請重新選取。</h1><hr>';
+                echo '<h1> 網頁將導回抄表表單選擇頁面.....</h1>';
+                header("Refresh:5;url=mtinsert.html");
+            }elseif ($allowTime>8 || $r_member!=$userID ) {
             echo '<h1>已超過可修改時間，或您並非該表單巡檢人員，如愈修改此表單請聯絡具有權限之管理者。</h1><hr>';
             echo '<h1> 網頁將導回抄表表單選擇頁面.....</h1>';
             header("Refresh:5;url=mtinsert.html");

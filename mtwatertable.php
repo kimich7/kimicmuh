@@ -113,9 +113,11 @@
         $pdo=null;
         if ($err>=1) {
             echo "<script>alert('有部分項目未填寫就送出，下次要補上時請選擇修改的方式')</script>"; //header("Location: ./php/manager.php");
-            echo "<script>window.close();</script>";
+            header("Location: mtinsert.html");
+            //echo "<script>window.close();</script>";
         } else {
-            echo "<script>window.close();</script>";
+            header("Location: mtinsert.html");
+            //echo "<script>window.close();</script>";
         }
         
         //echo "<script>window.close();</script>";

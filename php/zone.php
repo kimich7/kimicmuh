@@ -39,10 +39,10 @@
     if ($master_check_query==0 or $shift_seach==0) {//如果今日還沒抄表過或是該班還沒抄表過往這走
         $str=item("SELECT DISTINCT a.floorID,floorName FROM FA.BuildingFloor AS a INNER JOIN FA.Equipment_Check as b ON a.floorID = b.floorID WHERE b.b_number ='$buildNo' AND b.sysID =$systemNo");
         foreach ($str as $Info) {
-        $dataArray['floorID']=$Info['floorID'];
-        $dataArray['floorName']=$Info['floorName'];
-        $dataArray2=array_push($dataArray1,$dataArray);
-    }
+            $dataArray['floorID']=$Info['floorID'];
+            $dataArray['floorName']=$Info['floorName'];
+            $dataArray2=array_push($dataArray1,$dataArray);
+        }
     } else {//不然就走這(該班已有超過的項目)
         for ($i=0; $i <$basic_num ; $i++) {
             for ($j=0; $j <$floor_num ; ) { 
