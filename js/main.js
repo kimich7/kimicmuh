@@ -160,6 +160,34 @@ $(function () {
         });
     });
 
+    //用getJSON讀取data內的資料(updata_build)
+    $("#build_updata").one("click", function () {
+        $.getJSON("php/data.php", {
+            colID: 'b_number',
+            colName: 'B_name',
+        }, function (data) {
+            var html = '<option selected> 請選擇大樓 </option>';
+            for (let i = 0; i < data.length; i++) {
+                html += "<option value=\"" + data[i]["b_number"] + "\">" + data[i]["B_name"] + "</option>";
+                $("#build_updata").html(html);
+            }
+        });
+    });
+    //用getJSON讀取data內的資料(updata_system)
+    $("#system_updata").one("click", function () {
+        $.getJSON("php/data.php", {
+            colID: 'sysID',
+            colName: 'sysName',
+        }, function (data) {
+            var html = '<option selected> 請選擇大樓 </option>';
+            for (let i = 0; i < data.length; i++) {
+                html += "<option value=\"" + data[i]["sysID"] + "\">" + data[i]["sysName"] + "</option>";
+                $("#system_updata").html(html);
+            }
+        });
+    });
+
+
     //用getJSON讀取data內的資料(棟別)
     $.getJSON("php/insertdata.php", {
         colID: 'b_number',
