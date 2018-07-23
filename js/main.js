@@ -322,6 +322,7 @@ $(function () {
     //         }
     //     });
     // });
+
     //mtinsert選擇設備
     $(".f2").change(function () {
         var system_eq = $("#system").val();

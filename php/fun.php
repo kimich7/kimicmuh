@@ -1,5 +1,5 @@
 <?php
-    function sql_database($col,$tbl,$when,$wheans){        
+    function sql_database($col,$tbl,$when,$wheans){//對照欄位的名稱，通常用在ID找名稱        
         include("CMUHconndata.php");
         $view_select = "SELECT $col FROM $tbl WHERE $when = '$wheans' ";
         $view_query=$pdo->query($view_select)->fetch(PDO::FETCH_ASSOC);
