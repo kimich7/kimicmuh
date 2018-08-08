@@ -167,7 +167,11 @@
 
         //篩選出班別
         $class=sql_database('shiftName','FA.Shift_Table','shiftID',$shiftNo);
-        setcookie('className',$class);    
+        //setcookie('className',$class); 
+        setcookie("build[ID]",$buildNo);
+        setcookie("build[Name]",$build);
+        setcookie("floor[ID]",$floorID);
+        setcookie("floor[Name]",$floorName);
         //檢查項目
         switch ($sysNo) {
             case "4":

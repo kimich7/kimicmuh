@@ -6,6 +6,16 @@
     $courtyardName=$_COOKIE["courtyardName"];
     $result = array();
     $result1 = array();
+    if (isset($_COOKIE["build"]["ID"])) {
+        $buildID=$_COOKIE["build"]["ID"];
+        $buildName=$_COOKIE["build"]["Name"];
+        $floorID=$_COOKIE["floor"]["ID"];
+        $floorName=$_COOKIE["floor"]["Name"];
+        $result['buildID']=$buildID;
+        $result['buildName']=$buildName;
+        $result['floorID']=$floorID;
+        $result['floorName']=$floorName;
+    }
     $result['date'] = $date;
     $result['class'] = $class;
     $result['shiftclass'] = $shiftclass;
