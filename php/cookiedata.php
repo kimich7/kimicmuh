@@ -6,11 +6,11 @@
     $courtyardName=$_COOKIE["courtyardName"];
     $result = array();
     $result1 = array();
-    if (isset($_COOKIE["build"]["ID"])) {
-        $buildID=$_COOKIE["build"]["ID"];
-        $buildName=$_COOKIE["build"]["Name"];
-        $floorID=$_COOKIE["floor"]["ID"];
-        $floorName=$_COOKIE["floor"]["Name"];
+    if (isset($_COOKIE["floorID"])) {
+        $buildID=$_COOKIE["buildID"];
+        $buildName=$_COOKIE["buildName"];
+        $floorID=$_COOKIE["floorID"];
+        $floorName=$_COOKIE["floorName"];
         $result['buildID']=$buildID;
         $result['buildName']=$buildName;
         $result['floorID']=$floorID;

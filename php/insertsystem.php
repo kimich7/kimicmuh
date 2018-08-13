@@ -1,6 +1,13 @@
 <?php
     include("CMUHconndata.php");
     include("fun.php");
+    $build=sql_database('B_name','FA.Building','b_number',$_REQUEST["BuildID"]);
+    $floorName=sql_database('floorName','FA.BuildingFloor','floorID',$_REQUEST["floorID"]);
+    setcookie("buildID",$_REQUEST["BuildID"]);
+    setcookie("buildName",$build);
+    setcookie("floorID",$_REQUEST["floorID"]);
+    setcookie("floorName",$floorName);
+
     $systemArray=array();
     $systemArray1=array();
     if (!empty($_REQUEST["floorID"])) {

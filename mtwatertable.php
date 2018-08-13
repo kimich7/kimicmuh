@@ -4,35 +4,39 @@
     session_start();
     $user=$_SESSION["login_member"];
     $userID=sql_database('e_number','FA.Employee','cname',$user);
-    // setcookie('date',$_POST["bday"]);
-    // setcookie('shift',$_POST["class"]);
+
+    //mtinsert資料帶入
+    $check_date=$_POST["bday"];
+    $buildNo=$_POST["build"];
+    $sysNo=$_POST["system"];
+    $equipNo=$_POST["equipment"];
+    $shiftNo=$_POST["class"];
+    $floorID=$_POST["buildingfloor"];
     
+    //SQL Binding
+    //篩選出棟別
+    $build=sql_database('B_name','FA.Building','b_number',$buildNo);         
+    //篩選出系統別
+    $system=sql_database('sysName','FA.Equipment_System_Group','sysID',$sysNo);
+    //篩選出樓層別
+    $floorName=sql_database('floorName','FA.BuildingFloor','floorID',$floorID);
+    //篩選出班別
+    $class=sql_database('shiftName','FA.Shift_Table','shiftID',$shiftNo);
+
+    
+
     if (isset($_POST["action"])&&($_POST["action"]=="add")) {
         $rTime= date('Y-m-d H:i:s');
         $sys_no=$_POST["sys"];//系統ID 
-                
         //Master輸入
         $build_no=$_POST["build"];//棟別代號 
-        $date_ch=$_POST["date_c"];//檢點日期 
-        
+        $date_ch=$_POST["date_c"];//檢點日期
         //Detail輸入
         $shift_no=$_POST["shift"];//點檢班別ID 
         $remark=$_POST["remark"];//備註 
         $equip_no=$_POST["equip"];//設備(鍋爐、給水、熱水......等等)ID
         $loop_count=$_POST["loop_num"];//迴圈數量
         $floorID = $_POST["floorID"];//樓層資訊
-
-        // switch ($sys_no) {
-        //     case '4':
-        //         if (empty($equip_no)) {
-        //             $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check_elec WHERE floorID='$floorID'AND b_number='$build_no' AND sysID='$sys_no'";
-        //             $equip_ch=$pdo->query($sql_equip_check);
-        //         } else {
-        //             $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check_elec WHERE floorID='$floorID'AND zoneNo='$equip_no'AND b_number='$build_no' AND sysID='$sys_no'";
-        //             $equip_ch=$pdo->query($sql_equip_check);
-        //         }
-        //         break;            
-        //     default:
         if (empty($equip_no)) {
             $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$build_no' AND sysID='$sys_no'";
             $equip_ch=$pdo->query($sql_equip_check);
@@ -40,9 +44,6 @@
             $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID='$equip_no'AND b_number='$build_no' AND sysID='$sys_no'";
             $equip_ch=$pdo->query($sql_equip_check);
         }
-        //         break;
-        // }
-        
         $err=0;
         for ($i=0; $i < $loop_count; $i++) {
             $equip_id=$equip_ch->fetch();
@@ -55,76 +56,34 @@
                 $ans_no=null;
                 $err=$err+1;
             }
-
-            //最後如果沒問題的話可以把這個Switch的條件拿掉，因為目前兩個條件的內容是一樣的
             if ($master_check_query ==0) {                    
-                        $sql_insert_master="INSERT INTO FA.Water_System_Record_Master(b_number,rDate,sysID) VALUES ('$build_no','$date_ch',$sys_no) ";
-                        $insert_master =$pdo->exec($sql_insert_master);                    
-                        $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE sysID=$sys_no AND rDate='$date_ch' AND b_number='$build_no'";
-                        $select_master =$pdo->query($sql_select)->fetch();
-                        $MasterID=$select_master['recordID'];                   
-                        $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
-                        $insert_detail =$pdo->exec($sql_insert_detail);
-                    } else {
-                        $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE sysID=$sys_no AND rDate='$date_ch' AND b_number='$build_no'";
-                        $select_master =$pdo->query($sql_select)->fetch();
-                        $MasterID=$select_master['recordID'];
-                        $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
-                        $insert_detail =$pdo->exec($sql_insert_detail);
-                    }  
-            // switch ($sys_no) {
-            //     case "4":
-            //         if ($master_check_query ==0) {                    
-            //             $sql_insert_master="INSERT INTO FA.Water_System_Record_Master(b_number,rDate,sysID) VALUES ('$build_no','$date_ch',$sys_no) ";
-            //             $insert_master =$pdo->exec($sql_insert_master);                    
-            //             $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE sysID=$sys_no AND rDate='$date_ch' AND b_number='$build_no'";
-            //             $select_master =$pdo->query($sql_select)->fetch();
-            //             $MasterID=$select_master['recordID'];                   
-            //             $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
-            //             $insert_detail =$pdo->exec($sql_insert_detail);
-            //         } else {
-            //             $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE sysID=$sys_no AND rDate='$date_ch' AND b_number='$build_no'";
-            //             $select_master =$pdo->query($sql_select)->fetch();
-            //             $MasterID=$select_master['recordID'];
-            //             $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
-            //             $insert_detail =$pdo->exec($sql_insert_detail);
-            //         }                  
-            //         break;
-
-            //     default:
-            //         if ($master_check_query ==0) {                    
-            //             $sql_insert_master="INSERT INTO FA.Water_System_Record_Master(b_number,rDate,sysID) VALUES ('$build_no','$date_ch',$sys_no) ";
-            //             $insert_master =$pdo->exec($sql_insert_master);                    
-            //             $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE sysID=$sys_no AND rDate='$date_ch' AND b_number='$build_no'";
-            //             $select_master =$pdo->query($sql_select)->fetch();
-            //             $MasterID=$select_master['recordID'];                    
-            //             $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
-            //             $insert_detail =$pdo->exec($sql_insert_detail);
-            //         } else {
-            //             $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE rDate='$date_ch'AND b_number='$build_no' AND sysID=$sys_no";
-            //             $select_master =$pdo->query($sql_select)->fetch();
-            //             $MasterID=$select_master['recordID'];
-            //             $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
-            //             $insert_detail =$pdo->exec($sql_insert_detail);
-            //         }
-            //         break;
-            // }  
+                $sql_insert_master="INSERT INTO FA.Water_System_Record_Master(b_number,rDate,sysID) VALUES ('$build_no','$date_ch',$sys_no) ";
+                $insert_master =$pdo->exec($sql_insert_master);                    
+                $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE sysID=$sys_no AND rDate='$date_ch' AND b_number='$build_no'";
+                $select_master =$pdo->query($sql_select)->fetch();
+                $MasterID=$select_master['recordID'];                   
+                $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
+                $insert_detail =$pdo->exec($sql_insert_detail);
+            } else {
+                $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE sysID=$sys_no AND rDate='$date_ch' AND b_number='$build_no'";
+                $select_master =$pdo->query($sql_select)->fetch();
+                $MasterID=$select_master['recordID'];
+                $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
+                $insert_detail =$pdo->exec($sql_insert_detail);
+            } 
         }
         $pdo=null;
         if ($err>=1) {
-            echo "<script>alert('有部分項目未填寫就送出，下次要補上時請選擇修改的方式')</script>"; //header("Location: ./php/manager.php");
+            echo "<script>alert('有部分項目未填寫就送出，下次要補上時請選擇修改的方式')</script>";
+
             header("Location: mtinsert.html");
             //echo "<script>window.close();</script>";
         } else {
             header("Location: mtinsert.html");
             //echo "<script>window.close();</script>";
         }
-        
-        //echo "<script>window.close();</script>";
-       //header("Location: mtinsert.html");
     }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -149,30 +108,7 @@
 
 <body class="table_bg">
     <?PHP
-        //mtinsert資料帶入
-        $check_date=$_POST["bday"];
-        $buildNo=$_POST["build"];
-        $sysNo=$_POST["system"];
-        $equipNo=$_POST["equipment"];
-        $shiftNo=$_POST["class"];
-        $floorID=$_POST["buildingfloor"];
-        //SQL Binding
-        //篩選出棟別
-        $build=sql_database('B_name','FA.Building','b_number',$buildNo);         
-        //篩選出系統別
-        $system=sql_database('sysName','FA.Equipment_System_Group','sysID',$sysNo);
-        //篩選出樓層別
-        $floorName=sql_database('floorName','FA.BuildingFloor','floorID',$floorID);
-        //篩選出設備別
-
-        //篩選出班別
-        $class=sql_database('shiftName','FA.Shift_Table','shiftID',$shiftNo);
-        //setcookie('className',$class); 
-        setcookie("build[ID]",$buildNo);
-        setcookie("build[Name]",$build);
-        setcookie("floor[ID]",$floorID);
-        setcookie("floor[Name]",$floorName);
-        //檢查項目
+    //檢查項目
         switch ($sysNo) {
             case "4":
                 if (empty($equipNo)) {

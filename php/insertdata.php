@@ -7,8 +7,6 @@
     } else {
         $courtyardID=$_REQUEST["cyID"];
     }
-    
-    
     if (!empty($_REQUEST['colID'])) {
         $colID=$_REQUEST['colID'];
         $colName=$_REQUEST['colName'];

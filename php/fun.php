@@ -99,5 +99,16 @@
         }
         return $sql_equip_check;
     }
+    function cookieout(){
+        setcookie("buildID",'');// mtwatertable.php
+        setcookie("buildName",'');// mtwatertable.php
+        setcookie("floorID",'');// mtwatertable.php
+        setcookie("floorName",'');// mtwatertable.php
+        setcookie("date",'');// php/data_class.php
+        setcookie("shift",'');// php/data_class.php
+        setcookie("courtyard",'');// php/data_class.php
+        setcookie("className",'');// php/data_class.php
+        setcookie("courtyardName",'');// php/data_class.php
+    }
 ?>
 
