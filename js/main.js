@@ -200,7 +200,7 @@ $(function () {
     $.getJSON("php/cookiedata.php", function (data) {
         if (data[0]["floorID"]) {
             var html = "<option value=\"" + data[0]["buildID"] + "\">" + data[0]["buildName"] + "</option>";
-
+            var html_floor = "<option value=\"" + data[0]["floorID"] + "\">" + data[0]["floorName"] + "</option>"
             var cyID = $("#courtyard").val();
             $.getJSON("php/insertdata.php", {
                 colID: 'b_number',
@@ -214,7 +214,16 @@ $(function () {
                 }
             });
             $("#build").html(html);
-            $("#buildingfloor").html('<option value="' + data[0]["floorID"] + '">' + data[0]["floorName"] + "</option>");
+            $("#buildingfloor").html(html_floor);
+            var buildNo = $("#build").val();
+            $.getJSON("php/insertfloor.php", {
+                "buildNo": buildNo
+            }, function (data) {
+                for (let i = 0; i < data.length; i++) {
+                    html_floor += "<option value=\"" + data[i]["floorID"] + "\">" + data[i]["floorName"] + "</option>";
+                    $("#buildingfloor").html(html_floor);
+                }
+            })
         } else {
             $.getJSON("php/insertdata.php", {
                 colID: 'b_number',
@@ -324,7 +333,7 @@ $(function () {
                 $("#system").html(html);
             }
         })
-    }).change();
+    }); //.change();
 
     $("#system").one(function () {
         alert('走這');
