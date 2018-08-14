@@ -187,7 +187,7 @@ $(function () {
             colID: 'sysID',
             colName: 'sysName',
         }, function (data) {
-            var html = '<option selected> 請選擇棟別 </option>';
+            var html = '<option selected> 請選擇系統 </option>';
             for (let i = 0; i < data.length; i++) {
                 html += "<option value=\"" + data[i]["sysID"] + "\">" + data[i]["sysName"] + "</option>";
                 $("#system_updata").html(html);
@@ -201,29 +201,29 @@ $(function () {
         if (data[0]["floorID"]) {
             var html = "<option value=\"" + data[0]["buildID"] + "\">" + data[0]["buildName"] + "</option>";
             var html_floor = "<option value=\"" + data[0]["floorID"] + "\">" + data[0]["floorName"] + "</option>"
-            var cyID = $("#courtyard").val();
-            $.getJSON("php/insertdata.php", {
-                colID: 'b_number',
-                colName: 'B_name',
-                cyID: cyID,
-                seachNo: '2'
-            }, function (data) {
-                for (let i = 0; i < data.length; i++) {
-                    html += "<option value=\"" + data[i]["b_number"] + "\">" + data[i]["B_name"] + "</option>";
-                    $("#build").html(html);
-                }
-            });
+            // var cyID = $("#courtyard").val();
+            // $.getJSON("php/insertdata.php", {
+            //     colID: 'b_number',
+            //     colName: 'B_name',
+            //     cyID: cyID,
+            //     seachNo: '2'
+            // }, function (data) {
+            //     for (let i = 0; i < data.length; i++) {
+            //         html += "<option value=\"" + data[i]["b_number"] + "\">" + data[i]["B_name"] + "</option>";
+            //         $("#build").html(html);
+            //     }
+            // });
             $("#build").html(html);
             $("#buildingfloor").html(html_floor);
-            var buildNo = $("#build").val();
-            $.getJSON("php/insertfloor.php", {
-                "buildNo": buildNo
-            }, function (data) {
-                for (let i = 0; i < data.length; i++) {
-                    html_floor += "<option value=\"" + data[i]["floorID"] + "\">" + data[i]["floorName"] + "</option>";
-                    $("#buildingfloor").html(html_floor);
-                }
-            })
+            // var buildNo = $("#build").val();
+            // $.getJSON("php/insertfloor.php", {
+            //     "buildNo": buildNo
+            // }, function (data) {
+            //     for (let i = 0; i < data.length; i++) {
+            //         html_floor += "<option value=\"" + data[i]["floorID"] + "\">" + data[i]["floorName"] + "</option>";
+            //         $("#buildingfloor").html(html_floor);
+            //     }
+            // })
         } else {
             $.getJSON("php/insertdata.php", {
                 colID: 'b_number',
@@ -240,7 +240,7 @@ $(function () {
         }
     });
 
-    $("#build").one(function () {
+    $("#build").one("click", function () {
         var cyID = $("#courtyard").val();
         $.getJSON("php/insertdata.php", {
             colID: 'b_number',
@@ -252,6 +252,22 @@ $(function () {
             for (let i = 0; i < data.length; i++) {
                 html += "<option value=\"" + data[i]["b_number"] + "\">" + data[i]["B_name"] + "</option>";
                 $("#build").html(html);
+            }
+        });
+    })
+
+    $("#ubuild").one("click", function () {
+        var cyID = $("#ucourtyard").val();
+        $.getJSON("php/insertdata.php", {
+            colID: 'b_number',
+            colName: 'B_name',
+            cyID: cyID,
+            seachNo: '2'
+        }, function (data) {
+            var html = '<option selected> 請選擇棟別 </option>';
+            for (let i = 0; i < data.length; i++) {
+                html += "<option value=\"" + data[i]["b_number"] + "\">" + data[i]["B_name"] + "</option>";
+                $("#ubuild").html(html);
             }
         });
     })
@@ -288,7 +304,7 @@ $(function () {
         });
     })
     //mtinsert選擇樓層
-    $("#build").change(function () {
+    $("#buildingfloor").one("click", function () {
         var buildNo = $("#build").val();
         $.getJSON("php/insertfloor.php", {
             "buildNo": buildNo
@@ -300,6 +316,32 @@ $(function () {
             }
         })
     }).change();
+
+    $("#ubuildingfloor").one("click", function () {
+        var buildNo = $("#build").val();
+        $.getJSON("php/insertfloor.php", {
+            "buildNo": buildNo
+        }, function (data) {
+            var html = '<option value="" selected> 請選擇樓層 </option>';
+            for (let i = 0; i < data.length; i++) {
+                html += "<option value=\"" + data[i]["floorID"] + "\">" + data[i]["floorName"] + "</option>";
+                $("#ubuildingfloor").html(html);
+            }
+        })
+    }).change();
+
+    $("#build").change(function () {
+        var buildNo = $("#build").val();
+        $.getJSON("php/insertfloor.php", {
+            "buildNo": buildNo
+        }, function (data) {
+            var html = '<option value="" selected> 請選擇樓層 </option>';
+            for (let i = 0; i < data.length; i++) {
+                html += "<option value=\"" + data[i]["floorID"] + "\">" + data[i]["floorName"] + "</option>";
+                $("#buildingfloor").html(html);
+            }
+        })
+    })
 
     //mtinsert修改的選擇樓層
     $("#ubuild").change(function () {
@@ -333,10 +375,9 @@ $(function () {
                 $("#system").html(html);
             }
         })
-    }); //.change();
+    }); //.change();不能加.change
 
-    $("#system").one(function () {
-        alert('走這');
+    $("#system").one("click", function () {
         var floorID = $("#buildingfloor").val();
         var rDate = $("#bday").val();
         var shiftID = $("#Three_shifts").val();
@@ -347,13 +388,20 @@ $(function () {
             "shiftID": shiftID,
             "BuildID": BuildID
         }, function (data) {
-            var html = '<option value="" selected> 請選擇系統 </option>';
-            for (let i = 0; i < data.length; i++) {
-                html += "<option value=\"" + data[i]["sysID"] + "\">" + data[i]["sysName"] + "</option>";
+            var html = '';
+            if (data == "") {
+                html = '<option value="" selected> 此樓層已沒有需要點檢的系統 </option>';
                 $("#system").html(html);
+            } else {
+                html = '<option value="" selected> 請選擇系統 </option>';
+                for (let i = 0; i < data.length; i++) {
+                    html += "<option value=\"" + data[i]["sysID"] + "\">" + data[i]["sysName"] + "</option>";
+                    $("#system").html(html);
+                }
             }
         })
     })
+
     //mtinsert_UP依據所選的樓層選系統
     $("#ubuildingfloor").change(function () {
         var ufloorID = $("#ubuildingfloor").val();
@@ -434,10 +482,10 @@ $(function () {
         var building_eq = $("#ubuild").val();
         var floor_eq = $("#ubuildingfloor").val();
         var rdate = $("#ubday").val();
-        var equipment = $("#uequipment").val();
+        //var equipment = $("#uequipment").val();
         var shift = $("#uThree_shifts").val();
         //$("#reupdata").attr("href","reupdata.php?date=\""+rdate+"\"\& systemID=\""+system_eq+"\"\& shifts=\""+shift+"\"\& build=\""+building_eq+"\"\& floor=\""+floor_eq+"\"\& equipment=\""+equipment);
-        $("#reupdata").attr("href", "reupdata.php?date=" + rdate + "&systemID=" + system_eq + "&shift=" + shift + "&build=" + building_eq + "&floor=" + floor_eq + "&equipment=" + equipment + "");
+        $("#reupdata").attr("href", "reupdata.php?date=" + rdate + "&systemID=" + system_eq + "&shift=" + shift + "&build=" + building_eq + "&floor=" + floor_eq + ""); //"&equipment=" + equipment + "");
     })
     //偵測螢幕寬，然後出現按鈕選單
     var $tall = window.screen.width;

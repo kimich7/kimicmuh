@@ -9,7 +9,7 @@
     $check_date=$_POST["bday"];
     $buildNo=$_POST["build"];
     $sysNo=$_POST["system"];
-    $equipNo=$_POST["equipment"];
+    //$equipNo=$_POST["equipment"];
     $shiftNo=$_POST["class"];
     $floorID=$_POST["buildingfloor"];
     
@@ -37,16 +37,19 @@
         $equip_no=$_POST["equip"];//設備(鍋爐、給水、熱水......等等)ID
         $loop_count=$_POST["loop_num"];//迴圈數量
         $floorID = $_POST["floorID"];//樓層資訊
-        if (empty($equip_no)) {
-            $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$build_no' AND sysID='$sys_no'";
-            $equip_ch=$pdo->query($sql_equip_check);
-        } else {
-            $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID='$equip_no'AND b_number='$build_no' AND sysID='$sys_no'";
-            $equip_ch=$pdo->query($sql_equip_check);
-        }
+        
+        $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$build_no' AND sysID='$sys_no'";
+        $equip_ch=$pdo->query($sql_equip_check);
+        // if (empty($equip_no)) {
+        //     $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$build_no' AND sysID='$sys_no'";
+        //     $equip_ch=$pdo->query($sql_equip_check);
+        // } else {
+        //     $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID='$equip_no'AND b_number='$build_no' AND sysID='$sys_no'";
+        //     $equip_ch=$pdo->query($sql_equip_check);
+        // }
         $err=0;
         for ($i=0; $i < $loop_count; $i++) {
-            $equip_id=$equip_ch->fetch();
+            $equip_id=$equip_ch->fetch();//求出點檢項目id及參考值
             $ref_no = $equip_id['ref'];
             $equip_check = $equip_id['equipCheckID'];
             $ans_no=$_POST["$i"];
@@ -75,7 +78,6 @@
         $pdo=null;
         if ($err>=1) {
             echo "<script>alert('有部分項目未填寫就送出，下次要補上時請選擇修改的方式')</script>";
-
             header("Location: mtinsert.html");
             //echo "<script>window.close();</script>";
         } else {
@@ -111,87 +113,85 @@
     //檢查項目
         switch ($sysNo) {
             case "4":
-                if (empty($equipNo)) {
-                    $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
-                    $query_equip=$pdo->query($sql_equip_check);
-                    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
-                    $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-                    $equipment=sql_database('zoneName','FA.Zonefloor','floorID',$equipNo);
-                } else {
-                    $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND zoneNo=$equipNo AND b_number='$buildNo' AND sysID=$sysNo";
-                    $query_equip=$pdo->query($sql_equip_check);
-                    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND zoneNo=$equipNo AND b_number='$buildNo' AND sysID=$sysNo";
-                    $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-                }
+                $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
+                $query_equip=$pdo->query($sql_equip_check);
+                $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
+                $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
+                // if (empty($equipNo)) {
+                //     $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
+                //     $query_equip=$pdo->query($sql_equip_check);
+                //     $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
+                //     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
+                //     //$equipment=sql_database('zoneName','FA.Zonefloor','floorID',$equipNo);
+                // } else {
+                //     $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND zoneNo=$equipNo AND b_number='$buildNo' AND sysID=$sysNo";
+                //     $query_equip=$pdo->query($sql_equip_check);
+                //     $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND zoneNo=$equipNo AND b_number='$buildNo' AND sysID=$sysNo";
+                //     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
+                // }
                 break;
             default:
-                if (empty($equipNo)) {
-                    $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
-                    $query_equip=$pdo->query($sql_equip_check);
-                    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
-                    $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-                    $equipment=sql_database('equipName','FA.Equipment_System','equipID',$equipNo);
-                } else {
-                    $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID=$equipNo AND b_number='$buildNo' AND sysID=$sysNo";
-                    $query_equip=$pdo->query($sql_equip_check);
-                    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID=$equipNo AND b_number='$buildNo' AND sysID=$sysNo";
-                    $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-                }
+                $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
+                $query_equip=$pdo->query($sql_equip_check);
+                $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
+                $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
+                // if (empty($equipNo)) {
+                //     $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
+                //     $query_equip=$pdo->query($sql_equip_check);
+                //     $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
+                //     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
+                //     //$equipment=sql_database('equipName','FA.Equipment_System','equipID',$equipNo);
+                // } else {
+                //     $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID=$equipNo AND b_number='$buildNo' AND sysID=$sysNo";
+                //     $query_equip=$pdo->query($sql_equip_check);
+                //     $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID=$equipNo AND b_number='$buildNo' AND sysID=$sysNo";
+                //     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
+                // }
                 break;
-        }     
-    ?>
-    <div class="container border border-info mt-5">
-        <form action="" method="post" name="wa">
-            <h2 class="text-center font-weight-bold">中國醫藥大學附設醫院-<?= $build ?>--<?= $system ?></h2>
-            <!-- 班別/檢查者/日期欄 -->
-            <div class="row my-3">
-                <div class="col">
-                    <p class="d-inline font-weight-bold">班別：</p>
-                    <p class="d-inline text-primary"><?= $class ?></p>
-                </div>
-                <div class="col text-center">
-                    <p class="d-inline font-weight-bold">巡檢人員：</p>
-                    <p class="d-inline text-primary"><?= $user ?></p>
-                </div>
-                <div class="col text-right">
-                    <p class="d-inline font-weight-bold">檢查日期：</p>
-                    <p class="d-inline text-primary"><?= $check_date ?></p>
-                </div>
-            </div>
-            <!-- 表格主體 -->
-            <table class="table my-5">
-                <thead>
-                    <th>檢查項目</th>
-                    <th>參考值</th>
-                    <th>結果</th>
-                </thead>
-                <?php
+        }
+    echo '<div class="container border border-info mt-5">';
+        echo '<form action="" method="post" name="wa">';
+            echo '<h2 class="text-center font-weight-bold">'.'中國醫藥大學附設醫院-'.$build.'--'.$system.'</h2>';
+            //班別/檢查者/日期欄
+            echo '<div class="row my-3">';
+                echo '<div class="col">';
+                    echo '<p class="d-inline font-weight-bold">班別：</p>';
+                    echo '<p class="d-inline text-primary">'.$class.'</p>';
+                echo '</div>';
+                echo '<div class="col text-center">';
+                    echo '<p class="d-inline font-weight-bold">巡檢人員：</p>';
+                    echo '<p class="d-inline text-primary">'.$user.'</p>';
+                echo '</div>';
+                echo '<div class="col text-right">';
+                    echo '<p class="d-inline font-weight-bold">檢查日期：</p>';
+                    echo '<p class="d-inline text-primary">'.$check_date.'</p>';
+                echo '</div>';
+            echo '</div>';
+            //表格主體
+            echo '<table class="table my-5">';
+                echo '<thead>';
+                    echo '<th>檢查項目</th>';
+                    echo '<th>參考值</th>';
+                    echo '<th>結果</th>';
+                echo '</thead>';                
                 for ($i=0; $i < $equip_check_no; $i++) { 
-                    $equipinfo=$query_equip->fetch(PDO::FETCH_ASSOC);
-                ?>
-                <tbody class="text-primary">
-                    <td><?= $equipinfo['equipCheckName']?></td>
-                    <td><?= $equipinfo["ref"]?></td>
-                <?php
-                if ($equipinfo["ref"]=="V/X") { 
-                ?>
-                    <td>
-                        <input type='radio' name='<?= $i?>' value='true'>合格
-                        <input type='radio' name='<?= $i?>' value='false'>不合格
-                    </td>
-                <?php                
-                } else { 
-                ?>
-                    <td>
-                        <input type="text" name='<?= $i?>' maxlength="20">
-                    </td>
-                <?php
-                }  
-                echo"</tr>";
+                $equipinfo=$query_equip->fetch(PDO::FETCH_ASSOC);
+                echo '<tbody class="text-primary">';
+                    echo '<td>'.$equipinfo['equipCheckName'].'</td>';
+                    echo '<td>'.$equipinfo["ref"].'</td>';
+                    if ($equipinfo["ref"]=="V/X") {
+                        echo '<td>';
+                            echo "<input type='radio' name=\"".$i."\" value='true'>合格";
+                            echo "<input type='radio' name=\"".$i."\" value='false'>不合格";
+                        echo '</td>';
+                    } else {                 
+                        echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20'>".'</td>';                
+                    }  
+                    //echo"</tr>";
                 }
-                ?>
-                </tbody>
-            </table>
+                echo '</tbody>';
+            echo '</table>';
+        ?>
             <!-- 備註欄 -->
             <div class="input-group">
                 <div class="input-group-prepend">
@@ -202,7 +202,7 @@
             <!-- 傳送值到資料庫中 -->
             <input type="hidden" name="action" value="add">
             <input type="hidden" name="build" value='<?= $buildNo ?>'>
-            <input type="hidden" name="equip" value='<?= $equipNo ?>'>
+            <!-- <input type="hidden" name="equip" value='<?//= $equipNo ?>'> -->
             <input type="hidden" name="sys" value='<?= $sysNo ?>'>
             <input type="hidden" name="shift" value='<?= $shiftNo ?>'>
             <input type="hidden" name="date_c" value='<?= $check_date ?>'>
