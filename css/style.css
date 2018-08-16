@@ -24,6 +24,19 @@ body {
     background-position: center center;
 }
 
+/* 修改密碼設定 */
+
+.changepw {
+    height: 375px;
+    width: 400px;
+    background-color: rgba(0, 0, 0, 0.7);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -200px;
+    margin-top: -150px;
+}
+
 /* 登入表單設定 */
 
 .logintable {

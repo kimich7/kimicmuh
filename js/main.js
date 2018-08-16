@@ -18,6 +18,7 @@ $(function () {
             //登入隱藏/登出顯示
             $("#logInBtn").toggleClass("d-none");
             $("#logOutBtn").toggleClass("d-none");
+            $("#changepassword").toggleClass("d-none");
             switch (data[0]["login_authority"]) {
                 case "1":
                     $(".autho1,.autho2,.autho3,.autho4,.managerCheck").removeAttr("disabled").removeAttr("style");
@@ -516,4 +517,20 @@ $(function () {
         $("#tfresult3").removeClass("d-none");
     });
     //===================================mtinsert結束(與mtupdata共用)===================================
+    //===================================修改密碼=====================
+    $("#btn_modify").click(function () {
+        var old_passwd = $("#old_passwd").val();
+        var new_passwd = $("#new_passwd").val();
+        var check_passwd = $("#check_passwd").val();
+        $.getJSON("php/changepassword.php", {
+            "old_passwd": old_passwd,
+            "new_passwd": new_passwd,
+            "check_passwd": check_passwd
+        }, function (data) {
+            alert(data);
+            if (data == '密碼更換成功，下次請用新密碼登錄') {
+                window.location.replace('../CMUH/index.html');
+            }
+        })
+    })
 });
