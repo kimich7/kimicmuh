@@ -517,7 +517,7 @@ $(function () {
         $("#tfresult3").removeClass("d-none");
     });
     //===================================mtinsert結束(與mtupdata共用)===================================
-    //===================================修改密碼=====================
+    //===================================修改密碼&人員管理=====================
     $("#btn_modify").click(function () {
         var old_passwd = $("#old_passwd").val();
         var new_passwd = $("#new_passwd").val();
@@ -527,7 +527,6 @@ $(function () {
             "new_passwd": new_passwd,
             "check_passwd": check_passwd
         }, function (data) {
-            alert(data);
             if (data == '密碼更換成功，下次請用新密碼登錄') {
                 window.location.replace('../CMUH/index.html');
             }

@@ -117,7 +117,7 @@
         echo '<th>主  管</th>';
         echo '<th>檢查人</th>';
         echo '</thead>';
-        echo '<tbody class="text-primary">';
+        echo '<tbody>';
         $mgcheck="mgcheck";
         $mbcheck="mbcheck";
         while ($data_page = $sql_page->fetch()) {
