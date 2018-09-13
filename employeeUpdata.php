@@ -2,17 +2,8 @@
     include("php/CMUHconndata.php");
     include("php/fun.php");
     if (isset($_POST["action"])&&($_POST["action"]=="updata")) {
-        echo $_POST["uid"].'；ID。'.'</br>';
-        echo $_POST["uname"].'；Name。'.'</br>';
-        echo $_POST["upw"].'；Password。'.'</br>';
-        echo $_POST["utitle"].'；title。'.'</br>';
-        echo $_POST["urank"].'；Rank。'.'</br>';
-        echo $_POST["cID"].'；Rank。'.'</br>';
-
-
         $sqldelete="UPDATE FA.Employee SET e_number=:e_number, cname=:cname, passcard=:passcard, title=:title, rank=:rank  WHERE e_number=:cID";
         $stmt = $pdo->prepare($sqldelete);
-        print_r($stmt);
         $stmt->bindParam(':e_number',$_POST["uid"],PDO::PARAM_STR);
         $stmt->bindParam(':cname',$_POST["uname"],PDO::PARAM_STR);
         $stmt->bindParam(':passcard',$_POST["upw"],PDO::PARAM_STR);
