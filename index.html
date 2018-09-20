@@ -47,8 +47,8 @@
                 <i class="fas fa-7x fa-file-alt my-3"></i>
                 <h2>工務設備運轉抄表文件及管理系統</h2>
                 <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                    <button style="pointer-events: none;" type="button" class="mainBtn autho3" data-toggle="collapse" data-target="#article1"
-                        id="mainBtn1" disabled>點我進入</button>
+                    <button style="pointer-events: none;" type="button" class="mainBtn autho3" data-toggle="collapse"
+                        data-target="#article1" id="mainBtn1" disabled>點我進入</button>
                 </span>
             </div>
             <!-- 運轉抄表系統選單 -->
@@ -73,8 +73,8 @@
                 <i class="fas fa-7x fa-file-alt my-3"></i>
                 <h2>工務設備保養紀錄文件及管理系統</h2>
                 <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                    <button style="pointer-events: none;" type="button" class="mainBtn autho3" data-toggle="collapse" data-target="#article2"
-                        id="mainBtn2" disabled>點我進入</button>
+                    <button style="pointer-events: none;" type="button" class="mainBtn autho3" data-toggle="collapse"
+                        data-target="#article2" id="mainBtn2" disabled>點我進入</button>
                 </span>
             </div>
             <!-- 設備保養系統選單 -->
@@ -99,8 +99,8 @@
                 <i class="fas fa-7x fa-bell my-3"></i>
                 <h2>異常反應系統</h2>
                 <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                    <button style="pointer-events: none;" type="button" class="mainBtn autho3 mt-5" data-toggle="modal" data-target="#ModalCenter3"
-                        disabled>點我進入</button>
+                    <button style="pointer-events: none;" type="button" class="mainBtn autho3 mt-5" id="errbtn"
+                        data-toggle="modal" data-target="#ModalCenter3" disabled>點我進入</button>
                 </span>
             </div>
         </div>
@@ -110,8 +110,8 @@
                 <i class="fas fa-7x fa-cog my-3"></i>
                 <h2>中央彙整系統</h2>
                 <span class="billBoard1" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                    <button style="pointer-events: none;" type="button" data-toggle="collapse" data-target="#article3" class="mainBtn autho1 mt-5"
-                        disabled>點我進入</button>
+                    <button style="pointer-events: none;" type="button" data-toggle="collapse" data-target="#article3"
+                        class="mainBtn autho1 mt-5" disabled>點我進入</button>
                 </span>
             </div>
             <!-- 中央彙整系統選單 -->
@@ -134,7 +134,8 @@
     <!-- 卡片(Modal) -->
     <section>
         <!-- 主選單 -->
-        <div class="modal fade" id="ModalCenter1" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+        <div class="modal fade" id="ModalCenter1" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -173,37 +174,55 @@
             </div>
         </div>
         <!-- 異常表單 -->
-        <div class="modal fade" id="ModalCenter3" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="ModalLongTitle">異常表單</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <span>日期</span>
-                        <input class="form-control d-block" type="date" name="" id="errordate">
-                        <div class="form-group">
-                            <label for="errortext">異常情況描述</label>
-                            <textarea class="form-control" id="errortext" rows="3"></textarea>
+        <form action="abnormal.php" method="post" enctype="multipart/form-data">
+            <div class="modal fade" id="ModalCenter3" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="ModalLongTitle">異常表單</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
-                        <form>
+                        <div class="modal-body">
+                            <span>日期</span>
+                            <input class="form-control d-block" type="date" name="errordate" id="errordate">
                             <div class="form-group">
-                                <label for="FormControlFile1">異常檔案上傳</label>
-                                <input type="file" class="form-control-file" id="FormControlFile1">
+                                <label for="errortext">地點</label>
+                                <INPUT type="text" class="form-control" id="errortextlocation" name="errortextlocation">
                             </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                        <!-- TODO:送出到資料庫 -->
-                        <button type="button" class="btn btn-primary">送出</button>
+                            <div class="form-group">
+                                <label for="errortext">發現人員</label>
+                                <select class="form-control mb-3" id="findemp" name="findemp">
+                                    <option selected>請選擇人員</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="errortext">主旨</label>
+                                <INPUT type="text" class="form-control" id="errortexttitle" name="errortexttitle">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="errortext">異常情況描述</label>
+                                <textarea class="form-control" id="errortext" name="errortext" rows="3"></textarea>
+                            </div>
+                            <form>
+                                <div class="form-group">
+                                    <label for="FormControlFile1">異常檔案上傳</label>
+                                    <input type="file" class="form-control-file" id="FormControlFile1" name="uploadfile">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                            <!-- TODO:送出到資料庫 -->
+                            <button type="submit" class="btn btn-primary" id="errorbtn" name="errorbtn">送出</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </section>
     <!-- footer網頁尾頁 -->
     <footer>

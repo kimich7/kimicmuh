@@ -473,9 +473,61 @@ $(function () {
                     $("#equipment").html(html);
                 }
             }
-
         });
     });
+
+    //異常表單資料傳遞
+    $("#errbtn").click(function () {
+        $.getJSON("php/emp.php", function (data) {
+            var html = '<option value=""> 請選擇人員 </option>';
+            for (let i = 0; i < data.length; i++) {
+                html += "<option value=\"" + data[i]["e_number"] + "\">" + data[i]["cname"] + "</option>";
+                $("#findemp").html(html);
+            }
+        })
+    })
+
+    $("#errorbtn").click(function () {
+        var errdate = $("#errordate").val();
+        var errloction = $("#errortextlocation").val();
+        var erremp = $("#findemp").val();
+        var errtitle = $("#errortexttitle").val();
+        var errfile = $("#FormControlFile1").val();
+        var errtext = $("#errortext").val();
+        if (errdate == "" | errloction == "" | erremp == "" | errtitle == "" | errtext == "") {
+            if (errdate == "") {
+                alert("日期不可空白");
+                jQuery("#errordate").focus();
+            }
+            if (errloction == "") {
+                alert("地點不可空白");
+                jQuery("#errortextlocation").focus();
+            }
+            if (erremp == "") {
+                alert("發現者不可空白");
+                jQuery("#findemp").focus();
+            }
+            if (errtitle == "") {
+                alert("主旨不可空白");
+                jQuery("#errortexttitle").focus();
+            }
+            if (errtext == "") {
+                alert("異常情況描述不可空白");
+                jQuery("#errortext").focus();
+            }
+        } else {
+            //     $.getJSON("php/abnormal.php", {
+            //         "errdate": errdate,
+            //         "errloction": errloction,
+            //         "erremp": erremp,
+            //         "errtitle": errtitle,
+            //         "errfile": errfile,
+            //         "errtext": errtext
+            //     }, function (data) {
+
+            //     })
+        }
+    })
 
     //個人八小時內的修改
     $("#reupdata").click(function () {
