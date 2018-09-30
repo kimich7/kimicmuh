@@ -11,6 +11,7 @@ $(function () {
     // 登入表單提交時要執行getJSON指令
     $.getJSON("php/sessionData.php", function (data) {
         var $Name = data[0]["login_member"];
+        var $notice = data[0]['notice'];
         if (data[0]["login_success"] == false) {
             $("#result").html("帳號或密碼錯誤，請重新輸入");
         } else {
@@ -38,7 +39,41 @@ $(function () {
                     break;
             }
         }
+        //產生新的異常案件，並且是由主導主管登錄時的顯示
+        if ($notice == 1) {
+            $.getJSON("php/abnormalNum.php", function (data) {
+                var html = '<span class="badge badge-light" >' + data[0] + '</span>';
+                $("#notice1").html(html);
+            })
+            $("#notice").toggleClass("d-none");
+        }
     });
+    //被指派人員通知
+    $.getJSON("php/abnormalDesEmp.php", function (data) {
+        var $num = data[0];
+        if ($num > 0) {
+            var html = '<span class="badge badge-light" >' + data[0] + '</span>';
+            $("#dseEmpNotice1").html(html);
+            $("#dseEmpNotice").toggleClass("d-none");
+        }
+    })
+    //異常案件明細通知
+    $("#notice").click(function () {
+        $("#notice").attr("href", "./abnormalLink.php");
+    })
+    //被指派的異常案件明細通知
+    $("#dseEmpNotice").click(function () {
+        $("#dseEmpNotice").attr("href", "./abnormalDesLink.php");
+    })
+    //異常案件待指派人員清單
+    $.getJSON("php/emp.php", function (data) {
+        var html = '<option value=""> 請選擇人員 </option>';
+        for (let i = 0; i < data.length; i++) {
+            html += "<option value=\"" + data[i]["e_number"] + "\">" + data[i]["cname"] + "</option>";
+            $(".desemp").html(html);
+            $("#findemp").html(html);
+        }
+    })
 
     // 登出表單提交時要執行將登入顯示/登出隱藏    
     $("#logOutBtn").click(function () {
@@ -64,14 +99,7 @@ $(function () {
             $("#resultdate").text(data);
         });
     })
-    // $("#cardSendBtn1").click(function () {
-    //     $.getJSON("php/data_class.php", {
-    //         rankdate: $("#rank1date").val(),
-    //         rank: $("#rank1").val()
-    //     }, function (data) {
-    //         $("#resultdate").text(data);
-    //     });
-    // });
+
 
     // 使用getJSON讀取mainlist.json內的title資料
     $.getJSON("json/mainlist.json", function (data) {
@@ -99,6 +127,8 @@ $(function () {
             $("#cardSendBtn1").attr("href", data[4].url);
         });
     });
+
+
     //抓取當前時間並寫進時間選單內
     var presentYear = new Date().getFullYear();
     var presentMonth = new Date().getMonth() + 1;
@@ -202,29 +232,10 @@ $(function () {
         if (data[0]["floorID"]) {
             var html = "<option value=\"" + data[0]["buildID"] + "\">" + data[0]["buildName"] + "</option>";
             var html_floor = "<option value=\"" + data[0]["floorID"] + "\">" + data[0]["floorName"] + "</option>"
-            // var cyID = $("#courtyard").val();
-            // $.getJSON("php/insertdata.php", {
-            //     colID: 'b_number',
-            //     colName: 'B_name',
-            //     cyID: cyID,
-            //     seachNo: '2'
-            // }, function (data) {
-            //     for (let i = 0; i < data.length; i++) {
-            //         html += "<option value=\"" + data[i]["b_number"] + "\">" + data[i]["B_name"] + "</option>";
-            //         $("#build").html(html);
-            //     }
-            // });
+
             $("#build").html(html);
             $("#buildingfloor").html(html_floor);
-            // var buildNo = $("#build").val();
-            // $.getJSON("php/insertfloor.php", {
-            //     "buildNo": buildNo
-            // }, function (data) {
-            //     for (let i = 0; i < data.length; i++) {
-            //         html_floor += "<option value=\"" + data[i]["floorID"] + "\">" + data[i]["floorName"] + "</option>";
-            //         $("#buildingfloor").html(html_floor);
-            //     }
-            // })
+
         } else {
             $.getJSON("php/insertdata.php", {
                 colID: 'b_number',
@@ -416,32 +427,6 @@ $(function () {
             }
         })
     })
-
-    //mtinsert選擇樓層
-    // $(".f1").change(function () {
-    //     var system_eq = $("#system").val();
-    //     var building_eq = $("#build").val();
-    //     var rDate = $("#bday").val();
-    //     var now_class = $("#Three_shifts").val();
-
-    // if (system_eq == 4) {
-    //     choiceNo = 1;
-    // }
-    //     $.getJSON("php/zone.php", {
-    //         "system_eq": system_eq,
-    //         "build_eq": building_eq,
-    //         "rDate": rDate,
-    //         "now_class": now_class,
-    //         // "insert_revise": insert_revise
-    //     }, function (data) {
-    //         var html = '<option selected> 請選擇樓層 </option>';
-    //         for (let i = 0; i < data.length; i++) {
-    //             html += "<option value=\"" + data[i]["floorID"] + "\">" + data[i]["floorName"] + "</option>";
-    //             $("#buildingfloor").html(html);
-    //         }
-    //     });
-    // });
-
     //mtinsert選擇設備
     $(".f2").change(function () {
         var system_eq = $("#system").val();
@@ -476,17 +461,8 @@ $(function () {
         });
     });
 
-    //異常表單資料傳遞
-    $("#errbtn").click(function () {
-        $.getJSON("php/emp.php", function (data) {
-            var html = '<option value=""> 請選擇人員 </option>';
-            for (let i = 0; i < data.length; i++) {
-                html += "<option value=\"" + data[i]["e_number"] + "\">" + data[i]["cname"] + "</option>";
-                $("#findemp").html(html);
-            }
-        })
-    })
 
+    //異常表單填寫上傳
     $("#errorbtn").click(function () {
         var errdate = $("#errordate").val();
         var errloction = $("#errortextlocation").val();
@@ -516,16 +492,7 @@ $(function () {
                 jQuery("#errortext").focus();
             }
         } else {
-            //     $.getJSON("php/abnormal.php", {
-            //         "errdate": errdate,
-            //         "errloction": errloction,
-            //         "erremp": erremp,
-            //         "errtitle": errtitle,
-            //         "errfile": errfile,
-            //         "errtext": errtext
-            //     }, function (data) {
 
-            //     })
         }
     })
 

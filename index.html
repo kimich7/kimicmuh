@@ -36,6 +36,15 @@
                 <a class="btn btn-outline-primary" href="./login.html" id="logInBtn">登入</a>
                 <button class="btn btn-outline-primary d-none" id="logOutBtn">登出</button>
                 <a class="btn btn-outline-primary d-none" href="./changepassword.html" id="changepassword">修改密碼</a>
+                <!-- 異常案件通知 -->
+                <a type="button" class="btn btn-primary d-none" title="異常處理尚未指派人員案件" id="notice" href="#">
+                    通知<span class="badge badge-light" id="notice1"></span>
+                    <span class="sr-only">unread messages</span>
+                </a>
+                <a type="button" class="btn btn-primary d-none" title="指派人的案件" id="dseEmpNotice" href="#">
+                    通知<span class="badge badge-light" id="dseEmpNotice1"></span>
+                    <span class="sr-only">unread messages</span>
+                </a>
             </div>
         </div>
     </section>
@@ -122,7 +131,6 @@
                         <a class="text-dark maindata6"></a>
                     </li>
                     <li class="list-group-item">
-                        <a class="text-dark maindata7"></a>
                     </li>
                     <!-- <li class="list-group-item">
                         <a class="text-dark maindata8"></a>
@@ -187,25 +195,27 @@
                         </div>
                         <div class="modal-body">
                             <span>日期</span>
-                            <input class="form-control d-block" type="date" name="errordate" id="errordate">
+                            <input class="form-control d-block" type="date" name="errordate" id="errordate" required>
                             <div class="form-group">
                                 <label for="errortext">地點</label>
-                                <INPUT type="text" class="form-control" id="errortextlocation" name="errortextlocation">
+                                <INPUT type="text" class="form-control" id="errortextlocation" name="errortextlocation"
+                                    required>
                             </div>
                             <div class="form-group">
                                 <label for="errortext">發現人員</label>
-                                <select class="form-control mb-3" id="findemp" name="findemp">
+                                <select class="form-control mb-3" id="findemp" name="findemp" required>
                                     <option selected>請選擇人員</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="errortext">主旨</label>
-                                <INPUT type="text" class="form-control" id="errortexttitle" name="errortexttitle">
+                                <INPUT type="text" class="form-control" id="errortexttitle" name="errortexttitle"
+                                    required>
                             </div>
 
                             <div class="form-group">
                                 <label for="errortext">異常情況描述</label>
-                                <textarea class="form-control" id="errortext" name="errortext" rows="3"></textarea>
+                                <textarea class="form-control" id="errortext" name="errortext" rows="3" required></textarea>
                             </div>
                             <form>
                                 <div class="form-group">
