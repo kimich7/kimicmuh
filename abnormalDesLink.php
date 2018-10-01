@@ -3,9 +3,6 @@
     include("php/fun.php");
     session_start();
     $userID=$_SESSION["login_number"];
-   if (isset($_POST["action"])&&($_POST["action"]=="check")) {
-
-    }
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -47,7 +47,6 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
     }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -45,7 +45,12 @@ $(function () {
                 var html = '<span class="badge badge-light" >' + data[0] + '</span>';
                 $("#notice1").html(html);
             })
+            $.getJSON("php/abnormalCaseReviewNum.php", function (data) {
+                var html1 = '<span class="badge badge-light" >' + data[0] + '</span>';
+                $("#caseReview1").html(html1);
+            })
             $("#notice").toggleClass("d-none");
+            $("#caseReview").toggleClass("d-none");
         }
     });
     //被指派人員通知
@@ -64,6 +69,10 @@ $(function () {
     //被指派的異常案件明細通知
     $("#dseEmpNotice").click(function () {
         $("#dseEmpNotice").attr("href", "./abnormalDesLink.php");
+    })
+    //待審核異常案件明細通知
+    $("#caseReview").click(function () {
+        $("#caseReview").attr("href", "./abnormalCaseReviewLink.php");
     })
     //異常案件待指派人員清單
     $.getJSON("php/emp.php", function (data) {
