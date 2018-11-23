@@ -38,7 +38,7 @@
         $loop_count=$_POST["loop_num"];//迴圈數量
         $floorID = $_POST["floorID"];//樓層資訊
         
-        $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$build_no' AND sysID='$sys_no'";
+        $sql_equip_check = "SELECT equipCheckID,ref,answerMode  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$build_no' AND sysID='$sys_no' ORDER BY equipCheckName";
         $equip_ch=$pdo->query($sql_equip_check);
         // if (empty($equip_no)) {
         //     $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$build_no' AND sysID='$sys_no'";
@@ -49,10 +49,16 @@
         // }
         $err=0;
         for ($i=0; $i < $loop_count; $i++) {
+            
             $equip_id=$equip_ch->fetch();//求出點檢項目id及參考值
             $ref_no = $equip_id['ref'];
             $equip_check = $equip_id['equipCheckID'];
             $ans_no=$_POST["$i"];
+            if ($equip_id['answerMode']=='plural') {
+                $qu=$_POST["b"];
+                $ans_no= implode(",", $qu);
+            }
+            
             $sql_master_check="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE b_number='$build_no' AND rDate='$date_ch' AND sysID=$sys_no ";
             $master_check_query=Current($pdo->query($sql_master_check)->fetch());
             if (empty($ans_no)) {
@@ -64,7 +70,7 @@
                 $insert_master =$pdo->exec($sql_insert_master);                    
                 $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE sysID=$sys_no AND rDate='$date_ch' AND b_number='$build_no'";
                 $select_master =$pdo->query($sql_select)->fetch();
-                $MasterID=$select_master['recordID'];                   
+                $MasterID=$select_master['recordID'];                                   
                 $sql_insert_detail="INSERT INTO FA.Water_System_Record_Detail(equipCheckID,ref,shiftID,r_member,remark,recordID,checkResult,floorID,rDate,rTime) VALUES ($equip_check,'$ref_no',$shift_no,'$userID','$remark',$MasterID,'$ans_no','$floorID','$date_ch','$rTime')";
                 $insert_detail =$pdo->exec($sql_insert_detail);
             } else {
@@ -113,40 +119,16 @@
     //檢查項目
         switch ($sysNo) {
             case "4":
-                $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
+                $sql_equip_check = "SELECT equipCheckName,ref,answerMode  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo ORDER BY equipCheckName";
                 $query_equip=$pdo->query($sql_equip_check);
                 $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
                 $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-                // if (empty($equipNo)) {
-                //     $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
-                //     $query_equip=$pdo->query($sql_equip_check);
-                //     $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
-                //     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-                //     //$equipment=sql_database('zoneName','FA.Zonefloor','floorID',$equipNo);
-                // } else {
-                //     $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND zoneNo=$equipNo AND b_number='$buildNo' AND sysID=$sysNo";
-                //     $query_equip=$pdo->query($sql_equip_check);
-                //     $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND zoneNo=$equipNo AND b_number='$buildNo' AND sysID=$sysNo";
-                //     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-                // }
                 break;
             default:
-                $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
+                $sql_equip_check = "SELECT equipCheckName,ref,answerMode  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo ORDER BY equipCheckName";
                 $query_equip=$pdo->query($sql_equip_check);
                 $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
                 $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-                // if (empty($equipNo)) {
-                //     $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
-                //     $query_equip=$pdo->query($sql_equip_check);
-                //     $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
-                //     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-                //     //$equipment=sql_database('equipName','FA.Equipment_System','equipID',$equipNo);
-                // } else {
-                //     $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID=$equipNo AND b_number='$buildNo' AND sysID=$sysNo";
-                //     $query_equip=$pdo->query($sql_equip_check);
-                //     $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID=$equipNo AND b_number='$buildNo' AND sysID=$sysNo";
-                //     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-                // }
                 break;
         }
     echo '<div class="container border border-info mt-5">';
@@ -167,6 +149,7 @@
                     echo '<p class="d-inline text-primary">'.$check_date.'</p>';
                 echo '</div>';
             echo '</div>';
+            
             //表格主體
             echo '<table class="table my-5">';
                 echo '<thead>';
@@ -175,18 +158,78 @@
                     echo '<th>結果</th>';
                 echo '</thead>';                
                 for ($i=0; $i < $equip_check_no; $i++) { 
+                //$b=$i.'A';
+                $b=array();
+                $b[0]="";
+                $b[1]="";
+                
                 $equipinfo=$query_equip->fetch(PDO::FETCH_ASSOC);
                 echo '<tbody class="text-primary">';
                     echo '<td>'.$equipinfo['equipCheckName'].'</td>';
-                    echo '<td>'.$equipinfo["ref"].'</td>';
-                    if ($equipinfo["ref"]=="V/X") {
-                        echo '<td>';
-                            echo "<input type='radio' name=\"".$i."\" value='true'>合格";
-                            echo "<input type='radio' name=\"".$i."\" value='false'>不合格";
-                        echo '</td>';
-                    } else {                 
-                        echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20'>".'</td>';                
-                    }  
+                    echo '<td>'.$equipinfo["ref"].'</td>';                    
+                    switch ($equipinfo["answerMode"]) {
+                        case 'choiceTF':
+                            echo '<td>';
+                                echo "<input type='radio' name=\"".$i."\" value='true'>合格";
+                                echo "<input type='radio' name=\"".$i."\" value='false'>不合格";
+                            echo '</td>';
+                            break;
+                        case 'choiceHA':
+                            echo '<td>';
+                                echo "<input type='radio' name=\"".$i."\" value='handle'>手動";
+                                echo "<input type='radio' name=\"".$i."\" value='auto'>自動";
+                            echo '</td>';
+                            break;
+                        case 'choiceFN':
+                            echo '<td>';
+                                echo "<input type='radio' name=\"".$i."\" value='OFF'>OFF";
+                                echo "<input type='radio' name=\"".$i."\" value='ON'>ON";
+                            echo '</td>';
+                            break;
+                        case 'choiceRL':
+                            echo '<td>';
+                                echo "<input type='radio' name=\"".$i."\" value='remote'>遠端";
+                                echo "<input type='radio' name=\"".$i."\" value='local'>本地";
+                            echo '</td>';
+                            break;
+                        case 'choiceS12':
+                            echo '<td>';
+                                echo "<input type='radio' name=\"".$i."\" value='S1'>S1";
+                                echo "<input type='radio' name=\"".$i."\" value='S2'>S2";
+                            echo '</td>';
+                            break;
+                        case 'choiceRG':
+                            echo '<td>';
+                                echo "<input type='radio' name=\"".$i."\" value='red'>紅";
+                                echo "<input type='radio' name=\"".$i."\" value='green'>綠";
+                            echo '</td>';
+                            break;
+                        case 'plural':
+                            echo '<td>';
+                            ?>
+                                <!-- echo "<input type='checkbox' name=\"".$b."\" value='1'>1";
+                                echo "<input type='checkbox' name=\"".$b."\" value='2'>2"; -->
+
+                                <input type='checkbox' name="b[]" value='1'>1;
+                                <input type='checkbox' name="b[]" value='2'>2;
+                            <?php
+
+                            echo '</td>';
+                            break;
+                        default:
+                            echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20'>".'</td>';
+                            break;
+                    }
+                    // if ($equipinfo["answerMode"]=="V/X") {
+                    //     echo '<td>';
+                    //         echo "<input type='radio' name=\"".$i."\" value='true'>合格";
+                    //         echo "<input type='radio' name=\"".$i."\" value='false'>不合格";
+                    //     echo '</td>';
+                    // } else {                 
+                    //     echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20'>".'</td>';                
+                    // }
+                    
+                    
                     //echo"</tr>";
                 }
                 echo '</tbody>';

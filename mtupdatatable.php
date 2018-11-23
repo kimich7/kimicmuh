@@ -96,7 +96,7 @@
                     </thead>
                     <tbody class="text-primary">
                     <?php 
-                        $item=item("SELECT equipCheckID,ref FROM FA.Equipment_Check WHERE b_number='$buildNo' and sysID=$sysNo");
+                        $item=item("SELECT equipCheckID,ref FROM FA.Equipment_Check WHERE b_number='$buildNo' and sysID=$sysNo ORDER BY equipCheckName");
                         // $item=item("SELECT DISTINCT equipCheckID,ref FROM $systemTable WHERE recordID=$MasterID");
                        
                         // $num=num("SELECT COUNT(equipCheckID) FROM $systemTable WHERE recordID=$MasterID");

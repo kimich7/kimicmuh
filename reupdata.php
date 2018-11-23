@@ -18,40 +18,16 @@ $equipTable='FA.Equipment_Check';
 
 switch ($sysID) {
     case "4":
-        $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildID' AND sysID='$sysID'";
+        $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildID' AND sysID='$sysID'  ORDER BY equipCheckName";
         $query_equip=$pdo->query($sql_equip_check);
         $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildID' AND sysID='$sysID'";
         $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-        // if (empty($equipID)) {
-        //     $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildID' AND sysID='$sysID'";
-        //     $query_equip=$pdo->query($sql_equip_check);
-        //     $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildID' AND sysID='$sysID'";
-        //     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-        //     $equipment=sql_database('zoneName','FA.Zonefloor','floorID',$equipID);
-        // } else {
-        //     $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND zoneNo=$equipID AND b_number='$buildID' AND sysID=$sysID";
-        //     $query_equip=$pdo->query($sql_equip_check);
-        //     $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND zoneNo=$equipID AND b_number='$buildID' AND sysID=$sysID";
-        //     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-        // }
         break;
     default:
-        $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildID' AND sysID='$sysID'";
+        $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildID' AND sysID='$sysID' ORDER BY equipCheckName";
         $query_equip=$pdo->query($sql_equip_check);
         $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildID' AND sysID='$sysID'";
-        $equip_check_no=Current($pdo->query($equip_check_num)->fetch());        
-        // if (empty($equipID)) {
-        //     $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildID' AND sysID='$sysID'";
-        //     $query_equip=$pdo->query($sql_equip_check);
-        //     $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildID' AND sysID='$sysID'";
-        //     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-        //     //$equipment=sql_database('equipName','FA.Equipment_System','equipID',$equipID);
-        // } else {
-        //     $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID='$equipID'AND b_number='$buildID' AND sysID='$sysID'";
-        //     $query_equip=$pdo->query($sql_equip_check);
-        //     $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID='$equipID'AND b_number='$buildID' AND sysID='$sysID'";
-        //     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-        // }
+        $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
         break;
 }
 
@@ -77,6 +53,14 @@ if (isset($_POST["action"])&&($_POST["action"]=="update")) {
         $q=100+$i;
         $rdID=$_POST["$q"];
         $ans=$_POST["$i"];
+        $ansStr=$updatainfo[$i]["ref"];
+        $answerStr="SELECT a.answerMode FROM FA.Equipment_Check AS a INNER JOIN FA.Water_System_Record_Detail AS b ON a.ref = b.ref WHERE a.ref ='$ansStr'";
+        $snswerQuery=$pdo->query($answerStr)->fetch();
+        $answerMode=$snswerQuery["answerMode"];
+        if ($answerMode=='plural') {
+                $qu=$_POST["b"];
+                $ans= implode(",", $qu);
+            }
         $sql="UPDATE $detailTable SET remark=:remark , checkResult=:checkResult WHERE recordDetailID=:ID";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':remark',$_POST["remark"],PDO::PARAM_STR);
@@ -184,6 +168,10 @@ if (isset($_POST["action"])&&($_POST["action"]=="update")) {
                     for ($i=0; $i < $updata_qt; $i++) {
                         $q=100+$i;
                         $checkName=sql_database('equipCheckName',$equipTable,'equipCheckID',$updatainfo[$i]["equipCheckID"]);
+                        $ansStr=$updatainfo[$i]["ref"];
+                        $answerStr="SELECT a.answerMode FROM FA.Equipment_Check AS a INNER JOIN FA.Water_System_Record_Detail AS b ON a.ref = b.ref WHERE a.ref ='$ansStr'";
+                        $snswerQuery=$pdo->query($answerStr)->fetch();
+                        $answerMode=$snswerQuery["answerMode"];
                 ?>
                 <input type="hidden" name='<?= $q ?>' value='<?= $updatainfo[$i]["recordDetailID"]?>'>
                 <tbody class="text-primary">
@@ -194,20 +182,97 @@ if (isset($_POST["action"])&&($_POST["action"]=="update")) {
                         <?= $updatainfo[$i]["ref"]?>
                     </td>
                     <?php
-                        if ($updatainfo[$i]["ref"]=="V/X") { 
-                    ?>
-                    <td>
-                        <input type='radio' name='<?= $i?>' value='true' <?PHP if( $updatainfo[$i]["checkResult"]=="true") echo "checked";?>>合格
-                        <input type='radio' name='<?= $i?>' value='false' <?PHP if($updatainfo[$i]["checkResult"]=="false") echo "checked";?>>不合格
-                    </td>
-                    <?php                
-                        } else { 
-                    ?>
-                    <td>
-                        <input type="text" name='<?= $i?>' maxlength="20" value='<?= $updatainfo[$i]["checkResult"]?>'>
-                    </td>
-                    <?php
-                        }
+                    $b=array();
+                    $b[0]="";
+                    $b[1]="";
+                    switch ($answerMode) {
+                        case 'choiceTF':
+                            echo '<td>';
+                                if( $updatainfo[$i]["checkResult"]=="true"){
+                                    echo "<input type='radio' name=\"".$i."\" value='true' checked >合格";
+                                    echo "<input type='radio' name=\"".$i."\" value='false'>不合格";
+                                } else {
+                                    echo "<input type='radio' name=\"".$i."\" value='true' >合格";
+                                    echo "<input type='radio' name=\"".$i."\" value='false' checked >不合格";
+                                }                                
+                            echo '</td>';
+                            break;
+                        case 'choiceHA':
+                            echo '<td>';
+                                if( $updatainfo[$i]["checkResult"]=="handle"){
+                                    echo "<input type='radio' name=\"".$i."\" value='handle' checked>手動";
+                                    echo "<input type='radio' name=\"".$i."\" value='auto'>自動";
+                                } else {
+                                    echo "<input type='radio' name=\"".$i."\" value='handle'>手動";
+                                    echo "<input type='radio' name=\"".$i."\" value='auto' checked>自動";
+                                }
+                            echo '</td>';
+                            break;
+                        case 'choiceFN':
+                            echo '<td>';
+                                if( $updatainfo[$i]["checkResult"]=="OFF"){
+                                    echo "<input type='radio' name=\"".$i."\" value='OFF' checked>OFF";
+                                    echo "<input type='radio' name=\"".$i."\" value='ON'>ON";
+                                } else {
+                                    echo "<input type='radio' name=\"".$i."\" value='OFF'>OFF";
+                                    echo "<input type='radio' name=\"".$i."\" value='ON' checked>ON";
+                                }
+                            echo '</td>';
+                            break;
+                        case 'choiceRL':
+                            echo '<td>';
+                                if( $updatainfo[$i]["checkResult"]=="remote"){
+                                    echo "<input type='radio' name=\"".$i."\" value='remote' checked>遠端";
+                                    echo "<input type='radio' name=\"".$i."\" value='local'>本地";
+                                } else {
+                                    echo "<input type='radio' name=\"".$i."\" value='remote'>遠端";
+                                    echo "<input type='radio' name=\"".$i."\" value='local' checked>本地";
+                                }
+                            echo '</td>';
+                            break;
+                        case 'choiceS12':
+                            echo '<td>';
+                                if( $updatainfo[$i]["checkResult"]=="S1"){
+                                    echo "<input type='radio' name=\"".$i."\" value='S1' checked>S1";
+                                    echo "<input type='radio' name=\"".$i."\" value='S2'>S2";
+                                } else {
+                                    echo "<input type='radio' name=\"".$i."\" value='S1'>S1";
+                                    echo "<input type='radio' name=\"".$i."\" value='S2' checked>S2";
+                                }
+                            echo '</td>';
+                            break;
+                        case 'choiceRG':
+                            echo '<td>';
+                                if( $updatainfo[$i]["checkResult"]=="red"){
+                                    echo "<input type='radio' name=\"".$i."\" value='red' checked>紅";
+                                    echo "<input type='radio' name=\"".$i."\" value='green'>綠";
+                                } else {
+                                    echo "<input type='radio' name=\"".$i."\" value='red'>紅";
+                                    echo "<input type='radio' name=\"".$i."\" value='green' checked>綠";
+                                }
+                            echo '</td>';
+                            break;
+                        case 'plural':
+                            echo '<td>';
+                            if( $updatainfo[$i]["checkResult"]=="1"){ ?>
+                                <input type='checkbox' name="b[]" value='1' checked>1
+                                <input type='checkbox' name="b[]" value='2'>2
+                            <?php } elseif($updatainfo[$i]["checkResult"]=="2") { ?>
+                                <input type='checkbox' name="b[]" value='1'>1
+                                <input type='checkbox' name="b[]" value='2' checked>2
+                            <?php } elseif($updatainfo[$i]["checkResult"]=="1,2") { ?>
+                                <input type='checkbox' name="b[]" value='1' checked>1
+                                <input type='checkbox' name="b[]" value='2' checked>2
+                            <?php } else { ?>
+                                <input type='checkbox' name="b[]" value='1'>1
+                                <input type='checkbox' name="b[]" value='2'>2                                
+                            <?php }                            
+                            echo '</td>';
+                            break;
+                        default:
+                            echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20' value=\"".$updatainfo[$i]["checkResult"]."\"></td>";
+                            break;
+                    }                                        
                     }
                     ?>
                 </tbody>
@@ -227,5 +292,3 @@ if (isset($_POST["action"])&&($_POST["action"]=="update")) {
     </div>
 </body>
 </html>
-
-?>
