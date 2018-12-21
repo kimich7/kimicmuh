@@ -5,32 +5,22 @@ session_start();
 $user=$_SESSION["login_member"];
 $userID=sql_database('e_number','FA.Employee','cname',$user);
 $nowTime=date('Y-m-d H:i:s');
-
+//取得表單資料
 $sysID =(int)$_GET['systemID'];
 $buildID =$_GET['build'];
 $floorID =$_GET['floor'];
 $rDate =$_GET['date'];
-//$equipID =$_GET['equipment'];
 $shiftID =$_GET['shift'];
 $detailTable='FA.Water_System_Record_Detail';
 $masterTable='FA.Water_System_Record_Master';
 $equipTable='FA.Equipment_Check';
-
-switch ($sysID) {
-    case "4":
-        $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildID' AND sysID='$sysID'  ORDER BY equipCheckName";
-        $query_equip=$pdo->query($sql_equip_check);
-        $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildID' AND sysID='$sysID'";
-        $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-        break;
-    default:
-        $sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildID' AND sysID='$sysID' ORDER BY equipCheckName";
-        $query_equip=$pdo->query($sql_equip_check);
-        $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildID' AND sysID='$sysID'";
-        $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-        break;
-}
-
+//取得樓層系統要點檢的項目
+$sql_equip_check = "SELECT equipCheckName,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildID' AND sysID='$sysID' ORDER BY equipCheckName";
+$query_equip=$pdo->query($sql_equip_check);
+//取得要點檢的數量
+$equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildID' AND sysID='$sysID'";
+$equip_check_no=Current($pdo->query($equip_check_num)->fetch());
+//取得要修改的單號
 $sql_str="SELECT recordID,rDate FROM $masterTable WHERE sysID=$sysID AND b_number='$buildID' AND rDate ='$rDate'";//篩選出需要的主表明細
 $sql_query=$pdo->query($sql_str)->fetch();
 $MasterID=$sql_query["recordID"];
@@ -47,20 +37,40 @@ if (!empty($MasterID)) {
     $allowTime=(strtotime($nowTime)-strtotime($dataTime))/3600;
 }
 
-
 if (isset($_POST["action"])&&($_POST["action"]=="update")) {
     for ($i=0; $i  <$updata_qt ; $i++) {
         $q=100+$i;
-        $rdID=$_POST["$q"];
-        $ans=$_POST["$i"];
+        $rdID=$_POST["$q"];        
         $ansStr=$updatainfo[$i]["ref"];
         $answerStr="SELECT a.answerMode FROM FA.Equipment_Check AS a INNER JOIN FA.Water_System_Record_Detail AS b ON a.ref = b.ref WHERE a.ref ='$ansStr'";
         $snswerQuery=$pdo->query($answerStr)->fetch();
         $answerMode=$snswerQuery["answerMode"];
         if ($answerMode=='plural') {
-                $qu=$_POST["b"];
-                $ans= implode(",", $qu);
+            $qu=$_POST["b"];
+            $ans=implode(",", $qu) ;           
+            if ($ans=='1,1') {
+                $ans= '1';
+            }elseif($ans=='2,2'){
+                $ans= '2';
+            }else{
+                $ans= '1,2';
+            }                
+        }elseif ($answerMode=='plural_1') {
+            $qc=$_POST["c"];
+            $ans=implode(",", $qc);
+            if ($ans=='1,1') {
+                $ans= '1';
+            }elseif($ans=='2,2'){
+                $ans= '2';
+            }else{
+                $ans= '1,2';
             }
+        }else{
+            $ans=$_POST["$i"];
+        }
+        if (empty($ans)) {
+                $ans=null;
+        }
         $sql="UPDATE $detailTable SET remark=:remark , checkResult=:checkResult WHERE recordDetailID=:ID";
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':remark',$_POST["remark"],PDO::PARAM_STR);
@@ -182,9 +192,12 @@ if (isset($_POST["action"])&&($_POST["action"]=="update")) {
                         <?= $updatainfo[$i]["ref"]?>
                     </td>
                     <?php
-                    $b=array();
-                    $b[0]="";
-                    $b[1]="";
+                    // $b=array();
+                    // $b[0]="";
+                    // $b[1]="";
+                    // $c=array();
+                    // $c[0]="";
+                    // $c[1]="";
                     switch ($answerMode) {
                         case 'choiceTF':
                             echo '<td>';
@@ -255,17 +268,34 @@ if (isset($_POST["action"])&&($_POST["action"]=="update")) {
                         case 'plural':
                             echo '<td>';
                             if( $updatainfo[$i]["checkResult"]=="1"){ ?>
-                                <input type='checkbox' name="b[]" value='1' checked>1
+                                <input type='checkbox' name="b[]" value='1' checked>1&nbsp&nbsp
                                 <input type='checkbox' name="b[]" value='2'>2
                             <?php } elseif($updatainfo[$i]["checkResult"]=="2") { ?>
-                                <input type='checkbox' name="b[]" value='1'>1
+                                <input type='checkbox' name="b[]" value='1'>1&nbsp&nbsp
                                 <input type='checkbox' name="b[]" value='2' checked>2
                             <?php } elseif($updatainfo[$i]["checkResult"]=="1,2") { ?>
-                                <input type='checkbox' name="b[]" value='1' checked>1
+                                <input type='checkbox' name="b[]" value='1' checked>1&nbsp&nbsp
                                 <input type='checkbox' name="b[]" value='2' checked>2
                             <?php } else { ?>
-                                <input type='checkbox' name="b[]" value='1'>1
+                                <input type='checkbox' name="b[]" value='1'>1&nbsp&nbsp
                                 <input type='checkbox' name="b[]" value='2'>2                                
+                            <?php }                            
+                            echo '</td>';
+                            break;
+                        case 'plural_1':
+                            echo '<td>';
+                            if( $updatainfo[$i]["checkResult"]=="1"){ ?>
+                                <input type='checkbox' name="c[]" value='1' checked>1&nbsp&nbsp
+                                <input type='checkbox' name="c[]" value='2'>2
+                            <?php } elseif($updatainfo[$i]["checkResult"]=="2") { ?>
+                                <input type='checkbox' name="c[]" value='1'>1&nbsp&nbsp
+                                <input type='checkbox' name="c[]" value='2' checked>2
+                            <?php } elseif($updatainfo[$i]["checkResult"]=="1,2") { ?>
+                                <input type='checkbox' name="c[]" value='1' checked>1&nbsp&nbsp
+                                <input type='checkbox' name="c[]" value='2' checked>2
+                            <?php } else { ?>
+                                <input type='checkbox' name="c[]" value='1'>1&nbsp&nbsp
+                                <input type='checkbox' name="c[]" value='2'>2                                
                             <?php }                            
                             echo '</td>';
                             break;

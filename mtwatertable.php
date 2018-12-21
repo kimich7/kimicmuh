@@ -47,7 +47,7 @@
         //     $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID='$equip_no'AND b_number='$build_no' AND sysID='$sys_no'";
         //     $equip_ch=$pdo->query($sql_equip_check);
         // }
-        $err=0;
+        $err=0;//未填寫欄位的數量歸0
         for ($i=0; $i < $loop_count; $i++) {
             
             $equip_id=$equip_ch->fetch();//求出點檢項目id及參考值
@@ -58,12 +58,15 @@
                 $qu=$_POST["b"];
                 $ans_no= implode(",", $qu);
             }
-            
+            if ($equip_id['answerMode']=='plural_1') {
+                $qc=$_POST["c"];
+                $ans_no= implode(",", $qc);
+            }
             $sql_master_check="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE b_number='$build_no' AND rDate='$date_ch' AND sysID=$sys_no ";
             $master_check_query=Current($pdo->query($sql_master_check)->fetch());
             if (empty($ans_no)) {
                 $ans_no=null;
-                $err=$err+1;
+                $err=$err+1;//判斷有多少欄位沒有填寫
             }
             if ($master_check_query ==0) {                    
                 $sql_insert_master="INSERT INTO FA.Water_System_Record_Master(b_number,rDate,sysID) VALUES ('$build_no','$date_ch',$sys_no) ";
@@ -82,7 +85,7 @@
             } 
         }
         $pdo=null;
-        if ($err>=1) {
+        if ($err>=1) {//如果欄位沒有填寫就做下面的處理
             echo "<script>alert('有部分項目未填寫就送出，下次要補上時請選擇修改的方式')</script>";
             header("Location: mtinsert.html");
             //echo "<script>window.close();</script>";
@@ -117,20 +120,11 @@
 <body class="table_bg">
     <?PHP
     //檢查項目
-        switch ($sysNo) {
-            case "4":
-                $sql_equip_check = "SELECT equipCheckName,ref,answerMode  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo ORDER BY equipCheckName";
-                $query_equip=$pdo->query($sql_equip_check);
-                $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
-                $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-                break;
-            default:
-                $sql_equip_check = "SELECT equipCheckName,ref,answerMode  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo ORDER BY equipCheckName";
-                $query_equip=$pdo->query($sql_equip_check);
-                $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
-                $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
-                break;
-        }
+    $sql_equip_check = "SELECT equipCheckName,ref,answerMode  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo ORDER BY equipCheckName";
+    $query_equip=$pdo->query($sql_equip_check);
+    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
+    $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
+
     echo '<div class="container border border-info mt-5">';
         echo '<form action="" method="post" name="wa">';
             echo '<h2 class="text-center font-weight-bold">'.'中國醫藥大學附設醫院-'.$build.'--'.$system.'</h2>';
@@ -158,10 +152,12 @@
                     echo '<th>結果</th>';
                 echo '</thead>';                
                 for ($i=0; $i < $equip_check_no; $i++) { 
-                //$b=$i.'A';
-                $b=array();
-                $b[0]="";
-                $b[1]="";
+                // $b=array();
+                // $c=array();
+                // $b[0]="";
+                // $b[1]="";
+                // $c[0]="";
+                // $c[1]="";
                 
                 $equipinfo=$query_equip->fetch(PDO::FETCH_ASSOC);
                 echo '<tbody class="text-primary">';
@@ -206,31 +202,24 @@
                             break;
                         case 'plural':
                             echo '<td>';
-                            ?>
-                                <!-- echo "<input type='checkbox' name=\"".$b."\" value='1'>1";
-                                echo "<input type='checkbox' name=\"".$b."\" value='2'>2"; -->
-
-                                <input type='checkbox' name="b[]" value='1'>1;
-                                <input type='checkbox' name="b[]" value='2'>2;
+                            ?>                                
+                                <input type='checkbox' name="b[]" value='1'>1&nbsp&nbsp
+                                <input type='checkbox' name="b[]" value='2'>2
                             <?php
-
+                            echo '</td>';
+                            break;
+                        case 'plural_1':
+                            echo '<td>';
+                            ?>                                
+                                <input type='checkbox' name="c[]" value='1'>1&nbsp&nbsp
+                                <input type='checkbox' name="c[]" value='2'>2
+                            <?php
                             echo '</td>';
                             break;
                         default:
                             echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20'>".'</td>';
                             break;
-                    }
-                    // if ($equipinfo["answerMode"]=="V/X") {
-                    //     echo '<td>';
-                    //         echo "<input type='radio' name=\"".$i."\" value='true'>合格";
-                    //         echo "<input type='radio' name=\"".$i."\" value='false'>不合格";
-                    //     echo '</td>';
-                    // } else {                 
-                    //     echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20'>".'</td>';                
-                    // }
-                    
-                    
-                    //echo"</tr>";
+                    }                    
                 }
                 echo '</tbody>';
             echo '</table>';
