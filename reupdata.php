@@ -198,111 +198,111 @@ if (isset($_POST["action"])&&($_POST["action"]=="update")) {
                     // $c=array();
                     // $c[0]="";
                     // $c[1]="";
-                    switch ($answerMode) {
-                        case 'choiceTF':
-                            echo '<td>';
-                                if( $updatainfo[$i]["checkResult"]=="true"){
-                                    echo "<input type='radio' name=\"".$i."\" value='true' checked >合格";
-                                    echo "<input type='radio' name=\"".$i."\" value='false'>不合格";
-                                } else {
-                                    echo "<input type='radio' name=\"".$i."\" value='true' >合格";
-                                    echo "<input type='radio' name=\"".$i."\" value='false' checked >不合格";
-                                }                                
-                            echo '</td>';
-                            break;
-                        case 'choiceHA':
-                            echo '<td>';
-                                if( $updatainfo[$i]["checkResult"]=="handle"){
-                                    echo "<input type='radio' name=\"".$i."\" value='handle' checked>手動";
-                                    echo "<input type='radio' name=\"".$i."\" value='auto'>自動";
-                                } else {
-                                    echo "<input type='radio' name=\"".$i."\" value='handle'>手動";
-                                    echo "<input type='radio' name=\"".$i."\" value='auto' checked>自動";
-                                }
-                            echo '</td>';
-                            break;
-                        case 'choiceFN':
-                            echo '<td>';
-                                if( $updatainfo[$i]["checkResult"]=="OFF"){
-                                    echo "<input type='radio' name=\"".$i."\" value='OFF' checked>OFF";
-                                    echo "<input type='radio' name=\"".$i."\" value='ON'>ON";
-                                } else {
-                                    echo "<input type='radio' name=\"".$i."\" value='OFF'>OFF";
-                                    echo "<input type='radio' name=\"".$i."\" value='ON' checked>ON";
-                                }
-                            echo '</td>';
-                            break;
-                        case 'choiceRL':
-                            echo '<td>';
-                                if( $updatainfo[$i]["checkResult"]=="remote"){
-                                    echo "<input type='radio' name=\"".$i."\" value='remote' checked>遠端";
-                                    echo "<input type='radio' name=\"".$i."\" value='local'>本地";
-                                } else {
-                                    echo "<input type='radio' name=\"".$i."\" value='remote'>遠端";
-                                    echo "<input type='radio' name=\"".$i."\" value='local' checked>本地";
-                                }
-                            echo '</td>';
-                            break;
-                        case 'choiceS12':
-                            echo '<td>';
-                                if( $updatainfo[$i]["checkResult"]=="S1"){
-                                    echo "<input type='radio' name=\"".$i."\" value='S1' checked>S1";
-                                    echo "<input type='radio' name=\"".$i."\" value='S2'>S2";
-                                } else {
-                                    echo "<input type='radio' name=\"".$i."\" value='S1'>S1";
-                                    echo "<input type='radio' name=\"".$i."\" value='S2' checked>S2";
-                                }
-                            echo '</td>';
-                            break;
-                        case 'choiceRG':
-                            echo '<td>';
-                                if( $updatainfo[$i]["checkResult"]=="red"){
-                                    echo "<input type='radio' name=\"".$i."\" value='red' checked>紅";
-                                    echo "<input type='radio' name=\"".$i."\" value='green'>綠";
-                                } else {
-                                    echo "<input type='radio' name=\"".$i."\" value='red'>紅";
-                                    echo "<input type='radio' name=\"".$i."\" value='green' checked>綠";
-                                }
-                            echo '</td>';
-                            break;
-                        case 'plural':
-                            echo '<td>';
-                            if( $updatainfo[$i]["checkResult"]=="1"){ ?>
-                                <input type='checkbox' name="b[]" value='1' checked>1&nbsp&nbsp
-                                <input type='checkbox' name="b[]" value='2'>2
-                            <?php } elseif($updatainfo[$i]["checkResult"]=="2") { ?>
-                                <input type='checkbox' name="b[]" value='1'>1&nbsp&nbsp
-                                <input type='checkbox' name="b[]" value='2' checked>2
-                            <?php } elseif($updatainfo[$i]["checkResult"]=="1,2") { ?>
-                                <input type='checkbox' name="b[]" value='1' checked>1&nbsp&nbsp
-                                <input type='checkbox' name="b[]" value='2' checked>2
-                            <?php } else { ?>
-                                <input type='checkbox' name="b[]" value='1'>1&nbsp&nbsp
-                                <input type='checkbox' name="b[]" value='2'>2                                
-                            <?php }                            
-                            echo '</td>';
-                            break;
-                        case 'plural_1':
-                            echo '<td>';
-                            if( $updatainfo[$i]["checkResult"]=="1"){ ?>
-                                <input type='checkbox' name="c[]" value='1' checked>1&nbsp&nbsp
-                                <input type='checkbox' name="c[]" value='2'>2
-                            <?php } elseif($updatainfo[$i]["checkResult"]=="2") { ?>
-                                <input type='checkbox' name="c[]" value='1'>1&nbsp&nbsp
-                                <input type='checkbox' name="c[]" value='2' checked>2
-                            <?php } elseif($updatainfo[$i]["checkResult"]=="1,2") { ?>
-                                <input type='checkbox' name="c[]" value='1' checked>1&nbsp&nbsp
-                                <input type='checkbox' name="c[]" value='2' checked>2
-                            <?php } else { ?>
-                                <input type='checkbox' name="c[]" value='1'>1&nbsp&nbsp
-                                <input type='checkbox' name="c[]" value='2'>2                                
-                            <?php }                            
-                            echo '</td>';
-                            break;
-                        default:
-                            echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20' value=\"".$updatainfo[$i]["checkResult"]."\"></td>";
-                            break;
-                    }                                        
+                        switch ($answerMode) {
+                            case 'choiceTF':
+                                echo '<td>';
+                                    if( $updatainfo[$i]["checkResult"]=="true"){
+                                        echo "<input type='radio' name=\"".$i."\" value='true' checked >合格";
+                                        echo "<input type='radio' name=\"".$i."\" value='false'>不合格";
+                                    } else {
+                                        echo "<input type='radio' name=\"".$i."\" value='true' >合格";
+                                        echo "<input type='radio' name=\"".$i."\" value='false' checked >不合格";
+                                    }                                
+                                echo '</td>';
+                                break;
+                            case 'choiceHA':
+                                echo '<td>';
+                                    if( $updatainfo[$i]["checkResult"]=="handle"){
+                                        echo "<input type='radio' name=\"".$i."\" value='handle' checked>手動";
+                                        echo "<input type='radio' name=\"".$i."\" value='auto'>自動";
+                                    } else {
+                                        echo "<input type='radio' name=\"".$i."\" value='handle'>手動";
+                                        echo "<input type='radio' name=\"".$i."\" value='auto' checked>自動";
+                                    }
+                                echo '</td>';
+                                break;
+                            case 'choiceFN':
+                                echo '<td>';
+                                    if( $updatainfo[$i]["checkResult"]=="OFF"){
+                                        echo "<input type='radio' name=\"".$i."\" value='OFF' checked>OFF";
+                                        echo "<input type='radio' name=\"".$i."\" value='ON'>ON";
+                                    } else {
+                                        echo "<input type='radio' name=\"".$i."\" value='OFF'>OFF";
+                                        echo "<input type='radio' name=\"".$i."\" value='ON' checked>ON";
+                                    }
+                                echo '</td>';
+                                break;
+                            case 'choiceRL':
+                                echo '<td>';
+                                    if( $updatainfo[$i]["checkResult"]=="remote"){
+                                        echo "<input type='radio' name=\"".$i."\" value='remote' checked>遠端";
+                                        echo "<input type='radio' name=\"".$i."\" value='local'>本地";
+                                    } else {
+                                        echo "<input type='radio' name=\"".$i."\" value='remote'>遠端";
+                                        echo "<input type='radio' name=\"".$i."\" value='local' checked>本地";
+                                    }
+                                echo '</td>';
+                                break;
+                            case 'choiceS12':
+                                echo '<td>';
+                                    if( $updatainfo[$i]["checkResult"]=="S1"){
+                                        echo "<input type='radio' name=\"".$i."\" value='S1' checked>S1";
+                                        echo "<input type='radio' name=\"".$i."\" value='S2'>S2";
+                                    } else {
+                                        echo "<input type='radio' name=\"".$i."\" value='S1'>S1";
+                                        echo "<input type='radio' name=\"".$i."\" value='S2' checked>S2";
+                                    }
+                                echo '</td>';
+                                break;
+                            case 'choiceRG':
+                                echo '<td>';
+                                    if( $updatainfo[$i]["checkResult"]=="red"){
+                                        echo "<input type='radio' name=\"".$i."\" value='red' checked>紅";
+                                        echo "<input type='radio' name=\"".$i."\" value='green'>綠";
+                                    } else {
+                                        echo "<input type='radio' name=\"".$i."\" value='red'>紅";
+                                        echo "<input type='radio' name=\"".$i."\" value='green' checked>綠";
+                                    }
+                                echo '</td>';
+                                break;
+                            case 'plural':
+                                echo '<td>';
+                                if( $updatainfo[$i]["checkResult"]=="1"){ ?>
+                                    <input type='checkbox' name="b[]" value='1' checked>1&nbsp&nbsp
+                                    <input type='checkbox' name="b[]" value='2'>2
+                                <?php } elseif($updatainfo[$i]["checkResult"]=="2") { ?>
+                                    <input type='checkbox' name="b[]" value='1'>1&nbsp&nbsp
+                                    <input type='checkbox' name="b[]" value='2' checked>2
+                                <?php } elseif($updatainfo[$i]["checkResult"]=="1,2") { ?>
+                                    <input type='checkbox' name="b[]" value='1' checked>1&nbsp&nbsp
+                                    <input type='checkbox' name="b[]" value='2' checked>2
+                                <?php } else { ?>
+                                    <input type='checkbox' name="b[]" value='1'>1&nbsp&nbsp
+                                    <input type='checkbox' name="b[]" value='2'>2                                
+                                <?php }                            
+                                echo '</td>';
+                                break;
+                            case 'plural_1':
+                                echo '<td>';
+                                if( $updatainfo[$i]["checkResult"]=="1"){ ?>
+                                    <input type='checkbox' name="c[]" value='1' checked>1&nbsp&nbsp
+                                    <input type='checkbox' name="c[]" value='2'>2
+                                <?php } elseif($updatainfo[$i]["checkResult"]=="2") { ?>
+                                    <input type='checkbox' name="c[]" value='1'>1&nbsp&nbsp
+                                    <input type='checkbox' name="c[]" value='2' checked>2
+                                <?php } elseif($updatainfo[$i]["checkResult"]=="1,2") { ?>
+                                    <input type='checkbox' name="c[]" value='1' checked>1&nbsp&nbsp
+                                    <input type='checkbox' name="c[]" value='2' checked>2
+                                <?php } else { ?>
+                                    <input type='checkbox' name="c[]" value='1'>1&nbsp&nbsp
+                                    <input type='checkbox' name="c[]" value='2'>2                                
+                                <?php }                            
+                                echo '</td>';
+                                break;
+                            default:
+                                echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20' value=\"".$updatainfo[$i]["checkResult"]."\"></td>";
+                                break;
+                        }                                        
                     }
                     ?>
                 </tbody>

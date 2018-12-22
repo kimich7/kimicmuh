@@ -2,7 +2,7 @@
     include("php/CMUHconndata.php");
     include("php/fun.php");
     
-    //叫出資料
+    //叫出資料    
     $MasterID=$_GET["id"];
     $buildNo = $_GET["build"];
     $sysNo= $_GET["sys"];
@@ -15,6 +15,20 @@
     $updata_qt=updata_num($systemTable,$MasterID);//迴圈數量
     $updatainfo=updata_select($systemTable,$MasterID);//我要的東西
     
+    //該表單所點檢的項目
+    $item=item("SELECT equipCheckID,ref,answerMode FROM FA.Equipment_Check WHERE b_number='$buildNo' and sysID=$sysNo ORDER BY floorID,equipCheckName");
+    //該表單所點檢項目的數量
+    $num=num("SELECT COUNT(equipCheckID) FROM FA.Equipment_Check WHERE b_number='$buildNo' and sysID=$sysNo");
+    $checkName=array();//用來放equipCheckName的陣列
+    //早中晚班資料的撈取
+    //$ans1=item("SELECT recordDetailID,equipCheckID,checkResult,r_member FROM $systemTable WHERE recordID=$MasterID AND shiftID=1");
+    $ans1=item("SELECT B.recordDetailID,B.checkResult,B.r_member FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID FROM $systemTable WHERE recordID=$MasterID AND shiftID=1)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckName");
+    
+    $ans2=item("SELECT B.recordDetailID,B.checkResult,B.r_member FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID FROM $systemTable WHERE recordID=$MasterID AND shiftID=2)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckName");
+    
+    $ans3=item("SELECT B.recordDetailID,B.checkResult,B.r_member FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID FROM $systemTable WHERE recordID=$MasterID AND shiftID=3)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckName");
+    
+    
     if (isset($_POST["action"])&&($_POST["action"]=="update")) {        
         for ($i=0; $i  <$updata_qt ; $i++) {
             $q=200+$i;
@@ -23,7 +37,6 @@
                 $ans=$_POST["$an"];
             } else {
                 $ans=0;
-
             }
             if (isset($_POST["$q"])) {
                 $rdID=$_POST["$q"];
@@ -95,14 +108,8 @@
                         <th>參考值</th>
                     </thead>
                     <tbody class="text-primary">
-                    <?php 
-                        $item=item("SELECT equipCheckID,ref FROM FA.Equipment_Check WHERE b_number='$buildNo' and sysID=$sysNo ORDER BY equipCheckName");
-                        // $item=item("SELECT DISTINCT equipCheckID,ref FROM $systemTable WHERE recordID=$MasterID");
-                       
-                        // $num=num("SELECT COUNT(equipCheckID) FROM $systemTable WHERE recordID=$MasterID");
-                        $num=num("SELECT COUNT(equipCheckID) FROM FA.Equipment_Check WHERE b_number='$buildNo' and sysID=$sysNo");
-                        $checkName=array();
-                        for ($a=0; $a < $num; $a++) {                            
+                    <?php                         
+                        for ($a=0; $a < $num; $a++) {    //拿該表單所點檢項目的數量做迴圈用num                    
                         $checkName[$a]=sql_database('equipCheckName',$equipTable,'equipCheckID',$item[$a]["equipCheckID"]);//找出對應equipCheckID的equipCheckName的名稱                        
                     //問號結尾
                     echo '<tr>';
@@ -125,37 +132,147 @@
                     echo '<thead>';
                         echo '<th>早班結果</th>';
                     echo '</thead>';
-                    echo '<tbody class="text-primary">';    
-                        $ans1=item("SELECT recordDetailID,equipCheckID,checkResult,r_member FROM $systemTable WHERE recordID=$MasterID AND shiftID=1");
-                        $user_1=sql_database('cname','FA.Employee','e_number',$ans1[0]['r_member']);
+                    echo '<tbody class="text-primary">';
+                    $user_1=""; 
                         for ($a=0; $a < $num; $a++) {
                             $q=$a+200;
                             $an=$a;//結果答案
-                            for ($i=0; $i < $num ;) { 
-                                if ($item[$a]["equipCheckID"] == $ans1[$i]["equipCheckID"]) {
-                                    if ($item[$a]["ref"]=="V/X") {
-                        echo '<tr>';
-                            echo '<td>';
-                            if($ans1[$i]["checkResult"]==1){
-                                echo "<input type='radio' name=\"".$an."\" value=1 checked>合格";
-                                echo "<input type='radio' name=\"".$an."\" value=0>不合格";
-                            }else{
-                                echo "<input type='radio' name=\"".$an."\" value=1>合格";
-                                echo "<input type='radio' name=\"".$an."\" value=0 checked>不合格";
-                            } 
-                            echo '</td>'; 
-                        echo '</tr>';
-                                    } else {
-                        echo '<tr>';
-                            echo '<td>'."<input type='text' name=\"".$an."\" maxlength='20' value=\"".$ans1[$i]["checkResult"]."\"></td>";
-                        echo '</tr>';
-                                    } 
-                                    echo "<input type='hidden' name=\"".$q."\" value=\"".$ans1[$i]["recordDetailID"]."\">";
-                                break;                                            
-                                } else {
-                                    $i++;                                               
-                                }
+                            $answerMode=$item[$a]["answerMode"];                            
+                            if ($user_1=="") {
+                                $user_1=sql_database('cname','FA.Employee','e_number',$ans1[$a]['r_member']);
                             }
+                            echo '<tr>';
+                                switch ($answerMode) {
+                                    case 'choiceTF':
+                                        echo '<td>';
+                                            if( $ans1[$a]["checkResult"]=="true"){
+                                                echo "<input type='radio' name=\"".$an."\" value='true' checked >合格";
+                                                echo "<input type='radio' name=\"".$an."\" value='false'>不合格";
+                                            } else {
+                                                echo "<input type='radio' name=\"".$an."\" value='true' >合格";
+                                                echo "<input type='radio' name=\"".$an."\" value='false' checked >不合格";
+                                            }                                
+                                        echo '</td>';
+                                        break;
+                                    case 'choiceHA':
+                                        echo '<td>';
+                                            if( $ans1[$a]["checkResult"]=="handle"){
+                                                echo "<input type='radio' name=\"".$an."\" value='handle' checked>手動";
+                                                echo "<input type='radio' name=\"".$an."\" value='auto'>自動";
+                                            } else {
+                                                echo "<input type='radio' name=\"".$an."\" value='handle'>手動";
+                                                echo "<input type='radio' name=\"".$an."\" value='auto' checked>自動";
+                                            }
+                                        echo '</td>';
+                                        break;
+                                    case 'choiceFN':
+                                        echo '<td>';
+                                            if( $ans1[$a]["checkResult"]=="OFF"){
+                                                echo "<input type='radio' name=\"".$an."\" value='OFF' checked>OFF";
+                                                echo "<input type='radio' name=\"".$an."\" value='ON'>ON";
+                                            } else {
+                                                echo "<input type='radio' name=\"".$an."\" value='OFF'>OFF";
+                                                echo "<input type='radio' name=\"".$an."\" value='ON' checked>ON";
+                                            }
+                                        echo '</td>';
+                                        break;
+                                    case 'choiceRL':
+                                        echo '<td>';
+                                            if( $ans1[$a]["checkResult"]=="remote"){
+                                                echo "<input type='radio' name=\"".$an."\" value='remote' checked>遠端";
+                                                echo "<input type='radio' name=\"".$an."\" value='local'>本地";
+                                            } else {
+                                                echo "<input type='radio' name=\"".$an."\" value='remote'>遠端";
+                                                echo "<input type='radio' name=\"".$an."\" value='local' checked>本地";
+                                            }
+                                        echo '</td>';
+                                        break;
+                                    case 'choiceS12':
+                                        echo '<td>';
+                                            if( $ans1[$a]["checkResult"]=="S1"){
+                                                echo "<input type='radio' name=\"".$an."\" value='S1' checked>S1";
+                                                echo "<input type='radio' name=\"".$an."\" value='S2'>S2";
+                                            } else {
+                                                echo "<input type='radio' name=\"".$an."\" value='S1'>S1";
+                                                echo "<input type='radio' name=\"".$an."\" value='S2' checked>S2";
+                                            }
+                                        echo '</td>';
+                                        break;
+                                    case 'choiceRG':
+                                        echo '<td>';
+                                            if( $ans1[$a]["checkResult"]=="red"){
+                                                echo "<input type='radio' name=\"".$an."\" value='red' checked>紅";
+                                                echo "<input type='radio' name=\"".$an."\" value='green'>綠";
+                                            } else {
+                                                echo "<input type='radio' name=\"".$an."\" value='red'>紅";
+                                                echo "<input type='radio' name=\"".$an."\" value='green' checked>綠";
+                                            }
+                                        echo '</td>';
+                                        break;
+                                    case 'plural':
+                                        echo '<td>';
+                                        if( $ans1[$a]["checkResult"]=="1"){ ?>
+                                            <input type='checkbox' name="b[]" value='1' checked>1&nbsp&nbsp
+                                            <input type='checkbox' name="b[]" value='2'>2
+                                        <?php } elseif($ans1[$a]["checkResult"]=="2") { ?>
+                                            <input type='checkbox' name="b[]" value='1'>1&nbsp&nbsp
+                                            <input type='checkbox' name="b[]" value='2' checked>2
+                                        <?php } elseif($ans1[$a]["checkResult"]=="1,2") { ?>
+                                            <input type='checkbox' name="b[]" value='1' checked>1&nbsp&nbsp
+                                            <input type='checkbox' name="b[]" value='2' checked>2
+                                        <?php } else { ?>
+                                            <input type='checkbox' name="b[]" value='1'>1&nbsp&nbsp
+                                            <input type='checkbox' name="b[]" value='2'>2                                
+                                        <?php }                            
+                                        echo '</td>';
+                                        break;
+                                    case 'plural_1':
+                                        echo '<td>';
+                                        if( $ans1[$a]["checkResult"]=="1"){ ?>
+                                            <input type='checkbox' name="c[]" value='1' checked>1&nbsp&nbsp
+                                            <input type='checkbox' name="c[]" value='2'>2
+                                        <?php } elseif($ans1[$a]["checkResult"]=="2") { ?>
+                                            <input type='checkbox' name="c[]" value='1'>1&nbsp&nbsp
+                                            <input type='checkbox' name="c[]" value='2' checked>2
+                                        <?php } elseif($ans1[$a]["checkResult"]=="1,2") { ?>
+                                            <input type='checkbox' name="c[]" value='1' checked>1&nbsp&nbsp
+                                            <input type='checkbox' name="c[]" value='2' checked>2
+                                        <?php } else { ?>
+                                            <input type='checkbox' name="c[]" value='1'>1&nbsp&nbsp
+                                            <input type='checkbox' name="c[]" value='2'>2                                
+                                        <?php }                            
+                                        echo '</td>';
+                                        break;
+                                    default:
+                                        echo '<td>'."<input type='text' name=\"".$an."\" maxlength='20' value=\"".$ans1[$a]["checkResult"]."\"></td>";
+                                        break;
+                                    }
+                            echo '</tr>';         
+                        //     for ($i=0; $i < $num ;) { 
+                        //         if ($item[$a]["equipCheckID"] == $ans1[$i]["equipCheckID"]) {
+                        //             if ($item[$a]["ref"]=="V/X") {
+                        // echo '<tr>';
+                        //     echo '<td>';
+                        //                 if($ans1[$i]["checkResult"]==1){
+                        //                     echo "<input type='radio' name=\"".$an."\" value=1 checked>合格";
+                        //                     echo "<input type='radio' name=\"".$an."\" value=0>不合格";
+                        //                 }else{
+                        //                     echo "<input type='radio' name=\"".$an."\" value=1>合格";
+                        //                     echo "<input type='radio' name=\"".$an."\" value=0 checked>不合格";
+                        //                 } 
+                        //     echo '</td>'; 
+                        // echo '</tr>';
+                        //             } else {
+                        // echo '<tr>';
+                        //     echo '<td>'."<input type='text' name=\"".$an."\" maxlength='20' value=\"".$ans1[$i]["checkResult"]."\"></td>";
+                        // echo '</tr>';
+                        //             } 
+                                     echo "<input type='hidden' name=\"".$q."\" value=\"".$ans1[$a]["recordDetailID"]."\">";
+                        //         break;                                            
+                        //         } else {
+                        //             $i++;                                               
+                        //         }
+                        //     }
                         } 
                     echo '</tbody>';
                     echo '<tfoot class="text-primary">';
@@ -169,42 +286,154 @@
                         echo '<th>中班結果</th>';
                     echo '</thead>';
                     echo '<tbody class="text-primary">';
-                        $ans2=item("SELECT recordDetailID,equipCheckID,checkResult,r_member FROM $systemTable WHERE recordID=$MasterID AND shiftID=2");
+                        //$ans2=item("SELECT recordDetailID,equipCheckID,checkResult,r_member FROM $systemTable WHERE recordID=$MasterID AND shiftID=2");
+                        $user_2="";
                             for ($a=0; $a < $num; $a++) {
                                 $an=$a+($num);
                                 $q=$a+200+($num);
-                                if (!isset($ans2[$a])) {
+                                if (is_null($ans2[$a]["recordDetailID"])) {
                                     echo '<tr>';
-                                        echo "<td><input type=\"text\" name=\"$an\" maxlength=\"20\" value=\"未填寫\"></td>";
+                                        echo "<td><input type=\"text\" name=\"$an\" maxlength=\"20\" value=\"無該筆紀錄，此紀錄無法修改\" DISABLED></td>";
                                     echo '</tr>';
-                                    $user_2='無人填寫';   
+                                    //$user_2='無人填寫';   
                                 }else{
-                                    $user_2=sql_database('cname','FA.Employee','e_number',$ans2[0]['r_member']);
-                                    for ($i=0; $i < $num ;) {
-                                        if ($item[$a]["equipCheckID"] == $ans2[$i]["equipCheckID"]) {
-                                            if ($item[$a]["ref"]=="V/X") {
-                            echo '<tr>';
-                                echo '<td>';
-                                if($ans2[$i]["checkResult"]==1){
-                                    echo "<input type='radio' name=\"".$an."\" value=1 checked>合格";
-                                    echo "<input type='radio' name=\"".$an."\" value=0>不合格";
-                                }else{
-                                    echo "<input type='radio' name=\"".$an."\" value=1>合格";
-                                    echo "<input type='radio' name=\"".$an."\" value=0 checked>不合格";
-                                }    
-                                echo '</td>';
-                           echo '</tr>';
-                                            } else {
-                            echo '<tr>';
-                                echo '<td>'."<input type='text' name=\"".$an."\" maxlength='20' value=\"".$ans2[$i]["checkResult"]."\">".'</td>';
-                            echo '</tr>';
-                                            }
-                                    echo "<input type='hidden' name=\"".$q."\" value=\"".$ans2[$i]["recordDetailID"]."\">";
-                                        break;                                            
-                                        } else {
-                                    $i++;                                               
-                                        }
+                                    if ($user_2=="") {
+                                        $user_2=sql_database('cname','FA.Employee','e_number',$ans2[$a]['r_member']);
                                     }
+                                    $answerMode=$item[$a]["answerMode"];
+                                    echo '<tr>';
+                                        switch ($answerMode) {
+                                            case 'choiceTF':
+                                                echo '<td>';
+                                                    if( $ans2[$a]["checkResult"]=="true"){
+                                                        echo "<input type='radio' name=\"".$an."\" value='true' checked >合格";
+                                                        echo "<input type='radio' name=\"".$an."\" value='false'>不合格";
+                                                    } else {
+                                                        echo "<input type='radio' name=\"".$an."\" value='true' >合格";
+                                                        echo "<input type='radio' name=\"".$an."\" value='false' checked >不合格";
+                                                    }                                
+                                                echo '</td>';
+                                                break;
+                                            case 'choiceHA':
+                                                echo '<td>';
+                                                    if( $ans2[$a]["checkResult"]=="handle"){
+                                                        echo "<input type='radio' name=\"".$an."\" value='handle' checked>手動";
+                                                        echo "<input type='radio' name=\"".$an."\" value='auto'>自動";
+                                                    } else {
+                                                        echo "<input type='radio' name=\"".$an."\" value='handle'>手動";
+                                                        echo "<input type='radio' name=\"".$an."\" value='auto' checked>自動";
+                                                    }
+                                                echo '</td>';
+                                                break;
+                                            case 'choiceFN':
+                                                echo '<td>';
+                                                    if( $ans2[$a]["checkResult"]=="OFF"){
+                                                        echo "<input type='radio' name=\"".$an."\" value='OFF' checked>OFF";
+                                                        echo "<input type='radio' name=\"".$an."\" value='ON'>ON";
+                                                    } else {
+                                                        echo "<input type='radio' name=\"".$an."\" value='OFF'>OFF";
+                                                        echo "<input type='radio' name=\"".$an."\" value='ON' checked>ON";
+                                                    }
+                                                echo '</td>';
+                                                break;
+                                            case 'choiceRL':
+                                                echo '<td>';
+                                                    if( $ans2[$a]["checkResult"]=="remote"){
+                                                        echo "<input type='radio' name=\"".$an."\" value='remote' checked>遠端";
+                                                        echo "<input type='radio' name=\"".$an."\" value='local'>本地";
+                                                    } else {
+                                                        echo "<input type='radio' name=\"".$an."\" value='remote'>遠端";
+                                                        echo "<input type='radio' name=\"".$an."\" value='local' checked>本地";
+                                                    }
+                                                echo '</td>';
+                                                break;
+                                            case 'choiceS12':
+                                                echo '<td>';
+                                                    if( $ans2[$a]["checkResult"]=="S1"){
+                                                        echo "<input type='radio' name=\"".$an."\" value='S1' checked>S1";
+                                                        echo "<input type='radio' name=\"".$an."\" value='S2'>S2";
+                                                    } else {
+                                                        echo "<input type='radio' name=\"".$an."\" value='S1'>S1";
+                                                        echo "<input type='radio' name=\"".$an."\" value='S2' checked>S2";
+                                                    }
+                                                echo '</td>';
+                                                break;
+                                            case 'choiceRG':
+                                                echo '<td>';
+                                                    if( $ans2[$a]["checkResult"]=="red"){
+                                                        echo "<input type='radio' name=\"".$an."\" value='red' checked>紅";
+                                                        echo "<input type='radio' name=\"".$an."\" value='green'>綠";
+                                                    } else {
+                                                        echo "<input type='radio' name=\"".$an."\" value='red'>紅";
+                                                        echo "<input type='radio' name=\"".$an."\" value='green' checked>綠";
+                                                    }
+                                                echo '</td>';
+                                                break;
+                                            case 'plural':
+                                                echo '<td>';
+                                                if( $ans2[$a]["checkResult"]=="1"){ ?>
+                                                    <input type='checkbox' name="b[]" value='1' checked>1&nbsp&nbsp
+                                                    <input type='checkbox' name="b[]" value='2'>2
+                                                <?php } elseif($ans2[$a]["checkResult"]=="2") { ?>
+                                                    <input type='checkbox' name="b[]" value='1'>1&nbsp&nbsp
+                                                    <input type='checkbox' name="b[]" value='2' checked>2
+                                                <?php } elseif($ans2[$a]["checkResult"]=="1,2") { ?>
+                                                    <input type='checkbox' name="b[]" value='1' checked>1&nbsp&nbsp
+                                                    <input type='checkbox' name="b[]" value='2' checked>2
+                                                <?php } else { ?>
+                                                    <input type='checkbox' name="b[]" value='1'>1&nbsp&nbsp
+                                                    <input type='checkbox' name="b[]" value='2'>2                                
+                                                <?php }                            
+                                                echo '</td>';
+                                                break;
+                                            case 'plural_1':
+                                                echo '<td>';
+                                                if( $ans2[$a]["checkResult"]=="1"){ ?>
+                                                    <input type='checkbox' name="c[]" value='1' checked>1&nbsp&nbsp
+                                                    <input type='checkbox' name="c[]" value='2'>2
+                                                <?php } elseif($ans2[$a]["checkResult"]=="2") { ?>
+                                                    <input type='checkbox' name="c[]" value='1'>1&nbsp&nbsp
+                                                    <input type='checkbox' name="c[]" value='2' checked>2
+                                                <?php } elseif($ans2[$a]["checkResult"]=="1,2") { ?>
+                                                    <input type='checkbox' name="c[]" value='1' checked>1&nbsp&nbsp
+                                                    <input type='checkbox' name="c[]" value='2' checked>2
+                                                <?php } else { ?>
+                                                    <input type='checkbox' name="c[]" value='1'>1&nbsp&nbsp
+                                                    <input type='checkbox' name="c[]" value='2'>2                                
+                                                <?php }                            
+                                                echo '</td>';
+                                                break;
+                                            default:
+                                                echo '<td>'."<input type='text' name=\"".$an."\" maxlength='20' value=\"".$ans2[$a]["checkResult"]."\"></td>";
+                                                break;
+                                            }
+                                    echo '</tr>';         
+                        //             $user_2=sql_database('cname','FA.Employee','e_number',$ans2[0]['r_member']);
+                        //             for ($i=0; $i < $num ;) {
+                        //                 if ($item[$a]["equipCheckID"] == $ans2[$i]["equipCheckID"]) {
+                        //                     if ($item[$a]["ref"]=="V/X") {
+                        //     echo '<tr>';
+                        //         echo '<td>';
+                        //         if($ans2[$i]["checkResult"]==1){
+                        //             echo "<input type='radio' name=\"".$an."\" value=1 checked>合格";
+                        //             echo "<input type='radio' name=\"".$an."\" value=0>不合格";
+                        //         }else{
+                        //             echo "<input type='radio' name=\"".$an."\" value=1>合格";
+                        //             echo "<input type='radio' name=\"".$an."\" value=0 checked>不合格";
+                        //         }    
+                        //         echo '</td>';
+                        //    echo '</tr>';
+                        //                     } else {
+                        //     echo '<tr>';
+                        //         echo '<td>'."<input type='text' name=\"".$an."\" maxlength='20' value=\"".$ans2[$i]["checkResult"]."\">".'</td>';
+                        //     echo '</tr>';
+                        //                     }
+                                     echo "<input type='hidden' name=\"".$q."\" value=\"".$ans2[$a]["recordDetailID"]."\">";
+                        //                 break;                                            
+                        //                 } else {
+                        //             $i++;                                               
+                        //                 }
+                        //             }
                                 }
                             }
                     echo '</tbody>';
@@ -218,42 +447,156 @@
                         echo '<th>晚班結果</th>';
                     echo '</thead>';
                     echo '<tbody class="text-primary">';
-                        $ans3=item("SELECT recordDetailID,equipCheckID,checkResult,r_member FROM $systemTable WHERE recordID=$MasterID AND shiftID=3");
+                        //$ans3=item("SELECT recordDetailID,equipCheckID,checkResult,r_member FROM $systemTable WHERE recordID=$MasterID AND shiftID=3");
                         for ($a=0; $a < $num; $a++) {
                             $an=$a+(($num)+($num));
                             $q=$a+200+(($num)+($num));
-                            if (!isset($ans3[$a])) {
+                            $user_3='';
+                            if (is_null($ans3[$a]["recordDetailID"])) {
                                 echo '<tr>';
-                                    echo "<td><input type=\"text\" name=\"$an\" maxlength=\"20\" value=\"未填寫\"></td>";
+                                    echo "<td><input type=\"text\" name=\"$an\" maxlength=\"20\" value=\"無該筆紀錄，此紀錄無法修改\" Disabled></td>";
                                 echo '</tr>';
-                                $user_3='無人填寫';   
+                                $user_3='此時段無抄表紀錄';   
                             }else{
-                                $user_3=sql_database('cname','FA.Employee','e_number',$ans3[0]['r_member']);                                
-                                for ($i=0; $i < $num ;) { 
-                                    if ($item[$a]["equipCheckID"] == $ans3[$i]["equipCheckID"]) {
-                                        if ($item[$a]["ref"]=="V/X") {
-                            echo '<tr>';
-                                echo '<td>';
-                                if($ans3[$i]["checkResult"]==1){
-                                    echo "<input type='radio' name=\"".$an."\" value=1 checked>合格";
-                                    echo "<input type='radio' name=\"".$an."\" value=0>不合格";
-                                }else{
-                                    echo "<input type='radio' name=\"".$an."\" value=1>合格";
-                                    echo "<input type='radio' name=\"".$an."\" value=0 checked>不合格";
-                                }    
-                                echo '</td>';
-                           echo '</tr>';
-                                        } else {
-                        echo '<tr>';
-                            echo '<td>'."<input type='text' name=\"".$an."\" maxlength='20' value=\"".$ans3[$i]["checkResult"]."\">".'</td>';
-                        echo '</tr>';
-                                        }
-                            echo "<input type='hidden' name=\"".$q."\" value=\"".$ans3[$i]["recordDetailID"]."\">";
-                                        break;                                            
-                                    } else {
-                                        $i++;                                               
-                                    }
+                                if ($user_3=='此時段無抄表紀錄'or $user_3=='') {
+                                    $user_3=sql_database('cname','FA.Employee','e_number',$ans3[0]['r_member']);
                                 }
+                                $answerMode=$item[$a]["answerMode"];
+                                    echo '<tr>';
+                                        switch ($answerMode) {
+                                            case 'choiceTF':
+                                                echo '<td>';
+                                                    if( $ans3[$a]["checkResult"]=="true"){
+                                                        echo "<input type='radio' name=\"".$an."\" value='true' checked >合格";
+                                                        echo "<input type='radio' name=\"".$an."\" value='false'>不合格";
+                                                    } else {
+                                                        echo "<input type='radio' name=\"".$an."\" value='true' >合格";
+                                                        echo "<input type='radio' name=\"".$an."\" value='false' checked >不合格";
+                                                    }                                
+                                                echo '</td>';
+                                                break;
+                                            case 'choiceHA':
+                                                echo '<td>';
+                                                    if( $ans3[$a]["checkResult"]=="handle"){
+                                                        echo "<input type='radio' name=\"".$an."\" value='handle' checked>手動";
+                                                        echo "<input type='radio' name=\"".$an."\" value='auto'>自動";
+                                                    } else {
+                                                        echo "<input type='radio' name=\"".$an."\" value='handle'>手動";
+                                                        echo "<input type='radio' name=\"".$an."\" value='auto' checked>自動";
+                                                    }
+                                                echo '</td>';
+                                                break;
+                                            case 'choiceFN':
+                                                echo '<td>';
+                                                    if( $ans3[$a]["checkResult"]=="OFF"){
+                                                        echo "<input type='radio' name=\"".$an."\" value='OFF' checked>OFF";
+                                                        echo "<input type='radio' name=\"".$an."\" value='ON'>ON";
+                                                    } else {
+                                                        echo "<input type='radio' name=\"".$an."\" value='OFF'>OFF";
+                                                        echo "<input type='radio' name=\"".$an."\" value='ON' checked>ON";
+                                                    }
+                                                echo '</td>';
+                                                break;
+                                            case 'choiceRL':
+                                                echo '<td>';
+                                                    if( $ans3[$a]["checkResult"]=="remote"){
+                                                        echo "<input type='radio' name=\"".$an."\" value='remote' checked>遠端";
+                                                        echo "<input type='radio' name=\"".$an."\" value='local'>本地";
+                                                    } else {
+                                                        echo "<input type='radio' name=\"".$an."\" value='remote'>遠端";
+                                                        echo "<input type='radio' name=\"".$an."\" value='local' checked>本地";
+                                                    }
+                                                echo '</td>';
+                                                break;
+                                            case 'choiceS12':
+                                                echo '<td>';
+                                                    if( $ans3[$a]["checkResult"]=="S1"){
+                                                        echo "<input type='radio' name=\"".$an."\" value='S1' checked>S1";
+                                                        echo "<input type='radio' name=\"".$an."\" value='S2'>S2";
+                                                    } else {
+                                                        echo "<input type='radio' name=\"".$an."\" value='S1'>S1";
+                                                        echo "<input type='radio' name=\"".$an."\" value='S2' checked>S2";
+                                                    }
+                                                echo '</td>';
+                                                break;
+                                            case 'choiceRG':
+                                                echo '<td>';
+                                                    if( $ans3[$a]["checkResult"]=="red"){
+                                                        echo "<input type='radio' name=\"".$an."\" value='red' checked>紅";
+                                                        echo "<input type='radio' name=\"".$an."\" value='green'>綠";
+                                                    } else {
+                                                        echo "<input type='radio' name=\"".$an."\" value='red'>紅";
+                                                        echo "<input type='radio' name=\"".$an."\" value='green' checked>綠";
+                                                    }
+                                                echo '</td>';
+                                                break;
+                                            case 'plural':
+                                                echo '<td>';
+                                                if( $ans3[$a]["checkResult"]=="1"){ ?>
+                                                    <input type='checkbox' name="b[]" value='1' checked>1&nbsp&nbsp
+                                                    <input type='checkbox' name="b[]" value='2'>2
+                                                <?php } elseif($ans3[$a]["checkResult"]=="2") { ?>
+                                                    <input type='checkbox' name="b[]" value='1'>1&nbsp&nbsp
+                                                    <input type='checkbox' name="b[]" value='2' checked>2
+                                                <?php } elseif($ans3[$a]["checkResult"]=="1,2") { ?>
+                                                    <input type='checkbox' name="b[]" value='1' checked>1&nbsp&nbsp
+                                                    <input type='checkbox' name="b[]" value='2' checked>2
+                                                <?php } else { ?>
+                                                    <input type='checkbox' name="b[]" value='1'>1&nbsp&nbsp
+                                                    <input type='checkbox' name="b[]" value='2'>2                                
+                                                <?php }                            
+                                                echo '</td>';
+                                                break;
+                                            case 'plural_1':
+                                                echo '<td>';
+                                                if( $ans3[$a]["checkResult"]=="1"){ ?>
+                                                    <input type='checkbox' name="c[]" value='1' checked>1&nbsp&nbsp
+                                                    <input type='checkbox' name="c[]" value='2'>2
+                                                <?php } elseif($ans3[$a]["checkResult"]=="2") { ?>
+                                                    <input type='checkbox' name="c[]" value='1'>1&nbsp&nbsp
+                                                    <input type='checkbox' name="c[]" value='2' checked>2
+                                                <?php } elseif($ans3[$a]["checkResult"]=="1,2") { ?>
+                                                    <input type='checkbox' name="c[]" value='1' checked>1&nbsp&nbsp
+                                                    <input type='checkbox' name="c[]" value='2' checked>2
+                                                <?php } else { ?>
+                                                    <input type='checkbox' name="c[]" value='1'>1&nbsp&nbsp
+                                                    <input type='checkbox' name="c[]" value='2'>2                                
+                                                <?php }                            
+                                                echo '</td>';
+                                                break;
+                                            default:
+                                                echo '<td>'."<input type='text' name=\"".$an."\" maxlength='20' value=\"".$ans3[$a]["checkResult"]."\"></td>";
+                                                break;
+                                            }
+                                    echo '</tr>'; 
+                        
+                        
+                                //         $user_3=sql_database('cname','FA.Employee','e_number',$ans3[0]['r_member']);                                
+                        //         for ($i=0; $i < $num ;) { 
+                        //             if ($item[$a]["equipCheckID"] == $ans3[$i]["equipCheckID"]) {
+                        //                 if ($item[$a]["ref"]=="V/X") {
+                        //     echo '<tr>';
+                        //         echo '<td>';
+                        //         if($ans3[$i]["checkResult"]==1){
+                        //             echo "<input type='radio' name=\"".$an."\" value=1 checked>合格";
+                        //             echo "<input type='radio' name=\"".$an."\" value=0>不合格";
+                        //         }else{
+                        //             echo "<input type='radio' name=\"".$an."\" value=1>合格";
+                        //             echo "<input type='radio' name=\"".$an."\" value=0 checked>不合格";
+                        //         }    
+                        //         echo '</td>';
+                        //    echo '</tr>';
+                        //                 } else {
+                        // echo '<tr>';
+                        //     echo '<td>'."<input type='text' name=\"".$an."\" maxlength='20' value=\"".$ans3[$i]["checkResult"]."\">".'</td>';
+                        // echo '</tr>';
+                        //                 }
+                             echo "<input type='hidden' name=\"".$q."\" value=\"".$ans3[$a]["recordDetailID"]."\">";
+                        //                 break;                                            
+                        //             } else {
+                        //                 $i++;                                               
+                        //             }
+                        //         }
                             }
                         }    
                     
