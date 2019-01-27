@@ -8,7 +8,7 @@
     //mtinsert資料帶入
     $check_date=$_POST["bday"];
     $buildNo=$_POST["build"];
-    $sysNo=$_POST["system"];
+    //$sysNo=$_POST["system"];
     //$equipNo=$_POST["equipment"];
     $shiftNo=$_POST["class"];
     $floorID=$_POST["buildingfloor"];
@@ -17,7 +17,7 @@
     //篩選出棟別
     $build=sql_database('B_name','FA.Building','b_number',$buildNo);         
     //篩選出系統別
-    $system=sql_database('sysName','FA.Equipment_System_Group','sysID',$sysNo);
+    //$system=sql_database('sysName','FA.Equipment_System_Group','sysID',$sysNo);
     //篩選出樓層別
     $floorName=sql_database('floorName','FA.BuildingFloor','floorID',$floorID);
     //篩選出班別
@@ -27,33 +27,32 @@
 
     if (isset($_POST["action"])&&($_POST["action"]=="add")) {
         $rTime= date('Y-m-d H:i:s');
-        $sys_no=$_POST["sys"];//系統ID 
+         
         //Master輸入
         $build_no=$_POST["build"];//棟別代號 
         $date_ch=$_POST["date_c"];//檢點日期
         //Detail輸入
         $shift_no=$_POST["shift"];//點檢班別ID 
         $remark=$_POST["remark"];//備註 
-        $equip_no=$_POST["equip"];//設備(鍋爐、給水、熱水......等等)ID
+        //$equip_no=$_POST["equip"];//設備(鍋爐、給水、熱水......等等)ID
         $loop_count=$_POST["loop_num"];//迴圈數量
         $floorID = $_POST["floorID"];//樓層資訊
         
-        $sql_equip_check = "SELECT equipCheckID,ref,answerMode  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$build_no' AND sysID='$sys_no' ORDER BY equipCheckName";
-        $equip_ch=$pdo->query($sql_equip_check);
-        // if (empty($equip_no)) {
-        //     $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$build_no' AND sysID='$sys_no'";
-        //     $equip_ch=$pdo->query($sql_equip_check);
-        // } else {
-        //     $sql_equip_check = "SELECT equipCheckID,ref  FROM FA.Equipment_Check WHERE floorID='$floorID'AND equipID='$equip_no'AND b_number='$build_no' AND sysID='$sys_no'";
-        //     $equip_ch=$pdo->query($sql_equip_check);
-        // }
+        
+        
         $err=0;//未填寫欄位的數量歸0
         for ($i=0; $i < $loop_count; $i++) {
-            
+            $ans_no=$_POST["$i"];
+            $q=$i+200;
+            $sys_no=$_POST["$q"];//系統ID
             $equip_id=$equip_ch->fetch();//求出點檢項目id及參考值
             $ref_no = $equip_id['ref'];
             $equip_check = $equip_id['equipCheckID'];
-            $ans_no=$_POST["$i"];
+            
+
+            $sql_equip_check = "SELECT equipCheckID,ref,answerMode  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$build_no' AND sysID='$sys_no' ORDER BY equipCheckName";
+            $equip_ch=$pdo->query($sql_equip_check);
+
             if ($equip_id['answerMode']=='plural') {
                 $qu=$_POST["b"];
                 $ans_no= implode(",", $qu);
@@ -120,14 +119,14 @@
 <body class="table_bg">
     <?PHP
     //檢查項目
-    $sql_equip_check = "SELECT equipCheckName,ref,answerMode  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo ORDER BY equipCheckName";
+    $sql_equip_check = "SELECT equipCheckName,ref,answerMode,sysID  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' ORDER BY sysID,equipCheckName";
     $query_equip=$pdo->query($sql_equip_check);
-    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' AND sysID=$sysNo";
+    $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo'";
     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
 
     echo '<div class="container border border-info mt-5">';
         echo '<form action="" method="post" name="wa">';
-            echo '<h2 class="text-center font-weight-bold">'.'中國醫藥大學附設醫院-'.$build.'--'.$system.'</h2>';
+            echo '<h2 class="text-center font-weight-bold">'.'中國醫藥大學附設醫院-'.$build.'</h2>';
             //班別/檢查者/日期欄
             echo '<div class="row my-3">';
                 echo '<div class="col">';
@@ -158,7 +157,7 @@
                 // $b[1]="";
                 // $c[0]="";
                 // $c[1]="";
-                
+                $q=$i+200;
                 $equipinfo=$query_equip->fetch(PDO::FETCH_ASSOC);
                 echo '<tbody class="text-primary">';
                     echo '<td>'.$equipinfo['equipCheckName'].'</td>';
@@ -219,7 +218,8 @@
                         default:
                             echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20'>".'</td>';
                             break;
-                    }                    
+                    }
+                    echo "<input type='hidden' name=\"".$q."\" value=\"".$equipinfo['equipCheckName']."\">";                                      
                 }
                 echo '</tbody>';
             echo '</table>';
@@ -233,9 +233,7 @@
             </div>
             <!-- 傳送值到資料庫中 -->
             <input type="hidden" name="action" value="add">
-            <input type="hidden" name="build" value='<?= $buildNo ?>'>
-            <!-- <input type="hidden" name="equip" value='<?//= $equipNo ?>'> -->
-            <input type="hidden" name="sys" value='<?= $sysNo ?>'>
+            <input type="hidden" name="build" value='<?= $buildNo ?>'>                        
             <input type="hidden" name="shift" value='<?= $shiftNo ?>'>
             <input type="hidden" name="date_c" value='<?= $check_date ?>'>
             <input type="hidden" name="loop_num" value='<?= $equip_check_no ?>'>
