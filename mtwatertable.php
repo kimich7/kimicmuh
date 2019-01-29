@@ -44,15 +44,13 @@
         for ($i=0; $i < $loop_count; $i++) {
             $ans_no=$_POST["$i"];
             $q=$i+200;
-            (INT)$sys_no=$_POST["$q"];//系統ID
-            
-            $ref_no = $equip_id['ref'];
-            $equip_check = $equip_id['equipCheckID'];
-            
+            $sys_no=$_POST["$q"];//系統ID            
 
             $sql_equip_check = "SELECT equipCheckID,ref,answerMode  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$build_no' AND sysID='$sys_no' ORDER BY equipCheckName";
             $equip_ch=$pdo->query($sql_equip_check);
             $equip_id=$equip_ch->fetch();//求出點檢項目id及參考值
+            $ref_no = $equip_id['ref'];
+            $equip_check = $equip_id['equipCheckID'];
 
             if ($equip_id['answerMode']=='plural') {
                 $qu=$_POST["b"];
@@ -220,7 +218,7 @@
                             echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20'>".'</td>';
                             break;
                     }
-                    echo "<input type='hidden' name=\"".$q."\" value=\"".$equipinfo['equipCheckName']."\">";                                      
+                    echo "<input type='hidden' name=\"".$q."\" value=\"".$equipinfo['sysID']."\">";                                      
                 }
                 echo '</tbody>';
             echo '</table>';
