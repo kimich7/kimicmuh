@@ -41,25 +41,40 @@
         
         
         $err=0;//未填寫欄位的數量歸0
-        for ($i=0; $i < $loop_count; $i++) {
-            $ans_no=$_POST["$i"];
+        for ($i=0; $i < $loop_count; $i++) {                                    
             $q=$i+200;
-            $sys_no=$_POST["$q"];//系統ID            
+            $qf=$i+400;
+            $qID=$i+600;
+            $qMode=$i+800;
 
-            $sql_equip_check = "SELECT equipCheckID,ref,answerMode  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$build_no' AND sysID='$sys_no' ORDER BY equipCheckName";
-            $equip_ch=$pdo->query($sql_equip_check);
-            $equip_id=$equip_ch->fetch();//求出點檢項目id及參考值
-            $ref_no = $equip_id['ref'];
-            $equip_check = $equip_id['equipCheckID'];
+            $ans_no=$_POST["$i"];
+            $sys_no=$_POST["$q"];//系統ID
+            $ref_no = $_POST["$qf"];//參考值
+            $equip_check = $_POST["$qID"];//點檢項目ID
+            $equip_ansMode= $_POST["$qMode"];//點檢資料型態
 
-            if ($equip_id['answerMode']=='plural') {
+            // $sql_equip_check = "SELECT answerMode  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$build_no' AND sysID='$sys_no' ORDER BY equipCheckName";
+            // $equip_ch=$pdo->query($sql_equip_check);
+            // $equip_id=$equip_ch->fetch();//求出點檢項目id及參考值
+
+            // if ($equip_id['answerMode']=='plural') {
+            //     $qu=$_POST["b"];
+            //     $ans_no= implode(",", $qu);
+            // }
+            // if ($equip_id['answerMode']=='plural_1') {
+            //     $qc=$_POST["c"];
+            //     $ans_no= implode(",", $qc);
+            // }
+
+            if ($equip_ansMode=='plural') {
                 $qu=$_POST["b"];
                 $ans_no= implode(",", $qu);
             }
-            if ($equip_id['answerMode']=='plural_1') {
+            if ($equip_ansMode=='plural_1') {
                 $qc=$_POST["c"];
                 $ans_no= implode(",", $qc);
             }
+
             $sql_master_check="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE b_number='$build_no' AND rDate='$date_ch' AND sysID=$sys_no ";
             $master_check_query=Current($pdo->query($sql_master_check)->fetch());
             if (empty($ans_no)) {
@@ -118,7 +133,7 @@
 <body class="table_bg">
     <?PHP
     //檢查項目
-    $sql_equip_check = "SELECT equipCheckName,ref,answerMode,sysID  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' ORDER BY sysID,equipCheckName";
+    $sql_equip_check = "SELECT equipCheckID,equipCheckName,ref,answerMode,sysID  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' ORDER BY sysID,equipCheckName";
     $query_equip=$pdo->query($sql_equip_check);
     $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo'";
     $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
@@ -157,6 +172,9 @@
                 // $c[0]="";
                 // $c[1]="";
                 $q=$i+200;
+                $qf=$i+400;
+                $qID=$i+600;
+                $qMode=$i+800;
                 $equipinfo=$query_equip->fetch(PDO::FETCH_ASSOC);
                 echo '<tbody class="text-primary">';
                     echo '<td>'.$equipinfo['equipCheckName'].'</td>';
@@ -218,7 +236,10 @@
                             echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20'>".'</td>';
                             break;
                     }
-                    echo "<input type='hidden' name=\"".$q."\" value=\"".$equipinfo['sysID']."\">";                                      
+                    echo "<input type='hidden' name=\"".$q."\" value=\"".$equipinfo['sysID']."\">"; 
+                    echo "<input type='hidden' name=\"".$qID."\" value=\"".$equipinfo['equipCheckID']."\">";
+                    echo "<input type='hidden' name=\"".$qf."\" value=\"".$equipinfo['ref']."\">";
+                    echo "<input type='hidden' name=\"".$qMode."\" value=\"".$equipinfo['answerMode']."\">";                                   
                 }
                 echo '</tbody>';
             echo '</table>';

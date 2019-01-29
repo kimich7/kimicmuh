@@ -47,10 +47,12 @@ if (isset($_POST["action"])&&($_POST["action"]=="update")) {
         $answerMode=$snswerQuery["answerMode"];
         if ($answerMode=='plural') {
             $qu=$_POST["b"];
-            $ans=implode(",", $qu) ;           
-            if ($ans=='1,1') {
+            $ans=implode(",", $qu) ;  
+            print_r($ans);
+            echo '</br>';         
+            if ($ans=='1,1' or $ans=='1') {
                 $ans= '1';
-            }elseif($ans=='2,2'){
+            }elseif($ans=='2,2' or $ans=='2'){
                 $ans= '2';
             }else{
                 $ans= '1,2';
@@ -58,9 +60,9 @@ if (isset($_POST["action"])&&($_POST["action"]=="update")) {
         }elseif ($answerMode=='plural_1') {
             $qc=$_POST["c"];
             $ans=implode(",", $qc);
-            if ($ans=='1,1') {
+            if ($ans=='1,1'or $ans=='1') {
                 $ans= '1';
-            }elseif($ans=='2,2'){
+            }elseif($ans=='2,2'or $ans=='2'){
                 $ans= '2';
             }else{
                 $ans= '1,2';
