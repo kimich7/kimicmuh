@@ -240,11 +240,9 @@ $(function () {
     $.getJSON("php/cookiedata.php", function (data) {
         if (data[0]["floorID"]) {
             var html = "<option value=\"" + data[0]["buildID"] + "\">" + data[0]["buildName"] + "</option>";
-            var html_floor = "<option value=\"" + data[0]["floorID"] + "\">" + data[0]["floorName"] + "</option>"
-
+            //var html_floor = "<option value=\"" + data[0]["floorID"] + "\">" + data[0]["floorName"] + "</option>"
             $("#build").html(html);
-            $("#buildingfloor").html(html_floor);
-
+            //$("#buildingfloor").html(html_floor);
         } else {
             $.getJSON("php/insertdata.php", {
                 colID: 'b_number',
@@ -308,8 +306,7 @@ $(function () {
                 $("#build").html(html);
             }
         });
-    })
-    $("#ucourtyard").change(function () {
+    }) $("#ucourtyard").change(function () {
         var cyID = $("#ucourtyard").val();
         $.getJSON("php/insertdata.php", {
             colID: 'b_number',
@@ -356,13 +353,18 @@ $(function () {
         $.getJSON("php/insertfloor.php", {
             "buildNo": buildNo
         }, function (data) {
-            var html = '<option value="" selected> 請選擇樓層 </option>';
-            for (let i = 0; i < data.length; i++) {
-                html += "<option value=\"" + data[i]["floorID"] + "\">" + data[i]["floorName"] + "</option>";
+            if (data == "") {
+                html = '<option value="" selected> 此大樓已沒有須點檢的系統 </option>';
                 $("#buildingfloor").html(html);
+            } else {
+                var html = '<option value="" selected> 請選擇樓層 </option>';
+                for (let i = 0; i < data.length; i++) {
+                    html += "<option value=\"" + data[i]["floorID"] + "\">" + data[i]["floorName"] + "</option>";
+                    $("#buildingfloor").html(html);
+                }
             }
         })
-    })
+    }).change();
 
     //mtinsert修改的選擇樓層
     $("#ubuild").change(function () {
