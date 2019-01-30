@@ -238,27 +238,27 @@ $(function () {
 
     //用getJSON讀取data內的資料(棟別)
     $.getJSON("php/cookiedata.php", function (data) {
-        if (data[0]["floorID"]) {
-            var html = "<option value=\"" + data[0]["buildID"] + "\">" + data[0]["buildName"] + "</option>";
-            var html_floor = "<option value=\"" + data[0]["floorID"] + "\">" + data[0]["floorName"] + "</option>"
+        // if (data[0]["floorID"]) {
+        //     var html = "<option value=\"" + data[0]["buildID"] + "\">" + data[0]["buildName"] + "</option>";
+        //     //var html_floor = "<option value=\"" + data[0]["floorID"] + "\">" + data[0]["floorName"] + "</option>"
 
-            $("#build").html(html);
-            $("#buildingfloor").html(html_floor);
+        //     $("#build").html(html);
+        //     //$("#buildingfloor").html(html_floor);
 
-        } else {
-            $.getJSON("php/insertdata.php", {
-                colID: 'b_number',
-                colName: 'B_name',
-                seachNo: '1'
-            }, function (data) {
-                var html = '<option value="" selected> 請選擇棟別 </option>';
-                for (let i = 0; i < data.length; i++) {
-                    html += "<option value=\"" + data[i]["b_number"] + "\">" + data[i]["B_name"] + "</option>";
-                    $("#build").html(html);
-                    $("#ubuild").html(html);
-                }
-            });
-        }
+        // } else {
+        $.getJSON("php/insertdata.php", {
+            colID: 'b_number',
+            colName: 'B_name',
+            seachNo: '1'
+        }, function (data) {
+            var html = '<option value="" selected> 請選擇棟別 </option>';
+            for (let i = 0; i < data.length; i++) {
+                html += "<option value=\"" + data[i]["b_number"] + "\">" + data[i]["B_name"] + "</option>";
+                $("#build").html(html);
+                $("#ubuild").html(html);
+            }
+        });
+        // }
     });
 
     $("#build").one("click", function () {
@@ -353,16 +353,25 @@ $(function () {
 
     $("#build").change(function () {
         var buildNo = $("#build").val();
+        var rDate = $("#bday").val();
+        var shiftID = $("#Three_shifts").val();
         $.getJSON("php/insertfloor.php", {
-            "buildNo": buildNo
+            "buildNo": buildNo,
+            "rDate": rDate,
+            "shiftID": shiftID
         }, function (data) {
-            var html = '<option value="" selected> 請選擇樓層 </option>';
-            for (let i = 0; i < data.length; i++) {
-                html += "<option value=\"" + data[i]["floorID"] + "\">" + data[i]["floorName"] + "</option>";
+            if (data == "") {
+                html = '<option value="" selected> 此大樓已沒有需要抄表的樓層 </option>';
                 $("#buildingfloor").html(html);
+            } else {
+                var html = '<option value="" selected> 請選擇樓層 </option>';
+                for (let i = 0; i < data.length; i++) {
+                    html += "<option value=\"" + data[i]["floorID"] + "\">" + data[i]["floorName"] + "</option>";
+                    $("#buildingfloor").html(html);
+                }
             }
         })
-    })
+    }); //.change();
 
     //mtinsert修改的選擇樓層
     $("#ubuild").change(function () {
@@ -398,30 +407,30 @@ $(function () {
         })
     }); //.change();不能加.change
 
-    $("#system").one("click", function () {
-        var floorID = $("#buildingfloor").val();
-        var rDate = $("#bday").val();
-        var shiftID = $("#Three_shifts").val();
-        var BuildID = $("#build").val();
-        $.getJSON("php/insertsystem.php", {
-            "floorID": floorID,
-            "rDate": rDate,
-            "shiftID": shiftID,
-            "BuildID": BuildID
-        }, function (data) {
-            var html = '';
-            if (data == "") {
-                html = '<option value="" selected> 此樓層已沒有需要點檢的系統 </option>';
-                $("#system").html(html);
-            } else {
-                html = '<option value="" selected> 請選擇系統 </option>';
-                for (let i = 0; i < data.length; i++) {
-                    html += "<option value=\"" + data[i]["sysID"] + "\">" + data[i]["sysName"] + "</option>";
-                    $("#system").html(html);
-                }
-            }
-        })
-    })
+    // $("#system").one("click", function () {
+    //     var floorID = $("#buildingfloor").val();
+    //     var rDate = $("#bday").val();
+    //     var shiftID = $("#Three_shifts").val();
+    //     var BuildID = $("#build").val();
+    //     $.getJSON("php/insertsystem.php", {
+    //         "floorID": floorID,
+    //         "rDate": rDate,
+    //         "shiftID": shiftID,
+    //         "BuildID": BuildID
+    //     }, function (data) {
+    //         var html = '';
+    //         if (data == "") {
+    //             html = '<option value="" selected> 此樓層已沒有需要點檢的系統 </option>';
+    //             $("#system").html(html);
+    //         } else {
+    //             html = '<option value="" selected> 請選擇系統 </option>';
+    //             for (let i = 0; i < data.length; i++) {
+    //                 html += "<option value=\"" + data[i]["sysID"] + "\">" + data[i]["sysName"] + "</option>";
+    //                 $("#system").html(html);
+    //             }
+    //         }
+    //     })
+    // })
 
     //mtinsert_UP依據所選的樓層選系統
     $("#ubuildingfloor").change(function () {
@@ -437,38 +446,38 @@ $(function () {
         })
     })
     //mtinsert選擇設備
-    $(".f2").change(function () {
-        var system_eq = $("#system").val();
-        var building_eq = $("#build").val();
-        var rDate = $("#bday").val();
-        var now_class = $("#Three_shifts").val();
-        var floor_eq = $("#buildingfloor").val();
-        var choiceNo = 0;
-        if (system_eq == 4) {
-            choiceNo = 1;
-        }
-        $.getJSON("php/ajax_system.php", {
-            "system_eq": system_eq,
-            "build_eq": building_eq,
-            "floor_eq": floor_eq,
-            "rDate": rDate,
-            "now_class": now_class,
-            "choiceNo": choiceNo
-        }, function (data) {
-            var html = '<option value=""> 請選擇設備/區域 </option>';
-            if (choiceNo == 1) {
-                for (let i = 0; i < data.length; i++) {
-                    html += "<option value=\"" + data[i]["zoneNo"] + "\">" + data[i]["zoneName"] + "</option>";
-                    $("#equipment").html(html);
-                }
-            } else {
-                for (let i = 0; i < data.length; i++) {
-                    html += "<option value=\"" + data[i]["equipID"] + "\">" + data[i]["equipName"] + "</option>";
-                    $("#equipment").html(html);
-                }
-            }
-        });
-    });
+    // $(".f2").change(function () {
+    //     var system_eq = $("#system").val();
+    //     var building_eq = $("#build").val();
+    //     var rDate = $("#bday").val();
+    //     var now_class = $("#Three_shifts").val();
+    //     var floor_eq = $("#buildingfloor").val();
+    //     var choiceNo = 0;
+    //     if (system_eq == 4) {
+    //         choiceNo = 1;
+    //     }
+    //     $.getJSON("php/ajax_system.php", {
+    //         "system_eq": system_eq,
+    //         "build_eq": building_eq,
+    //         "floor_eq": floor_eq,
+    //         "rDate": rDate,
+    //         "now_class": now_class,
+    //         "choiceNo": choiceNo
+    //     }, function (data) {
+    //         var html = '<option value=""> 請選擇設備/區域 </option>';
+    //         if (choiceNo == 1) {
+    //             for (let i = 0; i < data.length; i++) {
+    //                 html += "<option value=\"" + data[i]["zoneNo"] + "\">" + data[i]["zoneName"] + "</option>";
+    //                 $("#equipment").html(html);
+    //             }
+    //         } else {
+    //             for (let i = 0; i < data.length; i++) {
+    //                 html += "<option value=\"" + data[i]["equipID"] + "\">" + data[i]["equipName"] + "</option>";
+    //                 $("#equipment").html(html);
+    //             }
+    //         }
+    //     });
+    // });
 
 
     //異常表單填寫上傳
