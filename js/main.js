@@ -116,21 +116,26 @@ $(function () {
             $(".maindata" + i).html(data[i].name).attr("href", data[i].url);
         }
     });
+    //工務設備運轉抄表文件新增表單 mtinsert.html
     $(".maindata0").click(function () {
         $.getJSON("json/mainlist.json", function (data) {
             $("#cardSendBtn1").attr("href", data[0].url);
         });
     });
+    //工務設備運轉抄表文件修改表單 mtupdata.html
     $(".maindata1").click(function () {
         $.getJSON("json/mainlist.json", function (data) {
             $("#cardSendBtn1").attr("href", data[1].url);
         });
     });
+
+    //務設備保養紀錄文件新增表單
     $(".maindata3").click(function () {
         $.getJSON("json/mainlist.json", function (data) {
             $("#cardSendBtn1").attr("href", data[3].url);
         });
     });
+    //工務設備保養紀錄文件修改表單
     $(".maindata4").click(function () {
         $.getJSON("json/mainlist.json", function (data) {
             $("#cardSendBtn1").attr("href", data[4].url);

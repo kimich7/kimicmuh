@@ -1,7 +1,14 @@
 <?php
+session_start();
 setcookie('date',$_GET["rankdate"]);//抄寫日期進Cookie
 setcookie('shift',$_GET["rank"]);//班別ID進Cookie
 setcookie('courtyard',$_GET["courtyard"]);//院區 進Cookie
+
+$userID=$_SESSION["login_number"];
+$user=$_SESSION["login_member"];
+$loginAutho = $_SESSION["login_authority"];
+
+
 // setcookie('className',$class);
 $date = $_GET["rankdate"];
 $rank = $_GET["rank"];//班別

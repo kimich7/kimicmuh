@@ -4,10 +4,10 @@
     $floorArray=array();
     $floorArray1=array();
 
-    // $date =$_REQUEST["rDate"];
-    // $shift =$_REQUEST["shiftID"];
-    $date =$_COOKIE["date"];
-    $shift =$_COOKIE["shift"];
+    $date =$_REQUEST["rDate"];
+    $shift =$_REQUEST["shiftID"];
+    //$date =$_COOKIE["date"];
+    //$shift =$_COOKIE["shift"];
 
     if (!empty($_REQUEST["buildNo"])) {
         $buildNo=$_REQUEST["buildNo"];        
@@ -19,12 +19,14 @@
             $floorCheck=array();
             $floorUnit=array();
             $MasterID=item("SELECT recordID FROM FA.Water_System_Record_Master WHERE b_number='$buildNo' AND rDate='$date'");
-            for ($i=0; $i < $check_right; $i++) {                     
+            print_r($MasterID);
+            echo '</br>';
+            for ($i=0; $i < $check_right; $i++) {
                 $floorCheck[$i]=$MasterID[$i]["recordID"];
                 $test=item("SELECT DISTINCT floorID FROM FA.Water_System_Record_Detail where recordID=$floorCheck[$i] AND shiftID=$shift");
                 foreach ($test as $value) {
                     $test=$value["floorID"];
-                    $a[]=$test;                        
+                    $a[]=$test;         
                 }                    
             }           
             $b=array_unique($a);
