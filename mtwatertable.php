@@ -5,7 +5,7 @@
     session_start();
     if (empty($_SESSION["login_member"])) {
         echo '<h2>'.'尚未登錄，無法進行設備抄表，請先登錄後再重新執行'.'</h2>';
-        header("refresh:3;url= http://127.0.0.1/CMUH/index.html");
+        header("refresh:3;url= index.html");
     } else {
         $user=$_SESSION["login_member"];
         $userID=sql_database('e_number','FA.Employee','cname',$user);

@@ -4,10 +4,10 @@
     $floorArray=array();
     $floorArray1=array();
 
-    $date =$_REQUEST["rDate"];
-    $shift =$_REQUEST["shiftID"];
-    //$date =$_COOKIE["date"];
-    //$shift =$_COOKIE["shift"];
+    //$date =$_REQUEST["rDate"];
+    //$shift =$_REQUEST["shiftID"];
+    $date =$_COOKIE["date"];
+    $shift =$_COOKIE["shift"];
 
     if (!empty($_REQUEST["buildNo"])) {
         $buildNo=$_REQUEST["buildNo"];        
