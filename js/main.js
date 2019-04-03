@@ -332,16 +332,49 @@ $(function () {
     //mtinsert選擇樓層
     $("#buildingfloor").one("click", function () {
         var buildNo = $("#build").val();
+        var rDate = $("#bday").val();
+        var shiftID = $("#Three_shifts").val();
         $.getJSON("php/insertfloor.php", {
-            "buildNo": buildNo
+            "buildNo": buildNo,
+            "rDate": rDate,
+            "shiftID": shiftID
         }, function (data) {
             var html = '<option value="" selected> 請選擇樓層 </option>';
+            console.log(data);
             for (let i = 0; i < data.length; i++) {
                 html += "<option value=\"" + data[i]["floorID"] + "\">" + data[i]["floorName"] + "</option>";
                 $("#buildingfloor").html(html);
             }
         })
     }).change();
+
+    // $("#buildingfloor").on("click", function () {
+    //     var buildNo = $("#build").val();
+    //     var rDate = $("#bday").val();
+    //     var shiftID = $("#Three_shifts").val();
+    //     $.ajax({
+    //         url: 'php/insertfloor.php',
+    //         cache: false,
+    //         type: 'get',
+    //         fileElementId: 'file',
+    //         datatype: 'JSON',
+    //         data: {
+    //             "buildNo": buildNo,
+    //             "rDate": rDate,
+    //             "shiftID": shiftID
+    //         },
+    //         success: function (data) {
+    //             var html = '<option value="" selected> 請選擇樓層 </option>';
+    //             for (let i = 0; i < data.length; i++) {
+    //                 html += "<option value=\"" + data[i]["floorID"] + "\">" + data[i]["floorName"] + "</option>";
+    //                 $("#buildingfloor").html(html);
+    //             }
+    //         },
+    //         error: function (e) {
+    //             console.log(e.message);
+    //         }
+    //     })
+    // }).change();
 
     $("#ubuildingfloor").one("click", function () {
         var buildNo = $("#build").val();
@@ -393,24 +426,24 @@ $(function () {
     })
 
     //mtinsert依據所選的樓層選系統
-    $("#buildingfloor").change(function () {
-        var floorID = $("#buildingfloor").val();
-        var rDate = $("#bday").val();
-        var shiftID = $("#Three_shifts").val();
-        var BuildID = $("#build").val();
-        $.getJSON("php/insertsystem.php", {
-            "floorID": floorID,
-            "rDate": rDate,
-            "shiftID": shiftID,
-            "BuildID": BuildID
-        }, function (data) {
-            var html = '<option value="" selected> 請選擇系統 </option>';
-            for (let i = 0; i < data.length; i++) {
-                html += "<option value=\"" + data[i]["sysID"] + "\">" + data[i]["sysName"] + "</option>";
-                $("#system").html(html);
-            }
-        })
-    }); //.change();不能加.change
+    // $("#buildingfloor").change(function () {
+    //     var floorID = $("#buildingfloor").val();
+    //     var rDate = $("#bday").val();
+    //     var shiftID = $("#Three_shifts").val();
+    //     var BuildID = $("#build").val();
+    //     $.getJSON("php/insertsystem.php", {
+    //         "floorID": floorID,
+    //         "rDate": rDate,
+    //         "shiftID": shiftID,
+    //         "BuildID": BuildID
+    //     }, function (data) {
+    //         var html = '<option value="" selected> 請選擇系統 </option>';
+    //         for (let i = 0; i < data.length; i++) {
+    //             html += "<option value=\"" + data[i]["sysID"] + "\">" + data[i]["sysName"] + "</option>";
+    //             $("#system").html(html);
+    //         }
+    //     })
+    // }); //.change();不能加.change
 
     // $("#system").one("click", function () {
     //     var floorID = $("#buildingfloor").val();

@@ -120,6 +120,7 @@
             if ($err>=1) {//如果欄位沒有填寫就做下面的處理
                 echo "<script>alert('有部分項目未填寫就送出，下次要補上時請選擇修改的方式')</script>";
                 header("Location: mtinsert.html");
+                //header("refresh:3;url= mtinsert.html");
                 //echo "<script>window.close();</script>";
             } else {
                 header("Location: mtinsert.html");
