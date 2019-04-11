@@ -3,6 +3,9 @@
     include("php/fun.php");
     
     session_start();
+
+    
+
     if (empty($_SESSION["login_member"])) {
         echo '<h2>'.'尚未登錄，無法進行設備抄表，請先登錄後再重新執行'.'</h2>';
         header("refresh:3;url= index.html");
@@ -32,9 +35,8 @@
         } else {
             $floorID=$_GET["buildingfloor"];//棟別
         }
-        //$buildNo=$_GET["build"];//棟別   
-        //$floorID=$_GET["buildingfloor"];//樓層
-        //SQL Binding
+               
+        
         //篩選出棟別
         $build=sql_database('B_name','FA.Building','b_number',$buildNo);
         //篩選出系統別
@@ -42,6 +44,7 @@
         //篩選出樓層別
         $floorName=sql_database('floorName','FA.BuildingFloor','floorID',$floorID);
         //篩選出班別
+
         if (isset($_POST["action"])&&($_POST["action"]=="add")) {
             $rTime= date('Y-m-d H:i:s');
             if (empty($_POST["shift"])) {                
@@ -152,126 +155,132 @@
 
     <body class="table_bg">
         <?PHP
-        //檢查項目
-        $sql_equip_check = "SELECT equipCheckID,equipCheckName,ref,answerMode,sysID  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' ORDER BY sysID,equipCheckName";
-        $query_equip=$pdo->query($sql_equip_check);
-        $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo'";
-        $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
+        $tablecheck=tableCheck($check_date,$floorID);
+        if ($tablecheck!=0) {
+            echo '<h2>'.'此樓層今天已經抄寫完成，如需修改請從修改表單進入，三秒後回到抄表選擇頁面'.'</h2>';
+            header("refresh:3;url= mtinsert.html");
+        } else {
+            //檢查項目
+            $sql_equip_check = "SELECT equipCheckID,equipCheckName,ref,answerMode,sysID  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' ORDER BY sysID,equipCheckName";
+            $query_equip=$pdo->query($sql_equip_check);
+            $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo'";
+            $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
 
-        echo '<div class="container border border-info mt-5">';
-            echo '<form action="" method="post" name="wa">';
-                echo '<h2 class="text-center font-weight-bold">'.'中國醫藥大學附設醫院-'.$build.'</h2>';
-                //班別/檢查者/日期欄
-                echo '<div class="row my-3">';
-                    echo '<div class="col">';
-                        echo '<p class="d-inline font-weight-bold">班別：</p>';                    
-                        if (empty($_GET["class"])) {
-                            echo '<select class="form-control mb-3" name="qr_class" id="qr_Three_shifts">';
-                                echo '<option selected>請選擇班別</option>';
-                                echo '<option value="1">早班</option>';
-                                echo '<option value="2">中班</option>';
-                                echo '<option value="3">晚班</option>';
-                            echo '</select>';
-                        } else {
-                            echo '<p class="d-inline text-primary">'.$class.'</p>';
+            echo '<div class="container border border-info mt-5">';
+                echo '<form action="" method="post" name="wa">';
+                    echo '<h2 class="text-center font-weight-bold">'.'中國醫藥大學附設醫院-'.$build.'</h2>';
+                    //班別/檢查者/日期欄
+                    echo '<div class="row my-3">';
+                        echo '<div class="col">';
+                            echo '<p class="d-inline font-weight-bold">班別：</p>';                    
+                            if (empty($_GET["class"])) {
+                                echo '<select class="form-control mb-3" name="qr_class" id="qr_Three_shifts">';
+                                    echo '<option selected>請選擇班別</option>';
+                                    echo '<option value="1">早班</option>';
+                                    echo '<option value="2">中班</option>';
+                                    echo '<option value="3">晚班</option>';
+                                echo '</select>';
+                            } else {
+                                echo '<p class="d-inline text-primary">'.$class.'</p>';
+                            }
+                        echo '</div>';
+                        echo '<div class="col text-center">';
+                            echo '<p class="d-inline font-weight-bold">巡檢人員：</p>';
+                            echo '<p class="d-inline text-primary">'.$user.'</p>';
+                        echo '</div>';
+                        echo '<div class="col text-right">';
+                            echo '<p class="d-inline font-weight-bold">檢查日期：</p>';
+                            echo '<p class="d-inline text-primary">'.$check_date.'</p>';
+                        echo '</div>';
+                    echo '</div>';
+                    
+                    //表格主體
+                    echo '<table class="table my-5">';
+                        echo '<thead>';
+                            echo '<th>檢查項目</th>';
+                            echo '<th>參考值</th>';
+                            echo '<th>結果</th>';
+                        echo '</thead>';                
+                        for ($i=0; $i < $equip_check_no; $i++) { 
+                        // $b=array();
+                        // $c=array();
+                        // $b[0]="";
+                        // $b[1]="";
+                        // $c[0]="";
+                        // $c[1]="";
+                        $q=$i+200;
+                        $qf=$i+400;
+                        $qID=$i+600;
+                        $qMode=$i+800;
+                        $equipinfo=$query_equip->fetch(PDO::FETCH_ASSOC);
+                        echo '<tbody class="text-primary">';
+                            echo '<td>'.$equipinfo['equipCheckName'].'</td>';
+                            echo '<td>'.$equipinfo["ref"].'</td>';                    
+                            switch ($equipinfo["answerMode"]) {
+                                case 'choiceTF':
+                                    echo '<td>';
+                                        echo "<input type='radio' name=\"".$i."\" value='true'>合格";
+                                        echo "<input type='radio' name=\"".$i."\" value='false'>不合格";
+                                    echo '</td>';
+                                    break;
+                                case 'choiceHA':
+                                    echo '<td>';
+                                        echo "<input type='radio' name=\"".$i."\" value='handle'>手動";
+                                        echo "<input type='radio' name=\"".$i."\" value='auto'>自動";
+                                    echo '</td>';
+                                    break;
+                                case 'choiceFN':
+                                    echo '<td>';
+                                        echo "<input type='radio' name=\"".$i."\" value='OFF'>OFF";
+                                        echo "<input type='radio' name=\"".$i."\" value='ON'>ON";
+                                    echo '</td>';
+                                    break;
+                                case 'choiceRL':
+                                    echo '<td>';
+                                        echo "<input type='radio' name=\"".$i."\" value='remote'>遠端";
+                                        echo "<input type='radio' name=\"".$i."\" value='local'>本地";
+                                    echo '</td>';
+                                    break;
+                                case 'choiceS12':
+                                    echo '<td>';
+                                        echo "<input type='radio' name=\"".$i."\" value='S1'>S1";
+                                        echo "<input type='radio' name=\"".$i."\" value='S2'>S2";
+                                    echo '</td>';
+                                    break;
+                                case 'choiceRG':
+                                    echo '<td>';
+                                        echo "<input type='radio' name=\"".$i."\" value='red'>紅";
+                                        echo "<input type='radio' name=\"".$i."\" value='green'>綠";
+                                    echo '</td>';
+                                    break;
+                                case 'plural':
+                                    echo '<td>';
+                                    ?>                                
+                                        <input type='checkbox' name="b[]" value='1'>1&nbsp&nbsp
+                                        <input type='checkbox' name="b[]" value='2'>2
+                                    <?php
+                                    echo '</td>';
+                                    break;
+                                case 'plural_1':
+                                    echo '<td>';
+                                    ?>                                
+                                        <input type='checkbox' name="c[]" value='1'>1&nbsp&nbsp
+                                        <input type='checkbox' name="c[]" value='2'>2
+                                    <?php
+                                    echo '</td>';
+                                    break;
+                                default:
+                                    echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20'>".'</td>';
+                                    break;
+                            }
+                            echo "<input type='hidden' name=\"".$q."\" value=\"".$equipinfo['sysID']."\">"; 
+                            echo "<input type='hidden' name=\"".$qID."\" value=\"".$equipinfo['equipCheckID']."\">";
+                            echo "<input type='hidden' name=\"".$qf."\" value=\"".$equipinfo['ref']."\">";
+                            echo "<input type='hidden' name=\"".$qMode."\" value=\"".$equipinfo['answerMode']."\">";                                   
                         }
-                    echo '</div>';
-                    echo '<div class="col text-center">';
-                        echo '<p class="d-inline font-weight-bold">巡檢人員：</p>';
-                        echo '<p class="d-inline text-primary">'.$user.'</p>';
-                    echo '</div>';
-                    echo '<div class="col text-right">';
-                        echo '<p class="d-inline font-weight-bold">檢查日期：</p>';
-                        echo '<p class="d-inline text-primary">'.$check_date.'</p>';
-                    echo '</div>';
-                echo '</div>';
-                
-                //表格主體
-                echo '<table class="table my-5">';
-                    echo '<thead>';
-                        echo '<th>檢查項目</th>';
-                        echo '<th>參考值</th>';
-                        echo '<th>結果</th>';
-                    echo '</thead>';                
-                    for ($i=0; $i < $equip_check_no; $i++) { 
-                    // $b=array();
-                    // $c=array();
-                    // $b[0]="";
-                    // $b[1]="";
-                    // $c[0]="";
-                    // $c[1]="";
-                    $q=$i+200;
-                    $qf=$i+400;
-                    $qID=$i+600;
-                    $qMode=$i+800;
-                    $equipinfo=$query_equip->fetch(PDO::FETCH_ASSOC);
-                    echo '<tbody class="text-primary">';
-                        echo '<td>'.$equipinfo['equipCheckName'].'</td>';
-                        echo '<td>'.$equipinfo["ref"].'</td>';                    
-                        switch ($equipinfo["answerMode"]) {
-                            case 'choiceTF':
-                                echo '<td>';
-                                    echo "<input type='radio' name=\"".$i."\" value='true'>合格";
-                                    echo "<input type='radio' name=\"".$i."\" value='false'>不合格";
-                                echo '</td>';
-                                break;
-                            case 'choiceHA':
-                                echo '<td>';
-                                    echo "<input type='radio' name=\"".$i."\" value='handle'>手動";
-                                    echo "<input type='radio' name=\"".$i."\" value='auto'>自動";
-                                echo '</td>';
-                                break;
-                            case 'choiceFN':
-                                echo '<td>';
-                                    echo "<input type='radio' name=\"".$i."\" value='OFF'>OFF";
-                                    echo "<input type='radio' name=\"".$i."\" value='ON'>ON";
-                                echo '</td>';
-                                break;
-                            case 'choiceRL':
-                                echo '<td>';
-                                    echo "<input type='radio' name=\"".$i."\" value='remote'>遠端";
-                                    echo "<input type='radio' name=\"".$i."\" value='local'>本地";
-                                echo '</td>';
-                                break;
-                            case 'choiceS12':
-                                echo '<td>';
-                                    echo "<input type='radio' name=\"".$i."\" value='S1'>S1";
-                                    echo "<input type='radio' name=\"".$i."\" value='S2'>S2";
-                                echo '</td>';
-                                break;
-                            case 'choiceRG':
-                                echo '<td>';
-                                    echo "<input type='radio' name=\"".$i."\" value='red'>紅";
-                                    echo "<input type='radio' name=\"".$i."\" value='green'>綠";
-                                echo '</td>';
-                                break;
-                            case 'plural':
-                                echo '<td>';
-                                ?>                                
-                                    <input type='checkbox' name="b[]" value='1'>1&nbsp&nbsp
-                                    <input type='checkbox' name="b[]" value='2'>2
-                                <?php
-                                echo '</td>';
-                                break;
-                            case 'plural_1':
-                                echo '<td>';
-                                ?>                                
-                                    <input type='checkbox' name="c[]" value='1'>1&nbsp&nbsp
-                                    <input type='checkbox' name="c[]" value='2'>2
-                                <?php
-                                echo '</td>';
-                                break;
-                            default:
-                                echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20'>".'</td>';
-                                break;
-                        }
-                        echo "<input type='hidden' name=\"".$q."\" value=\"".$equipinfo['sysID']."\">"; 
-                        echo "<input type='hidden' name=\"".$qID."\" value=\"".$equipinfo['equipCheckID']."\">";
-                        echo "<input type='hidden' name=\"".$qf."\" value=\"".$equipinfo['ref']."\">";
-                        echo "<input type='hidden' name=\"".$qMode."\" value=\"".$equipinfo['answerMode']."\">";                                   
-                    }
-                    echo '</tbody>';
-                echo '</table>';
+                        echo '</tbody>';
+                    echo '</table>';
+        
             ?>
                 <!-- 備註欄 -->
                 <div class="input-group">
@@ -291,8 +300,8 @@
                 <div class="d-flex justify-content-end">
                     <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>
                 </div>                           
-            </form>
-        </div>
+            </form><?php
+        }?></div>
     </body>
     </html><?php
     }
