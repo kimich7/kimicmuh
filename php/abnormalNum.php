@@ -1,4 +1,5 @@
 <?php
+    //判斷有多少還沒有指派的案件
     include("CMUHconndata.php");
     include("fun.php");
     $num1=array();

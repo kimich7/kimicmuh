@@ -1,4 +1,6 @@
 <?php
+
+    //計算你有幾個還沒有完成的案件
     include("CMUHconndata.php");
     include("fun.php");
     session_start();

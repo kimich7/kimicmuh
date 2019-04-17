@@ -1,4 +1,5 @@
 <?php
+//判斷未審核的異常事件有幾件
     include("CMUHconndata.php");
     include("fun.php");
     $num1=array();
