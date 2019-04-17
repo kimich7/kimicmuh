@@ -105,10 +105,20 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
                     echo '<td>'.$abDescription.'</td>';
                 echo '</tr>';
                 if ($abPhotourl) {
+                    $checkstr=substr($abPhotourl, -4);
+                    $checkstr4=substr($abPhotourl, -5);
+                    if ($checkstr=='.jpg' or $checkstr=='.gif' or $checkstr=='.png' or $checkstr4=='.jpeg') {
                         echo '<tr>';
-                            echo '<td>照片</td>';
+                            echo '<td>附件</td>';
                             echo '<td>'."<IMG SRC=\"".$abPhotourl."\" ALT='圖面顯示失敗'ALIGN='MIDDLE' BORDER=0 HSPACE=2 VSPACE=2 HEIGHT=640 WIDTH=640>". '</td>';
                         echo"</tr>";
+                    } else {
+                        $filename='http://localhost/CMUH/'.$abPhotourl;
+                        echo '<tr>';
+                            echo '<td>附件</td>';
+                            echo '<td>檔案非圖片檔，是否要開啟</BR></BR>'."<input type='button' value='開啟檔案' class='text-dark my-3 px-3 py-1 btn-outline-info' onclick = 'window.open(\"".$filename."\")'>".'</td>';        
+                        echo"</tr>";
+                    }                       
                 }
                 echo '<tr>';    
                     echo '<td>問題處理描述</td>';

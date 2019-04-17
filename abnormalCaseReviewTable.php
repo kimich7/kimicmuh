@@ -127,20 +127,40 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
                     echo '<td>'.$abDescription.'</td>';
                 echo '</tr>';
                 if ($abPhotourl) {
+                    $checkstr=substr($abPhotourl, -4);
+                    $checkstr4=substr($abPhotourl, -5);
+                    if ($checkstr=='.jpg' or $checkstr=='.gif' or $checkstr=='.png' or $checkstr4=='.jpeg') {
                         echo '<tr>';
-                            echo '<td>照片</td>';
+                            echo '<td>附件</td>';
                             echo '<td>'."<IMG SRC=\"".$abPhotourl."\" ALT='圖面顯示失敗'ALIGN='MIDDLE' BORDER=0 HSPACE=2 VSPACE=2 HEIGHT=640 WIDTH=640>". '</td>';
                         echo"</tr>";
+                    } else {
+                        $filename='http://localhost/CMUH/'.$abPhotourl;
+                        echo '<tr>';
+                            echo '<td>附件</td>';
+                            echo '<td>檔案非圖片檔，是否要開啟</BR></BR>'."<input type='button' value='開啟檔案' class='text-dark my-3 px-3 py-1 btn-outline-info' onclick = 'window.open(\"".$filename."\")'>".'</td>';        
+                        echo"</tr>";
+                    }                       
                 }
                 echo '<tr>';    
                     echo '<td>處理情形描述</td>';
                     echo '<td>'.$adAns.'</td>';
-                echo '</tr>';
+                echo '</tr>';                
                 if ($abAnsPhoto) {
-                    echo '<tr>';
-                        echo '<td>改善後照片</td>';
-                        echo '<td>'."<IMG SRC=\"".$abAnsPhoto."\" ALT='圖面顯示失敗'ALIGN='MIDDLE' BORDER=0 HSPACE=2 VSPACE=2 HEIGHT=640 WIDTH=640>". '</td>';
-                    echo"</tr>";
+                    $checkAns=substr($abAnsPhoto, -4);
+                    $checkAns4=substr($abAnsPhoto, -5);
+                    if ($checkAns=='.jpg' or $checkAns=='.gif' or $checkAns=='.png' or $checkAns4=='.jpeg') {
+                        echo '<tr>';
+                            echo '<td>改善後附件</td>';
+                            echo '<td>'."<IMG SRC=\"".$abAnsPhoto."\" ALT='圖面顯示失敗'ALIGN='MIDDLE' BORDER=0 HSPACE=2 VSPACE=2 HEIGHT=640 WIDTH=640>". '</td>';
+                        echo"</tr>";
+                    } else {
+                        $fileAnsname='http://localhost/CMUH/'.$abAnsPhoto;
+                        echo '<tr>';
+                            echo '<td>改善後附件</td>';
+                            echo '<td>檔案非圖片檔，是否要開啟</BR></BR>'."<input type='button' value='開啟檔案' class='text-dark my-3 px-3 py-1 btn-outline-info' onclick = 'window.open(\"".$fileAnsname."\")'>".'</td>';        
+                        echo"</tr>";
+                    }                       
                 }
                 echo '</tbody>';
             echo '</table>';
