@@ -565,7 +565,7 @@
                 echo '<div class="row my-3">';
                     echo '<div class="col text-left">';
                     echo '<p class="d-inline font-weight-bold">主管：</p>';
-                    echo '<p class="d-inline text-primary">'.$checkuser.'</p>';
+                    echo '<p class="d-inline text-primary">'.$checkuser.'&nbsp&nbsp;</p>';
                     echo '<p class="d-inline font-weight-bold" name="reMumber"><input type="checkbox" name="mgrCheck" value="mgcheck">主管確認</p>';
                     echo '</div>';
                     echo '<div class="col text-right">';

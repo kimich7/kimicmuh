@@ -129,16 +129,20 @@ $(function () {
         });
     });
 
+    //20190419新增
+
+    //--END--
+
     //務設備保養紀錄文件新增表單
-    $(".maindata3").click(function () {
-        $.getJSON("json/mainlist.json", function (data) {
-            $("#cardSendBtn1").attr("href", data[3].url);
-        });
-    });
-    //工務設備保養紀錄文件修改表單
     $(".maindata4").click(function () {
         $.getJSON("json/mainlist.json", function (data) {
             $("#cardSendBtn1").attr("href", data[4].url);
+        });
+    });
+    //工務設備保養紀錄文件修改表單
+    $(".maindata5").click(function () {
+        $.getJSON("json/mainlist.json", function (data) {
+            $("#cardSendBtn1").attr("href", data[5].url);
         });
     });
 
