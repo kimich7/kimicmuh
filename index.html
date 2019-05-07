@@ -118,13 +118,58 @@
         <div class="mainMenu">
             <div class="text-muted">
                 <i class="fas fa-7x fa-bell my-3"></i>
-                <h2>異常反應系統</h2>
+                <h2>異常反應/工程管理系統</h2>
+
+                <!--20190503修改--->
                 <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom"
+                    title="請登入相應權限帳號已解鎖">
+                    <button style="pointer-events: none;" type="button" class="mainBtn autho3" data-toggle="collapse"
+                        data-target="#article3" id="mainBtn3" disabled>點我進入</button>
+                </span>
+
+                <!-- <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom"
                     title="請登入相應權限帳號已解鎖">
                     <button style="pointer-events: none;" type="button" class="mainBtn autho3 mt-5" id="errbtn"
                         data-toggle="modal" data-target="#ModalCenter3" disabled>點我進入</button>
-                </span>
+                </span> -->
             </div>
+
+            <div>
+                <article class="my-3 collapse" id="article3">
+                    <ul class="syslist list-group" id="syslist3"></ul>
+                    <li class="list-group-item">
+                        <a class="text-dark " id="errbtn" data-toggle="modal" href="#ModalCenter3">異常反應系統</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="pmc.php" class="text-dark">工程管理系統</a>
+                    </li>
+                    <!-- data-target="#ModalCenter3"<li class="list-group-item"> mainBtn autho3 mt-5
+                                </li> -->
+                    <!-- <li class="list-group-item">
+                                    <a class="text-dark maindata9"></a>
+                                </li> -->
+                </article>
+
+                <!-- <article class="my-3 collapse" id="article1">
+                    <ul class="syslist list-group" id="syslist1"></ul>
+                    <li class="list-group-item">
+                        <a href="" class="text-dark maindata0" data-toggle="modal" data-target="#ModalCenter1"></a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="" class="text-dark maindata1" data-toggle="modal" data-target="#ModalCenter1"></a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="text-dark maindata2"></a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="text-dark maindata3"></a>
+                    </li>
+                </article> -->
+
+
+
+            </div>
+
         </div>
         <!-- 主選單:中央彙整系統 -->
         <div class="mainMenu">
@@ -133,13 +178,13 @@
                 <h2>中央彙整系統</h2>
                 <span class="billBoard1" tabindex="0" data-toggle="tooltip" data-placement="bottom"
                     title="請登入相應權限帳號已解鎖">
-                    <button style="pointer-events: none;" type="button" data-toggle="collapse" data-target="#article3"
+                    <button style="pointer-events: none;" type="button" data-toggle="collapse" data-target="#article4"
                         class="mainBtn autho1 mt-5" disabled>點我進入</button>
                 </span>
             </div>
             <!-- 中央彙整系統選單 -->
             <div>
-                <article class="my-3 collapse" id="article3">
+                <article class="my-3 collapse" id="article4">
                     <ul class="syslist list-group" id="syslist3"></ul>
                     <li class="list-group-item">
                         <a class="text-dark maindata8"></a>
@@ -196,7 +241,7 @@
                 </div>
             </div>
         </div>
-        <!-- 異常表單 -->
+        <!-- 異常表單卡片 -->
         <form action="abnormal.php" method="post" enctype="multipart/form-data">
             <div class="modal fade" id="ModalCenter3" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle"
                 aria-hidden="true">
