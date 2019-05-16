@@ -155,7 +155,7 @@
 
     <body class="table_bg">
         <?PHP
-        $tablecheck=tableCheck($check_date,$floorID);
+        $tablecheck=tableCheck($check_date,$floorID,$shiftNo);
         if ($tablecheck!=0) {
             echo '<h2>'.'此樓層今天已經抄寫完成，如需修改請從修改表單進入，三秒後回到抄表選擇頁面'.'</h2>';
             header("refresh:3;url= mtinsert.html");

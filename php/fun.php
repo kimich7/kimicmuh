@@ -81,9 +81,13 @@
     }
 
     //確認抄表系統該樓層今天抄過表沒
-    function tableCheck($rDate,$floor){
+    function tableCheck($rDate,$floor,$shiftNo){
         include("CMUHconndata.php");
-        $str="SELECT COUNT(recordDetailID) FROM FA.Water_System_Record_Detail where rDate='$rDate' AND floorID='$floor'";
+        if (isset($shiftNo) AND $shiftNo!="") {
+            $str="SELECT COUNT(recordDetailID) FROM FA.Water_System_Record_Detail where rDate='$rDate' AND floorID='$floor' AND shiftID=$shiftNo";
+        } else {
+            $str="SELECT COUNT(recordDetailID) FROM FA.Water_System_Record_Detail where rDate='$rDate' AND floorID='$floor'";
+        }
         $strnum=Current($pdo->query($str)->fetch());
         return $strnum;
     }
