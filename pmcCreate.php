@@ -26,16 +26,18 @@ while ($row=$querypmcty->fetch()) {
 
 if (isset($_POST["pmcaction"])&&($_POST["pmcaction"]=="add")) {
     $rTime= date('Y-m-d H:i:s');//日期
-    $id=$_POST["pmcid"];//id
+    //$id=$_POST["pmcid"];//id
+    $id=$_POST['pmchidden'];
     $empid=$_POST["pmccaseofficer"];//empoly
     $pmctype=$_POST["pmctype"];//pmctypeid
     $pmctypname=sql_database('typename','FA.pmctype','id',$pmctype);//pmctypename
     $title=$_POST["pmcname"];//工程名稱
-    $pmcfield=$_POST["pmcaction"];//地點
-
-    $insertstr="INSERT INTO FA.pmc(id,e_number,category,title,createdOn,building) VALUES ('$id','$empid','$pmctypname','$title','$rTime','$pmcfield') ";
+    $pmcfield=$_POST["pmczone"];//地點
+    //echo '我是id'.$id;
+    $insertstr="INSERT INTO FA.pmc(id,e_number,category,title,createdOn,building,status) VALUES ('$id','$empid','$pmctypname','$title','$rTime','$pmcfield','W') ";
     $insertquery =$pdo->exec($insertstr);
     $pdo=null;
+    
     header("Location: pmc.php");
 
 }
@@ -80,7 +82,7 @@ if (isset($_POST["pmcaction"])&&($_POST["pmcaction"]=="add")) {
                             <h2 class="text-center mb-4">新增工程</h2>
                             <!-- 單號 -->
                             <P>工程編號: </P>
-                            <input class="form-control mb-3" type='text' name="pmcid" id="pmcid" DISABLED>
+                            <Input class="form-control mb-3" type='text' name="pmcid" id="pmcid" Disabled>
                             <!--工程名稱 -->
                             <P>工程名稱: </P>
                             <textarea class="form-control" rows="5" name="pmcname" id="pmcname" required></textarea>                              
@@ -104,6 +106,7 @@ if (isset($_POST["pmcaction"])&&($_POST["pmcaction"]=="add")) {
                             <p>工程範圍/區域：</p>
                             <input class="form-control mb-3" type='text' name="pmczone" id="pmczone" value='請輸入工程範圍/區域。ex.BCG棟或全院......等'>
                             <input type="hidden" name="pmcaction" value="add">
+                            <input type="hidden" name="pmchidden">
                             <!-- 送出鍵 -->
                             <div class="d-flex justify-content-end">                                
                                 <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom"
@@ -130,7 +133,11 @@ function time_rota()  //日期
     var h = (now.getHours()>9)  ? now.getHours()  : "0"+now.getHours();
     var mm = (now.getMinutes()>9)  ? now.getMinutes()  : "0"+now.getMinutes();
     var s = (now.getSeconds()>9)  ? now.getSeconds()  : "0"+now.getSeconds();
-    document.formpmc.pmcid.value = y+m+d+h+mm+s; 
+    var id=y+m+d+h+mm+s; 
+    //$("#pmcid").html(id);
+    document.formpmc.pmcid.value = id;
+    document.formpmc.pmchidden.value = id;
+
 } 
 </script> 
 </html>

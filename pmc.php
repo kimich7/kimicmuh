@@ -20,10 +20,8 @@ while ($row=$pmcQuery->fetch()) {
         'building'=>$row["building"],//案件大樓
         'endon'=>$row["endon"],//結束日期
         'status'=>$row["status"]//狀態(W/P/H/F/D 尚未受理/處理中/部分完成/完成/作廢)
-    );
+    );    
 }
-//
-
 ?>
 
 <!DOCTYPE html>
@@ -61,11 +59,11 @@ while ($row=$pmcQuery->fetch()) {
 
     </form>
     </div>
-    <table class="table table-striped table-bordered table-hover">
+    <table class="table table-striped table-bordered table-hover col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12 table-sm"><!--表格樣式：條紋行、帶框表格、可滑入行-->
         <thead  class="thead-light">
-            <tr>
-            <th scope="col">單號</th>
-            <th scope="col">承辦人</th>
+            <tr align="center">
+            <th scope="col" width="10%">單號</th>
+            <th scope="col" width="5%">承辦人</th>
             <th scope="col">工程名稱</th>
             <th scope="col">交辦日期</th>
             <th scope="col">棟別</th>
@@ -74,9 +72,37 @@ while ($row=$pmcQuery->fetch()) {
             </tr>
         </thead>
         <tbody>
-        <?php for ($i=0; $i <$pmcnum ; $i++) { 
-            # code...
-        }?>
+        <?php for ($i=0; $i <$pmcnum ; $i++) {
+            //顯示資料的轉換 
+            $pmcemp=sql_database('cname','FA.Employee','e_number',$pmc[$i]['e_number']);
+            switch ($pmc[$i]['status']) {
+                case 'W':
+                    $pmcstatus='尚未處理';
+                    break;
+                case NULL:
+                    $pmcstatus='尚未處理';
+                    break;
+                case '':
+                    $pmcstatus='尚未處理';
+                    break;
+                case 'P':
+                    $pmcstatus='處理中';
+                    break;
+                case 'F':
+                    $pmcstatus='完成/結案';
+                    break;
+            }
+            ?>
+            <tr align="center">
+                <th scope="row"><?= $pmc[$i]['id']?></th>                
+                <td><?= $pmcemp?></td>
+                <td><a href="pmcDetail.php?id=<?= $pmc[$i]['id']?>"><?= $pmc[$i]['title']?></a></td>
+                <td><?= $pmc[$i]['createdOn']?></td>
+                <td><?= $pmc[$i]['building']?></td>
+                <td><?= $pmcstatus?></td>
+                <td><a href="pmcEdit.php?id=<?= $pmc[$i]['id']?>">內容編輯與修改</a></td>
+            </tr>
+        <?php }?>
         </tbody>
 
 </table>
