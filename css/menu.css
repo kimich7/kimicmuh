@@ -1,0 +1,251 @@
+@charset "utf-8";
+/* CSS Document */
+body{
+	font-family:"微軟正黑體";
+	background-color:#dcdcdc;
+}
+/*登入頁面*/
+.gna{
+	text-align:center;
+	color:#333;
+	font-size:120px;
+	margin-top:90px;
+}
+.content{
+	margin:30px auto;
+	width:320px;
+}
+
+/*.login*/ p.input-title{
+	text-align:center;
+	color:#FFF;
+	font-size:14px;
+	letter-spacing:1.5px;
+}
+/*.login*/ .left{
+	background-color:#333;
+	/*margin:0 0px 10px 0;*/
+	width:90px;
+	float:left;
+	padding:15px;
+}
+/*.login*/ .right{
+	margin:0 0px 10px 0;
+	background:#FFF;
+	padding:14px;
+	float:left;
+	width:169px;
+}
+/*.login*/ 
+input{
+	outline:none;
+	border:none;
+}
+.send{
+	background-color:#333;
+	color:#fff;
+	width:317px;
+	padding:13px;
+	font-size:14px;
+	font-weight:bold;
+	letter-spacing:1px;
+	cursor:pointer;
+	margin-bottom:10px;
+}
+.send:hover{
+	background-color:#666;}
+.forgot{
+	/*border:1px solid #333;*/
+	text-decoration:underline;
+	color:#333;
+	text-align:center;
+	font-size:13px;
+	text-decoration:underline;
+	letter-spacing:0.5px;
+	cursor:pointer;
+}
+.forgot:hover{
+	color:#FFF;
+}
+.forgot_psw{
+	display:none;
+	/*background-color:#dcdcdc;
+	position:fixed;
+	height:250px;
+	top:275px;	
+	margin:auto;*/}
+/*登入頁面END*/
+/*menu*/
+#out{
+	margin:0 auto 0 auto;
+	max-width:1500px;
+	
+}
+#left_area{
+	width:80px;
+	position:fixed;
+	background-color:#FFF;
+	min-height: 100%;
+	z-index: 1000
+}
+#logo{
+	width:80px;
+	height:50px;
+	background-color:#333;
+}
+#logo p{
+	color:#fff;
+	font-size:24px;
+	font-weight:bold;
+	letter-spacing:2px;
+	text-align:center;
+	margin:0;
+	line-height: 50px;
+}
+.user{
+	margin:25px 0 40px 0;
+	border-bottom:1px solid #fff;
+	cursor:pointer;
+
+
+}
+.user:hover{
+	border-bottom:1px solid #ccc;
+	
+	opacity:0.7;
+	}
+.user p{
+	color:#333;
+	font-size:12px;
+	text-align:center;
+	opacity:0.8;
+}
+.menu li{
+	display:block;
+	text-align:center;
+	margin:25px auto;
+	padding:0;
+}
+.menu p{
+	font-size:12px;
+	color:#333;
+}
+.menu img{
+	opacity:0.8;
+	width:40%;
+}
+.menu1:hover,.menu li ul li a:hover{
+	display:block;
+	opacity:0.5;
+}
+.menu li ul {
+    /* 讓第二層ul跳脫文件流以利定位 */
+    position:absolute;
+    /* 固定寬度 */
+    width:100px;
+	height:40px;
+    /* 避免出現捲軸 */
+    overflow:visible;
+    /* 讓ul與母階層li相同位置 */
+    margin-left: 80px;
+	margin-top:-40px;
+}
+.menu li ul {
+	z-index:500;
+    /* 預先隱藏第二層 */
+    visibility:hidden;
+}
+.menu li:hover ul {
+    /* 觸動第一層時，顯示第二層 */
+    visibility:visible;
+}
+.menu li ul li img{
+	width:10%;
+}
+
+.menu li ul li{
+	text-align:left;
+	color:#333;
+	font-size:14px;
+	padding:5px;
+	border-bottom:2px #ccc solid;
+	background-color:#fff;
+	margin: 0;
+}
+.menu li ul li a{
+	color:#333;
+}
+
+#right_area{
+	margin-left:80px;
+	padding-top:50px;
+}
+.dero_line{
+	border-bottom:2px solid #fff;
+	padding:0 30px;
+	padding-bottom:7px;
+}
+#right_content{
+	width:85%;
+	margin:auto;
+	border:5px solid #fff;
+	border-radius:5px;
+	padding:10px 0;
+}
+
+/*page 樣式*/
+.page_div{
+	text-align:center;
+}
+.page_div ul{
+	display:inline-block;
+	font-size:13.5px;
+}
+.page_div li{
+	line-height:15px;
+	padding:7px 5px 0px 5px;
+	float:left;
+	margin:5px;
+	text-align:center;
+	width:22px;
+	height:22px;
+	border-radius:15%;
+	border:2px solid #fff;
+	color:#666;
+	background-color:#FC3;
+}
+.page_div a li{
+	background-color:#dcdcdc;
+}
+.page_div a li:hover{
+	background-color:#F90;
+}
+.page_div li span{ /*頁碼就是當頁*/
+	border-radius:15%;
+	color:#fff;
+	padding:2px 3px;
+}
+
+/*h123456*/
+
+h1{
+	color:#333;
+	font-size:40px;
+}
+h3{
+	color:#333;
+	font-size:22px;
+}
+h4{/*用在小標*/
+	color:#333;
+	font-size:18px;
+	text-align:center;
+	background-color:#FC3;
+}
+h5{/*用在小標下面的註解*/
+	color:#666;
+	font-size:13px;
+	font-weight:lighter;
+	margin-bottom:15px;
+	
+}
