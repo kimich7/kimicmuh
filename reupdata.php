@@ -123,10 +123,10 @@ if (isset($_POST["action"])&&($_POST["action"]=="update")) {
                 echo '<h1>資料庫無此筆資料，請重新選取。</h1><hr>';
                 echo '<h1> 網頁將導回抄表表單選擇頁面.....</h1>';
                 header("Refresh:5;url=mtinsert.html");
-            }elseif ($allowTime>8 || $r_member!=$userID ) {
-            echo '<h1>已超過可修改時間，或您並非該表單巡檢人員，如愈修改此表單請聯絡具有權限之管理者。</h1><hr>';
-            echo '<h1> 網頁將導回抄表表單選擇頁面.....</h1>';
-            header("Refresh:5;url=mtinsert.html");
+            // }elseif ($allowTime>8 || $r_member!=$userID ) {
+            // echo '<h1>已超過可修改時間，或您並非該表單巡檢人員，如愈修改此表單請聯絡具有權限之管理者。</h1><hr>';
+            // echo '<h1> 網頁將導回抄表表單選擇頁面.....</h1>';
+            // header("Refresh:5;url=mtinsert.html");
             } else{        
         ?>
         <form action="" method="post" name="up">

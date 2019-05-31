@@ -247,14 +247,6 @@ $(function () {
 
     //用getJSON讀取data內的資料(棟別)
     $.getJSON("php/cookiedata.php", function (data) {
-        // if (data[0]["floorID"]) {
-        //     var html = "<option value=\"" + data[0]["buildID"] + "\">" + data[0]["buildName"] + "</option>";
-        //     //var html_floor = "<option value=\"" + data[0]["floorID"] + "\">" + data[0]["floorName"] + "</option>"
-
-        //     $("#build").html(html);
-        //     //$("#buildingfloor").html(html_floor);
-
-        // } else {
         $.getJSON("php/insertdata.php", {
             colID: 'b_number',
             colName: 'B_name',
@@ -267,10 +259,9 @@ $(function () {
                 $("#ubuild").html(html);
             }
         });
-        // }
     });
 
-    $("#build").one("click", function () {
+    $("#build").one("click", function () { //one("click", function ()
         var cyID = $("#courtyard").val();
         $.getJSON("php/insertdata.php", {
             colID: 'b_number',
@@ -303,7 +294,7 @@ $(function () {
     })
 
     //院區更換時，棟別的選項也要跟著變
-    $("#courtyard").change(function () {
+    $("#courtyard").one("click", function () { //change->one("click")
         var cyID = $("#courtyard").val();
         $.getJSON("php/insertdata.php", {
             colID: 'b_number',
@@ -317,7 +308,7 @@ $(function () {
                 $("#build").html(html);
             }
         });
-    })
+    }).change();
     $("#ucourtyard").change(function () {
         var cyID = $("#ucourtyard").val();
         $.getJSON("php/insertdata.php", {
@@ -350,7 +341,7 @@ $(function () {
                 $("#buildingfloor").html(html);
             }
         })
-    }).change();
+    });
 
     // $("#buildingfloor").on("click", function () {
     //     var buildNo = $("#build").val();
@@ -413,7 +404,7 @@ $(function () {
                 }
             }
         })
-    }); //.change();
+    }).change();
 
     //mtinsert修改的選擇樓層
     $("#ubuild").change(function () {

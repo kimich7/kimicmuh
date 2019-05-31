@@ -161,7 +161,7 @@
             header("refresh:3;url= mtinsert.html");
         } else {
             //檢查項目
-            $sql_equip_check = "SELECT equipCheckID,equipCheckName,ref,answerMode,sysID  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' ORDER BY sysID,equipCheckName";
+            $sql_equip_check = "SELECT equipCheckID,equipCheckName,ref,answerMode,sysID  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo' ORDER BY sysID,equipCheckID";
             $query_equip=$pdo->query($sql_equip_check);
             $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo'";
             $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
