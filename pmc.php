@@ -55,9 +55,9 @@ while ($row=$pmcQuery->fetch()) {
     </header>
     <div class="panel-heading">
             <h4>&nbsp&nbsp&nbsp&nbsp新增專案：<a class="btn btn-primary" href="pmcCreate.php" class="text-dark">新增</a></h4>    
-    <form method="get" name="selectform" action="pmc.php">
+    <!-- <form method="get" name="selectform" action="pmc.php">
 
-    </form>
+    </form> -->
     </div>
     <table class="table table-striped table-bordered table-hover col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12 table-sm"><!--表格樣式：條紋行、帶框表格、可滑入行-->
         <thead  class="thead-light">

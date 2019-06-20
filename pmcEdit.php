@@ -1,6 +1,7 @@
 <?php
     include("php/CMUHconndata.php");
     include("php/fun.php");
+    session_start();
     $pmcid=$_GET['id'];
     $userID=$_SESSION["login_number"];//登錄人員ID
     $username=$_SESSION["login_member"] ;//登錄人員名稱

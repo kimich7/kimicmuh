@@ -129,7 +129,126 @@ $(function () {
         });
     });
 
-    //20190419新增
+    //20190613新增
+
+    //把系統塞到卡片上做選擇
+    $("#mainBtn2").click(function () {
+        $.getJSON("php/mmtchoice.php", function (data) {
+            var html = '<option value="" selected> 選擇系統 </option>';
+            for (let i = 0; i < data.length; i++) {
+                html += "<option value=\"" + data[i]["id"] + "\">" + data[i]["sName"] + "</option>";
+                $("#mmtchoice").html(html);
+            }
+        });
+    })
+
+    //保養相關cookie
+    $(".mmtcookiecs").change(function () {
+        $.getJSON("php/mmtsyscookie.php", {
+            mmtsysNo: $("#mmtchoice").val()
+        }, function (data) {
+            // alert(data);
+            // $("#mmtsysa").html('<option value="' + data[0]["mmtsysNo"] + '"  selected>' + data[0]["mmtsysNo"] + '_' + data[0]["mmtsysName"] + "</option>");
+        });
+    });
+    //取得保養系統的大樓
+    $("#mmtbuilda").one('click', function () {
+        var switched = 1;
+        $.getJSON("php/mmtsys_a_data.php", {
+            switchchoice: switched,
+            mmtsysNo: $("#mmtsysa").val()
+        }, function (data) {
+            var html = '<option value="" selected> 請選擇大樓 </option>';
+            for (let i = 0; i < data.length; i++) {
+                html += "<option value=\"" + data[i]["id"] + "\">" + data[i]["bName"] + "</option>";
+                $("#mmtbuilda").html(html);
+            }
+        });
+    }).change();
+    //取得保養系統的樓層
+    $("#mmtbuilda").change(function () {
+        var switched = 2;
+        $.getJSON("php/mmtsys_a_data.php", {
+            switchchoice: switched,
+            mmtsysNo: $("#mmtsysa").val(),
+            mmtbuildNo: $("#mmtbuilda").val()
+        }, function (data) {
+            var html = '<option value="" selected> 請選擇樓層 </option>';
+            for (let i = 0; i < data.length; i++) {
+                html += "<option value=\"" + data[i]["fid"] + "\">" + data[i]["fName"] + "</option>";
+                $("#mmtfloora").html(html);
+            }
+        });
+    }).change();
+    //取得保養系統的設備
+    $("#mmtfloora").change(function () {
+        var switched = 3;
+        $.getJSON("php/mmtsys_a_data.php", {
+            switchchoice: switched,
+            mmtsysNo: $("#mmtsysa").val(),
+            mmtbuildNo: $("#mmtbuilda").val(),
+            mmtfloorNo: $("#mmtfloora").val()
+        }, function (data) {
+            var html = '<option value="" selected> 請選擇設備 </option>';
+            for (let i = 0; i < data.length; i++) {
+                html += "<option value=\"" + data[i]["id"] + "\">" + data[i]["eName"] + "</option>";
+                $("#mmtequipa").html(html);
+            }
+        });
+    }).change();
+
+    //取得保養系統設備的編號
+    $("#mmtequipa").change(function () {
+        var switched = 4;
+        $.getJSON("php/mmtsys_a_data.php", {
+            switchchoice: switched,
+            mmtsysNo: $("#mmtsysa").val(),
+            mmtbuildNo: $("#mmtbuilda").val(),
+            mmtfloorNo: $("#mmtfloora").val(),
+            mmtequipa: $("#mmtequipa").val()
+        }, function (data) {
+            var html = '<option value="" selected> 請選擇設備編號 </option>';
+            for (let i = 0; i < data.length; i++) {
+                html += "<option value=\"" + data[i]["id"] + "\">" + data[i]["eid"] + "-" + data[i]["id"] + "</option>";
+                $("#mmtequipNoa").html(html);
+            }
+        });
+    }).change();
+
+
+
+    //根據不同的系統去不同的保養清單
+    $("#mmtchoice").change(function () {
+        var mmtsys = $("#mmtchoice").val();
+        switch (mmtsys) {
+            case 'A':
+                url = "mmt_list_a.php";
+                break;
+            case 'B':
+                url = "mmt_list_b.php";
+                break;
+            case 'E':
+                url = "mmt_list_e.php";
+                break;
+            case 'F':
+                url = "mmt_list_f.php";
+                break;
+            case 'G':
+                url = "mmt_list_g.php";
+                break;
+            case 'H':
+                url = "mmt_list_h.php";
+                break;
+            case 'M':
+                url = "mmt_list_m.php";
+                break;
+            case 'W':
+                url = "mmt_list_w.php";
+                break;
+        }
+        document.MMT_Kind.action = url;
+
+    })
 
     //--END--
 
@@ -185,8 +304,6 @@ $(function () {
         //     $("#buildingfloor").html('<option value="' + data[0]["floorID"] + '">' + data[0]["floorName"] + "</option>");
         // }
     });
-
-
 
     //用getJSON讀取data內的資料(院區)
     $("#courtyard,#ucourtyard").one("click", function () {

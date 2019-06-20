@@ -92,11 +92,14 @@
                 <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom"
                     title="請登入相應權限帳號已解鎖">
                     <button style="pointer-events: none;" type="button" class="mainBtn autho3" data-toggle="collapse"
-                        data-target="#article2" id="mainBtn2" disabled>點我進入</button>
+                        data-target="#ModalCenter4" id="mainBtn2" disabled>點我進入</button>
                 </span>
             </div>
+
+
+
             <!-- 設備保養系統選單 -->
-            <div>
+            <!-- <div>
                 <article class="my-3 collapse" id="article2">
                     <ul class="syslist list-group" id="syslist2"></ul>
                     <li class="list-group-item">
@@ -112,8 +115,13 @@
                         <a class="text-dark maindata7"></a>
                     </li>
                 </article>
-            </div>
+            </div>2019/06/13暫時註-->
         </div>
+
+
+
+
+
         <!-- 主選單:異常反應系統 -->
         <div class="mainMenu">
             <div class="text-muted">
@@ -295,11 +303,42 @@
                 </div>
             </div>
         </form>
+
+        <!-- 保養卡片20190613 -->
+        <form action="" method="post" enctype="multipart/form-data" id="MMT_Kind" name="MMT_Kind">
+            <div class="modal fade" id="ModalCenter4" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="ModalLongTitle">保養系統選擇</h5>
+
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="mmtsys">保養系統選擇</label>
+                                <select class="form-control mb-3 mmtcookiecs" id="mmtchoice" name="mmtchoice" required>
+                                    <option selected>選擇系統</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                            <button type="submit" class="btn btn-primary" id="mmtbtn" name="mmtbtn">送出</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
     </section>
     <!-- footer網頁尾頁 -->
     <footer>
         <div id="footer"></div>
     </footer>
 </body>
+
 
 </html>
