@@ -9,7 +9,7 @@ $str_member="SELECT * FROM FA.Employee WHERE e_number='$checkuserID'";
 $member=$pdo->query($str_member)->fetch();
 //總資料
 //$ammtmstr="SELECT * FROM FA.MMT_AtableM ";
-$ammtmstr="SELECT m.id,a.tableKind,m.bid,m.fid,m.eid,m.rdate,m.datekind,m.remark,m.emp,m.cemp,m.status FROM FA.MMT_AtableM as m LEFT JOIN FA.MMT_AtableD as d ON m.id=d.mid LEFT JOIN FA.MMT_A AS a ON d.checkid=a.id";
+$ammtmstr="SELECT id,bid,fid,eid,rdate,datekind,tid,macNo,remark,emp,cemp,status FROM FA.MMT_AtableM ";
 $ammtmQuery=$pdo->query($ammtmstr);
 $ammtmAll=array();
 $ammtmnumstr="SELECT Count(id)FROM FA.MMT_AtableM ";
@@ -18,7 +18,8 @@ $ammtmnum=Current($pdo->query($ammtmnumstr)->fetch());
 while ($row=$ammtmQuery->fetch()) {
     $ammtm[]=array(
         'id'=>$row["id"],//案件單號
-        'tableNo'=>$row["tableKind"],//報表編號
+        'tableNo'=>$row["tid"],//報表編號
+        'macNo'=>$row["macNo"],//設備機台編號
         'bid'=>$row["bid"],//棟別id
         'fid'=>$row["fid"],//樓層id
         'eid'=>$row["eid"],//設備編號
@@ -73,12 +74,12 @@ while ($row=$ammtmQuery->fetch()) {
     <table class="table table-striped table-bordered table-hover col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12 table-sm"><!--表格樣式：條紋行、帶框表格、可滑入行-->
         <thead  class="thead-light">
             <tr align="center">
-            <th scope="col" width="10%">單號</th>
-            <th scope="col" width="5%">標單名稱</th>
-            <th scope="col">保養日期</th>
-            <th scope="col">保養人</th>
-            <th scope="col">工務室</th>
-            <th scope="col">狀態</th>
+            <th scope="col" width="15%">單號</th>
+            <th scope="col" width="40%">標單名稱</th>
+            <th scope="col" width="10%">保養日期</th>
+            <th scope="col" width="8%">保養人</th>
+            <th scope="col" width="8%">工務室</th>
+            <th scope="col" width="8%">狀態</th>
             <th scope="col"></th>
             </tr>
         </thead>
@@ -102,10 +103,11 @@ while ($row=$ammtmQuery->fetch()) {
                     $ammtmstatus='審核完成';
                     break;
             }
+            $macNo=$ammtm[$i]['macNo'];
             ?>
             <tr align="center">
                 <th scope="row"><?= $ammtm[$i]['id']?></th><!--表單編號-->                
-                <td><a href="ammtDetail.php?id=<?= $ammtm[$i]['id']?>"><?= $ammtmtabletitle?></a></td><!--表單名稱-->
+                <td><a href="ammtDetail.php?id=<?= $ammtm[$i]['id']?>"><?= $ammtmtabletitle.'('.$macNo.')' ?></a></td><!--表單名稱-->
                 <td><?= $ammtm[$i]['rdate']?></td><!--保養日期-->  
                 <td><?= $ammtmemp?></td><!--保養者-->                
                 <td><?= $ammtmcemp?></td><!--審核者-->                

@@ -35,7 +35,7 @@ $mmtsysName=sql_database('sName','FA.MMT_sys','id',$mmtsysNo);
             </a>
         </nav>
     </header>
-    <form action="mmtCreate_a.php" method="POST" name="formmmtchoicea">
+    <form action="mmtCreate_a.php" method="get" name="formmmtchoicea">
             <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-10 col-sm-10 col-12 back container w-50 my-4 rounded">
                     <div id="tablepanel" class="choice_table rounded text-white">                        
