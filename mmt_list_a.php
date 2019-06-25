@@ -13,7 +13,7 @@ $ammtmstr="SELECT id,bid,fid,eid,rdate,datekind,tid,macNo,remark,emp,cemp,status
 $ammtmQuery=$pdo->query($ammtmstr);
 $ammtmAll=array();
 $ammtmnumstr="SELECT Count(id)FROM FA.MMT_AtableM ";
-$ammtmnum=Current($pdo->query($ammtmnumstr)->fetch());
+$ammtmnum=Current($pdo->query($ammtmnumstr)->fetch());//數量
 
 while ($row=$ammtmQuery->fetch()) {
     $ammtm[]=array(
@@ -63,13 +63,13 @@ while ($row=$ammtmQuery->fetch()) {
         </nav>
     </header>
     <form action="mmtCreate_a_choice.php" method="post" name="mmtca">
-    <div class="panel-heading">
-        <input type="hidden" name="mmtsysa" value='A'>
-            <h4>&nbsp&nbsp&nbsp&nbsp新增保養：<button type='submit' name="mmtsysabtn" class="btn btn-primary" >新增</button></h4> 
-            <!-- <h4>&nbsp&nbsp&nbsp&nbsp新增保養：<a class="btn btn-primary" href="mmtCreate_a_choice.php" class="text-dark">新增</a></h4>    -->
-    
-    </div>
-</form>
+        <div class="panel-heading">
+            <input type="hidden" name="mmtsysa" value='A'>
+                <h4>&nbsp&nbsp&nbsp&nbsp新增保養：<button type='submit' name="mmtsysabtn" class="btn btn-primary" >新增</button></h4> 
+                <!-- <h4>&nbsp&nbsp&nbsp&nbsp新增保養：<a class="btn btn-primary" href="mmtCreate_a_choice.php" class="text-dark">新增</a></h4>    -->
+        
+        </div>
+    </form>
 
     <table class="table table-striped table-bordered table-hover col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12 table-sm"><!--表格樣式：條紋行、帶框表格、可滑入行-->
         <thead  class="thead-light">
@@ -84,35 +84,36 @@ while ($row=$ammtmQuery->fetch()) {
             </tr>
         </thead>
         <tbody>
-        <?php for ($i=0; $i <$ammtmnum ; $i++) {
-            //顯示資料的轉換 
-            $ammtmemp=sql_database('cname','FA.Employee','e_number',$ammtm[$i]['emp']);//員編轉人名
-            $ammtmcemp=sql_database('cname','FA.Employee','e_number',$ammtm[$i]['cemp']);//審核員編轉人名
-            $ammtmtabletitle=sql_database('tableName','FA.MMT_KIND','id',$ammtm[$i]['tableNo']);//表單編號轉名稱
-            switch ($ammtm[$i]['status']) {//(W/F/D 未審核/完成/作廢)}
-                case 'W':
-                    $ammtmstatus='未審核';
-                    break;
-                case NULL:
-                    $ammtmstatus='未審核';
-                    break;
-                case '':
-                    $ammtmstatus='未審核';
-                    break;                
-                case 'F':
-                    $ammtmstatus='審核完成';
-                    break;
+        <?php
+            for ($i=0; $i <$ammtmnum ; $i++) {
+                //顯示資料的轉換 
+                $ammtmemp=sql_database('cname','FA.Employee','e_number',$ammtm[$i]['emp']);//員編轉人名
+                $ammtmcemp=sql_database('cname','FA.Employee','e_number',$ammtm[$i]['cemp']);//審核員編轉人名
+                $ammtmtabletitle=sql_database('tableName','FA.MMT_KIND','id',$ammtm[$i]['tableNo']);//表單編號轉名稱
+                switch ($ammtm[$i]['status']) {//(W/F/D 未審核/完成/作廢)}
+                    case 'W':
+                        $ammtmstatus='未審核';
+                        break;
+                    case NULL:
+                        $ammtmstatus='未審核';
+                        break;
+                    case '':
+                        $ammtmstatus='未審核';
+                        break;                
+                    case 'F':
+                        $ammtmstatus='審核完成';
+                        break;
             }
             $macNo=$ammtm[$i]['macNo'];
-            ?>
+        ?>
             <tr align="center">
                 <th scope="row"><?= $ammtm[$i]['id']?></th><!--表單編號-->                
-                <td><a href="ammtDetail.php?id=<?= $ammtm[$i]['id']?>"><?= $ammtmtabletitle.'('.$macNo.')' ?></a></td><!--表單名稱-->
+                <td><a href="mmtDetail_a.php?id=<?= $ammtm[$i]['id']?>"><?= $ammtmtabletitle.'('.$macNo.')' ?></a></td><!--表單名稱-->
                 <td><?= $ammtm[$i]['rdate']?></td><!--保養日期-->  
                 <td><?= $ammtmemp?></td><!--保養者-->                
                 <td><?= $ammtmcemp?></td><!--審核者-->                
                 <td><?= $ammtmstatus?></td><!--狀態-->
-                <td><a href="ammtedit.php?id=<?= $ammtm[$i]['id']?>">內容編輯與修改</a></td>
+                <td><a href="mmtEdit_a.php?id=<?= $ammtm[$i]['id']?>">內容編輯與修改</a></td>
             </tr>
         <?php }?>
         </tbody>

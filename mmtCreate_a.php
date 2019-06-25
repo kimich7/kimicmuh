@@ -17,7 +17,7 @@
     $reportName=item("SELECT k.id,k.tableName,k.dateKind FROM FA.MMT_KIND AS k LEFT JOIN FA.MMT_equipNo AS n ON k.id=n.tid WHERE n.id='$mmtequipNum' AND n.eid='$mmtequipNo' AND n.fid='$mmtfloorNo' AND n.bid='$mmtbuildNo' AND n.sid='$mmtsysNo' ");
     
     $check_date=date("Y-m-d");//準備寫入的保養時間
-    $idnum=date("Ym");//用來當主表id的時間戳記
+    $idnum=date("Ymd");//用來當主表id的時間戳記
     $macnum=$mmtsysNo.'-'.$mmtbuildNo.'-'.$mmtfloorNo.'-'.$mmtequipNo.'-'.$mmtequipNum;//設備編號
     $mmt_a_m_id=$mmtsysNo.$mmtbuildNo.$mmtfloorNo.$mmtequipNo.$mmtequipNum.$idnum;//主表id
     //撈取檢查項目
@@ -30,8 +30,8 @@
         $num=$_POST["num"];//迴圈數量
         $rmark=$_POST["remark"];//備註
         $tid=$_POST['tableid'];//報表id
-        $rdatekind=$_POST['b'];//保養週期答案
-
+        $rdatekind_Array=$_POST['b'];//保養週期答案
+        $rdatekind= implode(",", $rdatekind_Array);
         
         $MMT_AtableMid=$_POST['mid'] ;//主表id
         $bid=$_POST['bid'] ;//大樓id
@@ -109,7 +109,7 @@
                 <p class="d-inline font-weight-bold">棟別：<?= $mmtbuildName ?></p>
             </div>
             <div class="col text-right">
-                <p class="d-inline font-weight-bold"><?= $check_date ?></p>
+                <p class="d-inline font-weight-bold">保養日期：<?= $check_date ?></p>
             </div>
         </div>
         <div class="row my-3">
@@ -183,7 +183,7 @@
             }
             echo "<input type='hidden' name='mid' value=\"".$mmt_a_m_id."\">";//主表id
             echo "<input type='hidden' name='bid' value=\"".$mmtbuildNo."\">";//大樓id
-            echo "<input type='hidden' name='fid' value=\"".$mmtbuildNo."\">";//樓層id
+            echo "<input type='hidden' name='fid' value=\"".$mmtfloorNo."\">";//樓層id
             echo "<input type='hidden' name='eid' value=\"".$mmtequipNo."\">";//設備id
             echo "<input type='hidden' name='rdate' value=\"".$check_date."\">";//保養日期
             echo "<input type='hidden' name='emp' value=\"".$userID."\">";//保養人員
@@ -200,6 +200,14 @@
         </div>
         <input type="hidden" name="action" value="add">
          <input type="hidden" name="num" value='<?= $num ?>'>
+          <div class="row my-3">
+            <div class="col">
+                <p class="d-inline font-weight-bold">工務室：</p>
+            </div>
+            <div class="col text-right">
+                <p class="d-inline font-weight-bold">保養人員：<?= $username ?></p>
+            </div>
+        </div>
         <!-- 送出鈕 -->    
             <div class="d-flex justify-content-end">
                 <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>
