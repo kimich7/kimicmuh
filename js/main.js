@@ -132,7 +132,7 @@ $(function () {
     //20190613新增
 
     //把系統塞到卡片上做選擇
-    $("#mainBtn2").click(function () {
+    $("#mainBtn2").one("click", function () {
         $.getJSON("php/mmtchoice.php", function (data) {
             var html = '<option value="" selected> 選擇系統 </option>';
             for (let i = 0; i < data.length; i++) {

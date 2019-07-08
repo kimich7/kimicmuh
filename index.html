@@ -91,11 +91,16 @@
                 <h2>工務設備保養紀錄文件及管理系統</h2>
                 <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom"
                     title="請登入相應權限帳號已解鎖">
-                    <button style="pointer-events: none;" type="button" class="mainBtn autho3" data-toggle="collapse"
+                    <button style="pointer-events: none;" type="button" class="mainBtn autho3" data-toggle="modal"
                         data-target="#ModalCenter4" id="mainBtn2" disabled>點我進入</button>
                 </span>
-            </div>
+            </div><!-- collapse -->
 
+            <!-- <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom"
+                    title="請登入相應權限帳號已解鎖">
+                    <button style="pointer-events: none;" type="button" class="mainBtn autho3 mt-5" id="errbtn"
+                        data-toggle="modal" data-target="#ModalCenter3" disabled>點我進入</button>
+                </span> -->
 
 
             <!-- 設備保養系統選單 -->
@@ -207,9 +212,11 @@
         </div>
     </div>
     <!-- 卡片(Modal) -->
+
+
     <section>
         <!-- 主選單 -->
-        <div class="modal fade" id="ModalCenter1" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle"
+        <div class="modal hide fade" id="ModalCenter1" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle"
             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -238,7 +245,6 @@
                                 <option value="1">早班</option>
                                 <option value="2">中班</option>
                                 <option value="3">晚班</option>
-                                <!-- <option value="4">巡檢</option> -->
                             </select>
                         </div>
                     </div>
@@ -251,8 +257,8 @@
         </div>
         <!-- 異常表單卡片 -->
         <form action="abnormal.php" method="post" enctype="multipart/form-data">
-            <div class="modal fade" id="ModalCenter3" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle"
-                aria-hidden="true">
+            <div class="modal hide fade" id="ModalCenter3" tabindex="-1" role="dialog"
+                aria-labelledby="ModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -296,23 +302,20 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
-                            <!-- TODO:送出到資料庫 -->
                             <button type="submit" class="btn btn-primary" id="errorbtn" name="errorbtn">送出</button>
                         </div>
                     </div>
                 </div>
             </div>
         </form>
-
         <!-- 保養卡片20190613 -->
         <form action="" method="post" enctype="multipart/form-data" id="MMT_Kind" name="MMT_Kind">
-            <div class="modal fade" id="ModalCenter4" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle"
-                aria-hidden="true">
+            <div class="modal hide fade" id="ModalCenter4" tabindex="-1" role="dialog"
+                aria-labelledby="ModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="ModalLongTitle">保養系統選擇</h5>
-
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -326,8 +329,9 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="xxbtn">關閉</button>
                             <button type="submit" class="btn btn-primary" id="mmtbtn" name="mmtbtn">送出</button>
+                            <!--  -->
                         </div>
                     </div>
                 </div>
@@ -339,6 +343,5 @@
         <div id="footer"></div>
     </footer>
 </body>
-
 
 </html>

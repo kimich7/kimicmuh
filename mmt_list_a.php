@@ -52,10 +52,18 @@ $ammtmAll=array();
     <link rel="stylesheet" href="./node_modules/normalize.css/normalize.css">
     <!-- 連結自己的CSS -->
     <link rel="stylesheet" href="./css/style.css">
+
+    
     <!-- 連結外部的JS -->
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script src="./node_modules/popper.js/dist/umd/popper.min.js"></script>
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <link rel="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"> -->
+
+
     <!-- 連結自己的JS -->
     <script src="./js/main.js"></script>
     <title>工程專案清單</title>
@@ -89,7 +97,7 @@ $ammtmAll=array();
         </div>
     </form>
     
-    <table class="table table-striped table-bordered table-hover col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12 table-sm order-table" id="dtBasicExample" aria-describedby="dataTables-example_info" data-sort-name="tid" data-sort-order="desc" data-sortable ="true"><!--表格樣式：條紋行、帶框表格、可滑入行-->
+    <table id="mmt_a" class="display table table-striped table-bordered table-hover col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12 table-sm order-table" id="dtBasicExample" aria-describedby="dataTables-example_info" data-sort-name="tid" data-sort-order="desc" data-sortable ="true"><!--表格樣式：條紋行、帶框表格、可滑入行-->
         <thead  class="thead-light">
             <tr align="center">
             <th scope="col" width="15%" name="tid" sortable="true">單號</th>
@@ -237,5 +245,21 @@ $ammtmAll=array();
         });
     })(document);
 </script>
+<!-- <script>
+    $(document).ready(function() {
+        $('#mmt_a').DataTable( {
+            columnDefs: [ {
+                targets: [ 0 ],
+                orderData: [ 0, 1 ]
+            }, {
+                targets: [ 1 ],
+                orderData: [ 1, 0 ]
+            }, {
+                targets: [ 4 ],
+                orderData: [ 4, 0 ]
+            } ]
+        } );
+    } );
+</script>     -->
 </body>
 </html>
