@@ -4,6 +4,23 @@
     session_start();
     $checkuser=$_SESSION["login_member"];
     $checkuserID=sql_database('e_number','FA.Employee','cname',$checkuser);
+    
+    //20190712修改(未完成)
+    $securityNoStr="SELECT e.sid,e.e_number,k.sysID FROM FA.securityemp as e LEFT JOIN FA.securityKind as k on e.sid=k.id  WHERE e.e_number='$checkuserID' AND k.sysID='$sysNo'";
+    $securityNo=$pdo->Query($securityNoStr)->fetch();
+    if (isset($securityNo) and $securityNo!='') {
+        $sNumber=$securityNo['sid'];//權限區域
+        if ($sNumber>4 and $sNumber<9) {
+            $checksum=1;//可簽核-身分主管
+        } else {
+            $checksum=2;//可簽核-檢查者
+        }        
+    } else {
+        $checksum=3;//只能看
+    }
+    //20190712修改(未完成)
+
+
     $str_member="SELECT * FROM FA.Employee WHERE e_number='$checkuserID'";
     $member=$pdo->query($str_member)->fetch();
     if (isset($_POST["action"])&&($_POST["action"]=="check")) {

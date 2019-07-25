@@ -8,6 +8,24 @@
         return $view;
     }
 
+    FUNCTION checkName($checkID){
+        include("CMUHconndata.php");
+        if (is_null($checkID)) {
+            return $checkUser='';
+        } else {
+            return $checkUser=sql_database('cname','FA.Employee','e_number',$checkID);
+        }
+    }
+
+    function sql_database_int($col,$tbl,$when,$wheans){//對照欄位的名稱，通常用在ID找名稱        
+        include("CMUHconndata.php");
+        $view_select = "SELECT $col FROM $tbl WHERE $when = $wheans ";
+        $view_query=$pdo->query($view_select)->fetch(PDO::FETCH_ASSOC);
+        $view=$view_query["$col"];
+        $pdo=null;
+        return $view;
+    }
+
     function updata_select($tbl,$Mid){
         include("CMUHconndata.php");
 
