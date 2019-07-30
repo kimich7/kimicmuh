@@ -50,16 +50,16 @@ while ($row = $M_data->fetch()) {
     (int)$tid=$Mdata[0]['tid'] ;
     //表單id,名稱(大標題用)
     $reportName=item("SELECT k.id,k.tableName,k.dateKind FROM FA.MMT_KIND AS k LEFT JOIN FA.MMT_equipNo AS n ON k.id=n.tid WHERE n.eid='$equip' AND n.fid='$floor' AND n.bid='$building' AND n.sid='F' ");
-    if ($Mdata[0]['cemp']=='' or $Mdata[0]['cemp']==null) {
-        $check_H1='';//確認主管
+    if ($Mdata[0]['cemp']=='' or $Mdata[0]['cemp']==null) {//下半年確認者
+        $check_H2='';
     } else {
-        $check_H1=sql_database('cname','FA.Employee','e_number',$Mdata[0]['cemp']);//確認主管
+        $check_H2=sql_database('cname','FA.Employee','e_number',$Mdata[0]['cemp']);
     }
     
-    if ($Mdata[0]['emp']=='' or $Mdata[0]['emp']==null) {
-        $check_H2='';//確認者
+    if ($Mdata[0]['emp']=='' or $Mdata[0]['emp']==null) {//上半年確認者
+        $check_H1='';
     } else {
-        $check_H2=sql_database('cname','FA.Employee','e_number',$Mdata[0]['cemp']);//確認主管
+        $check_H1=sql_database('cname','FA.Employee','e_number',$Mdata[0]['cemp']);
     }
     //明細表資料+點檢項目資料
     //S1答案
@@ -133,17 +133,18 @@ while ($row = $M_data->fetch()) {
 if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
     $mid=$_POST['mid'];//主表id
     $remark=$_POST['remark'];//備註
-    $va1=$_POST['va1'];//上半年電壓電流
-    $va2=$_POST['va2'];//上半年電壓電流
+    //$va1=$_POST['va1'];//上半年電壓電流
+    //$va2=$_POST['va2'];//上半年電壓電流
     $num=$_POST['num'];//迴圈數量
-    $va1_ans=implode(",", $va1);
-    $va2_ans=implode(",", $va2);
+    //$va1_ans=implode(",", $va1);
+    //$va2_ans=implode(",", $va2);
 
-    $MasterStr="UPDATE FA.MMT_FtableM SET remark=:remark,H1_vora=:H1_vora,H2_vora=:H2_vora WHERE id=:mid";
+    //$MasterStr="UPDATE FA.MMT_FtableM SET remark=:remark,H1_vora=:H1_vora,H2_vora=:H2_vora WHERE id=:mid";
+    $MasterStr="UPDATE FA.MMT_FtableM SET remark=:remark WHERE id=:mid";
     $stmtM = $pdo->prepare($MasterStr);    
     $stmtM->bindParam(':remark',$remark,PDO::PARAM_STR);
-    $stmtM->bindParam(':H1_vora',$va1_ans,PDO::PARAM_STR);
-    $stmtM->bindParam(':H2_vora',$va2_ans,PDO::PARAM_STR);
+    // $stmtM->bindParam(':H1_vora',$va1_ans,PDO::PARAM_STR);
+    // $stmtM->bindParam(':H2_vora',$va2_ans,PDO::PARAM_STR);
     $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
     $stmtM->execute();
 
@@ -393,17 +394,17 @@ if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
                 <!-- <td></td> -->
                 <?php switch ($choicedata) {
                     case '1':?>
-                        <td colspan='3'>斷電測試電壓：<input type='text' name='va1[]' maxlength='20' value="<?= $va1[0] ?>" >V</td>
+                        <td colspan='3'>斷電測試電壓：<input type='text' name='va1[]' maxlength='20' value="<?= $va1[0] ?>" DISABLED>V</td>
                         <?PHP
                         break;
                     
                     case '2':?>
-                        <td colspan='3'>運轉電流：<input type='text' name='va1[]' maxlength='20' value="<?= $va1[0] ?>" >A</td>
+                        <td colspan='3'>運轉電流：<input type='text' name='va1[]' maxlength='20' value="<?= $va1[0] ?>" DISABLED>A</td>
                         <?PHP
                         break;
                     
                     case '3':?>
-                        <td colspan='3'>運轉電流：主<input type='text' name='va1[]' maxlength='20' value="<?= $va1[0] ?>" >A&nbsp輔：<input type='text' name=va1[] maxlength='20' value="<?= $va1[2] ?>" ></td>
+                        <td colspan='3'>運轉電流：主<input type='text' name='va1[]' maxlength='20' value="<?= $va1[0] ?>" >A&nbsp輔：<input type='text' name=va1[] maxlength='20' value="<?= $va1[2] ?>" DISABLED></td>
                         <?PHP
                         break;
                 }
@@ -417,22 +418,22 @@ if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
                 <?php 
                     switch ($choicedata) {
                         case '1':?>
-                            <td colspan='3'>斷電測試電壓：<input type='text' name='va2[]' maxlength='20' value="<?= $va2[0] ?>" >V</td>
+                            <td colspan='3'>斷電測試電壓：<input type='text' name='va2[]' maxlength='20' value="<?= $va2[0] ?>" DISABLED>V</td>
                             <?PHP
                             break;
                         
                         case '2':?>
-                            <td colspan='3'>運轉電流：<input type='text' name='va2[]' maxlength='20' value="<?= $va2[0] ?>" >A</td>
+                            <td colspan='3'>運轉電流：<input type='text' name='va2[]' maxlength='20' value="<?= $va2[0] ?>" DISABLED>A</td>
                             <?PHP
                             break;
                         
                         case '3':?>
-                            <td colspan='3'>運轉電流：主<input type='text' name='va2[]' maxlength='20' value="<?= $va2[0] ?>" >A&nbsp輔：<input type='text' name='va2[]' maxlength='20' value="<?= $va2[1] ?>" >A</td>
+                            <td colspan='3'>運轉電流：主<input type='text' name='va2[]' maxlength='20' value="<?= $va2[0] ?>" >A&nbsp輔：<input type='text' name='va2[]' maxlength='20' value="<?= $va2[1] ?>" DISABLED>A</td>
                             <?PHP
                             break;
                     }
                 ?>
-                <td><?= '檢查者:' ?><?= $check_H2 ?></td>
+                <td><?= '檢查者:'.$check_H2 ?></td>
                 <!-- <td></td> -->
             </tr>
             </tbody>
@@ -454,8 +455,8 @@ if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
 
         <!-- 送出鈕 -->    
             <div class="d-flex justify-content-end">
-                <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>
-            </div>
+                <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>&nbsp&nbsp<a href="mmt_list_f.php" type="button" class="my-3 px-3 py-1 btn-outline-info text-dark">離開</a>
+            </div>            
     </form>
     </div>
 </body>

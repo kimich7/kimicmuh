@@ -8,7 +8,7 @@ $checkuserID=sql_database('e_number','FA.Employee','cname',$checkuser);
 $str_member="SELECT * FROM FA.Employee WHERE e_number='$checkuserID'";
 $member=$pdo->query($str_member)->fetch();
 //總資料
-//$ammtmstr="SELECT * FROM FA.MMT_AtableM ";
+//$ammtmstr="SELECT * FROM FA.MMT_GtableM ";
 
 $pageRow_record=10;//每頁的筆數
 $page_num=1;//預設的頁數
@@ -18,15 +18,15 @@ if (isset($_GET['page'])) {
 }
 $startRow_record=($page_num-1)*$pageRow_record;
 //所有的資料
-$ammtmstr="SELECT id,bid,fid,eid,datekind,tid,macNo,remark,H1_emp,H2_emp,status,H1_vora,H2_vora,timestamp FROM FA.MMT_FtableM ";//全部資料
+$ammtmstr="SELECT id,bid,fid,eid,rdate,datekind,tid,macNo,remark,emp,cemp,status FROM FA.MMT_GtableM ";//全部資料
 //總資料數量
-$ammtmnumstr="SELECT Count(id)FROM FA.MMT_FtableM ";
+$ammtmnumstr="SELECT Count(id)FROM FA.MMT_GtableM ";
 $ammtmnum=Current($pdo->query($ammtmnumstr)->fetch());//全部數量
 
 
 //----還沒帶入----
 //篩選後給每頁的筆數
-$sqlstr_page="SELECT id,bid,fid,eid,datekind,tid,macNo,remark,H1_emp,H2_emp,status,H1_vora,H2_vora,timestamp FROM FA.MMT_FtableM  ORDER BY timestamp ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+$sqlstr_page="SELECT id,bid,fid,eid,rdate,datekind,tid,macNo,remark,emp,cemp,status FROM FA.MMT_GtableM  ORDER BY rdate ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
 $sql_page=$pdo->query($sqlstr_page);
 // $sql_total=$pdo->query($sqlstr_total);
 //$total_num=CURRENT($pdo->query($totalstr_num)->fetch());
@@ -82,12 +82,12 @@ $ammtmAll=array();
             </a>
         </nav>
     </header>
-    <form action="mmtCreate_f_choice.php" method="post" name="mmtca">
+    <form action="mmtCreate_g_choice.php" method="post" name="mmtca">
         <div class="panel-heading">
-            <input type="hidden" name="mmtsysf" value='F'>
+            <input type="hidden" name="mmtsysg" value='G'>
             <div class="row my-3">
                 <div class="col">
-                    <p class="d-inline font-weight-bold">&nbsp&nbsp&nbsp&nbsp新增保養：<button type='submit' name="mmtsysfbtn" class="btn btn-primary" >新增</button></p>
+                    <p class="d-inline font-weight-bold">&nbsp&nbsp&nbsp&nbsp新增保養：<button type='submit' name="mmtsysabtn" class="btn btn-primary" >新增</button></p>
                 </div>
                     <!-- <h4>&nbsp&nbsp&nbsp&nbsp新增保養：<a class="btn btn-primary" href="mmtCreate_a_choice.php" class="text-dark">新增</a></h4>    -->
                 <div class="col text-right">
@@ -97,17 +97,16 @@ $ammtmAll=array();
         </div>
     </form>
     
-    <table id="mmt_a" class="display table table-striped table-bordered table-hover col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12 table-sm order-table" id="dtBasicExample" aria-describedby="dataTables-example_info" data-sort-name="tid" data-sort-order="desc" data-sortable ="true"><!--表格樣式：條紋行、帶框表格、可滑入行-->
+    <table id="MMT_G" class="display table table-striped table-bordered table-hover col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12 table-sm order-table" id="dtBasicExample" aria-describedby="dataTables-example_info" data-sort-name="tid" data-sort-order="desc" data-sortable ="true"><!--表格樣式：條紋行、帶框表格、可滑入行-->
         <thead  class="thead-light">
             <tr align="center">
             <th scope="col" width="15%" name="tid" sortable="true">單號</th>
             <th scope="col" width="40%">標單名稱</th>
             <th scope="col" width="10%">保養日期</th>
-            <!-- <th scope="col" width="8%">保養人</th>
-            <th scope="col" width="8%">工務室</th> -->
+            <th scope="col" width="8%">保養人</th>
+            <th scope="col" width="8%">工務室</th>
             <th scope="col" width="8%">狀態</th>
-            <th scope="col">內容編輯與修改</th>
-            <th scope="col">上、下年度消防檢查(廠商)</th>
+            <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
@@ -121,14 +120,12 @@ $ammtmAll=array();
                 'bid'=>$row["bid"],//棟別id
                 'fid'=>$row["fid"],//樓層id
                 'eid'=>$row["eid"],//設備編號
-                'rdate'=>$row["timestamp"],//時間戳記
+                'rdate'=>$row["rdate"],//紀錄日期
                 'datekind'=>$row["datekind"],//保養週期
                 'remark'=>$row["remark"],//備註
-                'emp'=>$row["H1_emp"],//檢查者
-                'cemp'=>$row["H2_emp"],//複查者
-                'status'=>$row["status"],//狀態(W/F/D 未審核/完成/作廢)
-                'H1_vora'=>$row["H1_vora"],//上半年檢查的電壓電流
-                'H2_vora'=>$row["H2_vora"]//下半年檢查的電壓電流
+                'emp'=>$row["emp"],//保養者員工編號
+                'cemp'=>$row["cemp"],//工務室審核員工編號
+                'status'=>$row["status"]//狀態(W/F/D 未審核/完成/作廢)
             );    
         }
         @$sql_page_num=count($ammtm);
@@ -148,10 +145,7 @@ $ammtmAll=array();
                         break;
                     case '':
                         $ammtmstatus='未審核';
-                        break; 
-                    case 'M':
-                        $ammtmstatus='部分審核';
-                        break;                    
+                        break;                
                     case 'F':
                         $ammtmstatus='審核完成';
                         break;
@@ -160,19 +154,18 @@ $ammtmAll=array();
         ?>
             <tr align="center">
                 <th scope="row"><?= $ammtm[$i]['id']?></th><!--表單編號-->                
-                <td><a href="mmtDetail_f.php?id=<?= $ammtm[$i]['id']?>"><?= $ammtmtabletitle.'('.$macNo.')' ?></a></td><!--表單名稱-->
+                <td><a href="mmtDetail_g.php?id=<?= $ammtm[$i]['id']?>"><?= $ammtmtabletitle.'('.$macNo.')' ?></a></td><!--表單名稱-->
                 <input type='hidden' name='<?= $k ?>' value='<?= $ammtm[$i]['id'] ?>'><!--傳遞主表id-->
                 <td><?= $ammtm[$i]['rdate']?></td><!--保養日期-->  
-                <!--<td><?//= $ammtmemp?></td>--><!--保養者-->                
-                <!--<td><?//= $ammtmcemp?></td>--><!--審核者--> 
+                <td><?= $ammtmemp?></td><!--保養者-->                
+                <td><?= $ammtmcemp?></td><!--審核者--> 
                 <?php 
-                if ($ammtmstatus=='未審核' or $ammtmstatus=='部分審核') { ?>
-                    <td><a href="mmtcheck_f.php?id=<?= $ammtm[$i]['id']?>"><?= $ammtmstatus?></a></td><!--狀態-->
+                if ($ammtmstatus=='未審核') { ?>
+                    <td><a href="mmtcheck_g.php?id=<?= $ammtm[$i]['id']?>"><?= $ammtmstatus?></a></td><!--狀態-->
                 <?php } else { ?>
                     <td><?= $ammtmstatus?></td>
                 <?php } ?>
-                <td><a href="mmtEdit_f.php?id=<?= $ammtm[$i]['id']?>">內容編輯與修改</a></td>
-                <td><a href="mmth1check_f.php?id=<?= $ammtm[$i]['id']?>">上半年</a> || <a href="mmth2check_f.php?id=<?= $ammtm[$i]['id']?>">下半年</a></td>
+                <td><a href="mmtEdit_g.php?id=<?= $ammtm[$i]['id']?>">內容編輯與修改</a></td>
             </tr>
         <?php }?>
         </tbody>

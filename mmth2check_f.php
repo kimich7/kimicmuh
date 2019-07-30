@@ -28,12 +28,19 @@ while ($row = $M_data->fetch()) {
         'timestamp'=>$row['timestamp']
     );
 } 
-     list($year, $month, $day) = preg_split('/[-: ]/', $Mdata[0]['timestamp']);
+    list($year, $month, $day) = preg_split('/[-: ]/', $Mdata[0]['timestamp']);
     //$mmtsysName=sql_database('sName','FA.MMT_sys','id',$mmtsysNo);//系統名稱  
-
-    
     $va1=explode(',',$Mdata[0]['H1_vora']);
     $va2=explode(',',$Mdata[0]['H2_vora']); 
+    
+    // if(!isset($Mdata[0]['emp'])or $Mdata[0]['emp']=="")
+    // {
+
+    // }
+    //     //上半年檢查廠商人員
+    // $Mdata[0]['cemp']//上半年檢查廠商人員
+    $h1checkmark=0;
+    $h2checkmark=0;
 
     $equip=$Mdata[0]['eid'];
     $floor=$Mdata[0]['fid'];
@@ -52,20 +59,20 @@ while ($row = $M_data->fetch()) {
     (int)$tid=$Mdata[0]['tid'] ;
     //表單id,名稱(大標題用)
     $reportName=item("SELECT k.id,k.tableName,k.dateKind FROM FA.MMT_KIND AS k LEFT JOIN FA.MMT_equipNo AS n ON k.id=n.tid WHERE n.eid='$equip' AND n.fid='$floor' AND n.bid='$building' AND n.sid='F' ");
-
-
-
-    
-    if ($Mdata[0]['cemp']=='' or $Mdata[0]['cemp']==null) {
-        $check_H1='';//確認主管
+    if ($Mdata[0]['emp']=='' or $Mdata[0]['emp']==null) {
+        $check_H1='';//上半年確認者
     } else {
-        $check_H1=sql_database('cname','FA.Employee','e_number',$Mdata[0]['cemp']);//確認主管
+        $check_H1=sql_database('cname','FA.Employee','e_number',$Mdata[0]['emp']);//上半年確認者
+        $h1checkmark=1;
     }
     
-    if ($Mdata[0]['emp']=='' or $Mdata[0]['emp']==null) {
-        $check_H2='';//確認者
+    if (!isset($Mdata[0]['cemp'])or $Mdata[0]['cemp']=='') {        
+        $Mdata[0]['cemp']=$userID;//下半年確認者ID
+        $check_H2=$username;//下半年確認者名稱
     } else {
-        $check_H2=sql_database('cname','FA.Employee','e_number',$Mdata[0]['cemp']);//確認主管
+        $check_H2=sql_database('cname','FA.Employee','e_number',$Mdata[0]['cemp']);//上半年確認者名稱
+        $userID=$Mdata[0]['cemp'];
+        $h2checkmark=1;
     }
     //明細表資料+點檢項目資料
     //S1答案
@@ -73,7 +80,7 @@ while ($row = $M_data->fetch()) {
     $reportdataS1=$pdo->query($reportdatastrS1);
     while ($row = $reportdataS1->fetch()) {
         $reportS1[]=array(
-            'id'=>['id'],
+            'id'=>$row['id'],
             'checkName'=>$row['checkName'],
             'ans'=>$row['ans'],
             'rDate'=>$row['rDate'],
@@ -83,6 +90,7 @@ while ($row = $M_data->fetch()) {
             'checkmanid'=>$row['checkmanid']
         );
     }
+    
     //S2答案 
     $reportdatastrS2="SELECT a.checkid,d.ans,d.id,d.rDate,d.remark,d.checkUserid,d.checkmanid  FROM(SELECT * FROM FA.MMT_FtableD WHERE fseason='S1' AND   mid='$MMT_AtableMid') AS a  LEFT JOIN (SELECT * FROM FA.MMT_FtableD WHERE mid='$MMT_AtableMid' AND fseason='S2') AS d ON  a.checkid=d.checkid";
     $reportdataS2=$pdo->query($reportdatastrS2);
@@ -125,8 +133,6 @@ while ($row = $M_data->fetch()) {
             'checkmanid'=>$row['checkmanid']
         );
     }
-
-    
     $checkUser1=checkName($reportS1[0]['checkUserid']);
     $checkUser2=checkName($reportS2[0]['checkUserid']);
     $checkUser3=checkName($reportS3[0]['checkUserid']);
@@ -135,33 +141,38 @@ while ($row = $M_data->fetch()) {
     $checkDouble2=checkName($reportS2[0]['checkmanid']);
     $checkDouble3=checkName($reportS3[0]['checkmanid']);
     $checkDouble4=checkName($reportS4[0]['checkmanid']);
+    $num = count($reportS1);
+
+if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
+    
+    if ($_POST['h2Check']=='done') {
+        $mid=$_POST['mid'];//主表id
+        $remark=$_POST['remark'];//備註
+        //$va1=$_POST['va1'];//上半年電壓電流
+        $va2=$_POST['va2'];//上半年電壓電流
+        $num=$_POST['num'];//迴圈數量
+        //$va1_ans=implode(",", $va1);
+        $va2_ans=implode(",", $va2);
+        $h2emp=$_POST['emp'] ;//保養人員
+        //$MasterStr="UPDATE FA.MMT_FtableM SET remark=:remark,H1_vora=:H1_vora,H2_vora=:H2_vora WHERE id=:mid";
+        $MasterStr="UPDATE FA.MMT_FtableM SET remark=:remark,H2_vora=:H2_vora,H2_emp=:H2_emp WHERE id=:mid";
+        $stmtM = $pdo->prepare($MasterStr);    
+        $stmtM->bindParam(':remark',$remark,PDO::PARAM_STR);
+        //$stmtM->bindParam(':H1_vora',$va1_ans,PDO::PARAM_STR);
+        $stmtM->bindParam(':H2_emp',$h2emp,PDO::PARAM_STR);
+        $stmtM->bindParam(':H2_vora',$va2_ans,PDO::PARAM_STR);
+        $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
+        $stmtM->execute();    
+        $pdo=null;
+        header("Location: mmt_list_f.php");
+    } else {        
+        header("Location: mmt_list_f.php");
+    }
+    
     
     
 
-//明細表資料
-// $D_data_str="SELECT * FROM FA.MMT_AtableD WHERE mid='$MMT_AtableMid'";
-// $D_data=$pdo->query($D_data_str);
-// while ($row = $D_data->fetch()) {
-//     $Ddata[]=array(
-//         'id'=>$row['id'],
-//         'checkid'=>$row['checkid'],
-//         'ans'=>$row['ans'],
-//         'mid'=>$row['mid']
-//     ); 
-// }
-$num = count($reportS1);
-
-// $Q_A_str="SELECT a.checkName,a.checkKind,a.ref,d.ans FROM FA.MMT_A AS a LEFT JOIN FA.MMT_AtableD as d ON a.id=d.checkid WHERE d.mid='$MMT_AtableMid' ORDER BY a.id";
-// $Q_A=$pdo->query($Q_A_str);
-// while ($row = $Q_A->fetch()) {
-//     $Q_A_data[]=array(
-//         'checkName'=>$row['checkName'],
-//         'checkKind'=>$row['checkKind'],
-//         'ref'=>$row['ref'],
-//         'ans'=>$row['ans']
-//     ); 
-// }
-// $num=count($Q_A_data);
+}
 
 ?>
 <!DOCTYPE html>
@@ -238,84 +249,113 @@ $num = count($reportS1);
             $checkrefS3=sql_database_int('ref','FA.MMT_A','id',$reportS3[$i]['checkid']);
             $checkrefS4=sql_database_int('ref','FA.MMT_A','id',$reportS4[$i]['checkid']);
             
-                $checkid=$i+1000;
-                $j=$i+200;
-                $k=$i+400;
-                $l=$i+600;
+                //$checkid=$i+1000;
+
+                $j=$i+200;//S2答案欄名稱($i是S1答案欄名稱)
+                $k=$i+400;//S3答案欄名稱
+                $l=$i+600;//S4答案欄名稱
+                $S1_id=$i+800;//S1 id欄位的名稱
+                $S2_id=$i+1000;//S2 id欄位的名稱
+                $S3_id=$i+1200;//S3 id欄位的名稱
+                $S4_id=$i+1400;//S4 id欄位的名稱
+
                 echo '<tr>';
                 echo  '<td>'.$reportS1[$i]['checkName'].'</td>';
-                if ($reportS1[$i]['checkKind']=='檢查項目') {
-                    echo '<td>';
-                    if ($reportS1[$i]['ans']=='true') {
-                        echo "<input type='radio' name=\"".$i."\" value='true' checked disabled>是&nbsp&nbsp&nbsp&nbsp";
-                        echo "<input type='radio' name=\"".$i."\" value='false' disabled>否";
-                    } elseif($reportS1[$i]['ans']=='false') {
-                        echo "<input type='radio' name=\"".$i."\" value='true' disabled>是&nbsp&nbsp&nbsp&nbsp";
-                        echo "<input type='radio' name=\"".$i."\" value='false' checked disabled>否";
-                    } else {
-                        echo "<input type='radio' name=\"".$i."\" value='true' disabled>是&nbsp&nbsp&nbsp&nbsp";
-                        echo "<input type='radio' name=\"".$i."\" value='false' disabled>否";
-                    }  
-                    echo '</td>';
-                }else{
-                    echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20' value=\"".$reportS1[$i]['ans']."\" disabled>".'</td>';
-                }
-                //echo "<input type='hidden' name=\"".$checkid."\" value=\"".$catarr[$i]['id']."\">";//檢查項目id  
-                if ($checkrefS2=='V/X') {
-                    echo '<td>';
-                    if($reportS2[$i]['ans']=='true') {
-                        echo "<input type='radio' name=\"".$j."\" value='true' checked disabled>是&nbsp&nbsp&nbsp&nbsp";
-                        echo "<input type='radio' name=\"".$j."\" value='false' disabled>否";
-                    } elseif($reportS2[$i]['ans']=='false') {
-                        echo "<input type='radio' name=\"".$j."\" value='true' disabled>是&nbsp&nbsp&nbsp&nbsp";
-                        echo "<input type='radio' name=\"".$j."\" value='false' checked disabled>否";
-                    } else {
-                        echo "<input type='radio' name=\"".$j."\" value='true' disabled>是&nbsp&nbsp&nbsp&nbsp";
-                        echo "<input type='radio' name=\"".$j."\" value='false' disabled>否";
-                    }  
-                    echo '</td>';
+                if (is_null($reportS1[$i]['id'])) {                    
+                        echo "<td><input type=\"text\" name=\"$i\" maxlength=\"20\" value=\"無紀錄，無法修改\" DISABLED></td>";                    
                 } else {
-                    echo '<td>'."<input type='text' name=\"".$j."\" maxlength='20' value=\"".$reportS2[$i]['ans']."\" disabled>".'</td>';
-                }
-                if ($checkrefS3=='V/X') {
+                    if ($reportS1[$i]['checkKind']=='檢查項目') {
                     echo '<td>';
-                    if($reportS3[$i]['ans']=='true') {
-                        echo "<input type='radio' name=\"".$k."\" value='true' checked disabled>是&nbsp&nbsp&nbsp&nbsp";
-                        echo "<input type='radio' name=\"".$k."\" value='false' disabled>否";
-                    } elseif($reportS3[$i]['ans']=='false') {
-                        echo "<input type='radio' name=\"".$k."\" value='true' disabled>是&nbsp&nbsp&nbsp&nbsp";
-                        echo "<input type='radio' name=\"".$k."\" value='false' checked disabled>否";
-                    } else {
-                        echo "<input type='radio' name=\"".$k."\" value='true' disabled>是&nbsp&nbsp&nbsp&nbsp";
-                        echo "<input type='radio' name=\"".$k."\" value='false' disabled>否";
-                    }  
-                    echo '</td>';
-                } else {
-                    echo '<td>'."<input type='text' name=\"".$k."\" maxlength='20' value=\"".$reportS3[$i]['ans']."\" disabled>".'</td>';
-                }
-                if ($checkrefS4=='V/X') {
-                    echo '<td>';
-                    if($reportS4[$i]['ans']=='true') {
-                        echo "<input type='radio' name=\"".$l."\" value='true' checked disabled>是&nbsp&nbsp&nbsp&nbsp";
-                        echo "<input type='radio' name=\"".$l."\" value='false' disabled>否";
-                    } elseif($reportS4[$i]['ans']=='false') {
-                        echo "<input type='radio' name=\"".$l."\" value='true' disabled>是&nbsp&nbsp&nbsp&nbsp";
-                        echo "<input type='radio' name=\"".$l."\" value='false' checked disabled>否";
-                    } else {
-                        echo "<input type='radio' name=\"".$l."\" value='true' disabled>是&nbsp&nbsp&nbsp&nbsp";
-                        echo "<input type='radio' name=\"".$l."\" value='false' disabled>否";
-                    }  
-                    echo '</td>';
-                } else {
-                    echo '<td>'."<input type='text' name=\"".$l."\" maxlength='20' value=\"".$reportS4[$i]['ans']."\" disabled>".'</td>';
-                }
-                echo '</tr>';
+                        if ($reportS1[$i]['ans']=='true') {
+                            echo "<input type='radio' name=\"".$i."\" value='true' checked DISABLED>是&nbsp&nbsp&nbsp&nbsp";
+                            echo "<input type='radio' name=\"".$i."\" value='false' DISABLED>否";
+                        } elseif($reportS1[$i]['ans']=='false') {
+                            echo "<input type='radio' name=\"".$i."\" value='true' DISABLED>是&nbsp&nbsp&nbsp&nbsp";
+                            echo "<input type='radio' name=\"".$i."\" value='false' checked DISABLED>否";
+                        } else {
+                            echo "<input type='radio' name=\"".$i."\" value='true' DISABLED>是&nbsp&nbsp&nbsp&nbsp";
+                            echo "<input type='radio' name=\"".$i."\" value='false' DISABLED>否";
+                        }  
+                        echo '</td>';
+                    }else{
+                        echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20' value=\"".$reportS1[$i]['ans']."\" DISABLED>".'</td>';
+                    }
+                    echo "<input type='hidden' name=\"".$S1_id."\" value=\"".$reportS1[$i]['id']."\">";
+                    
+                }                
                 
-            }                        
+                if (is_null($reportS2[$i]['id'])) {                    
+                        echo "<td><input type=\"text\" name=\"$j\" maxlength=\"20\" value=\"無紀錄，無法修改\" DISABLED></td>";                   
+                } else {
+                    if ($checkrefS2=='V/X') {
+                        echo '<td>';
+                        if($reportS2[$i]['ans']=='true') {
+                            echo "<input type='radio' name=\"".$j."\" value='true' checked DISABLED>是&nbsp&nbsp&nbsp&nbsp";
+                            echo "<input type='radio' name=\"".$j."\" value='false' DISABLED>否";
+                        } elseif($reportS2[$i]['ans']=='false') {
+                            echo "<input type='radio' name=\"".$j."\" value='true' DISABLED>是&nbsp&nbsp&nbsp&nbsp";
+                            echo "<input type='radio' name=\"".$j."\" value='false' checked DISABLED>否";
+                        } else {
+                            echo "<input type='radio' name=\"".$j."\" value='true' DISABLED>是&nbsp&nbsp&nbsp&nbsp";
+                            echo "<input type='radio' name=\"".$j."\" value='false' DISABLED>否";
+                        }  
+                        echo '</td>';
+                    } else {
+                        echo '<td>'."<input type='text' name=\"".$j."\" maxlength='20' value=\"".$reportS2[$i]['ans']."\" DISABLED>".'</td>';
+                    }
+                    echo "<input type='hidden' name=\"".$S2_id."\" value=\"".$reportS2[$i]['id']."\">";
+                }
+                
+                if (is_null($reportS3[$i]['id'])) {                    
+                        echo "<td><input type=\"text\" name=\"$k\" maxlength=\"20\" value=\"無紀錄，無法修改\" DISABLED></td>";                    
+                } else {
+                    if ($checkrefS3=='V/X') {
+                        echo '<td>';
+                        if($reportS3[$i]['ans']=='true') {
+                            echo "<input type='radio' name=\"".$k."\" value='true' checked DISABLED>是&nbsp&nbsp&nbsp&nbsp";
+                            echo "<input type='radio' name=\"".$k."\" value='false' DISABLED>否";
+                        } elseif($reportS3[$i]['ans']=='false') {
+                            echo "<input type='radio' name=\"".$k."\" value='true' DISABLED>是&nbsp&nbsp&nbsp&nbsp";
+                            echo "<input type='radio' name=\"".$k."\" value='false' checked DISABLED>否";
+                        } else {
+                            echo "<input type='radio' name=\"".$k."\" value='true' DISABLED>是&nbsp&nbsp&nbsp&nbsp";
+                            echo "<input type='radio' name=\"".$k."\" value='false' DISABLED>否";
+                        }  
+                        echo '</td>';
+                    } else {
+                        echo '<td>'."<input type='text' name=\"".$k."\" maxlength='20' value=\"".$reportS3[$i]['ans']."\" DISABLED>".'</td>';
+                    }
+                    echo "<input type='hidden' name=\"".$S3_id."\" value=\"".$reportS3[$i]['id']."\">";
+                }
+                
+                if (is_null($reportS4[$i]['id'])) {                    
+                        echo "<td><input type=\"text\" name=\"$l\" maxlength=\"20\" value=\"無紀錄，無法修改\" DISABLED></td>";                    
+                } else {
+                    if ($checkrefS4=='V/X') {
+                        echo '<td>';
+                        if($reportS4[$i]['ans']=='true') {
+                            echo "<input type='radio' name=\"".$l."\" value='true' checked DISABLED>是&nbsp&nbsp&nbsp&nbsp";
+                            echo "<input type='radio' name=\"".$l."\" value='false' DISABLED>否";
+                        } elseif($reportS4[$i]['ans']=='false') {
+                            echo "<input type='radio' name=\"".$l."\" value='true' DISABLED>是&nbsp&nbsp&nbsp&nbsp";
+                            echo "<input type='radio' name=\"".$l."\" value='false' checked DISABLED>否";
+                        } else {
+                            echo "<input type='radio' name=\"".$l."\" value='true' DISABLED>是&nbsp&nbsp&nbsp&nbsp";
+                            echo "<input type='radio' name=\"".$l."\" value='false' DISABLED>否";
+                        }  
+                        echo '</td>';
+                    } else {
+                        echo '<td>'."<input type='text' name=\"".$l."\" maxlength='20' value=\"".$reportS4[$i]['ans']."\" DISABLED>".'</td>';
+                    }
+                    echo "<input type='hidden' name=\"".$S4_id."\" value=\"".$reportS4[$i]['id']."\">";
+                }
+                echo '</tr>';                                
+            }                 
             ?>
+            <input type='hidden' name='num' value="<?= $num ?>">
             <tr>
                 <td>檢查者：</td>
-                <?php 
+                <?php
                 //第一季
                 if(!isset($reportS1[0]['rDate']) or $reportS1[0]['rDate']==''){//第一季沒有保養
                     echo '<td><div class="text-left d-inline font-weight-bold">尚未保養</td>';
@@ -384,50 +424,74 @@ $num = count($reportS1);
                 <!-- <td></td> -->
                 <?php switch ($choicedata) {
                     case '1':?>
-                        <td colspan='3'>斷電測試電壓：<input type='text' name='va[]' maxlength='20' value="<?= $va1[0] ?>" disabled>V</td>
+                        <td colspan='3'>斷電測試電壓：<input type='text' name='va1[]' maxlength='10' value="<?= $va1[0] ?>" DISABLED>V</td>
                         <?PHP
                         break;
                     
                     case '2':?>
-                        <td colspan='3'>運轉電流：<input type='text' name='va[]' maxlength='20' value="<?= $va1[0] ?>" disabled>A</td>
+                        <td colspan='3'>運轉電流：<input type='text' name='va1[]' maxlength='10' value="<?= $va1[0] ?>" DISABLED>A</td>
                         <?PHP
                         break;
                     
                     case '3':?>
-                        <td colspan='3'>運轉電流：主<input type='text' name='va[1]' maxlength='20' value="<?= $va1[0] ?>" disabled>A&nbsp輔：<input type='text' name=$va[2] maxlength='20' value="<?= $va1[1] ?>" disabled></td>
+                        <td colspan='3'>運轉電流：主<input type='text' name='va1[]' maxlength='10' value="<?= $va1[0] ?>" >A&nbsp輔：<input type='text' name=va1[] maxlength='20' value="<?= $va1[2] ?>" DISABLED></td>
                         <?PHP
                         break;
                 }
-                 ?>
-                <td><?= '檢查者:'.$check_H1 ?></td>
+                
+                echo '<td><div class="col text-left">';
+                echo '<p class="d-inline font-weight-bold">檢查者:</p>';
+                echo '<p class="d-inline text-primary">'.$check_H1.'&nbsp&nbsp</p>';
+                if ($h1checkmark==1) {        
+                    echo '<p class="d-inline font-weight-bold" name="reMumber"><input type="checkbox" name="h1Check" value="done" DISABLED checked>確認</p>';
+                }else{
+                    echo '<p class="d-inline font-weight-bold" name="reMumber"><input type="checkbox" name="h1Check" value="done" DISABLED>確認</p>';
+                }
+                echo '</td></div>';                
+                ?>
+                <!-- <td><?//= '檢查者:'.$check_H1 ?></td> -->
+
                 <!-- <td></td> -->
             </tr>
             <tr>
                 <td>下半年度消防檢查：<?= $year.'下半年度' ?></td>
                 <!-- <td></td> -->
-                <?php switch ($choicedata) {
-                    case '1':?>
-                        <td colspan='3'>斷電測試電壓：<input type='text' name='va[]' maxlength='20' value="<?= $va2[0] ?>" disabled>V</td>
-                        <?PHP
-                        break;
-                    
-                    case '2':?>
-                        <td colspan='3'>運轉電流：<input type='text' name='va[]' maxlength='20' value="<?= $va2[0] ?>" disabled>A</td>
-                        <?PHP
-                        break;
-                    
-                    case '3':?>
-                        <td colspan='3'>運轉電流：主<input type='text' name='va[]' maxlength='20' value="<?= $va2[0] ?>" disabled>A&nbsp輔：<input type='text' name='va[]' maxlength='20' value="<?= $va2[1] ?>" disabled>A</td>
-                        <?PHP
-                        break;
+                <?php 
+                    switch ($choicedata) {
+                        case '1':?>
+                            <td colspan='3'>斷電測試電壓：<input type='text' name='va2[]' maxlength='20' value="<?= $va2[0] ?>" >V</td>
+                            <?PHP
+                            break;
+                        
+                        case '2':?>
+                            <td colspan='3'>運轉電流：<input type='text' name='va2[]' maxlength='20' value="<?= $va2[0] ?>" >A</td>
+                            <?PHP
+                            break;
+                        
+                        case '3':?>
+                            <td colspan='3'>運轉電流：主<input type='text' name='va2[]' maxlength='20' value="<?= $va2[0] ?>" >A&nbsp輔：<input type='text' name='va2[]' maxlength='20' value="<?= $va2[1] ?>" >A</td>
+                            <?PHP
+                            break;
+                    }
+                echo '<td><div class="col text-left">';
+                echo '<p class="d-inline font-weight-bold">檢查者:</p>';
+                echo '<p class="d-inline text-primary">'.$check_H2.'&nbsp&nbsp&nbsp</p>';
+                if ($h2checkmark==1) {        
+                    echo '<p class="d-inline font-weight-bold" name="reMumber"><input type="checkbox" name="h2Check" value="done" checked>確認</p>';
+                }else{
+                    echo '<p class="d-inline font-weight-bold" name="reMumber"><input type="checkbox" name="h2Check" value="done" >確認</p>';
                 }
-                 ?>
-                <td><?= '檢查者:' ?><?= $check_H2 ?></td>
+                echo '</td></div>';
+                echo "<input type='hidden' name='emp' value=\"".$userID."\">";//保養人員
+                ?>
+                <!-- <td><?//= '檢查者:'.$check_H2 ?></td> -->
                 <!-- <td></td> -->
             </tr>
             </tbody>
         </table>
         </div>
+        <input type="hidden" name="action" value="Edit">
+        <input type="hidden" name="mid" value="<?= $Mdata[0]['id'] ?>">
         <!-- 備註欄 -->
         <div class="input-group">
             <div class="input-group-prepend">
@@ -442,7 +506,7 @@ $num = count($reportS1);
 
         <!-- 送出鈕 -->    
             <div class="d-flex justify-content-end">
-                <a href="mmt_list_f.php" type="button" class="btn btn-primary mt-4 rounded d-block mr-3">離開</a>
+                <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>&nbsp&nbsp<a href="mmt_list_f.php" type="button" class="my-3 px-3 py-1 btn-outline-info text-dark">離開</a>
             </div>
     </form>
     </div>
