@@ -1,51 +1,12 @@
 <?php //抄表的查詢功能
     include("php/CMUHconndata.php");
     include("php/fun.php");
+    include("page_1.php");
     session_start();
     $checkuser=$_SESSION["login_member"];
     $checkuserID=sql_database('e_number','FA.Employee','cname',$checkuser);
     $str_member="SELECT * FROM FA.Employee WHERE e_number='$checkuserID'";
     $member=$pdo->query($str_member)->fetch();
-    if (isset($_POST["action"])&&($_POST["action"]=="check")) {
-        $total_num=$_POST["total_num"];
-        for ($i=0; $i<$total_num ; $i++) { 
-            $j=$i+1000;
-            $k=$i+2000;                    
-            $a=$i;
-            if (isset($_POST["$j"])) {
-                $memberCheck=1;
-            } else {
-                $memberCheck=0;
-            }
-            if (isset($_POST["$a"])) {
-                $managerCheck=1;
-            } else {
-                $managerCheck=0;
-            }
-            if (isset($_POST["$k"])) {
-                $rdID=$_POST["$k"];
-            }else{
-                break;
-            }
-            if ($member['rank']<3) {
-                $sql="UPDATE FA.Water_System_Record_Master SET  check_manager=:check_manager,managerID=:managerID WHERE recordID=:ID";
-                $stmt = $pdo->prepare($sql);
-                $stmt->bindParam(':check_manager',$managerCheck,PDO::PARAM_STR);
-                $stmt->bindParam(':managerID',$checkuserID,PDO::PARAM_STR);
-            } else {
-                $sql="UPDATE FA.Water_System_Record_Master SET  check_number=:check_number,r_member=:r_member WHERE recordID=:ID";
-                $stmt = $pdo->prepare($sql);
-                $stmt->bindParam(':check_number',$memberCheck,PDO::PARAM_STR);
-                $stmt->bindParam(':r_member',$checkuserID,PDO::PARAM_STR);
-            }
-            $stmt->bindParam(':ID',$rdID,PDO::PARAM_INT);
-            $stmt->execute();
-            $j=$i+1000;
-            $k=$i+2000;     
-        }
-        $pdo=null;
-        header("Location:mtlistcheck.php");
-    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -64,137 +25,184 @@
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script src="./node_modules/popper.js/dist/umd/popper.min.js"></script>
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="./js/jquery.tablesorter.min.js" type="text/javascript"></script>
+    
     <!-- 連結自己的JS -->
     <script src="./js/main.js"></script>
-    <title>設備保養表單未簽核清單</title>
+    <title>抄表系統查詢清單</title>
 </head>
 
 <body>
     <!-- header網頁標題 -->
     <header>
        <div id="header"></div>
-    </header>
-    <form action="" method="post" name="checklist">
+    </header>    
     <!-- 未簽核清單 -->
     <section class="container-fluid">
-        <h1 class="text-center">設備保養表單未簽核清單</h1>
-        <div class="list-group mx-5 my-5">
-        <?php
-        $pageRow_record=10;//每頁的筆數
-        $page_num=1;//預設的頁數
-        //更新$page_num        
-        if (isset($_GET['page'])) {
-            $page_num=$_GET['page'];
-        }
-        $startRow_record=($page_num-1)*$pageRow_record;
-        if ($member['rank']<3) {
+        <h1 class="text-center">抄表系統查詢清單</h1>
+        <!-- <div class="col text-right">
+            <p class="d-inline font-weight-bold">Search:&nbsp&nbsp<input type="search" class="light-table-filter" data-table="order-table" placeholder="請輸入關鍵字"></p>
+        </div> -->
+        <div class="list-group mx-5 my-5">            
+            <?php
+            $pageRow_record=10;//每頁的筆數
+            $page_num=1;//預設的頁數
+            //更新$page_num        
+            if (isset($_GET['page'])) {
+                $page_num=$_GET['page'];
+            }
+            $startRow_record=($page_num-1)*$pageRow_record;
+            
             //所有的資料 (check_manager IS NULL or check_manager=0) and
-            $sqlstr_total="SELECT * FROM FA.Water_System_Record_Master WHERE (check_number=1) and (check_manager IS NULL or check_manager=0)";
+            $sqlstr_total="SELECT * FROM FA.Water_System_Record_Master ";
             //篩選後給每頁的筆數
-            $sqlstr_page="SELECT * FROM FA.Water_System_Record_Master WHERE (check_number=1) and (check_manager IS NULL or check_manager=0) ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+            $sqlstr_page="SELECT * FROM FA.Water_System_Record_Master ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
             //總資料數量
-            $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE (check_number=1) and (check_manager IS NULL or check_manager=0)";
-        } else {
-            //所有的資料
-            $sqlstr_total="SELECT * FROM FA.Water_System_Record_Master WHERE check_number IS NULL or check_number=0 or check_manager IS NULL or check_manager=0";
-            //篩選後給每頁的筆數
-            $sqlstr_page="SELECT * FROM FA.Water_System_Record_Master WHERE check_number IS NULL or check_number=0 or check_manager IS NULL or check_manager=0 ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
-            //總資料數量
-            $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE check_number IS NULL or check_number=0 or check_manager IS NULL or check_manager=0";
-        }
-        $sql_page=$pdo->query($sqlstr_page);
-        $sql_total=$pdo->query($sqlstr_total);
-        $total_num=CURRENT($pdo->query($totalstr_num)->fetch());
-        
-        //本業開始的筆數
-        $i=0;
-        $j=$i+1000;
-        $k=$i+2000;
-        $a=0;
-        echo '<table border="1" align="center" width="80%">';
-        echo '<thead align="center">';
-        echo '<th>項  目</th>';
-        echo '<th>主  管</th>';
-        echo '<th>檢查人</th>';
-        echo '</thead>';
-        echo '<tbody>';
-        $mgcheck="mgcheck";
-        $mbcheck="mbcheck";
-        while ($data_page = $sql_page->fetch()) {
-            $a=$i;
-            echo '<tr>';
-            $buildName=sql_database('B_name','FA.Building','b_number',$data_page['b_number']);
-            $sysName=sql_database('sysName','FA.Equipment_System_Group','sysID',$data_page['sysID']);
-                echo "<td width='80%'><a href='mtchecktable.php?id=\"".$data_page['recordID']."\"&build=\"".$data_page['b_number']."\"&r_date=\"".$data_page['rDate']."\"&member=\"".$data_page['r_member']."\"&manage=\"".$data_page['managerID']."\"&checkMember=\"".$data_page['check_number']."\"&checkManager=\"".$data_page['check_manager']."\"&sysID=\"".$data_page['sysID']."\"' class=\".list-group-item list-group-item-action.\">".$buildName."-".$sysName."-".$data_page['rDate'].'</a></td>';
-                echo '<td width="10%" align="center">';
-                if ($data_page['check_manager']==1) {
-                    echo "<input type='checkbox' class='managerCheck' name=\"".$a."\" value=\"".$mgcheck."\" checked disabled>";
-                } else {
-                    echo "<input type='checkbox' class='managerCheck' name=\"".$a."\" value=\"".$mgcheck."\" disabled>";
-                }   
-                echo '</td>';
-                echo '<td width="10%" align="center">';
-                if ($data_page['check_number']==1) {
-                    echo "<input type='checkbox' class='employeeCheck' name=\"".$j."\" value=\"".$mbcheck."\" checked disabled>";
-                } else {
-                    echo "<input type='checkbox' class='employeeCheck' name=\"".$j."\" value=\"".$mbcheck."\" disabled>";
-                }  
-                echo '</td>';
-                $q=$data_page['recordID'];
-                echo "<input type='hidden' name=\"".$k."\" value=\"".$q."\">";
-            $i++;
-            $j++;
-            $k++;
-            echo '</tr>';
-        }
-        echo '</tbody>';
-        echo '</table>';
-        
-        //計算總頁數
-        $total_page=ceil($total_num/$pageRow_record);
-        echo '<table border="0" align="center">';    
-            echo '<tr>';
-                echo '<td><h5>'.'未簽核清單共計'.$total_num.'筆(共'.$total_page.'頁)'.'</h5></td>';
-            echo '</tr>';
-        echo '</table>';
-        echo '<table border="0" align="center">';
-            echo '<tr>';
-                if ($page_num>1) {
-                    $prev=$page_num-1;
-                    echo '<td><a href="mtlistcheck.php?page=1">'."[第一頁]".'</a></td>';
-                    echo "<td><a href=\"mtlistcheck.php?page={$prev}\">"."[<<<上一頁]".'</a></td>';
-                }
-                if ($page_num<$total_page) {
-                    $next=$page_num+1;
-                    echo "<td>"."<a href=\"mtlistcheck.php?page={$next}\">"."[下一頁>>>]".'</a></td>';
-                    echo "<td><a href=\"mtlistcheck.php?page=$total_page\">".'[最末頁]'.'</a></td>';
-                }
-            echo '</tr>';
-        echo '</table>';
-        echo '<nav aria-label="Page navigation example" >';
-                echo '<ul class="pagination">';
-                        for ($i=1; $i <= $total_page; $i++) {
-                            if ($i==$page_num) {
-                                echo "<li class=\"page-item\"><span class='page-link text-danger' href=#><b>{$i}</b></span></li>";
-                            } else {
-                                echo "<li class=\"page-item\"><a class='page-link' href=\"mtlistcheck.php?page={$i}\">{$i}</a></li>";
-                            }
-                        }
-                echo '</ul>';
-        echo '</nav>';
-        ?>
+            $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master ";
+            $sql_page=$pdo->query($sqlstr_page);
+            $sql_total=$pdo->query($sqlstr_total);
+            $total_num=CURRENT($pdo->query($totalstr_num)->fetch());
+            
+            //本業開始的筆數
+            $i=0;
+            $j=$i+1000;
+            $k=$i+2000;
+            $a=0;
+            echo '<table id="searchlist" class="display tablesorter table table-striped table-bordered table-hover col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12 table-sm order-table" align="center" width="80%">';
+            echo '<thead class="thead-light" >';
+            echo '<tr align="center">';
+            echo '<th class="th-sm">名   稱</th>';
+            echo '<th class="th-sm">抄表日期</th>';
+            echo '<th class="th-sm">狀   態</th>';
+            echo '<th class="th-sm">檢 查 人</th>';
+            echo '<th class="th-sm">主   管</th>';
+            echo '</tr class="th-sm">';
+            echo '</thead>';
+            echo '<tbody>';
+            $mgcheck="mgcheck";
+            $mbcheck="mbcheck";
+            while ($data_page = $sql_page->fetch()) {
+                $a=$i;
+                echo '<tr>';
+                $buildName=sql_database('B_name','FA.Building','b_number',$data_page['b_number']);
+                $sysName=sql_database('sysName','FA.Equipment_System_Group','sysID',$data_page['sysID']);
+                    echo "<td width='50%'><a href='mtdetail.php?id=\"".$data_page['recordID']."\"&build=\"".$data_page['b_number']."\"&r_date=\"".$data_page['rDate']."\"&member=\"".$data_page['r_member']."\"&manage=\"".$data_page['managerID']."\"&checkMember=\"".$data_page['check_number']."\"&checkManager=\"".$data_page['check_manager']."\"&sysID=\"".$data_page['sysID']."\"' class=\".list-group-item list-group-item-action.\">".$buildName."-".$sysName."-".$data_page['rDate'].'</a></td>';
+                    echo '<td width="10%" align="center">'.$data_page['rDate'].'</td>';
+                    echo '<td width="10%" align="center">';
+                    if ($data_page['check_manager']==1 and $data_page['check_number']==1) {
+                        $status='審核完成';                    
+                    } elseif($data_page['check_manager']==0 and $data_page['check_number']==1) {
+                        $status='主管未審核';                    
+                    } elseif($data_page['check_manager']==0 and $data_page['check_number']==0) {
+                        $status='檢查者未審核';
+                    }
+                    echo $status;   
+                    echo '</td>';
+                    $r_member=sql_database('cname','FA.Employee','e_number',$data_page['r_member']);
+                    $manager=sql_database('cname','FA.Employee','e_number',$data_page['managerID']);
+                    echo '<td width="10%" align="center">'.$r_member.'</td>';
+                    echo '<td width="10%" align="center">'.$manager.'</td>';
+                    $q=$data_page['recordID'];
+                    echo "<input type='hidden' name=\"".$k."\" value=\"".$q."\">";
+                $i++;
+                $j++;
+                $k++;
+                echo '</tr>';
+            }
+            echo '</tbody>';
+            echo '</table>';
+            
+            //計算總頁數
+            $total_page=ceil($total_num/$pageRow_record);
+            echo '<table border="0" align="center">';    
+                echo '<tr>';
+                    echo '<td><h5>'.'未簽核清單共計'.$total_num.'筆(共'.$total_page.'頁)'.'</h5></td>';
+                echo '</tr>';
+            echo '</table>';
+            echo '<table border="0" align="center">';
+                echo '<tr>';
+                    if ($page_num>1) {
+                        $prev=$page_num-1;
+                        echo '<td><a href="mtlistsearch.php?page=1">'."[第一頁]".'</a></td>';
+                        echo "<td><a href=\"mtlistsearch.php?page={$prev}\">"."[<<<上一頁]".'</a></td>';
+                    }
+                    if ($page_num<$total_page) {
+                        $next=$page_num+1;
+                        echo "<td>"."<a href=\"mtlistsearch.php?page={$next}\">"."[下一頁>>>]".'</a></td>';
+                        echo "<td><a href=\"mtlistsearch.php?page=$total_page\">".'[最末頁]'.'</a></td>';
+                    }
+                echo '</tr>';
+            echo '</table>';
+            
+            //分頁按鈕一次七頁
+            $phpfile = 'mtlistsearch.php';
+            $page= isset($_GET['page'])?$_GET['page']:1;        
+            $getpageinfo = page($page,$total_num,$phpfile);
+            echo '<div align="center">'; 
+            echo $getpageinfo['pagecode'];//顯示分頁的html語法
+            echo '</div>';
+            //分頁按鈕end
+            ?>
         </div>
+        <form action="mtlistfilter.php" method="post" name="mtlist"> 
+            <div>
+                <div align="left">
+                    日期區間搜索：</br>
+                    開始時間：<input type="date" name="start_date">&nbsp&nbsp結束時間：<input type="date" name="end_date">            
+            </div>
+            <div>
+                <div align="left">
+                    </br>關鍵字：<input type="text" name="keywordsearch">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="submit" value="查詢">
+                </div>           
+            </div>            
+        </form>
         <input type="hidden" name="total_num" value="<?= $total_num?>">;
-        <input type="hidden" name="action" value="check">
-        <!-- 送出鈕 -->
-        <div class="d-flex justify-content-end">
-            <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>
-        </div>
-    </section>
-    </form>
+        <input type="hidden" name="action" value="new_page">       
+    </section>    
+    <script>
+        (function(document) {
+            //表格排序
+            $("#searchlist").tablesorter();
+            // 'use strict';
+            // // 建立 LightTableFilter
+            // var LightTableFilter = (function(Arr) {
+            //     var _input;
+            //     // 資料輸入事件處理函數
+            //     function _onInputEvent(e) {
+            //         _input = e.target;
+            //         var tables = document.getElementsByClassName(_input.getAttribute('data-table'));
+            //         Arr.forEach.call(tables, function(table) {
+            //             Arr.forEach.call(table.tBodies, function(tbody) {
+            //             Arr.forEach.call(tbody.rows, _filter);
+            //             });
+            //         });
+            //     }
+            //     // 資料篩選函數，顯示包含關鍵字的列，其餘隱藏
+            //     function _filter(row) {
+            //         var text = row.textContent.toLowerCase(), val = _input.value.toLowerCase();
+            //         row.style.display = text.indexOf(val) === -1 ? 'none' : 'table-row';
+            //     }
+            //     return {
+            //     // 初始化函數
+            //         init: function() {
+            //             var inputs = document.getElementsByClassName('light-table-filter');
+            //             Arr.forEach.call(inputs, function(input) {
+            //             input.oninput = _onInputEvent;
+            //             });
+            //         }
+            //     };
+            // })(Array.prototype);
+            // // 網頁載入完成後，啟動 LightTableFilter
+            // document.addEventListener('readystatechange', function() {
+            //     if (document.readyState === 'complete') {
+            //         LightTableFilter.init();
+            //     }
+            // });
+        })(document);
+    </script>    
     <!-- footer網頁尾頁 -->
     <footer>
         <div id="footer"></div>
-    </footer>
+    </footer>        
 </body>
 </html>

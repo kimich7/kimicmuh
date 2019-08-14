@@ -1,9 +1,9 @@
 <?php
 session_start();
+include("CMUHconndata.php");
 $userID=$_SESSION["login_number"];
 $user=$_SESSION["login_member"];
 $loginAutho = $_SESSION["login_authority"];
-//$password=$_SESSION["login_password"];
 $login_success=$_SESSION["login_success"];
 $notice = 0;
 if ($userID=='A8240') {
@@ -11,7 +11,6 @@ if ($userID=='A8240') {
 }
     $result = array();
     $result1 = array();
-
     $result['notice'] = $notice;//判斷是不是異常處理系統主則長官
     $result['login_success'] = $login_success;
     $result['login_number'] = $userID;

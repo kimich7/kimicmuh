@@ -17,6 +17,17 @@
         }
     }
 
+    FUNCTION checkNamelike($keyword){
+        include("CMUHconndata.php");
+        $view_select = "SELECT e_number FROM FA.Employee WHERE cname like '%$keyword%' ";
+        $view_query=$pdo->query($view_select);
+        while ($name = $view_query->fetch()) {
+            $view=array($name["e_number"]);
+        };        
+        $pdo=null;
+        return $view;
+    }
+
     function sql_database_int($col,$tbl,$when,$wheans){//對照欄位的名稱，通常用在ID找名稱        
         include("CMUHconndata.php");
         $view_select = "SELECT $col FROM $tbl WHERE $when = $wheans ";

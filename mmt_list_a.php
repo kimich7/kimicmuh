@@ -87,7 +87,7 @@ $ammtmAll=array();
             <input type="hidden" name="mmtsysa" value='A'>
             <div class="row my-3">
                 <div class="col">
-                    <p class="d-inline font-weight-bold">&nbsp&nbsp&nbsp&nbsp新增保養：<button type='submit' name="mmtsysabtn" class="btn btn-primary" >新增</button></p>
+                    <p class="d-inline font-weight-bold">&nbsp&nbsp&nbsp&nbsp新增保養：<button type='submit' name="mmtsysabtn" class="btn btn-primary aclass"  disabled>新增</button></p>
                 </div>
                     <!-- <h4>&nbsp&nbsp&nbsp&nbsp新增保養：<a class="btn btn-primary" href="mmtCreate_a_choice.php" class="text-dark">新增</a></h4>    -->
                 <div class="col text-right">
@@ -128,7 +128,7 @@ $ammtmAll=array();
                 'status'=>$row["status"]//狀態(W/F/D 未審核/完成/作廢)
             );    
         }
-        $sql_page_num=count($ammtm);
+        @$sql_page_num=count($ammtm);
             //for ($i=0; $i <$ammtmnum ; $i++) {    
             for ($i=0; $i <$sql_page_num ; $i++) {
                 $k=$i+2000;

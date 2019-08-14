@@ -6,7 +6,7 @@
     $checkuserID=sql_database('e_number','FA.Employee','cname',$checkuser);
     
     //20190712修改(未完成)
-    $securityNoStr="SELECT e.sid,e.e_number,k.sysID FROM FA.securityemp as e LEFT JOIN FA.securityKind as k on e.sid=k.id  WHERE e.e_number='$checkuserID' AND k.sysID='$sysNo'";
+    $securityNoStr="SELECT e.sid,e.e_number,k.sysID FROM FA.securityemp as e LEFT JOIN FA.securityKind as k on e.sid=k.id  WHERE e.e_number='$checkuserID'";// AND k.sysID='$sysNo'";
     $securityNo=$pdo->Query($securityNoStr)->fetch();
     if (isset($securityNo) and $securityNo!='') {
         $sNumber=$securityNo['sid'];//權限區域

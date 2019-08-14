@@ -150,8 +150,8 @@ if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
 
     for ($i=0; $i < $num; $i++) { 
         $S1_id=$i+800;//S1 id欄位的名稱       
-        $ans1=$_POST["$i"];//取得S1的答案        
-        $dids1=$_POST["$S1_id"];//取得S1的ID
+        @$ans1=$_POST["$i"];//取得S1的答案        
+        @$dids1=$_POST["$S1_id"];//取得S1的ID
         $sql="UPDATE FA.MMT_FtableD SET ans=:ans,remark = null WHERE id=:ID";
         $stmt = $pdo->prepare($sql);        
         $stmt->bindParam(':ans',$ans1,PDO::PARAM_STR);
@@ -161,8 +161,8 @@ if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
     for ($i=0; $i < $num; $i++) {         
         $j=$i+200;//S2答案欄名稱($i是S1答案欄名稱)
         $S2_id=$i+1000;//S2 id欄位的名稱
-        $ans2=$_POST["$j"];//取得S2的答案
-        $dids2=$_POST["$S2_id"];//取得S2的ID
+        @$ans2=$_POST["$j"];//取得S2的答案
+        @$dids2=$_POST["$S2_id"];//取得S2的ID
         $sql="UPDATE FA.MMT_FtableD SET ans=:ans,remark = null WHERE id=:ID";
         $stmt = $pdo->prepare($sql);        
         $stmt->bindParam(':ans',$ans2,PDO::PARAM_STR);
@@ -172,8 +172,8 @@ if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
     for ($i=0; $i < $num; $i++) {         
         $k=$i+400;//S3答案欄名稱        
         $S3_id=$i+1200;//S3 id欄位的名稱       
-        $ans3=$_POST["$k"];   //取得S3的答案     
-        $dids3=$_POST["$S3_id"];//取得S3的ID
+        @$ans3=$_POST["$k"];   //取得S3的答案     
+        @$dids3=$_POST["$S3_id"];//取得S3的ID
         $sql="UPDATE FA.MMT_FtableD SET ans=:ans,remark = null WHERE id=:ID";
         $stmt = $pdo->prepare($sql);        
         $stmt->bindParam(':ans',$ans3,PDO::PARAM_STR);
@@ -183,8 +183,8 @@ if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
     for ($i=0; $i < $num; $i++) {
         $l=$i+600;//S4答案欄名稱
         $S4_id=$i+1400;//S4 id欄位的名稱
-        $ans4=$_POST["$l"];//取得S4的答案
-        $dids4=$_POST["$S4_id"];//取得S4的ID
+        @$ans4=$_POST["$l"];//取得S4的答案
+        @$dids4=$_POST["$S4_id"];//取得S4的ID
         $sql="UPDATE FA.MMT_FtableD SET ans=:ans,remark = null WHERE id=:ID";
         $stmt = $pdo->prepare($sql);        
         $stmt->bindParam(':ans',$ans4,PDO::PARAM_STR);
