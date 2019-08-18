@@ -1,11 +1,20 @@
 <?php
+                // id	sName	         sysID
+                // 1	抄表電力系統檢查人	4
+                // 2	抄表空調系統檢查人	3
+                // 3	抄表氣體系統檢查人	2
+                // 4	抄表水系統檢查人	1
+                // 5	抄表電力系統主管	4
+                // 6	抄表空調系統主管	3
+                // 7	抄表氣體系統主管	2
+                // 8	抄表水系統主管	    1
     include("php/CMUHconndata.php");
     include("php/fun.php");
     session_start();
     $checkuser=$_SESSION["login_member"];
     $checkuserID=sql_database('e_number','FA.Employee','cname',$checkuser);
     
-    //20190712修改(未完成)
+    //-----20190712判斷登錄者的權限--------
     $securityNoStr="SELECT e.sid,e.e_number,k.sysID FROM FA.securityemp as e LEFT JOIN FA.securityKind as k on e.sid=k.id  WHERE e.e_number='$checkuserID'";// AND k.sysID='$sysNo'";
     $securityNo=$pdo->Query($securityNoStr)->fetch();
     if (isset($securityNo) and $securityNo!='') {
@@ -18,11 +27,46 @@
     } else {
         $checksum=3;//只能看
     }
-    //20190712修改(未完成)
+    //------END---------
 
+
+    //----20190815確認登入者到甚麼權限
+    
+    
+    $sec="SELECT m.*  FROM FA.Water_System_Record_Master as m left join FA.securityKind as s ON  m.sysID=s.sysID  left join FA.securityemp as e ON s.id=e.sid WHERE e.e_number='$checkuserID'";
+    //-----END------
+    
+    $pageRow_record=10;//每頁的筆數
+    $page_num=1;//預設的頁數
+    //更新$page_num        
+    if (isset($_GET['page'])) {
+        $page_num=$_GET['page'];
+    }
+    $startRow_record=($page_num-1)*$pageRow_record;
 
     $str_member="SELECT * FROM FA.Employee WHERE e_number='$checkuserID'";
     $member=$pdo->query($str_member)->fetch();
+    if ($member['rank']<3) {
+        //所有的資料 (check_manager IS NULL or check_manager=0) and
+        $sqlstr_total="SELECT * FROM FA.Water_System_Record_Master WHERE (check_number=1) and (check_manager IS NULL or check_manager=0)";
+        //篩選後給每頁的筆數
+        $sqlstr_page="SELECT * FROM FA.Water_System_Record_Master WHERE (check_number=1) and (check_manager IS NULL or check_manager=0) ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+        //總資料數量
+        $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE (check_number=1) and (check_manager IS NULL or check_manager=0)";
+    } else {
+        //所有的資料
+        $sqlstr_total="SELECT * FROM FA.Water_System_Record_Master WHERE check_number IS NULL or check_number=0 or check_manager IS NULL or check_manager=0";
+        //篩選後給每頁的筆數
+        $sqlstr_page="SELECT * FROM FA.Water_System_Record_Master WHERE check_number IS NULL or check_number=0 or check_manager IS NULL or check_manager=0 ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+        //總資料數量
+        $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE check_number IS NULL or check_number=0 or check_manager IS NULL or check_manager=0";
+    }
+    $sql_page=$pdo->query($sqlstr_page);
+    $sql_total=$pdo->query($sqlstr_total);
+    $total_num=CURRENT($pdo->query($totalstr_num)->fetch());
+
+
+    
     if (isset($_POST["action"])&&($_POST["action"]=="check")) {
         $total_num=$_POST["total_num"];
         for ($i=0; $i<$total_num ; $i++) { 
@@ -97,31 +141,7 @@
         <h1 class="text-center">設備保養表單未簽核清單</h1>
         <div class="list-group mx-5 my-5">
         <?php
-        $pageRow_record=10;//每頁的筆數
-        $page_num=1;//預設的頁數
-        //更新$page_num        
-        if (isset($_GET['page'])) {
-            $page_num=$_GET['page'];
-        }
-        $startRow_record=($page_num-1)*$pageRow_record;
-        if ($member['rank']<3) {
-            //所有的資料 (check_manager IS NULL or check_manager=0) and
-            $sqlstr_total="SELECT * FROM FA.Water_System_Record_Master WHERE (check_number=1) and (check_manager IS NULL or check_manager=0)";
-            //篩選後給每頁的筆數
-            $sqlstr_page="SELECT * FROM FA.Water_System_Record_Master WHERE (check_number=1) and (check_manager IS NULL or check_manager=0) ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
-            //總資料數量
-            $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE (check_number=1) and (check_manager IS NULL or check_manager=0)";
-        } else {
-            //所有的資料
-            $sqlstr_total="SELECT * FROM FA.Water_System_Record_Master WHERE check_number IS NULL or check_number=0 or check_manager IS NULL or check_manager=0";
-            //篩選後給每頁的筆數
-            $sqlstr_page="SELECT * FROM FA.Water_System_Record_Master WHERE check_number IS NULL or check_number=0 or check_manager IS NULL or check_manager=0 ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
-            //總資料數量
-            $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE check_number IS NULL or check_number=0 or check_manager IS NULL or check_manager=0";
-        }
-        $sql_page=$pdo->query($sqlstr_page);
-        $sql_total=$pdo->query($sqlstr_total);
-        $total_num=CURRENT($pdo->query($totalstr_num)->fetch());
+        
         
         //本業開始的筆數
         $i=0;

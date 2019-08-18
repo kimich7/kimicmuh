@@ -247,12 +247,7 @@
                 echo @$getpageinfo['pagecode'];//顯示分頁的html語法
             echo '</div>';
             //分頁按鈕end
-            //------------帶到下一頁的資料-----------------            
-            echo "<input type='hidden' name='action' value='next_page'>";
-            echo "<input type='hidden' name='startDate' value='$start_date'>";
-            echo "<input type='hidden' name='endDate' value='$end_date'>";
-            echo "<input type='hidden' name='keyword' value='$keyword'>";
-            //-----------帶到下一頁的資料完-------------------
+            
             ?>
 
         </div>

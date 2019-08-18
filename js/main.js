@@ -54,43 +54,43 @@ $(function () {
         }
     });
 
-    // 登入者等級
-    $.getJSON("php/security.php", function (data) {
-        var num = data.length;
-        for (let i = 0; i < num; i++) {
-            var $securitylevel = data[i]["sid"];
-            switch ($securitylevel) {
-                case "9": //保養空調系統保養人員
-                    $(".aclass").removeAttr("disabled").removeAttr("style");
-                    $(".billBoard1,.billBoard2,.billBoard3,.billBoard4").tooltip('dispose');
-                    break;
-                case "10": //保養空調系統審核人員
-                    $(".autho2,.autho3,.autho4,.managerCheck").removeAttr("disabled").removeAttr("style");
-                    $(".billBoard2,.billBoard3,.billBoard4").tooltip('dispose');
-                    break;
-                case "11": //保養消防系統保養人員
-                    $(".autho3,.autho4,.employeeCheck").removeAttr("disabled").removeAttr("style");
-                    $(".billBoard3,.billBoard4").tooltip('dispose');
-                    break;
-                case "12": //保養消防系統廠商
-                    $(".autho4").removeAttr("disabled").removeAttr("style");
-                    $(".billBoard4").tooltip('dispose');
-                    break;
-                case "13": //保養消防系統審核人員
-                    $(".autho4").removeAttr("disabled").removeAttr("style");
-                    $(".billBoard4").tooltip('dispose');
-                    break;
-                case "14": //保養氣體系統保養人員
-                    $(".autho4").removeAttr("disabled").removeAttr("style");
-                    $(".billBoard4").tooltip('dispose');
-                    break;
-                case "15": //保養氣體系統審核人員
-                    $(".autho4").removeAttr("disabled").removeAttr("style");
-                    $(".billBoard4").tooltip('dispose');
-                    break;
-            }
-        }
-    });
+    // 20190818登入者等級待啟用
+    // $.getJSON("php/security.php", function (data) {
+    //     var num = data.length;
+    //     for (let i = 0; i < num; i++) {
+    //         var $securitylevel = data[i]["sid"];
+    //         switch ($securitylevel) {
+    //             case "9": //保養空調系統保養人員
+    //                 $(".aclass").removeAttr("disabled").removeAttr("style");
+    //                 $(".billBoard1,.billBoard2,.billBoard3,.billBoard4").tooltip('dispose');
+    //                 break;
+    //             case "10": //保養空調系統審核人員
+    //                 $(".autho2,.autho3,.autho4,.managerCheck").removeAttr("disabled").removeAttr("style");
+    //                 $(".billBoard2,.billBoard3,.billBoard4").tooltip('dispose');
+    //                 break;
+    //             case "11": //保養消防系統保養人員
+    //                 $(".autho3,.autho4,.employeeCheck").removeAttr("disabled").removeAttr("style");
+    //                 $(".billBoard3,.billBoard4").tooltip('dispose');
+    //                 break;
+    //             case "12": //保養消防系統廠商
+    //                 $(".autho4").removeAttr("disabled").removeAttr("style");
+    //                 $(".billBoard4").tooltip('dispose');
+    //                 break;
+    //             case "13": //保養消防系統審核人員
+    //                 $(".autho4").removeAttr("disabled").removeAttr("style");
+    //                 $(".billBoard4").tooltip('dispose');
+    //                 break;
+    //             case "14": //保養氣體系統保養人員
+    //                 $(".autho4").removeAttr("disabled").removeAttr("style");
+    //                 $(".billBoard4").tooltip('dispose');
+    //                 break;
+    //             case "15": //保養氣體系統審核人員
+    //                 $(".autho4").removeAttr("disabled").removeAttr("style");
+    //                 $(".billBoard4").tooltip('dispose');
+    //                 break;
+    //         }
+    //     }
+    // });
 
 
 
@@ -359,6 +359,9 @@ $(function () {
             }
         });
     });
+
+
+
     //用getJSON讀取data內的資料(班別)
     $("#Three_shifts,#uThree_shifts").one("click", function () {
         $.getJSON("php/data.php", {
@@ -434,6 +437,8 @@ $(function () {
         });
     })
 
+
+
     $("#ubuild").one("click", function () {
         var cyID = $("#ucourtyard").val();
         $.getJSON("php/insertdata.php", {
@@ -451,7 +456,23 @@ $(function () {
     })
 
     //院區更換時，棟別的選項也要跟著變
-    $("#courtyard").one("click", function () { //change->one("click")
+    // $("#courtyard").one("click", function () { //change->one("click")
+    //     var cyID = $("#courtyard").val();
+    //     $.getJSON("php/insertdata.php", {
+    //         colID: 'b_number',
+    //         colName: 'B_name',
+    //         cyID: cyID,
+    //         seachNo: '2'
+    //     }, function (data) {
+    //         var html = '<option value="" selected> 請選擇棟別 </option>';
+    //         for (let i = 0; i < data.length; i++) {
+    //             html += "<option value=\"" + data[i]["b_number"] + "\">" + data[i]["B_name"] + "</option>";
+    //             $("#build").html(html);
+    //         }
+    //     });
+    // }).change();
+    //----20190814測試----
+    $("#courtyard").change(function () { //change->one("click")
         var cyID = $("#courtyard").val();
         $.getJSON("php/insertdata.php", {
             colID: 'b_number',
@@ -466,6 +487,9 @@ $(function () {
             }
         });
     }).change();
+    //-------------------
+
+
     $("#ucourtyard").change(function () {
         var cyID = $("#ucourtyard").val();
         $.getJSON("php/insertdata.php", {

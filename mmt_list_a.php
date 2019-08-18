@@ -87,7 +87,8 @@ $ammtmAll=array();
             <input type="hidden" name="mmtsysa" value='A'>
             <div class="row my-3">
                 <div class="col">
-                    <p class="d-inline font-weight-bold">&nbsp&nbsp&nbsp&nbsp新增保養：<button type='submit' name="mmtsysabtn" class="btn btn-primary aclass"  disabled>新增</button></p>
+                    <!-- <p class="d-inline font-weight-bold">&nbsp&nbsp&nbsp&nbsp新增保養：<button type='submit' name="mmtsysabtn" class="btn btn-primary aclass"  disabled>新增</button></p> -->
+                    <p class="d-inline font-weight-bold">&nbsp&nbsp&nbsp&nbsp新增保養：<button type='submit' name="mmtsysabtn" class="btn btn-primary "  >新增</button></p>
                 </div>
                     <!-- <h4>&nbsp&nbsp&nbsp&nbsp新增保養：<a class="btn btn-primary" href="mmtCreate_a_choice.php" class="text-dark">新增</a></h4>    -->
                 <div class="col text-right">

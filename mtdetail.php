@@ -49,18 +49,18 @@
     @$echeck=$status['eeCheck'];//確認是否做檢查了
     @$mcheck=$status['mgrCheck'];//確認是否做檢查了
     
-    if (!isset($echeck) or $echeck==0 ) {
-        $checkmanID='尚未檢查';
-        $echeck=0;
-    }else{
-        $echeck=1;
-    }
-    if (!isset($mcheck) or $mcheck==0 ) {
-        $managerID='主管尚未核准';
-        $mcheck=0;
-    }else{
-        $mcheck=1;
-    }    
+    // if (!isset($echeck) or $echeck==0 ) {
+    //     $checkmanID='尚未檢查';
+    //     $echeck=0;
+    // }else{
+    //     $echeck=1;
+    // }
+    // if (!isset($mcheck) or $mcheck==0 ) {
+    //     $managerID='主管尚未核准';
+    //     $mcheck=0;
+    // }else{
+    //     $mcheck=1;
+    // }    
     //權限分類功能結束
 
     $bname=sql_database('B_name','FA.Building','b_number',$buildNo);
@@ -74,12 +74,35 @@
     $num=num("SELECT COUNT(equipCheckID) FROM FA.Equipment_Check WHERE b_number='$buildNo' and sysID=$sysNo");
     $checkName=array();//用來放equipCheckName的陣列
     //早中晚班資料的撈取
-    $ans1=item("SELECT B.recordDetailID,B.checkResult,B.r_member FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID FROM $systemTable WHERE recordID=$MasterID AND shiftID=1)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID");
-    $ans2=item("SELECT B.recordDetailID,B.checkResult,B.r_member FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID FROM $systemTable WHERE recordID=$MasterID AND shiftID=2)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID");
-    $ans3=item("SELECT B.recordDetailID,B.checkResult,B.r_member FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID FROM $systemTable WHERE recordID=$MasterID AND shiftID=3)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID");
+    $ans1=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=1)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID");
+    $ans2=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=2)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID");
+    $ans3=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=3)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID");
     $user_1No=$ans1[0]["r_member"];
     $user_2No=$ans2[0]["r_member"];
-    $user_3No=$ans3[0]["r_member"];
+    $user_3No=$ans3[0]["r_member"];    
+    
+    //備註內容整合
+    $remark='';
+    //早班備註
+    if (isset($ans1[0]["remark"]) && $ans1[0]["remark"]!='') {
+        $remark.='早班：'.$ans1[0]["remark"].'。'.chr(13);
+    } else {
+        $remark='';
+    }
+    //中班備註
+    if (isset($ans2[0]["remark"]) && $ans2[0]["remark"]!='') {
+        $remark.='中班：'.$ans2[0]["remark"].'。'.chr(13);
+    } else {
+        $remark.='';
+    }
+    //晚班備註
+    if (isset($ans3[0]["remark"]) && $ans3[0]["remark"]!='') {
+        $remark.='晚班：'.$ans3[0]["remark"].'。'.chr(13);
+    } else {
+        $remark.='';
+    }
+    
+
     if (!isset($user_1No)or $user_1No=='' ) {
         $user_1="該班無抄表紀錄";
     } else {
@@ -96,43 +119,7 @@
         $user_3=sql_database('cname','FA.Employee','e_number',$ans3[0]['r_member']);
     }
     
-    // if (isset($_POST["action"])&&($_POST["action"]=="update")) {        
-    //     $recordID=$_POST['MasterID'];
-    //     $checksum=$_POST['checksum'];
-    //     switch ($checksum) {
-    //         case '1':
-    //             if ($_POST["mgrCheck"]=='mgcheck') {
-    //                 $check_manager=1;                    
-    //             }else{
-    //                 $check_manager=0;
-    //                 //$checkuserID=null;                    
-    //             }
-    //             $sql="UPDATE $sysMaster SET managerID=:managerID , check_manager=:check_manager WHERE recordID=:ID";
-    //             $stmt = $pdo->prepare($sql);
-    //             $stmt->bindParam(':managerID',$checkuserID,PDO::PARAM_STR);
-    //             $stmt->bindParam(':check_manager',$check_manager,PDO::PARAM_STR);
-    //             break;
-    //         case '2':
-    //             if ($_POST["eeCheck"]=='mbcheck') {
-    //                 $check_employee=1;
-    //             } else {
-    //                 $check_employee=0;
-    //                 //$checkuserID=null;
-    //             }      
-    //             $sql="UPDATE $sysMaster SET r_member=:r_member , check_number=:check_number WHERE recordID=:ID";
-    //             $stmt = $pdo->prepare($sql);
-    //             $stmt->bindParam(':r_member',$checkuserID,PDO::PARAM_STR);
-    //             $stmt->bindParam(':check_number',$check_employee,PDO::PARAM_STR);          
-    //             break;
-    //         case '3':
-    //             header("Location: mtlistcheck.php");
-    //             break;
-    //     }        
-    //     $stmt->bindParam(':ID',$recordID,PDO::PARAM_INT);
-    //     $stmt->execute();      
-    //     $pdo=null;
-    //     header("Location: mtlistcheck.php");    
-    // }
+    
 ?>
 
 <!DOCTYPE html>
@@ -559,77 +546,60 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">備註：</span>
                 </div>
-                <textarea class="form-control" name="remark" aria-label="With textarea" DISABLED><?= $updatainfo[0]["remark"] ?></textarea>
+                <textarea class="form-control" name="remark" rows="5" aria-label="With textarea" DISABLED><?= $remark ?></textarea>
             </div>
             <input type='hidden' name='MasterID' value='<?= $MasterID?>'>
             <input type='hidden' name='checksum' value='<?= $checksum?>'>
             <?php
-                switch ($checksum) {
-                    case '1':
-                        echo '<div class="row my-3">';
-                            echo '<div class="col text-left">';
-                            echo '<p class="d-inline font-weight-bold">主管：</p>';
-                            echo '<p class="d-inline text-primary">'.$checkuser.'&nbsp&nbsp&nbsp</p>';
-                            if ($mcheck==1) {
-                                echo '<p class="d-inline font-weight-bold" name="reMumber"><input type="checkbox" name="mgrCheck" value="mgcheck" checked>主管確認</p>';
-                            echo '</div>';
-                            } else {
-                                echo '<p class="d-inline font-weight-bold" name="reMumber"><input type="checkbox" name="mgrCheck" value="mgcheck">主管確認</p>';
-                            echo '</div>';
-                            }                            
-                            echo '<div class="col text-right">';
-                            echo '<p class="d-inline font-weight-bold">檢查者：</p>';
-                            echo '<p class="d-inline text-primary" name="reMumber">'.$checkmanID.'&nbsp&nbsp&nbsp</p>';
-                            echo '<p class="d-inline font-weight-bold" name="reMumber"><input type="checkbox" name="eeCheck" value="mbcheck" checked disabled >檢查人確認</p>';
-                            echo '</div>';
-                        echo '</div>' ;
-                        break;
-                    
-                    case '2':
-                        echo '<div class="row my-3">';
-                            echo '<div class="col text-left">';
-                            echo '<p class="d-inline font-weight-bold">主管：</p>';
-                            echo '<p class="d-inline text-primary">'.$managerID.'&nbsp&nbsp&nbsp</p>';
-                            echo '<p class="d-inline font-weight-bold" name="reMumber"><input type="checkbox" name="mgrCheck" value="mgcheck" disabled>主管確認</p>';
-                            echo '</div>';
-                            echo '<div class="col text-right">';
-                            echo '<p class="d-inline font-weight-bold">檢查者：</p>';
-                            echo '<p class="d-inline text-primary" name="reMumber">'.$checkuser.'&nbsp&nbsp&nbsp</p>';
-                            if ($echeck==1) {
-                                echo '<p class="d-inline font-weight-bold" name="reMumber"><input type="checkbox" name="eeCheck" value="mbcheck" checked>檢查人確認</p>';
-                                echo '</div>';
-                            } else {
-                                echo '<p class="d-inline font-weight-bold" name="reMumber"><input type="checkbox" name="eeCheck" value="mbcheck" >檢查人確認</p>';
-                                echo '</div>';
-                            }
-                        echo '</div>' ;
-                        break;
-                    
-                    case '3':
-                        echo '<div class="row my-3">';
-                            echo '<div class="col text-left">';
-                            echo '<p class="d-inline font-weight-bold">主管：</p>';
-                            echo '<p class="d-inline text-primary">'.$managerID.'&nbsp&nbsp&nbsp</p>';
-                            if ($mcheck==1) {
-                                echo '<p class="d-inline font-weight-bold" name="reMumber"><input type="checkbox" name="mgrCheck" value="mgcheck" disabled checked>主管確認</p>';
-                                echo '</div>';                                
-                            } else {
-                                echo '<p class="d-inline font-weight-bold" name="reMumber"><input type="checkbox" name="mgrCheck" value="mgcheck" disabled >主管確認</p>';
-                                echo '</div>';
-                            }                             
-                            echo '<div class="col text-right">';
-                            echo '<p class="d-inline font-weight-bold">檢查者：</p>';
-                            echo '<p class="d-inline text-primary" name="reMumber">'.$checkmanID.'&nbsp&nbsp&nbsp</p>';
-                            if ($echeck==1) {
-                                echo '<p class="d-inline font-weight-bold" name="reMumber"><input type="checkbox" name="eeCheck" value="mbcheck" disabled checked>檢查人確認</p>';
-                            echo '</div>';
-                            } else {
-                                echo '<p class="d-inline font-weight-bold" name="reMumber"><input type="checkbox" name="eeCheck" value="mbcheck" disabled>檢查人確認</p>';
-                                echo '</div>';
-                            }                            
-                        echo '</div>' ;
-                        break;
-                }
+            // @$checkmanID=$status['employeeID'];//確認是否有檢查者
+            // $checkman=sql_database('cname','FA.Employee','e_number',$checkmanID);
+            // @$managerID=$status['managerID'];//確認是否有主管檢查者
+            // @$echeck=$status['eeCheck'];//確認檢查者是否做檢查了
+            // @$mcheck=$status['mgrCheck'];//確認主管是否做檢查了
+
+            //檢查者未檢查主管未審核
+            if ((!isset($echeck)or$echeck=='') && (!isset($status)or $status=='')) {
+                echo '<div class="row my-3">';
+                    echo '<div class="col text-left">';
+                        echo '<p class="d-inline font-weight-bold">主管：</p>';
+                        echo '<p class="d-inline text-primary">主管尚未審核&nbsp&nbsp&nbsp</p>';
+                    echo '</div>';
+                    echo '<div class="col text-right">';
+                        echo '<p class="d-inline font-weight-bold">檢查者：</p>';
+                        echo '<p class="d-inline text-primary" name="reMumber">檢查者尚未檢查&nbsp&nbsp&nbsp</p>';                    
+                    echo '</div>';
+                echo '</div>' ;
+            }
+            //檢查者已檢查主管未審核            
+            if ((isset($echeck)&& $echeck!='') && (!isset($status)or $status=='')) {
+                $checkman=sql_database('cname','FA.Employee','e_number',$checkmanID);
+                echo '<div class="row my-3">';
+                    echo '<div class="col text-left">';
+                        echo '<p class="d-inline font-weight-bold">主管：</p>';
+                        echo '<p class="d-inline text-primary">主管尚未審核&nbsp&nbsp&nbsp</p>';
+                    echo '</div>';
+                    echo '<div class="col text-right">';
+                        echo '<p class="d-inline font-weight-bold">檢查者：</p>';
+                        echo '<p class="d-inline text-primary" name="reMumber">'.$checkman.'&nbsp已檢查&nbsp&nbsp</p>';                    
+                    echo '</div>';
+                echo '</div>' ;
+            }
+
+            //檢查者已檢查主管已審核            
+            if ((isset($echeck)&& $echeck!='') && (isset($status)&& $status!='')) {
+                $checkman=sql_database('cname','FA.Employee','e_number',$checkmanID);
+                $manager=sql_database('cname','FA.Employee','e_number',$managerID);
+                echo '<div class="row my-3">';
+                    echo '<div class="col text-left">';
+                        echo '<p class="d-inline font-weight-bold">主管：</p>';
+                        echo '<p class="d-inline text-primary">'.$manager.'&nbsp已審核&nbsp&nbsp</p>';
+                    echo '</div>';
+                    echo '<div class="col text-right">';
+                        echo '<p class="d-inline font-weight-bold">檢查者：</p>';
+                        echo '<p class="d-inline text-primary" name="reMumber">'.$checkman.'&nbsp已檢查&nbsp&nbsp</p>';                    
+                    echo '</div>';
+                echo '</div>' ;
+            }            
             ?>
             
             <!-- 傳送值到資料庫中 -->
