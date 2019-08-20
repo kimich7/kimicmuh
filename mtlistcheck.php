@@ -21,21 +21,14 @@
         $sNumber=$securityNo['sid'];//權限區域
         if ($sNumber>4 and $sNumber<9) {
             $checksum=1;//可簽核-身分主管
-        } else {
+        } 
+        if($sNumber>=1 and $sNumber<=4){
             $checksum=2;//可簽核-檢查者
         }        
     } else {
         $checksum=3;//只能看
     }
     //------END---------
-
-
-    //----20190815確認登入者到甚麼權限
-    
-    
-    $sec="SELECT m.*  FROM FA.Water_System_Record_Master as m left join FA.securityKind as s ON  m.sysID=s.sysID  left join FA.securityemp as e ON s.id=e.sid WHERE e.e_number='$checkuserID'";
-    //-----END------
-    
     $pageRow_record=10;//每頁的筆數
     $page_num=1;//預設的頁數
     //更新$page_num        
@@ -44,28 +37,27 @@
     }
     $startRow_record=($page_num-1)*$pageRow_record;
 
-    $str_member="SELECT * FROM FA.Employee WHERE e_number='$checkuserID'";
-    $member=$pdo->query($str_member)->fetch();
-    if ($member['rank']<3) {
-        //所有的資料 (check_manager IS NULL or check_manager=0) and
-        $sqlstr_total="SELECT * FROM FA.Water_System_Record_Master WHERE (check_number=1) and (check_manager IS NULL or check_manager=0)";
-        //篩選後給每頁的筆數
-        $sqlstr_page="SELECT * FROM FA.Water_System_Record_Master WHERE (check_number=1) and (check_manager IS NULL or check_manager=0) ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
-        //總資料數量
-        $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE (check_number=1) and (check_manager IS NULL or check_manager=0)";
+    //----20190815確認登入者到甚麼權限
+    if ($checksum==1) {
+        //所有的資料 (check_manager IS NULL or check_number=1)檢查者已確認
+        $sqlstr_total="SELECT m.*  FROM FA.Water_System_Record_Master as m left join FA.securityKind as s ON  m.sysID=s.sysID  left join FA.securityemp as e ON s.id=e.sid WHERE e.e_number='$checkuserID' and (check_number=1) and (check_manager IS NULL or check_manager=0)";
+        //分頁資料
+        $sqlstr_page="SELECT m.*  FROM FA.Water_System_Record_Master as m left join FA.securityKind as s ON  m.sysID=s.sysID  left join FA.securityemp as e ON s.id=e.sid WHERE e.e_number='$checkuserID' and (check_number=1) and (check_manager IS NULL or check_manager=0) ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+        //總資料量
+        $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master as m left join FA.securityKind as s ON  m.sysID=s.sysID  left join FA.securityemp as e ON s.id=e.sid WHERE e.e_number='$checkuserID' and (check_number=1) and (check_manager IS NULL or check_manager=0)";
     } else {
-        //所有的資料
-        $sqlstr_total="SELECT * FROM FA.Water_System_Record_Master WHERE check_number IS NULL or check_number=0 or check_manager IS NULL or check_manager=0";
-        //篩選後給每頁的筆數
-        $sqlstr_page="SELECT * FROM FA.Water_System_Record_Master WHERE check_number IS NULL or check_number=0 or check_manager IS NULL or check_manager=0 ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
-        //總資料數量
-        $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master WHERE check_number IS NULL or check_number=0 or check_manager IS NULL or check_manager=0";
+        //所有的資料 (check_manager IS NULL or check_manager=0)都還沒有人確認，主管不會看到這資料
+        $sqlstr_total="SELECT m.*  FROM FA.Water_System_Record_Master as m left join FA.securityKind as s ON  m.sysID=s.sysID  left join FA.securityemp as e ON s.id=e.sid WHERE e.e_number='$checkuserID'";
+        //分頁資料
+        $sqlstr_page="SELECT m.*  FROM FA.Water_System_Record_Master as m left join FA.securityKind as s ON  m.sysID=s.sysID  left join FA.securityemp as e ON s.id=e.sid WHERE e.e_number='$checkuserID' ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+        //總資料量
+        $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master as m left join FA.securityKind as s ON  m.sysID=s.sysID  left join FA.securityemp as e ON s.id=e.sid WHERE e.e_number='$checkuserID'";
     }
+    //-----END------
+    
     $sql_page=$pdo->query($sqlstr_page);
     $sql_total=$pdo->query($sqlstr_total);
     $total_num=CURRENT($pdo->query($totalstr_num)->fetch());
-
-
     
     if (isset($_POST["action"])&&($_POST["action"]=="check")) {
         $total_num=$_POST["total_num"];
@@ -148,11 +140,11 @@
         $j=$i+1000;
         $k=$i+2000;
         $a=0;
-        echo '<table border="1" align="center" width="80%">';
-        echo '<thead align="center">';
-        echo '<th>項  目</th>';
-        echo '<th>主  管</th>';
-        echo '<th>檢查人</th>';
+        echo '<table  id="checklist" class="display tablesorter table table-striped table-bordered table-hover col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12 table-sm order-table" align="center" width="80%">';
+        echo '<thead align="center" class="thead-light">';
+        echo '<th class="th-sm">項  目</th>';
+        echo '<th class="th-sm">主  管</th>';
+        echo '<th class="th-sm">檢查人</th>';
         echo '</thead>';
         echo '<tbody>';
         $mgcheck="mgcheck";

@@ -25,7 +25,26 @@
         @$start_date=$_POST["start_date"];
         @$end_date=$_POST["end_date"];
         @$keyword=$_POST["keywordsearch"];  
-    }    
+    } 
+    //----20190820模糊搜索審核欄位(未完)
+    // switch ($keyword) {
+    //     case strpos('完成',$keyword):
+    //         $status=1;
+    //         break;
+    //     case strpos('未',$keyword):
+    //         $status=0;
+    //         break;
+    //     case strpos('主管',$keyword):
+    //         $status=0;
+    //         break;
+    //     case strpos('檢查者',$keyword):
+    //         $status=0;
+    //         break;
+    //     default:
+    //         # code...
+    //         break;
+    // }
+    
     
     if ((isset($_POST["action"])&&($_POST["action"]=="new_page"))&&((!isset($start_date) or $start_date=='') && (!isset($end_date)or $end_date=='')&& (!isset($keyword) or $keyword==''))) {
          header("Location: mtlistsearch.php");
@@ -179,7 +198,7 @@
             echo '<th class="th-sm">狀   態</th>';
             echo '<th class="th-sm">檢 查 人</th>';
             echo '<th class="th-sm">主   管</th>';
-            echo '</tr class="th-sm">';
+            echo '</tr>';
             echo '</thead>';
             echo '<tbody>';
             $mgcheck="mgcheck";

@@ -54,43 +54,88 @@ $(function () {
         }
     });
 
+    //----20190820 Hyperlink Disabled 在chrome無效需要此段程式
+    $(function () {
+        //避免 disabled 的 hyperlink 被觸發， chrome,firefox 需要這段處理
+        //判斷每一個超連結，如果屬性有設 disabled，就避免觸發 click 事件。
+        $("a").click(function () {
+            if ($(this).attr("disabled") == "disabled") {
+                event.preventDefault();
+            }
+        });
+    });
+    //--------Hyperlink Disabled無效解決方式end---------------
+
     // 20190818登入者等級待啟用
-    // $.getJSON("php/security.php", function (data) {
-    //     var num = data.length;
-    //     for (let i = 0; i < num; i++) {
-    //         var $securitylevel = data[i]["sid"];
-    //         switch ($securitylevel) {
-    //             case "9": //保養空調系統保養人員
-    //                 $(".aclass").removeAttr("disabled").removeAttr("style");
-    //                 $(".billBoard1,.billBoard2,.billBoard3,.billBoard4").tooltip('dispose');
-    //                 break;
-    //             case "10": //保養空調系統審核人員
-    //                 $(".autho2,.autho3,.autho4,.managerCheck").removeAttr("disabled").removeAttr("style");
-    //                 $(".billBoard2,.billBoard3,.billBoard4").tooltip('dispose');
-    //                 break;
-    //             case "11": //保養消防系統保養人員
-    //                 $(".autho3,.autho4,.employeeCheck").removeAttr("disabled").removeAttr("style");
-    //                 $(".billBoard3,.billBoard4").tooltip('dispose');
-    //                 break;
-    //             case "12": //保養消防系統廠商
-    //                 $(".autho4").removeAttr("disabled").removeAttr("style");
-    //                 $(".billBoard4").tooltip('dispose');
-    //                 break;
-    //             case "13": //保養消防系統審核人員
-    //                 $(".autho4").removeAttr("disabled").removeAttr("style");
-    //                 $(".billBoard4").tooltip('dispose');
-    //                 break;
-    //             case "14": //保養氣體系統保養人員
-    //                 $(".autho4").removeAttr("disabled").removeAttr("style");
-    //                 $(".billBoard4").tooltip('dispose');
-    //                 break;
-    //             case "15": //保養氣體系統審核人員
-    //                 $(".autho4").removeAttr("disabled").removeAttr("style");
-    //                 $(".billBoard4").tooltip('dispose');
-    //                 break;
-    //         }
-    //     }
-    // });
+    $.getJSON("php/security.php", function (data) {
+        var num = data.length;
+        for (let i = 0; i < num; i++) {
+            var $securitylevel = data[i]["sid"];
+            switch ($securitylevel) {
+                case "1": //保養空調系統保養人員
+                    $(".mtcheck").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardcheck").tooltip('dispose');
+                    break;
+                case "2": //保養空調系統審核人員
+                    $(".mtcheck").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardcheck").tooltip('dispose');
+                    break;
+                case "3": //保養消防系統保養人員
+                    $(".mtcheck").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardcheck").tooltip('dispose');
+                    break;
+                case "4": //保養消防系統廠商
+                    $(".mtcheck").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardcheck").tooltip('dispose');
+                    break;
+                case "5": //保養消防系統審核人員
+                    $(".mtcheck").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardcheck").tooltip('dispose');
+                    break;
+                case "6": //保養氣體系統保養人員
+                    $(".mtcheck").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardcheck").tooltip('dispose');
+                    break;
+                case "7": //保養氣體系統審核人員
+                    $(".mtcheck").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardcheck").tooltip('dispose');
+                    break;
+                case "8": //保養氣體系統審核人員
+                    $(".mtcheck").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardcheck").tooltip('dispose');
+                    break;
+
+                    // case "9": //保養空調系統保養人員
+                    //     $(".aclass").removeAttr("disabled").removeAttr("style");
+                    //     $(".billBoard1,.billBoard2,.billBoard3,.billBoard4").tooltip('dispose');
+                    //     break;
+                    // case "10": //保養空調系統審核人員
+                    //     $(".autho2,.autho3,.autho4,.managerCheck").removeAttr("disabled").removeAttr("style");
+                    //     $(".billBoard2,.billBoard3,.billBoard4").tooltip('dispose');
+                    //     break;
+                    // case "11": //保養消防系統保養人員
+                    //     $(".autho3,.autho4,.employeeCheck").removeAttr("disabled").removeAttr("style");
+                    //     $(".billBoard3,.billBoard4").tooltip('dispose');
+                    //     break;
+                    // case "12": //保養消防系統廠商
+                    //     $(".autho4").removeAttr("disabled").removeAttr("style");
+                    //     $(".billBoard4").tooltip('dispose');
+                    //     break;
+                    // case "13": //保養消防系統審核人員
+                    //     $(".autho4").removeAttr("disabled").removeAttr("style");
+                    //     $(".billBoard4").tooltip('dispose');
+                    //     break;
+                    // case "14": //保養氣體系統保養人員
+                    //     $(".autho4").removeAttr("disabled").removeAttr("style");
+                    //     $(".billBoard4").tooltip('dispose');
+                    //     break;
+                    // case "15": //保養氣體系統審核人員
+                    //     $(".autho4").removeAttr("disabled").removeAttr("style");
+                    //     $(".billBoard4").tooltip('dispose');
+                    //     break;
+            }
+        }
+    });
 
 
 
