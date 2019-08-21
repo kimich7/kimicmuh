@@ -606,7 +606,7 @@
             <input type="hidden" name="action" value="update">
             <!-- 送出鈕 -->
             <div class="d-flex justify-content-end">
-                <a href='mtlistsearch.php' type='button' class="my-3 px-3 py-1 btn-outline-info text-dark">離開</button>
+                <a href='mtlistsearch.php' type='button' class="my-3 px-3 py-1 btn-outline-info text-dark">離開</a>
             </div>
         </form>
     </div>

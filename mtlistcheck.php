@@ -217,7 +217,12 @@
         <input type="hidden" name="action" value="check">
         <!-- 送出鈕 -->
         <div class="d-flex justify-content-end">
-            <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>
+            <div>
+                <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>&nbsp&nbsp                            
+            </div>
+            <div>
+                <a href='index.html' type='button' class="my-3 px-3 py-1 btn-outline-info text-dark">離開</a>
+            </div>
         </div>
     </section>
     </form>

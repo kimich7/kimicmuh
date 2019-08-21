@@ -139,7 +139,7 @@ $ammtmAll=array();
                 $ammtmemp=sql_database('cname','FA.Employee','e_number',$ammtm[$i]['emp']);//員編轉人名
                 $ammtmcemp=sql_database('cname','FA.Employee','e_number',$ammtm[$i]['cemp']);//審核員編轉人名
                 $ammtmtabletitle=sql_database('tableName','FA.MMT_KIND','id',$ammtm[$i]['tableNo']);//表單編號轉名稱
-                switch ($ammtm[$i]['status']) {//(W/F/D 未審核/完成/作廢)}
+                switch ($ammtm[$i]['status']) {//(W/M/F/D 未審核/進行中/完成/作廢)}
                     case 'W':
                         $ammtmstatus='未審核';
                         break;
@@ -150,7 +150,7 @@ $ammtmAll=array();
                         $ammtmstatus='未審核';
                         break; 
                     case 'M':
-                        $ammtmstatus='部分審核';
+                        $ammtmstatus='進行中';
                         break;                    
                     case 'F':
                         $ammtmstatus='審核完成';
