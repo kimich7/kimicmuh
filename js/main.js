@@ -22,15 +22,15 @@ $(function () {
             $("#changepassword").toggleClass("d-none");
             switch (data[0]["login_authority"]) {
                 case "1":
-                    $(".autho1,.autho2,.autho3,.autho4,.managerCheck").removeAttr("disabled").removeAttr("style");
+                    $(".autho1,.autho2,.autho3,.autho4").removeAttr("disabled").removeAttr("style");
                     $(".billBoard1,.billBoard2,.billBoard3,.billBoard4").tooltip('dispose');
                     break;
                 case "2":
-                    $(".autho2,.autho3,.autho4,.managerCheck").removeAttr("disabled").removeAttr("style");
+                    $(".autho2,.autho3,.autho4").removeAttr("disabled").removeAttr("style");
                     $(".billBoard2,.billBoard3,.billBoard4").tooltip('dispose');
                     break;
                 case "3":
-                    $(".autho3,.autho4,.employeeCheck").removeAttr("disabled").removeAttr("style");
+                    $(".autho3,.autho4").removeAttr("disabled").removeAttr("style");
                     $(".billBoard3,.billBoard4").tooltip('dispose');
                     break;
                 case "4":
@@ -73,35 +73,35 @@ $(function () {
             var $securitylevel = data[i]["sid"];
             switch ($securitylevel) {
                 case "1": //保養空調系統保養人員
-                    $(".mtcheck").removeAttr("disabled").removeAttr("style");
+                    $(".mtcheck,.employeeCheck").removeAttr("disabled").removeAttr("style");
                     $(".billBoardcheck").tooltip('dispose');
                     break;
                 case "2": //保養空調系統審核人員
-                    $(".mtcheck").removeAttr("disabled").removeAttr("style");
+                    $(".mtcheck,.employeeCheck").removeAttr("disabled").removeAttr("style");
                     $(".billBoardcheck").tooltip('dispose');
                     break;
                 case "3": //保養消防系統保養人員
-                    $(".mtcheck").removeAttr("disabled").removeAttr("style");
+                    $(".mtcheck,.employeeCheck").removeAttr("disabled").removeAttr("style");
                     $(".billBoardcheck").tooltip('dispose');
                     break;
                 case "4": //保養消防系統廠商
-                    $(".mtcheck").removeAttr("disabled").removeAttr("style");
+                    $(".mtcheck,.employeeCheck").removeAttr("disabled").removeAttr("style");
                     $(".billBoardcheck").tooltip('dispose');
                     break;
                 case "5": //保養消防系統審核人員
-                    $(".mtcheck").removeAttr("disabled").removeAttr("style");
+                    $(".mtcheck,.managerCheck").removeAttr("disabled").removeAttr("style");
                     $(".billBoardcheck").tooltip('dispose');
                     break;
                 case "6": //保養氣體系統保養人員
-                    $(".mtcheck").removeAttr("disabled").removeAttr("style");
+                    $(".mtcheck,.managerCheck").removeAttr("disabled").removeAttr("style");
                     $(".billBoardcheck").tooltip('dispose');
                     break;
                 case "7": //保養氣體系統審核人員
-                    $(".mtcheck").removeAttr("disabled").removeAttr("style");
+                    $(".mtcheck,.managerCheck").removeAttr("disabled").removeAttr("style");
                     $(".billBoardcheck").tooltip('dispose');
                     break;
                 case "8": //保養氣體系統審核人員
-                    $(".mtcheck").removeAttr("disabled").removeAttr("style");
+                    $(".mtcheck,.managerCheck").removeAttr("disabled").removeAttr("style");
                     $(".billBoardcheck").tooltip('dispose');
                     break;
 

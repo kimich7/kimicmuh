@@ -61,31 +61,34 @@
     
     if (isset($_POST["action"])&&($_POST["action"]=="check")) {
         $total_num=$_POST["total_num"];
+        $checksum=$_POST["checksum"];
         for ($i=0; $i<$total_num ; $i++) { 
             $j=$i+1000;
             $k=$i+2000;                    
             $a=$i;
-            if (isset($_POST["$j"])) {
+            if (isset($_POST["$j"])) {//檢查人確認
                 $memberCheck=1;
             } else {
                 $memberCheck=0;
             }
-            if (isset($_POST["$a"])) {
+            if (isset($_POST["$a"])) {//主管確認
                 $managerCheck=1;
             } else {
                 $managerCheck=0;
             }
-            if (isset($_POST["$k"])) {
+            if (isset($_POST["$k"])) {//id
                 $rdID=$_POST["$k"];
             }else{
                 break;
             }
-            if ($member['rank']<3) {
+            
+            if ($checksum==1) {
                 $sql="UPDATE FA.Water_System_Record_Master SET  check_manager=:check_manager,managerID=:managerID WHERE recordID=:ID";
                 $stmt = $pdo->prepare($sql);
                 $stmt->bindParam(':check_manager',$managerCheck,PDO::PARAM_STR);
                 $stmt->bindParam(':managerID',$checkuserID,PDO::PARAM_STR);
-            } else {
+            } 
+            if($checksum==2) {
                 $sql="UPDATE FA.Water_System_Record_Master SET  check_number=:check_number,r_member=:r_member WHERE recordID=:ID";
                 $stmt = $pdo->prepare($sql);
                 $stmt->bindParam(':check_number',$memberCheck,PDO::PARAM_STR);
@@ -157,14 +160,14 @@
                 echo "<td width='80%'><a href='mtchecktable.php?id=\"".$data_page['recordID']."\"&build=\"".$data_page['b_number']."\"&r_date=\"".$data_page['rDate']."\"&member=\"".$data_page['r_member']."\"&manage=\"".$data_page['managerID']."\"&checkMember=\"".$data_page['check_number']."\"&checkManager=\"".$data_page['check_manager']."\"&sysID=\"".$data_page['sysID']."\"' class=\".list-group-item list-group-item-action.\">".$buildName."-".$sysName."-".$data_page['rDate'].'</a></td>';
                 echo '<td width="10%" align="center">';
                 if ($data_page['check_manager']==1) {
-                    echo "<input type='checkbox' class='managerCheck' name=\"".$a."\" value=\"".$mgcheck."\" checked disabled>";
+                    echo "<input type='checkbox'  name=\"".$a."\" value=\"".$mgcheck."\" checked disabled>";
                 } else {
                     echo "<input type='checkbox' class='managerCheck' name=\"".$a."\" value=\"".$mgcheck."\" disabled>";
                 }   
                 echo '</td>';
                 echo '<td width="10%" align="center">';
                 if ($data_page['check_number']==1) {
-                    echo "<input type='checkbox' class='employeeCheck' name=\"".$j."\" value=\"".$mbcheck."\" checked disabled>";
+                    echo "<input type='checkbox'  class='employeeCheck' name=\"".$j."\" value=\"".$mbcheck."\" checked disabled>";
                 } else {
                     echo "<input type='checkbox' class='employeeCheck' name=\"".$j."\" value=\"".$mbcheck."\" disabled>";
                 }  
@@ -213,8 +216,9 @@
         echo '</nav>';
         ?>
         </div>
-        <input type="hidden" name="total_num" value="<?= $total_num?>">;
+        <input type="hidden" name="total_num" value="<?= $total_num?>">
         <input type="hidden" name="action" value="check">
+        <input type="hidden" name="checksum" value="<?= $checksum ?>">
         <!-- 送出鈕 -->
         <div class="d-flex justify-content-end">
             <div>
