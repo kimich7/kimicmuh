@@ -88,14 +88,21 @@
                 $sysName=sql_database('sysName','FA.Equipment_System_Group','sysID',$data_page['sysID']);
                     echo "<td width='50%'><a href='mtdetail.php?id=\"".$data_page['recordID']."\"&build=\"".$data_page['b_number']."\"&r_date=\"".$data_page['rDate']."\"&member=\"".$data_page['r_member']."\"&manage=\"".$data_page['managerID']."\"&checkMember=\"".$data_page['check_number']."\"&checkManager=\"".$data_page['check_manager']."\"&sysID=\"".$data_page['sysID']."\"' class=\".list-group-item list-group-item-action.\">".$buildName."-".$sysName."-".$data_page['rDate'].'</a></td>';
                     echo '<td width="10%" align="center">'.$data_page['rDate'].'</td>';
-                    echo '<td width="10%" align="center">';
-                    if ($data_page['check_manager']==1 and $data_page['check_number']==1) {
+                    echo '<td width="10%" align="center">';                    
+                    if ($data_page['status']=='F') {
                         $status='審核完成';                    
-                    } elseif($data_page['check_manager']==0 and $data_page['check_number']==1) {
-                        $status='主管未審核';                    
-                    } elseif($data_page['check_manager']==0 and $data_page['check_number']==0) {
-                        $status='檢查者未審核';
+                    } elseif($data_page['status']=='M') {
+                        $status='進行中';                    
+                    } elseif($data_page['status']=='W') {
+                        $status='未審核';
                     }
+                    // if ($data_page['check_manager']==1 and $data_page['check_number']==1) {
+                    //     $status='審核完成';                    
+                    // } elseif($data_page['check_manager']==0 and $data_page['check_number']==1) {
+                    //     $status='主管未審核';                    
+                    // } elseif($data_page['check_manager']==0 and $data_page['check_number']==0) {
+                    //     $status='檢查者未審核';
+                    // }
                     echo $status;   
                     echo '</td>';
                     $r_member=sql_database('cname','FA.Employee','e_number',$data_page['r_member']);

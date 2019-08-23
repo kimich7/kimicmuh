@@ -121,11 +121,11 @@
             switch ($x) {
                 case 1://只有keyword
                     //所有的資料 (check_manager IS NULL or check_manager=0) and
-                    $sqlstr_total=" SELECT a.* FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID  WHERE b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%' or a.rDate like '%$keyword%'";
+                    $sqlstr_total=" SELECT a.* FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID  LEFT JOIN FA.CheckStatus as p ON a.status=p.id  WHERE b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%' or a.rDate like '%$keyword%' or p.checkName like '%$keyword%'";
                     //篩選後給每頁的筆數
-                    $sqlstr_page="SELECT a.* FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID WHERE b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%'  or a.rDate like '%$keyword%' ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+                    $sqlstr_page="SELECT a.* FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID LEFT JOIN FA.CheckStatus as p ON a.status=p.id WHERE b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%'  or a.rDate like '%$keyword%' or p.checkName like '%$keyword%' ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
                     //總資料數量
-                    $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID  WHERE b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%' or a.rDate like '%$keyword%' ";
+                    $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID LEFT JOIN FA.CheckStatus as p ON a.status=p.id WHERE b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%' or a.rDate like '%$keyword%'  or p.checkName like '%$keyword%' ";
                     break;
                 case 2://只有日期區間
                     //所有的資料 (check_manager IS NULL or check_manager=0) and
@@ -153,27 +153,27 @@
                     break;
                 case 5://開始+keyword
                     //所有的資料 (check_manager IS NULL or check_manager=0) and
-                    $sqlstr_total=" SELECT a.* FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID  WHERE rDate ='$start_date' and (b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%')";
+                    $sqlstr_total=" SELECT a.* FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID LEFT JOIN FA.CheckStatus as p ON a.status=p.id WHERE rDate ='$start_date' and (b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%' or p.checkName like '%$keyword%')";
                     //篩選後給每頁的筆數
-                    $sqlstr_page="SELECT a.* FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID WHERE rDate ='$start_date' and (b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%') ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+                    $sqlstr_page="SELECT a.* FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID LEFT JOIN FA.CheckStatus as p ON a.status=p.id WHERE rDate ='$start_date' and (b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%' or p.checkName like '%$keyword%') ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
                     //總資料數量
-                    $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID  WHERE rDate ='$start_date' and (b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%')";
+                    $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID LEFT JOIN FA.CheckStatus as p ON a.status=p.id WHERE rDate ='$start_date' and (b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%' or p.checkName like '%$keyword%')";
                     break;
                 case 6://結束+keyword
                     //所有的資料 (check_manager IS NULL or check_manager=0) and
-                    $sqlstr_total=" SELECT a.* FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID  WHERE rDate ='$end_date' and (b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%')";
+                    $sqlstr_total=" SELECT a.* FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID LEFT JOIN FA.CheckStatus as p ON a.status=p.id WHERE rDate ='$end_date' and (b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%' or p.checkName like '%$keyword%')";
                     //篩選後給每頁的筆數
-                    $sqlstr_page="SELECT a.* FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID WHERE rDate ='$end_date' and (b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%') ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+                    $sqlstr_page="SELECT a.* FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID LEFT JOIN FA.CheckStatus as p ON a.status=p.id WHERE rDate ='$end_date' and (b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%' or p.checkName like '%$keyword%') ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
                     //總資料數量
-                    $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID  WHERE rDate ='$end_date' and (b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%')";
+                    $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID LEFT JOIN FA.CheckStatus as p ON a.status=p.id WHERE rDate ='$end_date' and (b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%' or p.checkName like '%$keyword%')";
                     break;
                 case 7://結束+keyword
                     //所有的資料 (check_manager IS NULL or check_manager=0) and
-                    $sqlstr_total=" SELECT a.* FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID  WHERE (rDate between '$start_date' and '$end_date')and (b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%')";
+                    $sqlstr_total=" SELECT a.* FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID LEFT JOIN FA.CheckStatus as p ON a.status=p.id WHERE (rDate between '$start_date' and '$end_date')and (b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%' or p.checkName like '%$keyword%')";
                     //篩選後給每頁的筆數
-                    $sqlstr_page="SELECT a.* FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID WHERE (rDate between '$start_date' and '$end_date')and (b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%') ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+                    $sqlstr_page="SELECT a.* FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID LEFT JOIN FA.CheckStatus as p ON a.status=p.id WHERE (rDate between '$start_date' and '$end_date')and (b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%' or p.checkName like '%$keyword%') ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
                     //總資料數量
-                    $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID  WHERE (rDate between '$start_date' and '$end_date')and (b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%')";
+                    $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master as a LEFT JOIN FA.Employee as b on a.r_member=b.e_number or a.managerID=b.e_number left join FA.Building as c on a.b_number=c.b_number left join FA.Equipment_System_Group as s on a.sysID=s.sysID LEFT JOIN FA.CheckStatus as p ON a.status=p.id WHERE (rDate between '$start_date' and '$end_date')and (b.cname like '%$keyword%' or c.B_name like '%$keyword%' or s.sysName like '%$keyword%' or p.checkName like '%$keyword%')";
                     break;
                 default:
                     # code...
@@ -211,13 +211,20 @@
                     echo "<td width='50%'><a href='mtdetail.php?id=\"".$data_page['recordID']."\"&build=\"".$data_page['b_number']."\"&r_date=\"".$data_page['rDate']."\"&member=\"".$data_page['r_member']."\"&manage=\"".$data_page['managerID']."\"&checkMember=\"".$data_page['check_number']."\"&checkManager=\"".$data_page['check_manager']."\"&sysID=\"".$data_page['sysID']."\"' class=\".list-group-item list-group-item-action.\">".$buildName."-".$sysName."-".$data_page['rDate'].'</a></td>';
                     echo '<td width="10%" align="center">'.$data_page['rDate'].'</td>';
                     echo '<td width="10%" align="center">';
-                    if ($data_page['check_manager']==1 and $data_page['check_number']==1) {
+                    if ($data_page['status']=='F') {
                         $status='審核完成';                    
-                    } elseif($data_page['check_manager']==0 and $data_page['check_number']==1) {
-                        $status='主管未審核';                    
-                    } elseif($data_page['check_manager']==0 and $data_page['check_number']==0) {
-                        $status='檢查者未審核';
+                    } elseif($data_page['status']=='M') {
+                        $status='進行中';                    
+                    } elseif($data_page['status']=='W') {
+                        $status='未審核';
                     }
+                    // if ($data_page['check_manager']==1 and $data_page['check_number']==1) {
+                    //     $status='審核完成';                    
+                    // } elseif($data_page['check_manager']==0 and $data_page['check_number']==1) {
+                    //     $status='主管未審核';                    
+                    // } elseif($data_page['check_manager']==0 and $data_page['check_number']==0) {
+                    //     $status='檢查者未審核';
+                    // }
                     echo $status;   
                     echo '</td>';
                     $r_member=sql_database('cname','FA.Employee','e_number',$data_page['r_member']);
