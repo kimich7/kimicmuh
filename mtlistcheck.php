@@ -1,15 +1,7 @@
 <?php
-                // id	sName	         sysID
-                // 1	抄表電力系統檢查人	4
-                // 2	抄表空調系統檢查人	3
-                // 3	抄表氣體系統檢查人	2
-                // 4	抄表水系統檢查人	1
-                // 5	抄表電力系統主管	4
-                // 6	抄表空調系統主管	3
-                // 7	抄表氣體系統主管	2
-                // 8	抄表水系統主管	    1
     include("php/CMUHconndata.php");
     include("php/fun.php");
+    include("page_1.php");
     session_start();
     $checkuser=$_SESSION["login_member"];
     $checkuserID=sql_database('e_number','FA.Employee','cname',$checkuser);
@@ -120,6 +112,8 @@
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script src="./node_modules/popper.js/dist/umd/popper.min.js"></script>
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!--新加入20190815表格排序-->
+    <script src="./js/jquery.tablesorter.min.js" type="text/javascript"></script>
     <!-- 連結自己的JS -->
     <script src="./js/main.js"></script>
     <title>設備保養表單未簽核清單</title>
@@ -203,19 +197,29 @@
                 }
             echo '</tr>';
         echo '</table>';
-        echo '<nav aria-label="Page navigation example" >';
-                echo '<ul class="pagination">';
-                        for ($i=1; $i <= $total_page; $i++) {
-                            if ($i==$page_num) {
-                                echo "<li class=\"page-item\"><span class='page-link text-danger' href=#><b>{$i}</b></span></li>";
-                            } else {
-                                echo "<li class=\"page-item\"><a class='page-link' href=\"mtlistcheck.php?page={$i}\">{$i}</a></li>";
-                            }
-                        }
-                echo '</ul>';
-        echo '</nav>';
+        // echo '<nav aria-label="Page navigation example" >';
+        //         echo '<ul class="pagination">';
+        //                 for ($i=1; $i <= $total_page; $i++) {
+        //                     if ($i==$page_num) {
+        //                         echo "<li class=\"page-item\"><span class='page-link text-danger' href=#><b>{$i}</b></span></li>";
+        //                     } else {
+        //                         echo "<li class=\"page-item\"><a class='page-link' href=\"mtlistcheck.php?page={$i}\">{$i}</a></li>";
+        //                     }
+        //                 }
+        //         echo '</ul>';
+        // echo '</nav>';
+
+        //分頁按鈕一次七頁
+            $phpfile = 'mtlistcheck.php';
+            $page= isset($_GET['page'])?$_GET['page']:1;        
+            $getpageinfo = page($page,$total_num,$phpfile);
+            echo '<div align="center">'; 
+            echo $getpageinfo['pagecode'];//顯示分頁的html語法
+            echo '</div>';
+            //分頁按鈕end
         ?>
-        </div>
+        </div>        
+        <input type="hidden" name="action" value="new_page">
         <input type="hidden" name="total_num" value="<?= $total_num?>">
         <input type="hidden" name="action" value="check">
         <input type="hidden" name="checksum" value="<?= $checksum ?>">
@@ -230,6 +234,23 @@
         </div>
     </section>
     </form>
+    <form action="mtcheckfilter.php" method="post" name="mtlist"> 
+            <div>
+                <div align="left">
+                    日期區間搜索：</br>
+                    開始時間：<input type="date" name="start_date">&nbsp&nbsp結束時間：<input type="date" name="end_date">            
+                </div>
+                <div align="left">
+                    </br>關鍵字：<input type="text" name="keywordsearch">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="submit" value="查詢">
+                </div>           
+            </div>            
+        </form>
+    <script>
+        (function(document) {
+            //表格排序
+            $("#checklist").tablesorter();            
+        })(document);
+    </script> 
     <!-- footer網頁尾頁 -->
     <footer>
         <div id="footer"></div>
