@@ -20,6 +20,10 @@
     } else {
         $checksum=3;//只能看
     }
+    /**
+     * 理論上不會有$checksum=3的情況出現，因為在進這頁面的按鈕在之前的首頁index.html，
+     * 我已經設定權限排除checksum=1與2之外的人無法按，所以不會有全縣相關以外的人進來此頁面
+     */
     //------END---------
     $pageRow_record=10;//每頁的筆數
     $page_num=1;//預設的頁數
@@ -116,7 +120,7 @@
     <script src="./js/jquery.tablesorter.min.js" type="text/javascript"></script>
     <!-- 連結自己的JS -->
     <script src="./js/main.js"></script>
-    <title>設備保養表單未簽核清單</title>
+    <title>抄表系統未簽核清單</title>
 </head>
 
 <body>
@@ -127,7 +131,7 @@
     <form action="" method="post" name="checklist">
     <!-- 未簽核清單 -->
     <section class="container-fluid">
-        <h1 class="text-center">設備保養表單未簽核清單</h1>
+        <h1 class="text-center">抄表系統未簽核清單</h1>
         <div class="list-group mx-5 my-5">
         <?php
         

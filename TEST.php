@@ -1,24 +1,15 @@
 <?php 
-if(strpos('www.itread01.com我','我是') !== false){
- echo '包含jb51</br>';
-}else{
- echo '不包含jb51</br>';
+include("php/CMUHconndata.php");
+include("php/fun.php");
+$date='WHERE empCheckdate = \'2019-08-23\' and check_number =1';
+
+$str="SELECT * FROM FA.Water_System_Record_Master $date and check_manager is null";
+$query=$pdo->query($str);
+while ($show = $query->fetch()) {
+    echo $show['b_number'].'</br>';
+    echo $show['recordID'].'</br>';
 }
 
-
-if(strpos('www.itread01.com我','我')){
- echo '包含我</br>';
-}else{
- echo '不包含我</br>';
-}
-$keyword='未甚麼';
-if (strpos('未',$keyword)!==false) {
-    echo '有</br>';
-} else {
-    echo '沒有</br>';
-} 
-    $a=array(1,2);
-    echo $a[0];
 
 ?>
 
