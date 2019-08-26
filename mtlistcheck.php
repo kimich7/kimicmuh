@@ -222,9 +222,7 @@
             echo '</div>';
             //分頁按鈕end
         ?>
-        </div>        
-        <input type="hidden" name="action" value="new_page">
-        <input type="hidden" name="total_num" value="<?= $total_num?>">
+        </div>
         <input type="hidden" name="action" value="check">
         <input type="hidden" name="checksum" value="<?= $checksum ?>">
         <!-- 送出鈕 -->
@@ -247,8 +245,11 @@
                 <div align="left">
                     </br>關鍵字：<input type="text" name="keywordsearch">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="submit" value="查詢">
                 </div>           
-            </div>            
+            </div> 
+            <input type="hidden" name="action" value="new_page">
+            <input type="hidden" name="total_num" value="<?= $total_num?>">           
         </form>
+        
     <script>
         (function(document) {
             //表格排序
