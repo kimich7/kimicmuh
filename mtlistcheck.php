@@ -237,18 +237,18 @@
     </section>
     </form>
     <form action="mtcheckfilter.php" method="post" name="mtlist"> 
-            <div>
-                <div align="left">
-                    日期區間搜索：</br>
-                    開始時間：<input type="date" name="start_date">&nbsp&nbsp結束時間：<input type="date" name="end_date">            
-                </div>
-                <div align="left">
-                    </br>關鍵字：<input type="text" name="keywordsearch">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="submit" value="查詢">
-                </div>           
-            </div> 
-            <input type="hidden" name="action" value="new_page">
-            <input type="hidden" name="total_num" value="<?= $total_num?>">           
-        </form>
+        <div>
+            <div align="left">
+                日期區間搜索：</br>
+                開始時間：<input type="date" name="start_date">&nbsp&nbsp結束時間：<input type="date" name="end_date">            
+            </div>
+            <div align="left">
+                </br>關鍵字：<input type="text" name="keywordsearch">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="submit" value="查詢">
+            </div>           
+        </div> 
+        <input type="hidden" name="action" value="new_page">
+        <input type="hidden" name="total_num" value="<?= $total_num?>">           
+    </form>
         
     <script>
         (function(document) {
