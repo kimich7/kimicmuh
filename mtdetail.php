@@ -551,14 +551,8 @@
             <input type='hidden' name='MasterID' value='<?= $MasterID?>'>
             <input type='hidden' name='checksum' value='<?= $checksum?>'>
             <?php
-            // @$checkmanID=$status['employeeID'];//確認是否有檢查者
-            // $checkman=sql_database('cname','FA.Employee','e_number',$checkmanID);
-            // @$managerID=$status['managerID'];//確認是否有主管檢查者
-            // @$echeck=$status['eeCheck'];//確認檢查者是否做檢查了
-            // @$mcheck=$status['mgrCheck'];//確認主管是否做檢查了
-
             //檢查者未檢查主管未審核
-            if ((!isset($echeck)or$echeck=='') && (!isset($status)or $status=='')) {
+            if ((!isset($echeck)or$echeck=='' OR $echeck==0) && (!isset($mcheck)or $mcheck=='' OR $mcheck==0)) {
                 echo '<div class="row my-3">';
                     echo '<div class="col text-left">';
                         echo '<p class="d-inline font-weight-bold">主管：</p>';
@@ -571,7 +565,7 @@
                 echo '</div>' ;
             }
             //檢查者已檢查主管未審核            
-            if ((isset($echeck)&& $echeck!='') && (!isset($status)or $status=='')) {
+            if ((isset($echeck)&& $echeck!='' && $echeck!=0) && (!isset($mcheck)or $mcheck=='' OR $mcheck==0)) {
                 $checkman=sql_database('cname','FA.Employee','e_number',$checkmanID);
                 echo '<div class="row my-3">';
                     echo '<div class="col text-left">';
@@ -586,7 +580,7 @@
             }
 
             //檢查者已檢查主管已審核            
-            if ((isset($echeck)&& $echeck!='') && (isset($status)&& $status!='')) {
+            if ((isset($echeck)&& $echeck!='' && $echeck!=0) && (isset($mcheck)&& $mcheck!='' && $mcheck!=0)) {
                 $checkman=sql_database('cname','FA.Employee','e_number',$checkmanID);
                 $manager=sql_database('cname','FA.Employee','e_number',$managerID);
                 echo '<div class="row my-3">';

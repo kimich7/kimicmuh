@@ -75,19 +75,6 @@
                 $equip_check = $_POST["$qID"];//點檢項目ID
                 $equip_ansMode= $_POST["$qMode"];//點檢資料型態
 
-                // $sql_equip_check = "SELECT answerMode  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$build_no' AND sysID='$sys_no' ORDER BY equipCheckName";
-                // $equip_ch=$pdo->query($sql_equip_check);
-                // $equip_id=$equip_ch->fetch();//求出點檢項目id及參考值
-
-                // if ($equip_id['answerMode']=='plural') {
-                //     $qu=$_POST["b"];
-                //     $ans_no= implode(",", $qu);
-                // }
-                // if ($equip_id['answerMode']=='plural_1') {
-                //     $qc=$_POST["c"];
-                //     $ans_no= implode(",", $qc);
-                // }
-
                 if ($equip_ansMode=='plural') {
                     $qu=$_POST["b"];
                     $ans_no= implode(",", $qu);
@@ -166,8 +153,9 @@
             $equip_check_num="SELECT COUNT(equipCheckID)  FROM FA.Equipment_Check WHERE floorID='$floorID'AND b_number='$buildNo'";
             $equip_check_no=Current($pdo->query($equip_check_num)->fetch());
 
-            echo '<div class="container border border-info mt-5">';
-                echo '<form action="" method="post" name="wa">';
+            echo '<div class="container border border-info mt-5">';?>
+                <form id="wa" action="" method="post" name="wa" onkeypress="if (event.keyCode==13) return false;">
+                <?php
                     echo '<h2 class="text-center font-weight-bold">'.'中國醫藥大學附設醫院-'.$build.'</h2>';
                     //班別/檢查者/日期欄
                     echo '<div class="row my-3">';
@@ -301,9 +289,7 @@
                     <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>
                 </div>                           
             </form><?php
-        }?></div>
+        }
+    }   ?></div>    
     </body>
-    </html><?php
-    }
-    ?>
-    
+    </html>

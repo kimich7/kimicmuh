@@ -22,10 +22,32 @@
     $checkName=array();//用來放equipCheckName的陣列
     //早中晚班資料的撈取
     //$ans1=item("SELECT recordDetailID,equipCheckID,checkResult,r_member FROM $systemTable WHERE recordID=$MasterID AND shiftID=1");
-    $ans1=item("SELECT B.recordDetailID,B.checkResult,B.r_member FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID FROM $systemTable WHERE recordID=$MasterID AND shiftID=1)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID");
-    $ans2=item("SELECT B.recordDetailID,B.checkResult,B.r_member FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID FROM $systemTable WHERE recordID=$MasterID AND shiftID=2)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID");
-    $ans3=item("SELECT B.recordDetailID,B.checkResult,B.r_member FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID FROM $systemTable WHERE recordID=$MasterID AND shiftID=3)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID");
-        
+    $ans1=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=1)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID");
+    $ans2=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=2)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID");
+    $ans3=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=3)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID");
+    $user_1No=$ans1[0]["r_member"];
+    $user_2No=$ans2[0]["r_member"];
+    $user_3No=$ans3[0]["r_member"];
+    //備註內容整合
+    $remark='';
+    //早班備註
+    if (isset($ans1[0]["remark"]) && $ans1[0]["remark"]!='') {
+        $remark.='早班：'.$ans1[0]["remark"].'。'.chr(13);
+    } else {
+        $remark='';
+    }
+    //中班備註
+    if (isset($ans2[0]["remark"]) && $ans2[0]["remark"]!='') {
+        $remark.='中班：'.$ans2[0]["remark"].'。'.chr(13);
+    } else {
+        $remark.='';
+    }
+    //晚班備註
+    if (isset($ans3[0]["remark"]) && $ans3[0]["remark"]!='') {
+        $remark.='晚班：'.$ans3[0]["remark"].'。'.chr(13);
+    } else {
+        $remark.='';
+    }    
     if (isset($_POST["action"])&&($_POST["action"]=="update")) {
         $ans_num=$_POST["num"];
         $selectNum=0;
@@ -641,8 +663,8 @@
             <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text">備註：</span>
-                </div>
-                <textarea class="form-control" name="remark" aria-label="With textarea"><?= $updatainfo[0]["remark"] ?></textarea>
+                </div>                
+                <textarea class="form-control" name="remark" rows="5" aria-label="With textarea" ><?= $remark ?></textarea>
             </div>
             <!-- 傳送值到資料庫中 -->
             <input type="hidden" name="action" value="update">
