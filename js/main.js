@@ -72,70 +72,195 @@ $(function () {
         for (let i = 0; i < num; i++) {
             var $securitylevel = data[i]["sid"];
             switch ($securitylevel) {
-                case "1": //保養空調系統保養人員
+                case "1": //抄表空調系統保養人員
                     $(".mtcheck,.employeeCheck").removeAttr("disabled").removeAttr("style");
                     $(".billBoardcheck").tooltip('dispose');
                     break;
-                case "2": //保養空調系統審核人員
+                case "2": //抄表空調系統審核人員
                     $(".mtcheck,.employeeCheck").removeAttr("disabled").removeAttr("style");
                     $(".billBoardcheck").tooltip('dispose');
                     break;
-                case "3": //保養消防系統保養人員
+                case "3": //抄表消防系統保養人員
                     $(".mtcheck,.employeeCheck").removeAttr("disabled").removeAttr("style");
                     $(".billBoardcheck").tooltip('dispose');
                     break;
-                case "4": //保養消防系統廠商
+                case "4": //抄表消防系統廠商
                     $(".mtcheck,.employeeCheck").removeAttr("disabled").removeAttr("style");
                     $(".billBoardcheck").tooltip('dispose');
                     break;
-                case "5": //保養消防系統審核人員
+                case "5": //抄表消防系統審核人員
                     $(".mtcheck,.managerCheck").removeAttr("disabled").removeAttr("style");
                     $(".billBoardcheck").tooltip('dispose');
                     break;
-                case "6": //保養氣體系統保養人員
+                case "6": //抄表氣體系統保養人員
                     $(".mtcheck,.managerCheck").removeAttr("disabled").removeAttr("style");
                     $(".billBoardcheck").tooltip('dispose');
                     break;
-                case "7": //保養氣體系統審核人員
+                case "7": //抄表氣體系統審核人員
                     $(".mtcheck,.managerCheck").removeAttr("disabled").removeAttr("style");
                     $(".billBoardcheck").tooltip('dispose');
                     break;
-                case "8": //保養氣體系統審核人員
+                case "8": //抄表氣體系統審核人員
                     $(".mtcheck,.managerCheck").removeAttr("disabled").removeAttr("style");
                     $(".billBoardcheck").tooltip('dispose');
                     break;
-
-                    // case "9": //保養空調系統保養人員
-                    //     $(".aclass").removeAttr("disabled").removeAttr("style");
-                    //     $(".billBoard1,.billBoard2,.billBoard3,.billBoard4").tooltip('dispose');
-                    //     break;
-                    // case "10": //保養空調系統審核人員
-                    //     $(".autho2,.autho3,.autho4,.managerCheck").removeAttr("disabled").removeAttr("style");
-                    //     $(".billBoard2,.billBoard3,.billBoard4").tooltip('dispose');
-                    //     break;
-                    // case "11": //保養消防系統保養人員
-                    //     $(".autho3,.autho4,.employeeCheck").removeAttr("disabled").removeAttr("style");
-                    //     $(".billBoard3,.billBoard4").tooltip('dispose');
-                    //     break;
-                    // case "12": //保養消防系統廠商
-                    //     $(".autho4").removeAttr("disabled").removeAttr("style");
-                    //     $(".billBoard4").tooltip('dispose');
-                    //     break;
-                    // case "13": //保養消防系統審核人員
-                    //     $(".autho4").removeAttr("disabled").removeAttr("style");
-                    //     $(".billBoard4").tooltip('dispose');
-                    //     break;
-                    // case "14": //保養氣體系統保養人員
-                    //     $(".autho4").removeAttr("disabled").removeAttr("style");
-                    //     $(".billBoard4").tooltip('dispose');
-                    //     break;
-                    // case "15": //保養氣體系統審核人員
-                    //     $(".autho4").removeAttr("disabled").removeAttr("style");
-                    //     $(".billBoard4").tooltip('dispose');
-                    //     break;
+                    //----保養權限------
+                case "9": //保養空調系統保養人員
+                    $(".airconL1").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardairconL1").tooltip('dispose');
+                    break;
+                case "10": //保養空調系統保養人員
+                    $(".airconL2").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardairconL2").tooltip('dispose');
+                    break;
+                case "11": //保養空調系統保養人員
+                    $(".airconL3").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardairconL3").tooltip('dispose');
+                    break;
+                case "12": //保養建築物保養人員
+                    $(".buildL1").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardbuildL1").tooltip('dispose');
+                    break;
+                case "13": //保養建築物專責
+                    $(".buildL2").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardbuildL2").tooltip('dispose');
+                    break;
+                case "14": //保養建築物主管
+                    $(".buildL3").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardbuildL3").tooltip('dispose');
+                    break;
+                case "15": //保養電力保養人員
+                    $(".powerL1").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardpowerL1").tooltip('dispose');
+                    break;
+                case "16": //保養電力專責
+                    $(".powerL2").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardpowerL2").tooltip('dispose');
+                    break;
+                case "17": //保養電力主管
+                    $(".powerL3").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardpowerL3").tooltip('dispose');
+                    break;
+                case "18": //保養消防保養人員
+                    $(".fireL1").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardfireL1").tooltip('dispose');
+                    break;
+                case "19": //保養消防專責
+                    $(".fireL2").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardfireL2").tooltip('dispose');
+                    break;
+                case "20": //保養消防主管
+                    $(".fireL3").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardfireL3").tooltip('dispose');
+                    break;
+                case "21": //保養氣體保養人員
+                    $(".airL1").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardairL1").tooltip('dispose');
+                    break;
+                case "22": //保養氣體專責
+                    $(".airL2").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardairL2").tooltip('dispose');
+                    break;
+                case "23": //保養氣體主管
+                    $(".airL3").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardairL3").tooltip('dispose');
+                    break;
+                case "24": //保養傳送保養人員
+                    $(".conveyL1").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardconveyL1").tooltip('dispose');
+                    break;
+                case "25": //保養傳送專責
+                    $(".conveyL2").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardconveyL2").tooltip('dispose');
+                    break;
+                case "26": //保養傳送主管
+                    $(".conveyL3").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardconveyL3").tooltip('dispose');
+                    break;
+                case "27": //保養監控保養人員
+                    $(".monitorL1").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardmonitorL1").tooltip('dispose');
+                    break;
+                case "28": //保養監控專責
+                    $(".monitorL2").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardmonitorL2").tooltip('dispose');
+                    break;
+                case "29": //保養監控主管
+                    $(".monitorL3").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardmonitorL3").tooltip('dispose');
+                    break;
+                case "30": //保養水保養人員
+                    $(".waterL1").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardwaterL1").tooltip('dispose');
+                    break;
+                case "31": //保養水專責
+                    $(".waterL2").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardwaterL2").tooltip('dispose');
+                    break;
+                case "32": //保養水主管
+                    $(".waterL3").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardwaterL3").tooltip('dispose');
+                    break;
             }
         }
     });
+    //------20190902保養表單各系統權限設定
+    $("#mmtbtn").click(function () {
+        var mmtsys = $("#mmtchoice").val();
+        $.getJSON("php/security.php", function (data) {
+            var num = data.length;
+            var key = 0;
+            var sysname = '';
+            for (let i = 0; i < num; i++) {
+                var $securitylevelstr = data[i]["sid"];
+                $securitylevel = parseInt($securitylevelstr);
+                if ($securitylevel > 8 && $securitylevel < 12) {
+                    if (mmtsys == 'A') {
+                        key = 1;
+                    }
+                } else if ($securitylevel > 11 && $securitylevel < 15) {
+                    if (mmtsys == 'B') {
+                        key = 1;
+                    }
+                } else if ($securitylevel > 14 && $securitylevel < 18) {
+                    if (mmtsys == 'E') {
+                        key = 1;
+                    }
+                } else if ($securitylevel > 17 && $securitylevel < 21) {
+                    if (mmtsys == 'F') {
+                        key = 1;
+                    }
+                } else if ($securitylevel > 20 && $securitylevel < 24) {
+                    if (mmtsys == 'G') {
+                        key = 1;
+                    }
+                } else if ($securitylevel > 23 && $securitylevel < 27) {
+                    if (mmtsys == 'H') {
+                        key = 1;
+                    }
+                } else if ($securitylevel > 26 && $securitylevel < 30) {
+                    if (mmtsys == 'M') {
+                        key = 1;
+                    }
+                } else if ($securitylevel > 29 && $securitylevel <= 32) {
+                    if (mmtsys == 'W') {
+                        key = 1;
+                    }
+                } else {
+                    key = 0;
+                }
+            }
+            if (key == 1) {
+                $(".mmtsyskey").removeAttr("disabled").removeAttr("style");
+                $(".billBoardmmtsyskey").tooltip('dispose');
+                $("#MMT_Kind").submit();
+            } else {
+                alert('請用該系統相關人員身分登入');
+            }
+        })
+
+    })
+    //-------end------
 
 
 
