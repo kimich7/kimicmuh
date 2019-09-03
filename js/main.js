@@ -109,11 +109,11 @@ $(function () {
                     $(".airconL1").removeAttr("disabled").removeAttr("style");
                     $(".billBoardairconL1").tooltip('dispose');
                     break;
-                case "10": //保養空調系統保養人員
+                case "10": //保養空調系統專責
                     $(".airconL2").removeAttr("disabled").removeAttr("style");
                     $(".billBoardairconL2").tooltip('dispose');
                     break;
-                case "11": //保養空調系統保養人員
+                case "11": //保養空調系統主管
                     $(".airconL3").removeAttr("disabled").removeAttr("style");
                     $(".billBoardairconL3").tooltip('dispose');
                     break;

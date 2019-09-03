@@ -1,6 +1,8 @@
 <?php
     include("php/CMUHconndata.php");
     include("php/fun.php");
+    $securitystr="SELECT * FROM FA.securityKind";
+    $security=$pdo->query($securitystr);
     if (isset($_POST["action"])&&($_POST["action"]=="add")) {
         if (empty($_POST["aid"])) {
             echo "<script>";
@@ -30,7 +32,16 @@
                 $rank=(int)$_POST["crank"];
             }
             $insertstr="INSERT INTO FA.Employee(e_number,cname,passcard,title,rank)VALUES('$id','$name','$password','$title',$rank)";
-            $insertdata=$pdo->exec($insertstr);
+            $insertdata=$pdo->exec($insertstr);      
+            if (isset($_POST['security'])&&$_POST['security']!='') {
+                $level=$_POST['security'];                
+                $num=count($level);
+                for ($i=0; $i < $num; $i++) {
+                    $levelint[$i]=(int)$level[$i]; 
+                    $levelstr="INSERT INTO FA.securityemp(e_number,sid)VALUES('$id',$levelint[$i])";
+                    $leveldata=$pdo->exec($levelstr);
+                }
+            }          
             $pdo=null;
             header("Location: employee.php");
         }
@@ -74,15 +85,15 @@
     <p align="center"><a href="employee.php">回主畫面</a></p>
     <form action="" method="post" name="formAdd" id="formAdd">
     <?php
-    echo '<table border="3" align="center" cellpadding="6" width="25%">';
+    echo '<table border="3" align="center" cellpadding="6" width="40%">';
         echo '<tr align="center">';
             echo '<th>欄位</th><th>資料</th>';
         echo '</tr>';
         echo '<tr>';
-            echo '<td align="center">員工編號</td><td align="center"><input type="text" name="aid" id="aid"></td>';
+            echo '<td align="center">員工編號</td><td align="center"><input type="text" name="aid" id="aid" required></td>';
         echo '</tr>';
         echo '<tr>';
-            echo '<td align="center">員工姓名</td><td align="center"><input type="text" name="cname" id="cname"></td>';
+            echo '<td align="center">員工姓名</td><td align="center"><input type="text" name="cname" id="cname" required></td>';
         echo '</tr>';
         echo '<tr>';
             echo '<td align="center">密碼</td><td align="center"><input type="password" name="cnpw" id="cnpw"></td>';
@@ -91,9 +102,24 @@
             echo '<td align="center">職稱</td><td align="center"><input type="text" name="ctitle" id="ctitle"></td>';
         echo '</tr>';
         echo '<tr>';
-            echo '<td align="center">權限</td><td align="center"><input type="radio" name="crank" id="crank" Value="1">系統管理員';
+            echo '<td align="center">身份</td><td align="center"><input type="radio" name="crank" id="crank" Value="1">系統管理員';
             echo '<input type="radio" name="crank" id="crank" Value="2">組長/主任';
             echo '<input type="radio" name="crank" id="crank" Value="3">作業者</td>';
+        echo '</tr>';
+        echo '<tr>';
+            echo '<td align="center">權限</td><td align="center">';
+            echo '<select name="security[]" id="security" style="width:auto;" multiple>';
+            echo '<option value="" selected>請選擇權限</option>';
+            while ($row = $security->fetch()) {
+                $level[]=array(
+                'id'=>$row['id'],
+                'name'=>$row['sName']
+                );                
+            }
+            $num=count($level);
+            for ($i=0; $i < $num; $i++) { 
+                echo "<option value=\"".$level[$i]['id']."\">".$level[$i]['name']."</option>";
+            }
         echo '</tr>';
         echo '<tr>';
                 echo '<td align="center" colspan="2">';

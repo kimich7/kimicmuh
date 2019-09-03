@@ -22,6 +22,7 @@ while ($row = $M_data->fetch()) {
         'macNo'=>$row['macNo'],
         'remark'=>$row['remark'],
         'emp'=>$row['emp'],
+        'sremp'=>$row['sremp'],
         'cemp'=>$row['cemp'],
         'status'=>$row['status']
 
@@ -33,6 +34,7 @@ while ($row = $M_data->fetch()) {
     $mmtfloorName=sql_database('fName','FA.MMT_floor','fid',$Mdata[0]['fid']);//樓層名稱    
     $mmtequipName=sql_database('eName','FA.MMT_equip','id',$Mdata[0]['eid']);//設備名稱
     $remp=sql_database('cname','FA.Employee','e_number',$Mdata[0]['emp']);//保養人員
+    
     (int)$tid=$Mdata[0]['tid'] ;
     
     if ($Mdata[0]['cemp']=='' or $Mdata[0]['cemp']==null) {
@@ -40,6 +42,12 @@ while ($row = $M_data->fetch()) {
     } else {
         $check_emp=sql_database('cname','FA.Employee','e_number',$Mdata[0]['cemp']);//確認主管
     }
+    if ($Mdata[0]['sremp']=='' or $Mdata[0]['sremp']==null) {
+        $sremp='';//確認專責
+    } else {
+        $sremp=sql_database('cname','FA.Employee','e_number',$Mdata[0]['sremp']);//專責人員
+    }
+
     $reportdatastr="SELECT * FROM FA.MMT_KIND WHERE id=$tid";
     $reportdata=$pdo->query($reportdatastr);
     while ($row = $reportdata->fetch()) {
@@ -210,8 +218,11 @@ $num=count($Q_A_data);
             <textarea class="form-control" name="remark" aria-label="With textarea" disabled><?= $Mdata[0]['remark'] ?></textarea>
         </div>
         <div class="row my-3">
-            <div class="col">
+            <div class="col text-left">
                 <p class="d-inline font-weight-bold">工務室：<?= $check_emp ?></p>
+            </div>
+            <div class="col text-center">
+                <p class="d-inline font-weight-bold">專責人員：<?= $sremp ?></p>
             </div>
             <div class="col text-right">
                 <p class="d-inline font-weight-bold">保養人員：<?= $remp ?></p>

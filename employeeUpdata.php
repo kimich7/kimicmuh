@@ -16,7 +16,13 @@
     }
     $id=$_GET["id"];
     $sqlselect="SELECT e_number,cname,passcard,title,rank FROM FA.Employee WHERE e_number='$id'";
-    $result = $pdo->query($sqlselect)->fetch();    
+    $result = $pdo->query($sqlselect)->fetch();
+    $securitystr="SELECT * FROM FA.securityKind";//全部的類別權限
+    $security=$pdo->query($securitystr);
+
+    $securitystr="SELECT * FROM FA.securityKind";//全部的類別權限
+    $security=$pdo->query($securitystr);
+
 ?>
 
 <!DOCTYPE html>
@@ -52,7 +58,7 @@
     <h2 align="center">工務所人員管理系統-更改資料</h2>
     <form action="" method="post" name="formUpd" id="formUpd">
         <?php
-        echo '<table border="1" align="center" cellpadding="6">';
+        echo '<table border="1" align="center" cellpadding="6" width="40%">';
             echo '<tr align="center">';
                 echo '<th>欄位</th><th>資料</th>';
             echo '</tr>';

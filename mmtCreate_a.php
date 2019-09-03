@@ -204,6 +204,9 @@
             <div class="col">
                 <p class="d-inline font-weight-bold">工務室：</p>
             </div>
+            <div class="col text-center">
+                <p class="d-inline font-weight-bold">專責人員：</p>
+            </div>
             <div class="col text-right">
                 <p class="d-inline font-weight-bold">保養人員：<?= $username ?></p>
             </div>

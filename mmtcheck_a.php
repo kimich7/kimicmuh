@@ -7,6 +7,27 @@ $userID=$_SESSION["login_number"];//登錄人員ID
 $username=$_SESSION["login_member"] ;//登錄人員名稱
 $MMT_AtableMid=$_GET['id'] ;//主表id
 
+//20190703新增-判斷權限分類
+    
+    $securityNoStr_emp="SELECT e.sid,e.e_number FROM FA.securityemp as e LEFT JOIN FA.securityKind as k on e.sid=k.id  WHERE e.e_number='$userID' and k.id = 10";
+    $securityNo_emp=$pdo->query($securityNoStr_emp)->fetch();
+    $securityNoStr_PM="SELECT e.sid,e.e_number FROM FA.securityemp as e LEFT JOIN FA.securityKind as k on e.sid=k.id  WHERE e.e_number='$userID' and k.id = 11";
+    $securityNo_PM=$pdo->query($securityNoStr_PM)->fetch();
+    
+    if (!empty($securityNo_emp) and $securityNo_emp!='') {
+        $checksum=2;//可簽核-專責        
+    } 
+    if(!empty($securityNo_PM) and $securityNo_PM!=''){
+        $checksum=1;//可簽核-主管
+    }
+    if (!$securityNo_emp && !$securityNo_PM) {
+        echo "<script>";
+        echo "alert('您沒有審核權限，請已有審核權限的身份登錄')";
+        echo "</script>";
+        header("Location: mmt_list_a.php");
+    }
+    
+
 //主表的資料
 $M_data_str="SELECT * FROM FA.MMT_AtableM WHERE id='$MMT_AtableMid'";
 $M_data=$pdo->query($M_data_str);
@@ -22,6 +43,7 @@ while ($row = $M_data->fetch()) {
         'macNo'=>$row['macNo'],
         'remark'=>$row['remark'],
         'emp'=>$row['emp'],
+        'sremp'=>$row['sremp'],
         'cemp'=>$row['cemp'],
         'status'=>$row['status']
 
@@ -33,6 +55,7 @@ while ($row = $M_data->fetch()) {
     $mmtfloorName=sql_database('fName','FA.MMT_floor','fid',$Mdata[0]['fid']);//樓層名稱    
     $mmtequipName=sql_database('eName','FA.MMT_equip','id',$Mdata[0]['eid']);//設備名稱
     $remp=sql_database('cname','FA.Employee','e_number',$Mdata[0]['emp']);//保養人員
+    @$sremp=sql_database('cname','FA.Employee','e_number',$Mdata[0]['sremp']);//保養人員
     (int)$tid=$Mdata[0]['tid'] ;
     
     if ($Mdata[0]['cemp']=='' or $Mdata[0]['cemp']==null) {
@@ -76,15 +99,21 @@ while ($row = $Q_A->fetch()) {
     ); 
 }
 $num=count($Q_A_data);
-if (isset($_POST["action"])&&($_POST["action"]=="check")) {
-    $cemp=$_POST["memp"];//審核者(當下登入的)
-    $mid=$_POST["mid"];//主表ID
-    $check_ans=$_POST["mmt_a_Check"];//審核
-    if (empty($check_ans)) {
+if (isset($_POST["action"])&&($_POST["action"]=="check")) {    
+    $mid=$_POST["mid"];//主表ID    
+    $checksum=$_POST['checksum'];//審核等級
+    if (empty($_POST["mmt_a_Check"])) {
         $check_ans=null;
-        header("Location: mmt_list_a.php");                     
+        $cemp=null;//審核者(當下登入的)
     }else{
-        $MasterStr="UPDATE FA.MMT_AtableM SET status=:status,cemp=:cemp WHERE id=:mid";
+        @$check_ans=$_POST["mmt_a_Check"];//審核
+        $cemp=$_POST["memp"];//審核者(當下登入的)
+    }
+    if ($checksum==1) {
+            $MasterStr="UPDATE FA.MMT_AtableM SET status=:status,cemp=:cemp WHERE id=:mid";
+        } else {
+            $MasterStr="UPDATE FA.MMT_AtableM SET status=:status,sremp=:cemp WHERE id=:mid";
+        }
         $stmtM = $pdo->prepare($MasterStr);
         $stmtM->bindParam(':status',$check_ans,PDO::PARAM_STR);
         $stmtM->bindParam(':cemp',$cemp,PDO::PARAM_STR);
@@ -92,7 +121,6 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
         $stmtM->execute();    
         $pdo=null;
         header("Location: mmt_list_a.php");
-    }
 }
 ?>
 <!DOCTYPE html>
@@ -229,17 +257,51 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
         <input type="hidden" name="action" value="check">
         <input type="hidden" name="mid" value="<?= $MMT_AtableMid ?>">
         <input type="hidden" name="memp" value="<?= $userID ?>">
-
-        <div class="row my-3">
-            <div class="col">
-                <!-- <p class="d-inline font-weight-bold">工務室：<?//= $check_emp ?></p> -->
-                <p class="d-inline font-weight-bold" name="reMumber">工務室：<?= $username?>&nbsp&nbsp&nbsp<input type="checkbox" name="mmt_a_Check" value='F' >審核</p>
+        <input type="hidden" name="checksum" value="<?= $checksum ?>">
+        <?php
+        if ($checksum==1) {   //主管登錄 ?>
+            <div class="row my-3">
+                <div class="col">
+                <?php if ($Mdata[0]['status']=='W'or $Mdata[0]['status']=='' or $Mdata[0]['status']==null) {?>
+                    <p class="d-inline font-weight-bold" name="reMumber">工務室：<?= $username?>&nbsp&nbsp&nbsp<input type="checkbox" name="mmt_a_Check" value='F' disabled>審核</p>
+                <?PHP } ?>
+                <?php if ($Mdata[0]['status']=='M') {?>
+                    <p class="d-inline font-weight-bold" name="reMumber">工務室：<?= $username?>&nbsp&nbsp&nbsp<input type="checkbox" name="mmt_a_Check" value='F'>審核</p>
+                <?PHP } ?>
+                <?php if ($Mdata[0]['status']=='F') {?>
+                    <p class="d-inline font-weight-bold" name="reMumber">工務室：<?= $username?>&nbsp&nbsp&nbsp<input type="checkbox" name="mmt_a_Check" value='F' checked>審核</p>
+                <?PHP } ?>
+                </div>
+                <div class="col text-center">
+                    <p class="d-inline font-weight-bold">專責人員：<?= $sremp ?></p>
+                </div>
+                <div class="col text-right">
+                    <p class="d-inline font-weight-bold">保養人員：<?= $remp ?></p>
+                </div>
             </div>
-            <div class="col text-right">
-                <p class="d-inline font-weight-bold">保養人員：<?= $remp ?></p>
-            </div>
-        </div>
-
+        <?php
+        } else {//專責登錄?>
+            <div class="row my-3">
+                <div class="col">                    
+                    <p class="d-inline font-weight-bold">工務室：</p>
+                </div>
+                <div class="col text-center">
+                <?php 
+                    if ($Mdata[0]['status']=='W'or $Mdata[0]['status']=='' or $Mdata[0]['status']==null) {?>
+                        <p class="d-inline font-weight-bold">專責人員：<?= $username?>&nbsp&nbsp&nbsp<input type="checkbox" name="mmt_a_Check" value='M' >審核</p>
+              <?PHP } 
+                    if($Mdata[0]['status']=='M') { ?>
+                        <p class="d-inline font-weight-bold">專責人員：<?= $username?>&nbsp&nbsp&nbsp<input type="checkbox" name="mmt_a_Check" value='M' checked>審核</p>
+              <?PHP }
+                    if($Mdata[0]['status']=='F') { ?>
+                        <p class="d-inline font-weight-bold">專責人員：<?= $username?>&nbsp&nbsp&nbsp<input type="checkbox" name="mmt_a_Check" value='M' checked Disabled>審核</p>
+              <?PHP }?>
+                </div>
+                <div class="col text-right">
+                    <p class="d-inline font-weight-bold">保養人員：<?= $remp ?></p>
+                </div>
+            </div><?php
+        }?>
         <!-- 送出鈕 -->
             <div class="d-flex justify-content-end">
                 <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">確認審核</button>&nbsp&nbsp&nbsp

@@ -146,7 +146,10 @@ $ammtmAll=array();
                         break;
                     case '':
                         $ammtmstatus='未審核';
-                        break;                
+                        break;  
+                    case 'M':
+                        $ammtmstatus='進行中';
+                        break;              
                     case 'F':
                         $ammtmstatus='審核完成';
                         break;
@@ -161,8 +164,8 @@ $ammtmAll=array();
                 <td><?= $ammtmemp?></td><!--保養者-->                
                 <td><?= $ammtmcemp?></td><!--審核者--> 
                 <?php 
-                if ($ammtmstatus=='未審核') { ?>
-                    <td><a href="mmtcheck_a.php?id=<?= $ammtm[$i]['id']?>"><?= $ammtmstatus?></a></td><!--狀態-->
+                if ($ammtmstatus!='審核完成') { ?>
+                    <td><a href="mmtcheck_a.php?id=<?= $ammtm[$i]['id']?>" class="airconL2 airconL3" Disabled><?= $ammtmstatus?></a></td><!--狀態-->
                 <?php } else { ?>
                     <td><?= $ammtmstatus?></td>
                 <?php } ?>
