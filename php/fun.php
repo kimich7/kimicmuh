@@ -151,18 +151,19 @@
         setcookie("className",'');// php/data_class.php
         setcookie("courtyardName",'');// php/data_class.php
     }
-
+    
+    //差集
     function a_array_unique($array){
-    $out = array();
+        $out = array();
+        foreach ($array as $key=>$value) {
+            if (!in_array($value, $out)){
+                $out[$key] = $value;
+            }
+        }
+        $out = array_values($out);
+        return $out;
+    }
+
     
-    foreach ($array as $key=>$value) {
-    if (!in_array($value, $out)){
-        $out[$key] = $value;
-    }
-    }
-    
-    $out = array_values($out);
-    return $out;
-    }
 ?>
 

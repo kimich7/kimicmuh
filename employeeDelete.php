@@ -2,8 +2,16 @@
     include("php/CMUHconndata.php");
     include("php/fun.php");
     if (isset($_POST["action"])&&($_POST["action"]=="delete")) {
+        $emp=$_POST["cID"];
         $sqldelete="DELETE FROM FA.Employee WHERE e_number=:ID";
-        $stmt = $pdo->prepare($sqldelete);
+        $stmt = $pdo->prepare($sqldelete);        
+        $deletestr="SELECT COUNT(e_number) FROM FA.securityemp WHERE e_number='$emp'";
+        $delete=Current($pdo->query($deletestr)->fetch());
+        if ($delete!=0) {
+            $emp=$_POST["cID"];
+            $deleteempstr="DELETE FA.securityemp WHERE e_number='$emp'";
+            $deleteemp=$pdo->exec($deleteempstr);
+        }
         $stmt->bindParam(':ID',$_POST["cID"],PDO::PARAM_STR);       
         $stmt->execute();
         $pdo=null;

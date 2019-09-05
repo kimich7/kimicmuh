@@ -4,6 +4,18 @@
     if (isset($_POST["action"])&&($_POST["action"]=="updata")) {
         $sqldelete="UPDATE FA.Employee SET e_number=:e_number, cname=:cname, passcard=:passcard, title=:title, rank=:rank  WHERE e_number=:cID";
         $stmt = $pdo->prepare($sqldelete);
+        if (isset($_POST['security'])&&$_POST['security']!='') {
+                $level=$_POST['security'];                
+                $num=count($level);
+                $emp=$_POST["cID"];
+                $leveldeletestr="DELETE FA.securityemp WHERE e_number='$emp'" ;
+                $leveldelete=$pdo->exec($leveldeletestr);
+                for ($i=0; $i < $num; $i++) {
+                    $levelint[$i]=(int)$level[$i];
+                    $levelstr="INSERT INTO FA.securityemp(e_number,sid)VALUES('$emp',$levelint[$i])";
+                    $leveldata=$pdo->exec($levelstr);
+                }
+            }          
         $stmt->bindParam(':e_number',$_POST["uid"],PDO::PARAM_STR);
         $stmt->bindParam(':cname',$_POST["uname"],PDO::PARAM_STR);
         $stmt->bindParam(':passcard',$_POST["upw"],PDO::PARAM_STR);
@@ -17,12 +29,47 @@
     $id=$_GET["id"];
     $sqlselect="SELECT e_number,cname,passcard,title,rank FROM FA.Employee WHERE e_number='$id'";
     $result = $pdo->query($sqlselect)->fetch();
-    $securitystr="SELECT * FROM FA.securityKind";//全部的類別權限
-    $security=$pdo->query($securitystr);
 
-    $securitystr="SELECT * FROM FA.securityKind";//全部的類別權限
+    //全部的類別權限
+    $securitystr="SELECT * FROM FA.securityKind";
     $security=$pdo->query($securitystr);
-
+    while ($row = $security->fetch()) {
+        $level[]=array(
+            'id'=>$row['id'],
+            'sName'=>$row['sName']
+        );
+    }
+    $levelnum=Count($level);
+    
+    //人員的權限有哪些
+    $securityempstr="SELECT a.* FROM FA.securityKind as a LEFT JOIN FA.securityemp AS b ON a.id=b.sid WHERE b.e_number = '$id'";
+    $securityemp=$pdo->query($securityempstr);
+    while ($row = $securityemp->fetch()) {
+        $levelemp[]=array(
+            'id'=>$row['id'],
+            'sName'=>$row['sName']
+        );
+    }
+    //交集
+    foreach ($level as $value){
+        foreach ($levelemp as $val){
+            if($value==$val){
+              $intersect[]=$value;
+            }
+        }
+    }
+    $pinum=count($intersect);
+    
+    //差集
+    if ($pinum>0) {
+        foreach($level as $k=>$v){
+            if(in_array($v, $levelemp)){
+                unset($level[$k]);
+            } 
+        }
+        $level=array_values($level); 
+        $levelnun=count($level);
+    }
 ?>
 
 <!DOCTYPE html>
@@ -93,6 +140,26 @@
                         break;
                 }
             echo '</tr>';
+            
+            echo '<tr>';
+            echo '<td align="center">權限</td><td align="center">';
+            echo '<select name="security[]" id="security" style="width:auto;" size=10 multiple>';
+            if ($pinum>0) {
+                for ($i=0; $i < $pinum; $i++) {                    
+                        //echo "<input type='checkbox' name='security[]' id='security' value=\"".$intersect[$i]['id']."\" checked>".$intersect[$i]['sName'];
+                        echo "<option value=\"".$intersect[$i]['id']."\" selected>".$intersect[$i]['sName']."</option>";
+                    } 
+                for ($i=0; $i < $levelnun; $i++) { 
+                    //echo "<input type='checkbox' name='security[]' id='security' value=\"".$level[$i]['id']."\">".$level[$i]['sName'];
+                    echo "<option value=\"".$level[$i]['id']."\">".$level[$i]['sName']."</option>";
+                }
+            }else{
+               for ($i=0; $i < $levelnum; $i++) { 
+                   //echo "<input type='checkbox' name='security[]' id='security' value=\"".$level[$i]['id']."\">".$level[$i]['sName'];
+                   echo "<option value=\"".$level[$i]['id']."\">".$level[$i]['sName']."</option>";
+               }                 
+            }                
+            echo '</tr>';            
             echo '<tr>';
                 echo '<td align="center" colspan="2">';
                 echo '<input name="action" type="hidden" value="updata">';
