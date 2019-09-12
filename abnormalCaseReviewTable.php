@@ -1,4 +1,5 @@
 <?php
+/*本頁是異常處理明細*/
 include("php/CMUHconndata.php");
 include("php/fun.php");
 session_start();

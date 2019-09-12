@@ -87,7 +87,7 @@
             echo '</tr>';
         echo '</table>';
         echo '<nav aria-label="Page navigation example">';
-                echo '<ul class="pagination">';
+                echo '<ul class="pagination justify-content-center">';
                         for ($i=1; $i <= $total_page; $i++) {
                             if ($i==$page_num) {
                                 echo "<li class=\"page-item\"><span class='page-link text-danger' href=#><b>{$i}</b></span></li>";

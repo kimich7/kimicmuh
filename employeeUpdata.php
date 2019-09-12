@@ -29,7 +29,7 @@
     $id=$_GET["id"];
     $sqlselect="SELECT e_number,cname,passcard,title,rank FROM FA.Employee WHERE e_number='$id'";
     $result = $pdo->query($sqlselect)->fetch();
-
+    
     //全部的類別權限
     $securitystr="SELECT * FROM FA.securityKind";
     $security=$pdo->query($securitystr);
@@ -50,26 +50,30 @@
             'sName'=>$row['sName']
         );
     }
-    //交集
-    foreach ($level as $value){
-        foreach ($levelemp as $val){
-            if($value==$val){
-              $intersect[]=$value;
+    
+    if (isset($levelemp)&&$levelemp!='') {
+            //交集
+        foreach ($level as $value){
+            foreach ($levelemp as $val){
+                if($value==$val){
+                $intersect[]=$value;
+                }
             }
         }
-    }
-    $pinum=count($intersect);
-    
-    //差集
-    if ($pinum>0) {
-        foreach($level as $k=>$v){
-            if(in_array($v, $levelemp)){
-                unset($level[$k]);
-            } 
+        $pinum=count($intersect);
+        
+        //差集
+        if ($pinum>0) {
+            foreach($level as $k=>$v){
+                if(in_array($v, $levelemp)){
+                    unset($level[$k]);
+                } 
+            }
+            $level=array_values($level); 
+            $levelnun=count($level);
         }
-        $level=array_values($level); 
-        $levelnun=count($level);
     }
+    
 ?>
 
 <!DOCTYPE html>
@@ -144,7 +148,7 @@
             echo '<tr>';
             echo '<td align="center">權限</td><td align="center">';
             echo '<select name="security[]" id="security" style="width:auto;" size=10 multiple>';
-            if ($pinum>0) {
+            if (isset($levelemp)&&$levelemp!='') {
                 for ($i=0; $i < $pinum; $i++) {                    
                         //echo "<input type='checkbox' name='security[]' id='security' value=\"".$intersect[$i]['id']."\" checked>".$intersect[$i]['sName'];
                         echo "<option value=\"".$intersect[$i]['id']."\" selected>".$intersect[$i]['sName']."</option>";

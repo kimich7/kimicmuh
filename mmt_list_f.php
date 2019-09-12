@@ -1,6 +1,7 @@
 <?php
 include("php/CMUHconndata.php");
 include("php/fun.php");
+include("page_1.php");
 //登入者
 session_start();
 $checkuser=$_SESSION["login_member"];
@@ -22,6 +23,7 @@ $ammtmstr="SELECT id,bid,fid,eid,datekind,tid,macNo,remark,H1_emp,H2_emp,status,
 //總資料數量
 $ammtmnumstr="SELECT Count(id)FROM FA.MMT_FtableM ";
 $ammtmnum=Current($pdo->query($ammtmnumstr)->fetch());//全部數量
+$total_num=$ammtmnum;
 
 
 //----還沒帶入----
@@ -58,6 +60,8 @@ $ammtmAll=array();
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script src="./node_modules/popper.js/dist/umd/popper.min.js"></script>
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+     <!--新加入20190815表格排序-->
+    <script src="./js/jquery.tablesorter.min.js" type="text/javascript"></script>
 
     <!-- <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -87,7 +91,9 @@ $ammtmAll=array();
             <input type="hidden" name="mmtsysf" value='F'>
             <div class="row my-3">
                 <div class="col">
-                    <p class="d-inline font-weight-bold">&nbsp&nbsp&nbsp&nbsp新增保養：<button type='submit' name="mmtsysfbtn" class="btn btn-primary" >新增</button></p>
+                <span class="billBoardfireL1 billBoardfireL3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
+                    <p class="d-inline font-weight-bold">&nbsp&nbsp&nbsp&nbsp新增保養：<button type='submit' name="mmtsysfbtn" class="btn btn-primary fireL1 fireL3" Disabled>新增</button></p>
+                </span>
                 </div>
                     <!-- <h4>&nbsp&nbsp&nbsp&nbsp新增保養：<a class="btn btn-primary" href="mmtCreate_a_choice.php" class="text-dark">新增</a></h4>    -->
                 <div class="col text-right">
@@ -97,7 +103,7 @@ $ammtmAll=array();
         </div>
     </form>
     
-    <table id="mmt_a" class="display table table-striped table-bordered table-hover col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12 table-sm order-table" id="dtBasicExample" aria-describedby="dataTables-example_info" data-sort-name="tid" data-sort-order="desc" data-sortable ="true"><!--表格樣式：條紋行、帶框表格、可滑入行-->
+    <table id="mmt_f" class="display table table-striped table-bordered table-hover col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12 table-sm order-table" aria-describedby="dataTables-example_info" data-sort-name="tid" data-sort-order="desc" data-sortable ="true"><!--表格樣式：條紋行、帶框表格、可滑入行-->
         <thead  class="thead-light">
             <tr align="center">
             <th scope="col" width="15%" name="tid" sortable="true">單號</th>
@@ -166,12 +172,12 @@ $ammtmAll=array();
                 <!--<td><?//= $ammtmemp?></td>--><!--保養者-->                
                 <!--<td><?//= $ammtmcemp?></td>--><!--審核者--> 
                 <?php 
-                if ($ammtmstatus=='未審核' or $ammtmstatus=='部分審核') { ?>
-                    <td><a href="mmtcheck_f.php?id=<?= $ammtm[$i]['id']?>"><?= $ammtmstatus?></a></td><!--狀態-->
+                if ($ammtmstatus!='審核完成') { ?>
+                    <td><a href="mmtcheck_f.php?id=<?= $ammtm[$i]['id']?>"fireL2 fireL3 Disabled><?= $ammtmstatus?></a></td><!--狀態-->
                 <?php } else { ?>
                     <td><?= $ammtmstatus?></td>
                 <?php } ?>
-                <td><a href="mmtEdit_f.php?id=<?= $ammtm[$i]['id']?>">內容編輯與修改</a></td>
+                <td><a href="mmtEdit_f.php?id=<?= $ammtm[$i]['id']?>" fireL2 fireL3 Disabled>內容編輯與修改</a></td>
                 <td><a href="mmth1check_f.php?id=<?= $ammtm[$i]['id']?>">上半年</a> || <a href="mmth2check_f.php?id=<?= $ammtm[$i]['id']?>">下半年</a></td>
             </tr>
         <?php }?>
@@ -199,19 +205,27 @@ $ammtmAll=array();
                 }
             echo '</tr>';
         echo '</table>';
-        echo '<div class="container">';
-            echo '<nav aria-label="Page navigation example" >';
-                    echo '<ul class="pagination justify-content-center">';
-                            for ($i=1; $i <= $total_page; $i++) {
-                                if ($i==$page_num) {
-                                    echo "<li class=\"page-item\"><span class='page-link text-danger' href=#><b>{$i}</b></span></li>";
-                                } else {
-                                    echo "<li class=\"page-item\"><a class='page-link' href=\"mmt_list_a.php?page={$i}\">{$i}</a></li>";
-                                }
-                            }
-                    echo '</ul>';
-            echo '</nav>';
-        echo '</div>'
+        //分頁按鈕一次七頁
+            $phpfile = 'mmt_list_f.php';
+            $page= isset($_GET['page'])?$_GET['page']:1;        
+            $getpageinfo = page($page,$total_num,$phpfile);
+            echo '<div align="center">'; 
+            echo $getpageinfo['pagecode'];//顯示分頁的html語法
+            echo '</div>';
+        //分頁按鈕end
+        // echo '<div class="container">';
+        //     echo '<nav aria-label="Page navigation example" >';
+        //             echo '<ul class="pagination justify-content-center">';
+        //                     for ($i=1; $i <= $total_page; $i++) {
+        //                         if ($i==$page_num) {
+        //                             echo "<li class=\"page-item\"><span class='page-link text-danger' href=#><b>{$i}</b></span></li>";
+        //                         } else {
+        //                             echo "<li class=\"page-item\"><a class='page-link' href=\"mmt_list_a.php?page={$i}\">{$i}</a></li>";
+        //                         }
+        //                     }
+        //             echo '</ul>';
+        //     echo '</nav>';
+        // echo '</div>'
 ?>
 <script>
     (function(document) {
@@ -250,23 +264,10 @@ $ammtmAll=array();
                 LightTableFilter.init();
             }
         });
+
+        //表格排序
+        $("#mmt_f").tablesorter();
     })(document);
 </script>
-<!-- <script>
-    $(document).ready(function() {
-        $('#mmt_a').DataTable( {
-            columnDefs: [ {
-                targets: [ 0 ],
-                orderData: [ 0, 1 ]
-            }, {
-                targets: [ 1 ],
-                orderData: [ 1, 0 ]
-            }, {
-                targets: [ 4 ],
-                orderData: [ 4, 0 ]
-            } ]
-        } );
-    } );
-</script>     -->
 </body>
 </html>

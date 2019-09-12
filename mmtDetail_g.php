@@ -22,6 +22,7 @@ while ($row = $M_data->fetch()) {
         'macNo'=>$row['macNo'],
         'remark'=>$row['remark'],
         'emp'=>$row['emp'],
+        'sremp'=>$row['sremp'],
         'cemp'=>$row['cemp'],
         'status'=>$row['status']
 
@@ -39,7 +40,13 @@ while ($row = $M_data->fetch()) {
         $check_emp='';//確認主管
     } else {
         $check_emp=sql_database('cname','FA.Employee','e_number',$Mdata[0]['cemp']);//確認主管
+    }    
+    if ($Mdata[0]['sremp']=='' or $Mdata[0]['sremp']==null) {
+        $sremp='';//確認專責
+    } else {
+        $sremp=sql_database('cname','FA.Employee','e_number',$Mdata[0]['sremp']);//專責人員
     }
+
     $reportdatastr="SELECT * FROM FA.MMT_KIND WHERE id=$tid";
     $reportdata=$pdo->query($reportdatastr);
     while ($row = $reportdata->fetch()) {
@@ -164,6 +171,9 @@ $num=count($Q_A_data);
         <div class="row my-3">
             <div class="col">
                 <p class="d-inline font-weight-bold">主管覆核：<?= $check_emp ?></p>
+            </div>
+            <div class="col text-center">
+                <p class="d-inline font-weight-bold">專責人員：<?= $sremp ?></p>
             </div>
             <div class="col text-right">
                 <p class="d-inline font-weight-bold">檢查保養人員：<?= $remp ?></p>

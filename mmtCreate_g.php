@@ -170,13 +170,16 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">備註：</span>
             </div>
-            <textarea class="form-control" name="remark" aria-label="With textarea"></textarea>
+            <textarea class="form-control" name="remark" rows="5" aria-label="With textarea"></textarea>
         </div>
         <input type="hidden" name="action" value="add">
          <input type="hidden" name="num" value='<?= $num ?>'>
           <div class="row my-3">
             <div class="col">
                 <p class="d-inline font-weight-bold">主管覆核：</p>
+            </div>
+            <div class="col text-center">
+                <p class="d-inline font-weight-bold">專責人員：</p>
             </div>
             <div class="col text-right">
                 <p class="d-inline font-weight-bold">檢查保養人員：<?= $username ?></p>

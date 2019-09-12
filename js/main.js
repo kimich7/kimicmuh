@@ -937,6 +937,84 @@ $(function () {
         $("#tfresult2").addClass("d-none");
         $("#tfresult3").removeClass("d-none");
     });
+
+
+
+    $('#emptable').bootstrapTable({
+        columns: [ //欄位設定
+            {
+                field: 'id',
+                title: '人員編號',
+                align: 'center',
+                width: 40,
+                visible: true,
+                sortable: true
+            },
+            {
+                field: 'name',
+                title: '人員姓名',
+                align: 'center',
+                width: 40,
+                visible: true,
+                sortable: true
+            },
+            {
+                field: 'edit',
+                title: '功能',
+                align: 'center',
+                width: 40,
+                visible: true
+            }
+        ],
+        classes: 'table',
+        data: getRandomData(), //所有資料
+        uniqueId: 'id', //哪一個欄位是key
+        sortName: 'id', //依照那個欄位排序			
+        height: 450,
+        pagination: true, //使否要分頁
+
+        //可於ToolBar上顯示的按鈕
+        showColumns: true, //顯示/隱藏哪些欄位
+        showToggle: true, //名片式/table式切換
+        showPaginationSwitch: true, //分頁/不分頁切換
+        showRefresh: true, //重新整理
+        search: true, //查詢
+
+        onPageChange: function (currentPage, pageSize) {
+            console.log("目前頁數:" + currentPage + ",一頁顯示:" + pageSize + "筆");
+        },
+        pageSize: 10, //一頁顯示幾筆
+        pageList: [10, 20, 50, 100], //一頁顯示幾筆的選項
+
+        formatRecordsPerPage: function (pageSize) {
+            return '&nbsp;&nbsp;每頁顯示' + pageSize + '筆';
+        },
+        formatShowingRows: function (fromIndex, toIndex, totalSize) {
+            //目前第幾頁
+            var currentPage = Math.ceil(fromIndex / this.pageSize);
+            //總共幾頁
+            var totalPageCount = Math.ceil(totalSize / this.pageSize);
+            return '第' + currentPage + '頁&nbsp;&nbsp;共' + totalPageCount + '頁';
+        }
+    });
+    $('#emptable').bootstrapTable('load', data);
+
+    function getRandomData() {
+        $.getJSON("php/testbootstraptable.php", function (data) {
+            var ans = [];
+            for (var i = 0; i < data.length; i++) {
+                ans.push({
+                    id: data[i]["e_number"],
+                    name: data[i]["cname"],
+                    edit: ""
+                });
+            }
+            $('#emptable').bootstrapTable('load', ans);
+            return ans;
+        })
+    }
+
+
     //===================================mtinsert結束(與mtupdata共用)===================================
     //===================================修改密碼&人員管理=====================
     $("#btn_modify").click(function () {

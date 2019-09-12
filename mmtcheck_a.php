@@ -103,24 +103,94 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
     $mid=$_POST["mid"];//主表ID    
     $checksum=$_POST['checksum'];//審核等級
     if (empty($_POST["mmt_a_Check"])) {
-        $check_ans=null;
-        $cemp=null;//審核者(當下登入的)
-    }else{
-        @$check_ans=$_POST["mmt_a_Check"];//審核
-        $cemp=$_POST["memp"];//審核者(當下登入的)
-    }
-    if ($checksum==1) {
-            $MasterStr="UPDATE FA.MMT_AtableM SET status=:status,cemp=:cemp WHERE id=:mid";
-        } else {
-            $MasterStr="UPDATE FA.MMT_AtableM SET status=:status,sremp=:cemp WHERE id=:mid";
+        switch ($checksum) {
+            case 1:
+                $cemp=null;
+                $MasterStr="UPDATE FA.MMT_AtableM SET status='M',cemp =:cemp WHERE id=:mid";
+                $stmtM = $pdo->prepare($MasterStr);
+                $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
+                $stmtM->bindParam(':cemp',$cemp,PDO::PARAM_STR);
+                $stmtM->execute();    
+                $pdo=null;
+                header("Location: mmt_list_a.php");
+                break;
+            case 2:
+                $cemp=null;
+                $MasterStr="UPDATE FA.MMT_AtableM SET status='W',sremp =:cemp WHERE id=:mid";
+                $stmtM = $pdo->prepare($MasterStr);
+                $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
+                $stmtM->bindParam(':cemp',$cemp,PDO::PARAM_STR);
+                $stmtM->execute();    
+                $pdo=null;
+                header("Location: mmt_list_a.php");
+                break;
+            case 3:   
+                $cemp=null;             
+                $MasterStr="UPDATE FA.MMT_AtableM SET status='W',sremp =:sremp,cemp =:cemp WHERE id=:mid";
+                $stmtM = $pdo->prepare($MasterStr);
+                $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
+                $stmtM->bindParam(':cemp',$cemp,PDO::PARAM_STR);
+                $stmtM->bindParam(':sremp',$cemp,PDO::PARAM_STR);
+                $stmtM->execute();    
+                $pdo=null;
+                header("Location: mmt_list_a.php");
+                break;            
         }
-        $stmtM = $pdo->prepare($MasterStr);
-        $stmtM->bindParam(':status',$check_ans,PDO::PARAM_STR);
-        $stmtM->bindParam(':cemp',$cemp,PDO::PARAM_STR);
-        $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
-        $stmtM->execute();    
-        $pdo=null;
-        header("Location: mmt_list_a.php");
+    } else {
+        switch ($checksum) {
+            case 1:                
+                @$check_ans=$_POST["mmt_a_Check"];//審核
+                $cemp=$_POST["memp"];//審核者(當下登入的)                
+                $MasterStr="UPDATE FA.MMT_AtableM SET status=:status,cemp=:cemp WHERE id=:mid";
+                $stmtM = $pdo->prepare($MasterStr);
+                $stmtM->bindParam(':status',$check_ans,PDO::PARAM_STR);
+                $stmtM->bindParam(':cemp',$cemp,PDO::PARAM_STR);
+                $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
+                $stmtM->execute();    
+                $pdo=null;
+                header("Location: mmt_list_a.php");
+                break;
+            case 2:                
+                @$check_ans=$_POST["mmt_a_Check"];//審核
+                $cemp=$_POST["memp"];//審核者(當下登入的)                
+                $MasterStr="UPDATE FA.MMT_AtableM SET status=:status,sremp=:cemp WHERE id=:mid";
+                $stmtM = $pdo->prepare($MasterStr);
+                $stmtM->bindParam(':status',$check_ans,PDO::PARAM_STR);
+                $stmtM->bindParam(':cemp',$cemp,PDO::PARAM_STR);
+                $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
+                $stmtM->execute();    
+                $pdo=null;
+                header("Location: mmt_list_a.php");
+                break;
+            case 3:
+                $check_ansArray=$_POST["mmt_a_Check"];//審核
+                $cemp=$_POST["memp"];//審核者(當下登入的)                
+                $check_ans= implode(",", $check_ansArray);
+                echo $check_ans;
+                if ($check_ans=='M') {
+                    $MasterStr="UPDATE FA.MMT_AtableM SET status=:status,sremp=:cemp WHERE id=:mid";
+                    $stmtM = $pdo->prepare($MasterStr);
+                    $stmtM->bindParam(':status',$check_ans,PDO::PARAM_STR);
+                    $stmtM->bindParam(':cemp',$cemp,PDO::PARAM_STR);
+                    $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
+                    $stmtM->execute();    
+                    $pdo=null;
+                    header("Location: mmt_list_a.php");
+                }
+                if ($check_ans=='F,M' or $check_ans=='F' or $check_ans=='M,F') {
+                    $MasterStr="UPDATE FA.MMT_AtableM SET status='F',sremp=:sremp,cemp=:cemp WHERE id=:mid";
+                    $stmtM = $pdo->prepare($MasterStr);
+                    // $stmtM->bindParam(':status',$check_ans,PDO::PARAM_STR);
+                    $stmtM->bindParam(':sremp',$cemp,PDO::PARAM_STR);
+                    $stmtM->bindParam(':cemp',$cemp,PDO::PARAM_STR);                
+                    $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
+                    $stmtM->execute();    
+                    $pdo=null;
+                    header("Location: mmt_list_a.php");
+                }                
+                break;
+        }        
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -280,7 +350,8 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
                 </div>
             </div>
         <?php
-        } else {//專責登錄?>
+        } 
+        if ($checksum==2) {//專責登錄?>
             <div class="row my-3">
                 <div class="col">                    
                     <p class="d-inline font-weight-bold">工務室：</p>
@@ -297,6 +368,38 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
                         <p class="d-inline font-weight-bold">專責人員：<?= $username?>&nbsp&nbsp&nbsp<input type="checkbox" name="mmt_a_Check" value='M' checked Disabled>審核</p>
               <?PHP }?>
                 </div>
+                <div class="col text-right">
+                    <p class="d-inline font-weight-bold">保養人員：<?= $remp ?></p>
+                </div>
+            </div><?php
+        }
+        if($checksum==3) {//專責登錄?>
+            <div class="row my-3"> 
+                <?php 
+                    if ($Mdata[0]['status']=='W'or $Mdata[0]['status']=='' or $Mdata[0]['status']==null) {?>
+                        <div class="col text-left">
+                        <p class="d-inline font-weight-bold" name="reMumber">工務室：<?= $username?>&nbsp&nbsp&nbsp<input type="checkbox" name="mmt_a_Check[]" value='F'>審核</p>
+                        </div>
+                        <div class="col text-center">
+                        <p class="d-inline font-weight-bold">專責人員：<?= $username?>&nbsp&nbsp&nbsp<input type="checkbox" name="mmt_a_Check[]" value='M' >審核</p>
+                        </div>
+              <?PHP } 
+                    if($Mdata[0]['status']=='M') { ?>
+                        <div class="col text-left">
+                        <p class="d-inline font-weight-bold" name="reMumber">工務室：<?= $username?>&nbsp&nbsp&nbsp<input type="checkbox" name="mmt_a_Check[]" value='F'>審核</p>
+                        </div>
+                        <div class="col text-center">
+                        <p class="d-inline font-weight-bold">專責人員：<?= $username?>&nbsp&nbsp&nbsp<input type="checkbox" name="mmt_a_Check[]" value='M' checked>審核</p>
+                        </div>
+              <?PHP }
+                    if($Mdata[0]['status']=='F') { ?>
+                        <div class="col text-left">
+                        <p class="d-inline font-weight-bold" name="reMumber">工務室：<?= $username?>&nbsp&nbsp&nbsp<input type="checkbox" name="mmt_a_Check[]" value='F'checked>審核</p>
+                        </div>
+                        <div class="col text-center">
+                        <p class="d-inline font-weight-bold">專責人員：<?= $username?>&nbsp&nbsp&nbsp<input type="checkbox" name="mmt_a_Check[]" value='M' checked>審核</p>
+                        </div>
+              <?PHP }?>
                 <div class="col text-right">
                     <p class="d-inline font-weight-bold">保養人員：<?= $remp ?></p>
                 </div>
