@@ -38,14 +38,14 @@
         //所有的資料 (check_manager IS NULL or check_number=1)檢查者已確認
         $sqlstr_total="SELECT m.*  FROM FA.Water_System_Record_Master as m left join FA.securityKind as s ON  m.sysID=s.sysID  left join FA.securityemp as e ON s.id=e.sid WHERE e.e_number='$checkuserID' and (check_number=1) and (check_manager IS NULL or check_manager=0)";
         //分頁資料
-        $sqlstr_page="SELECT m.*  FROM FA.Water_System_Record_Master as m left join FA.securityKind as s ON  m.sysID=s.sysID  left join FA.securityemp as e ON s.id=e.sid WHERE e.e_number='$checkuserID' and (check_number=1) and (check_manager IS NULL or check_manager=0) ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+        $sqlstr_page="SELECT m.*  FROM FA.Water_System_Record_Master as m left join FA.securityKind as s ON  m.sysID=s.sysID  left join FA.securityemp as e ON s.id=e.sid WHERE e.e_number='$checkuserID' and (check_number=1) and (check_manager IS NULL or check_manager=0) ORDER BY recordID DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
         //總資料量
         $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master as m left join FA.securityKind as s ON  m.sysID=s.sysID  left join FA.securityemp as e ON s.id=e.sid WHERE e.e_number='$checkuserID' and (check_number=1) and (check_manager IS NULL or check_manager=0)";
     } else {
         //所有的資料 (check_manager IS NULL or check_manager=0)都還沒有人確認，主管不會看到這資料
         $sqlstr_total="SELECT m.*  FROM FA.Water_System_Record_Master as m left join FA.securityKind as s ON  m.sysID=s.sysID  left join FA.securityemp as e ON s.id=e.sid WHERE e.e_number='$checkuserID'";
         //分頁資料
-        $sqlstr_page="SELECT m.*  FROM FA.Water_System_Record_Master as m left join FA.securityKind as s ON  m.sysID=s.sysID  left join FA.securityemp as e ON s.id=e.sid WHERE e.e_number='$checkuserID' ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+        $sqlstr_page="SELECT m.*  FROM FA.Water_System_Record_Master as m left join FA.securityKind as s ON  m.sysID=s.sysID  left join FA.securityemp as e ON s.id=e.sid WHERE e.e_number='$checkuserID' ORDER BY recordID DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
         //總資料量
         $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master as m left join FA.securityKind as s ON  m.sysID=s.sysID  left join FA.securityemp as e ON s.id=e.sid WHERE e.e_number='$checkuserID'";
     }

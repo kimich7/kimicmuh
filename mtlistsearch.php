@@ -57,7 +57,7 @@
             //所有的資料 (check_manager IS NULL or check_manager=0) and
             $sqlstr_total="SELECT * FROM FA.Water_System_Record_Master ";
             //篩選後給每頁的筆數
-            $sqlstr_page="SELECT * FROM FA.Water_System_Record_Master ORDER BY recordID ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+            $sqlstr_page="SELECT * FROM FA.Water_System_Record_Master ORDER BY recordID DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
             //總資料數量
             $totalstr_num="SELECT COUNT(recordID) FROM FA.Water_System_Record_Master ";
             $sql_page=$pdo->query($sqlstr_page);
@@ -96,7 +96,7 @@
                     if($data_page['status'] == 'M') {
                         $status='進行中';                    
                     } 
-                    if($data_page['status'] == 'W') {
+                    if($data_page['status'] == 'W' or empty($data_page['status'])) {
                         $status='未審核';
                     }
                     echo $status;   
