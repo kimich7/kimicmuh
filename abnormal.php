@@ -8,7 +8,7 @@
     $errtitle=$_POST["errortexttitle"];//主旨
     $errtext=$_POST["errortext"];//內容描述
     
-    if($_FILES['uploadfile']['error']>0){        
+    if($_FILES['uploadfile']['error']>0){
         $insertStr="INSERT INTO FA.Abnormal_Notification_System_Master(case_title,case_location,case_time,case_userID,case_description)VALUES('$errtitle','$errloction','$errdate','$erremp','$errtext')";
     }else{
         move_uploaded_file($_FILES['uploadfile']['tmp_name'], 'abnormalPhoto/'.$_FILES['uploadfile']['name']);

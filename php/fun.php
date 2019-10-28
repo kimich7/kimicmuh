@@ -1,13 +1,21 @@
 <?php
     function sql_database($col,$tbl,$when,$wheans){//對照欄位的名稱，通常用在ID找名稱        
         include("CMUHconndata.php");
-        $view_select = "SELECT $col FROM $tbl WHERE $when = '$wheans' ";
+        if (is_numeric($wheans)) {
+            $view_select = "SELECT $col FROM $tbl WHERE $when = $wheans ";
+        } else {
+            $view_select = "SELECT $col FROM $tbl WHERE $when = '$wheans' ";
+        }
+        
+        //$view_select = "SELECT $col FROM $tbl WHERE $when = '$wheans' ";
         $view_query=$pdo->query($view_select)->fetch(PDO::FETCH_ASSOC);
         $view=$view_query["$col"];
         $pdo=null;
         return $view;
     }
-
+    function time_rota(){
+        return $id=date("YmdHis");
+    }
     FUNCTION checkName($checkID){
         include("CMUHconndata.php");
         if (is_null($checkID)) {

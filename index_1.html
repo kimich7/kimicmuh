@@ -92,154 +92,64 @@
             <div class="text-muted">
                 <i class="fas fa-7x fa-file-alt my-3"></i>
                 <h2>工務設備保養紀錄文件及管理系統</h2>
-                <!-- collapse -->
                 <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom"
                     title="請登入相應權限帳號已解鎖">
-                    <button style="pointer-events: none;" type="button" class="mainBtn autho3 mt-5" id="errbtn"
-                        data-toggle="collapse" data-target="#article2" disabled>點我進入</button>
+                    <button style="pointer-events: none;" type="button" class="mainBtn autho3" data-toggle="modal"
+                        data-target="#ModalCenter4" id="mainBtn2" disabled>點我進入</button>
                 </span>
-            </div>
+            </div><!-- collapse -->
+
+            <!-- <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom"
+                    title="請登入相應權限帳號已解鎖">
+                    <button style="pointer-events: none;" type="button" class="mainBtn autho3 mt-5" id="errbtn"
+                        data-toggle="modal" data-target="#ModalCenter3" disabled>點我進入</button>
+                </span> -->
+
 
             <!-- 設備保養系統選單 -->
-            <div>
+            <!-- <div>
                 <article class="my-3 collapse" id="article2">
                     <ul class="syslist list-group" id="syslist2"></ul>
-                    <!--Aircondition-->
-                    <span class="billBoardairconL1 billBoardairconL2 billBoardairconL3" tabindex="0"
-                        data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                        <li class="list-group-item">
-                            <a href="mmt_list_a.php" class="text-dark airconL1 airconL2 airconL3" Disabled>空調系統</a>
-                        </li>
-                    </span>
-                    <!--Build-->
-                    <span class="billBoardbuildL1 billBoardbuildL2 billBoardbuildL3" tabindex="0" data-toggle="tooltip"
-                        data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                        <li class="list-group-item">
-                            <div class="dropright buildL1 buildL2 buildL3">
-                                <button type="button" class="btn btn-light dropdown-toggle buildL1 buildL2 buildL3"
-                                    id="buildlist" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                    Disabled>建築物</button>
-                                <div class="dropdown-menu" aria-labelledby="buildlist">
-                                    <a class="buildL1 buildL2 buildL3 dropdown-item" href="mmt_list_b.php"
-                                        Disabled>不便設施</a>
-                                    <a class="buildL1 buildL2 buildL3 dropdown-item" href="mmt_list_b_other.php"
-                                        Disabled>其他</a>
-                                </div>
-                            </div>
-                        </li>
-                    </span>
-                    <!--electricity -->
-                    <span class="billBoardpowerL1 billBoardpowerL2 billBoardpowerL3" tabindex="0" data-toggle="tooltip"
-                        data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                        <li class="list-group-item">
-                            <div class="dropright powerL1 powerL2 powerL3 ">
-                                <button type="button" class="btn btn-light dropdown-toggle powerL1 powerL2 powerL3"
-                                    id="powerlist" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                    Disabled>電力</button>
-                                <div class="dropdown-menu" aria-labelledby="powerlist">
-                                    <a class="powerL1 powerL2 powerL3 dropdown-item" href="mmt_list_e.php"
-                                        Disabled>分電盤</a>
-                                    <a class="powerL1 powerL2 powerL3 dropdown-item" href="#" Disabled>高低壓</a>
-                                    <a class="powerL1 powerL2 powerL3 dropdown-item" href="#" Disabled>UPS</a>
-                                    <a class="powerL1 powerL2 powerL3 dropdown-item" href="#" Disabled>發電機系統</a>
-                                </div>
-                            </div>
-                        </li>
-                    </span>
-                    <!--fire -->
-                    <span class="billBoardfireL1 billBoardfireL2 billBoardfireL3" tabindex="0" data-toggle="tooltip"
-                        data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                        <li class="list-group-item">
-                            <div class="dropright fireL1 fireL2 fireL3 ">
-                                <button type="button" class="btn btn-light dropdown-toggle fireL1 fireL2 fireL3"
-                                    id="firelist" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                    Disabled>消防</button>
-                                <div class="dropdown-menu" aria-labelledby="firelist">
-                                    <a class="fireL1 fireL2 fireL3 dropdown-item" href="mmt_list_f.php"
-                                        Disabled>消防設備</a>
-                                    <a class="fireL1 fireL2 fireL3 dropdown-item" href="#" Disabled>滅火器</a>
-                                </div>
-                            </div>
-                        </li>
-                    </span>
-                    <!--air -->
-                    <span class="billBoardairL1 billBoardairL2 billBoardairL3" tabindex="0" data-toggle="tooltip"
-                        data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                        <li class="list-group-item">
-                            <div class="dropright airL1 airL2 airL3 ">
-                                <button type="button" class="btn btn-light dropdown-toggle airL1 airL2 airL3"
-                                    id="airlist" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                    Disabled>氣體</button>
-                                <div class="dropdown-menu" aria-labelledby="airlist">
-                                    <a class="airL1 airL2 airL3 dropdown-item" href="mmt_list_g.php" Disabled>氣體設備</a>
-                                    <a class="airL1 airL2 airL3 dropdown-item" href="#" Disabled>年度檢查</a>
-                                </div>
-                            </div>
-                        </li>
-                    </span>
-                    <!--convey-->
-                    <span class="billBoardconveyL1 billBoardconveyL2 billBoardconveyL3" tabindex="0"
-                        data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                        <li class="list-group-item">
-                            <div class="dropright conveyL1 conveyL2 conveyL3 ">
-                                <button type="button" class="btn btn-light dropdown-toggle conveyL1 conveyL2 conveyL3"
-                                    id="conveylist" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                    Disabled>傳送</button>
-                                <div class="dropdown-menu" aria-labelledby="conveylist">
-                                    <a class="conveyL1 conveyL2 conveyL3 dropdown-item" href="mmt_list_h.php"
-                                        Disabled>電梯-對講機</a>
-                                    <a class="conveyL1 conveyL2 conveyL3 dropdown-item" href="#" Disabled>電梯-半月保養</a>
-                                    <a class="conveyL1 conveyL2 conveyL3 dropdown-item" href="#" Disabled>小藥梯</a>
-                                    <a class="conveyL1 conveyL2 conveyL3 dropdown-item" href="#" Disabled>氣送</a>
-                                </div>
-                            </div>
-                        </li>
-                    </span>
-                    <!--monitor-->
-                    <span class="billBoardmonitorL1 billBoardmonitorL2 billBoardmonitorL3" tabindex="0"
-                        data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                        <li class="list-group-item">
-                            <a href="mmt_list_m.php" class="text-dark monitorL1 monitorL2 monitorL3" Disabled>監控</a>
-                        </li>
-                    </span>
-                    <!--Water-->
-                    <span class="billBoardwaterL1 billBoardwaterL2 billBoardwaterL3" tabindex="0" data-toggle="tooltip"
-                        data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                        <li class="list-group-item">
-                            <div class="dropright waterL1 waterL2 waterL3 ">
-                                <button type="button" class="btn btn-light dropdown-toggle waterL1 waterL2 waterL3"
-                                    id="waterlist" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                    Disabled>水系統</button>
-                                <div class="dropdown-menu" aria-labelledby="waterlist">
-                                    <a class="waterL1 waterL2 waterL3 dropdown-item" href="mmt_list_w.php"
-                                        Disabled>電梯-對講機</a>
-                                    <a class="waterL1 waterL2 waterL3 dropdown-item" href="#" Disabled>給水-電壓電流</a>
-                                    <a class="waterL1 waterL2 waterL3 dropdown-item" href="#" Disabled>給水-設備點檢</a>
-                                    <a class="waterL1 waterL2 waterL3 dropdown-item" href="#" Disabled>排水-排水設備</a>
-                                    <a class="waterL1 waterL2 waterL3 dropdown-item" href="#" Disabled>排水-汙水處理設備</a>
-                                    <a class="waterL1 waterL2 waterL3 dropdown-item" href="#" Disabled>鍋爐-每日檢查</a>
-                                    <a class="waterL1 waterL2 waterL3 dropdown-item" href="#" Disabled>鍋爐-年月保養</a>
-                                </div>
-                            </div>
-                        </li>
-                    </span>
+                    <li class="list-group-item">
+                        <a href="" class="text-dark maindata4" data-toggle="modal" data-target="#ModalCenter1"></a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="" class="text-dark maindata5" data-toggle="modal" data-target="#ModalCenter1"></a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="text-dark maindata6"></a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="text-dark maindata7"></a>
+                    </li>
                 </article>
-            </div>
-            <!-- 2019/06/13暫時註 -->
+            </div>2019/06/13暫時註-->
         </div>
+
+
+
+
 
         <!-- 主選單:異常反應系統 -->
         <div class="mainMenu">
             <div class="text-muted">
                 <i class="fas fa-7x fa-bell my-3"></i>
                 <h2>異常反應/工程管理系統</h2>
+
                 <!--20190503修改--->
                 <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom"
                     title="請登入相應權限帳號已解鎖">
                     <button style="pointer-events: none;" type="button" class="mainBtn autho3" data-toggle="collapse"
                         data-target="#article3" id="mainBtn3" disabled>點我進入</button>
                 </span>
+
+                <!-- <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom"
+                    title="請登入相應權限帳號已解鎖">
+                    <button style="pointer-events: none;" type="button" class="mainBtn autho3 mt-5" id="errbtn"
+                        data-toggle="modal" data-target="#ModalCenter3" disabled>點我進入</button>
+                </span> -->
             </div>
+
             <div>
                 <article class="my-3 collapse" id="article3">
                     <ul class="syslist list-group" id="syslist3"></ul>
@@ -249,8 +159,33 @@
                     <li class="list-group-item">
                         <a href="pmc.php" class="text-dark">工程管理系統</a>
                     </li>
+                    <!-- data-target="#ModalCenter3"<li class="list-group-item"> mainBtn autho3 mt-5
+                                </li> -->
+                    <!-- <li class="list-group-item">
+                                    <a class="text-dark maindata9"></a>
+                                </li> -->
                 </article>
+
+                <!-- <article class="my-3 collapse" id="article1">
+                    <ul class="syslist list-group" id="syslist1"></ul>
+                    <li class="list-group-item">
+                        <a href="" class="text-dark maindata0" data-toggle="modal" data-target="#ModalCenter1"></a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="" class="text-dark maindata1" data-toggle="modal" data-target="#ModalCenter1"></a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="text-dark maindata2"></a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="text-dark maindata3"></a>
+                    </li>
+                </article> -->
+
+
+
             </div>
+
         </div>
         <!-- 主選單:中央彙整系統 -->
         <div class="mainMenu">
@@ -270,11 +205,18 @@
                     <li class="list-group-item">
                         <a class="text-dark maindata8"></a>
                     </li>
+                    <!-- <li class="list-group-item">
+                    </li> -->
+                    <!-- <li class="list-group-item">
+                        <a class="text-dark maindata9"></a>
+                    </li> -->
                 </article>
             </div>
         </div>
     </div>
     <!-- 卡片(Modal) -->
+
+
     <section>
         <!-- 主選單 -->
         <div class="modal hide fade" id="ModalCenter1" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle"
@@ -364,6 +306,35 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
                             <button type="submit" class="btn btn-primary" id="errorbtn" name="errorbtn">送出</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!-- 保養卡片20190613 -->
+        <form action="" method="post" enctype="multipart/form-data" id="MMT_Kind" name="MMT_Kind">
+            <div class="modal hide fade" id="ModalCenter4" tabindex="-1" role="dialog"
+                aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="ModalLongTitle">保養系統選擇</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="mmtsys">保養系統選擇</label>
+                                <select class="form-control mb-3 mmtcookiecs" id="mmtchoice" name="mmtchoice" required>
+                                    <option selected>選擇系統</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="xxbtn">關閉</button>
+                            <!-- <button type="submit" class="btn btn-primary" id="mmtbtn" name="mmtbtn">送出</button> -->
+                            <button type="button" class="btn btn-primary" id="mmtbtn" name="mmtbtn">送出</button>
                         </div>
                     </div>
                 </div>
