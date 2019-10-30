@@ -72,11 +72,16 @@ $update=date("Y-m-d");
                             <p>
                                 保養區分:&nbsp&nbsp</BR>
                                 <h3>
-                                <input type='checkbox' name="b[]" value='HM'>&nbsp半月&nbsp&nbsp
-                                <input type='checkbox' name="b[]" value='M'>&nbsp月&nbsp&nbsp
-                                <input type='checkbox' name="b[]" value='S'>&nbsp季&nbsp&nbsp
-                                <input type='checkbox' name="b[]" value='HY'>&nbsp半年&nbsp&nbsp
-                                <input type='checkbox' name="b[]" value='Y'>&nbsp年
+                                    <input type="radio" name="b" value='HM'>&nbsp半月&nbsp&nbsp
+                                    <input type="radio" name="b" value='M'>&nbsp月&nbsp&nbsp
+                                    <input type="radio" name="b" value='S'>&nbsp季&nbsp&nbsp
+                                    <input type="radio" name="b" value='HY'>&nbsp半年&nbsp&nbsp
+                                    <input type="radio" name="b" value='Y'>&nbsp年
+                                    <!-- <input type='checkbox' name="b[]" value='HM'>&nbsp半月&nbsp&nbsp
+                                    <input type='checkbox' name="b[]" value='M'>&nbsp月&nbsp&nbsp
+                                    <input type='checkbox' name="b[]" value='S'>&nbsp季&nbsp&nbsp
+                                    <input type='checkbox' name="b[]" value='HY'>&nbsp半年&nbsp&nbsp
+                                    <input type='checkbox' name="b[]" value='Y'>&nbsp年 -->
                                 </h3>
                             </p>                           
                             <!-- 檔案上傳 -->

@@ -14,8 +14,11 @@
     //設備地點
     $eqlocation=$_POST["location"];
     //保養區分
-    $fileCycle_Array=$_POST["b"];
-    $fileCycle= implode(",", $fileCycle_Array);
+    $fileCycle=$_POST["b"];
+    
+    // $fileCycle_Array=$_POST["b"];
+    // $fileCycle= implode(",", $fileCycle_Array);
+    
     //檔案
     //$filePath=$_POST["mmtfile"];
     //備註

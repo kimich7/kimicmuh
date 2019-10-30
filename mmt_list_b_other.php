@@ -171,7 +171,7 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
             );    
         }
         @$sql_page_num=count($ammtm);
-            //for ($i=0; $i <$ammtmnum ; $i++) {    
+            //for ($i=0; $i <$ammtmnum ; $i++) {
             for ($i=0; $i <$sql_page_num ; $i++) {
                 $k=$i+2000;
                 $a=$i;
@@ -199,13 +199,13 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
                 }
                 switch ($ammtm[$i]['status']) {//(W/F/D 未審核/完成/作廢)}
                     case 'W':
-                        $ammtmstatus='待確認';
+                        $ammtmstatus='未審核';
                         break;
                     case 'M':
-                        $ammtmstatus='確認中';
+                        $ammtmstatus='進行中';
                         break;
                     case 'F':
-                        $ammtmstatus='已完成';
+                        $ammtmstatus='審核完成';
                         break;                      
                 }            
         ?> 
@@ -292,9 +292,24 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
             </div>
         </div>
         <input type="hidden" name="action" value="check">
-    </form>    
-<input type="hidden" name="total_num" value="<?= $total_num?>">;
-<input type="hidden" name="action" value="new_page">
+    </form> 
+
+    <!--filter-->
+    <form action="mmt_list_filter.php" method="post" name="mtlist"> 
+        <div>
+            <div align="left">
+                日期區間搜索：</br>
+                開始時間：<input type="date" name="start_date">&nbsp&nbsp結束時間：<input type="date" name="end_date">            
+            </div>
+            <div align="left">
+                </br>關鍵字：<input type="text" name="keywordsearch">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="submit" value="查詢">
+            </div>           
+        </div> 
+        <input type="hidden" name="sdid" value="1">
+        <input type="hidden" name="action" value="new_page">
+        <input type="hidden" name="total_num" value="<?= $total_num?>">           
+    </form>
+    <!--filter end-->
 
 <script>
     (function(document) {
