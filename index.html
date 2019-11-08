@@ -122,8 +122,10 @@
                                 <div class="dropdown-menu" aria-labelledby="buildlist">
                                     <a class="buildL1 buildL2 buildL3 dropdown-item" href="mmt_list_b.php"
                                         Disabled>不便設施</a>
-                                    <a class="buildL1 buildL2 buildL3 dropdown-item" href="mmt_list_b_other.php"
+                                    <a class="buildL1 buildL2 buildL3 dropdown-item" href="mmt_list_filepage.php?sdid=1"
                                         Disabled>其他</a>
+                                    <!-- <a class="buildL1 buildL2 buildL3 dropdown-item" href="mmt_list_b_other.php"
+                                        Disabled>其他</a> -->
                                 </div>
                             </div>
                         </li>
@@ -139,9 +141,18 @@
                                 <div class="dropdown-menu" aria-labelledby="powerlist">
                                     <a class="powerL1 powerL2 powerL3 dropdown-item" href="mmt_list_e.php"
                                         Disabled>分電盤</a>
-                                    <a class="powerL1 powerL2 powerL3 dropdown-item" href="#" Disabled>高低壓</a>
-                                    <a class="powerL1 powerL2 powerL3 dropdown-item" href="#" Disabled>UPS</a>
-                                    <a class="powerL1 powerL2 powerL3 dropdown-item" href="#" Disabled>發電機系統</a>
+                                    <!-- <a class="powerL1 powerL2 powerL3 dropdown-item" href="mmt_list_e_hl_vol.php"
+                                        Disabled>高低壓</a> -->
+                                    <a class="powerL1 powerL2 powerL3 dropdown-item" href="mmt_list_filepage.php?sdid=2"
+                                        Disabled>高低壓</a>
+                                    <!-- <a class="powerL1 powerL2 powerL3 dropdown-item" href="mmt_list_e_ups.php"
+                                        Disabled>UPS</a> -->
+                                    <a class="powerL1 powerL2 powerL3 dropdown-item" href="mmt_list_filepage.php?sdid=3"
+                                        Disabled>UPS</a>
+                                    <!-- <a class="powerL1 powerL2 powerL3 dropdown-item" href="mmt_list_e_gen.php"
+                                        Disabled>發電機系統</a> -->
+                                    <a class="powerL1 powerL2 powerL3 dropdown-item" href="mmt_list_filepage.php?sdid=4"
+                                        Disabled>發電機系統</a>
                                 </div>
                             </div>
                         </li>
@@ -157,7 +168,8 @@
                                 <div class="dropdown-menu" aria-labelledby="firelist">
                                     <a class="fireL1 fireL2 fireL3 dropdown-item" href="mmt_list_f.php"
                                         Disabled>消防設備</a>
-                                    <a class="fireL1 fireL2 fireL3 dropdown-item" href="#" Disabled>滅火器</a>
+                                    <a class="fireL1 fireL2 fireL3 dropdown-item" href="mmt_list_filepage.php?sdid=5"
+                                        Disabled>滅火器</a>
                                 </div>
                             </div>
                         </li>
@@ -172,7 +184,8 @@
                                     Disabled>氣體</button>
                                 <div class="dropdown-menu" aria-labelledby="airlist">
                                     <a class="airL1 airL2 airL3 dropdown-item" href="mmt_list_g.php" Disabled>氣體設備</a>
-                                    <a class="airL1 airL2 airL3 dropdown-item" href="#" Disabled>年度檢查</a>
+                                    <a class="airL1 airL2 airL3 dropdown-item" href="mmt_list_filepage.php?sdid=6"
+                                        Disabled>年度檢查</a>
                                 </div>
                             </div>
                         </li>
@@ -188,9 +201,12 @@
                                 <div class="dropdown-menu" aria-labelledby="conveylist">
                                     <a class="conveyL1 conveyL2 conveyL3 dropdown-item" href="mmt_list_h.php"
                                         Disabled>電梯-對講機</a>
-                                    <a class="conveyL1 conveyL2 conveyL3 dropdown-item" href="#" Disabled>電梯-半月保養</a>
-                                    <a class="conveyL1 conveyL2 conveyL3 dropdown-item" href="#" Disabled>小藥梯</a>
-                                    <a class="conveyL1 conveyL2 conveyL3 dropdown-item" href="#" Disabled>氣送</a>
+                                    <a class="conveyL1 conveyL2 conveyL3 dropdown-item"
+                                        href="mmt_list_filepage.php?sdid=7" Disabled>電梯-半月保養</a>
+                                    <a class="conveyL1 conveyL2 conveyL3 dropdown-item"
+                                        href="mmt_list_filepage.php?sdid=8" Disabled>小藥梯</a>
+                                    <a class="conveyL1 conveyL2 conveyL3 dropdown-item"
+                                        href="mmt_list_filepage.php?sdid=9" Disabled>氣送</a>
                                 </div>
                             </div>
                         </li>
@@ -199,7 +215,8 @@
                     <span class="billBoardmonitorL1 billBoardmonitorL2 billBoardmonitorL3" tabindex="0"
                         data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
                         <li class="list-group-item">
-                            <a href="mmt_list_m.php" class="text-dark monitorL1 monitorL2 monitorL3" Disabled>監控</a>
+                            <a class="text-dark monitorL1 monitorL2 monitorL3" href="mmt_list_filepage.php?sdid=10"
+                                Disabled>監控</a>
                         </li>
                     </span>
                     <!--Water-->
@@ -211,14 +228,16 @@
                                     id="waterlist" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                                     Disabled>水系統</button>
                                 <div class="dropdown-menu" aria-labelledby="waterlist">
-                                    <a class="waterL1 waterL2 waterL3 dropdown-item" href="mmt_list_w.php"
-                                        Disabled>電梯-對講機</a>
-                                    <a class="waterL1 waterL2 waterL3 dropdown-item" href="#" Disabled>給水-電壓電流</a>
+                                    <a class="waterL1 waterL2 waterL3 dropdown-item" href="mmt_list_w_vol_curr.php"
+                                        Disabled>給水-電壓電流</a>
                                     <a class="waterL1 waterL2 waterL3 dropdown-item" href="#" Disabled>給水-設備點檢</a>
-                                    <a class="waterL1 waterL2 waterL3 dropdown-item" href="#" Disabled>排水-排水設備</a>
-                                    <a class="waterL1 waterL2 waterL3 dropdown-item" href="#" Disabled>排水-汙水處理設備</a>
+                                    <a class="waterL1 waterL2 waterL3 dropdown-item"
+                                        href="mmt_list_filepage.php?sdid=11" Disabled>排水-排水設備</a>
+                                    <a class="waterL1 waterL2 waterL3 dropdown-item"
+                                        href="mmt_list_filepage.php?sdid=12" Disabled>排水-汙水處理設備</a>
                                     <a class="waterL1 waterL2 waterL3 dropdown-item" href="#" Disabled>鍋爐-每日檢查</a>
-                                    <a class="waterL1 waterL2 waterL3 dropdown-item" href="#" Disabled>鍋爐-年月保養</a>
+                                    <a class="waterL1 waterL2 waterL3 dropdown-item"
+                                        href="mmt_list_filepage.php?sdid=13" Disabled>鍋爐-年月保養</a>
                                 </div>
                             </div>
                         </li>

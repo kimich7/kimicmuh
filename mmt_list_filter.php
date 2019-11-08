@@ -80,7 +80,8 @@ session_start();
     }
 
     if (isset($_POST["action"])&&($_POST["action"]=="check")) {
-        // $total_num=$_POST["total_num"];
+        $total_num=$_POST["total_num"];
+        $sdid=$_POST['sdid'];
         // $checksum=$_POST["checksum"];
         for ($i=0; $i<$total_num ; $i++) {             
             $k=$i+2000;                    
@@ -108,8 +109,50 @@ session_start();
             }    
         }
         $pdo=null;
-        header("Location:mmt_list_b_other.php");
+        switch ($sdid) {
+        case 1:
+            header("Location: mmt_list_filepage.php?sdid=1");
+            break;
+        case 2:
+            header("Location: mmt_list_filepage.php?sdid=2");
+            break;
+        case 3:
+            header("Location: mmt_list_filepage.php?sdid=3");
+            break;
+        case 4:
+            header("Location: mmt_list_filepage.php?sdid=4");
+            break;
+        case 5:
+            header("Location: mmt_list_filepage.php?sdid=5");
+            break;
+        case 6:
+            header("Location: mmt_list_filepage.php?sdid=6");
+            break;
+        case 7:
+            header("Location: mmt_list_filepage.php?sdid=7");
+            break;
+        case 8:
+            header("Location: mmt_list_filepage.php?sdid=8");
+            break;
+        case 9:
+            header("Location: mmt_list_filepage.php?sdid=9");
+            break;
+        case 10:
+            header("Location: mmt_list_filepage.php?sdid=10");
+            break;
+        case 11:
+            header("Location: mmt_list_filepage.php?sdid=11");
+            break;
+        case 12:
+            header("Location: mmt_list_filepage.php?sdid=12");
+            break;
+        case 13:
+            header("Location: mmt_list_filepage.php?sdid=13");
+            break;
+        
     }
+        // header("Location:mmt_list_b_other.php");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -141,11 +184,9 @@ session_start();
     <form action="" method="post" name="checklistfilter">
     <section class="container-fluid">
     <h1 class="text-center">建築-其他清單</h1>
-        <div class="d-flex ">
-        <?php 
-            if ($sdid==1) {?>
-                <a href="mmt_list_b_other.php" type="button" id="backlistmmt" class="btn btn-primary mt-4 rounded d-block mr-3">清除條件</a>
-        <?php }?>
+        <div class="d-flex ">        
+            <a href='mmt_list_filepage.php?sdid=<?= $sdid?>' type="button" id="backlistmmt" class="btn btn-primary mt-4 rounded d-block mr-3">清除條件</a>
+        
              
             <!-- <p class="d-inline font-weight-bold">Search:&nbsp&nbsp<input type="search" class="light-table-filter" data-table="order-table" placeholder="請輸入關鍵字"></p> -->
         </div> 
@@ -164,7 +205,7 @@ session_start();
                     //所有的資料 (check_manager IS NULL or check_manager=0) and
                     $sqlstr_total="SELECT a.* FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number  LEFT JOIN FA.CheckStatus as p ON a.status=p.id LEFT JOIN FA.MMT_cycleTime as c ON a.fileCycle=c.cycleID where (sdid=$sdid)and( b.cname like '%$keyword%' or a.eqlocation like '%$keyword%' or a.fileDownloadDate like '%$keyword%' or a.fileInsertDate like '%$keyword%' or a.checkdate like '%$keyword%' or p.checkName like '%$keyword%' or a.fileNo like '%$keyword%' or a.remark like '%$keyword%' or c.cycName like '%$keyword%')";
                     //篩選後給每頁的筆數
-                    $sqlstr_page="SELECT a.* FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number  LEFT JOIN FA.CheckStatus as p ON a.status=p.id LEFT JOIN FA.MMT_cycleTime as c ON a.fileCycle=c.cycleID where (sdid=$sdid)and( b.cname like '%$keyword%' or a.eqlocation like '%$keyword%' or a.fileDownloadDate like '%$keyword%' or a.fileInsertDate like '%$keyword%' or a.checkdate like '%$keyword%' or p.checkName like '%$keyword%' or a.fileNo like '%$keyword%' or a.remark like '%$keyword%' or c.cycName like '%$keyword%') ORDER BY a.fileNo DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+                    $sqlstr_page="SELECT a.* FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number  LEFT JOIN FA.CheckStatus as p ON a.status=p.id LEFT JOIN FA.MMT_cycleTime as c ON a.fileCycle=c.cycleID where (sdid=$sdid)and( b.cname like '%$keyword%' or a.eqlocation like '%$keyword%' or a.fileDownloadDate like '%$keyword%' or a.fileInsertDate like '%$keyword%' or a.checkdate like '%$keyword%' or p.checkName like '%$keyword%' or a.fileNo like '%$keyword%' or a.remark like '%$keyword%' or c.cycName like '%$keyword%') ORDER BY a.fileDownloadDate DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
                    //總資料數量
                     $totalstr_num="SELECT COUNT(fileNo) FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number  LEFT JOIN FA.CheckStatus as p ON a.status=p.id LEFT JOIN FA.MMT_cycleTime as c ON a.fileCycle=c.cycleID where (sdid=$sdid)and( b.cname like '%$keyword%' or a.eqlocation like '%$keyword%' or a.fileDownloadDate like '%$keyword%' or a.fileInsertDate like '%$keyword%' or a.checkdate like '%$keyword%' or p.checkName like '%$keyword%' or a.fileNo like '%$keyword%' or a.remark like '%$keyword%' or c.cycName like '%$keyword%')";
                     break;
@@ -172,7 +213,7 @@ session_start();
                     //所有的資料 (check_manager IS NULL or check_manager=0) and
                     $sqlstr_total=" SELECT a.* FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number where (sdid=$sdid)and(fileDownloadDate between '$start_date' and '$end_date' or fileInsertDate between '$start_date' and '$end_date' or checkdate between '$start_date' and '$end_date')";
                     //篩選後給每頁的筆數
-                    $sqlstr_page="SELECT a.* FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number where (sdid=$sdid)and(fileDownloadDate between '$start_date' and '$end_date' or fileInsertDate between '$start_date' and '$end_date' or checkdate between '$start_date' and '$end_date') ORDER BY fileNo DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+                    $sqlstr_page="SELECT a.* FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number where (sdid=$sdid)and(fileDownloadDate between '$start_date' and '$end_date' or fileInsertDate between '$start_date' and '$end_date' or checkdate between '$start_date' and '$end_date') ORDER BY a.fileDownloadDate DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
                     //總資料數量
                     $totalstr_num="SELECT COUNT(fileNo) FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number where (sdid=$sdid)and(fileDownloadDate between '$start_date' and '$end_date' or fileInsertDate between '$start_date' and '$end_date' or checkdate between '$start_date' and '$end_date')";
                     break;
@@ -180,7 +221,7 @@ session_start();
                     //所有的資料 (check_manager IS NULL or check_manager=0) and
                     $sqlstr_total=" SELECT a.* FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number  where (sdid=$sdid)and(fileDownloadDate ='$start_date' or fileInsertDate ='$start_date' or checkdate ='$start_date')";
                     //篩選後給每頁的筆數
-                    $sqlstr_page="SELECT a.* FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number where (sdid=$sdid)and(fileDownloadDate ='$start_date' or fileInsertDate ='$start_date' or checkdate ='$start_date') ORDER BY fileNo DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+                    $sqlstr_page="SELECT a.* FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number where (sdid=$sdid)and(fileDownloadDate ='$start_date' or fileInsertDate ='$start_date' or checkdate ='$start_date') ORDER BY a.fileDownloadDate DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
                     //總資料數量
                     $totalstr_num="SELECT COUNT(fileNo) FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number where (sdid=$sdid)and(fileDownloadDate ='$start_date' or fileInsertDate ='$start_date' or checkdate ='$start_date')";
                     break;
@@ -188,7 +229,7 @@ session_start();
                     //所有的資料 (check_manager IS NULL or check_manager=0) and
                     $sqlstr_total=" SELECT a.* FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number where (sdid=$sdid)and(fileDownloadDate ='$end_date' or fileInsertDate ='$end_date' or checkdate ='$end_date')";
                     //篩選後給每頁的筆數
-                    $sqlstr_page="SELECT a.* FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number where (sdid=$sdid)and(fileDownloadDate ='$end_date' or fileInsertDate ='$end_date' or checkdate ='$end_date') ORDER BY fileNo DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+                    $sqlstr_page="SELECT a.* FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number where (sdid=$sdid)and(fileDownloadDate ='$end_date' or fileInsertDate ='$end_date' or checkdate ='$end_date') ORDER BY a.fileDownloadDate DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
                     //總資料數量
                     $totalstr_num="SELECT COUNT(fileNo) FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number where (sdid=$sdid)and(fileDownloadDate ='$end_date' or fileInsertDate ='$end_date' or checkdate ='$end_date')";
                     break;
@@ -196,7 +237,7 @@ session_start();
                     //所有的資料 (check_manager IS NULL or check_manager=0) and
                     $sqlstr_total=" SELECT a.* FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number  LEFT JOIN FA.CheckStatus as p ON a.status=p.id LEFT JOIN FA.MMT_cycleTime as c ON a.fileCycle=c.cycleID  where (sdid=$sdid)and((a.fileDownloadDate ='$start_date'or a.fileInsertDate= '$start_date' or a.checkdate= '$start_date') and ( b.cname like '%$keyword%' or a.eqlocation like '%$keyword%' or p.checkName like '%$keyword%' or a.fileNo like '%$keyword%' or a.remark like '%$keyword%' or c.cycName like '%$keyword%'))";
                     //篩選後給每頁的筆數
-                    $sqlstr_page="SELECT a.* FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number  LEFT JOIN FA.CheckStatus as p ON a.status=p.id LEFT JOIN FA.MMT_cycleTime as c ON a.fileCycle=c.cycleID  where (sdid=$sdid)and((a.fileDownloadDate ='$start_date'or a.fileInsertDate = '$start_date' or a.checkdate= '$start_date') and ( b.cname like '%$keyword%' or a.eqlocation like '%$keyword%' or p.checkName like '%$keyword%' or a.fileNo like '%$keyword%' or a.remark like '%$keyword%' or c.cycName like '%$keyword%')) ORDER BY fileNo DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+                    $sqlstr_page="SELECT a.* FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number  LEFT JOIN FA.CheckStatus as p ON a.status=p.id LEFT JOIN FA.MMT_cycleTime as c ON a.fileCycle=c.cycleID  where (sdid=$sdid)and((a.fileDownloadDate ='$start_date'or a.fileInsertDate = '$start_date' or a.checkdate= '$start_date') and ( b.cname like '%$keyword%' or a.eqlocation like '%$keyword%' or p.checkName like '%$keyword%' or a.fileNo like '%$keyword%' or a.remark like '%$keyword%' or c.cycName like '%$keyword%')) ORDER BY a.fileDownloadDate DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
                     //總資料數量
                     $totalstr_num="SELECT COUNT(fileNo) FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number  LEFT JOIN FA.CheckStatus as p ON a.status=p.id LEFT JOIN FA.MMT_cycleTime as c ON a.fileCycle=c.cycleID  where (sdid=$sdid)and((a.fileDownloadDate ='$start_date'or a.fileInsertDate = '$start_date' or a.checkdate= '$start_date') and ( b.cname like '%$keyword%' or a.eqlocation like '%$keyword%' or p.checkName like '%$keyword%' or a.fileNo like '%$keyword%' or a.remark like '%$keyword%' or c.cycName like '%$keyword%'))";
                     break;
@@ -204,7 +245,7 @@ session_start();
                     //所有的資料 (check_manager IS NULL or check_manager=0) and
                     $sqlstr_total=" SELECT a.* FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number  LEFT JOIN FA.CheckStatus as p ON a.status=p.id LEFT JOIN FA.MMT_cycleTime as c ON a.fileCycle=c.cycleID  where (sdid=$sdid)and((a.fileDownloadDate='$end_date'or a.fileInsertDate = '$end_date' or a.checkdate = '$end_date')  and ( b.cname like '%$keyword%' or a.eqlocation like '%$keyword%' or p.checkName like '%$keyword%' or a.fileNo like '%$keyword%' or a.remark like '%$keyword%' or c.cycName like '%$keyword%'))";
                     //篩選後給每頁的筆數
-                    $sqlstr_page="SELECT a.* FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number  LEFT JOIN FA.CheckStatus as p ON a.status=p.id LEFT JOIN FA.MMT_cycleTime as c ON a.fileCycle=c.cycleID  where (sdid=$sdid)and((a.fileDownloadDate='$end_date'or a.fileInsertDate = '$end_date' or a.checkdate = '$end_date')  and ( b.cname like '%$keyword%' or a.eqlocation like '%$keyword%' or p.checkName like '%$keyword%' or a.fileNo like '%$keyword%' or a.remark like '%$keyword%' or c.cycName like '%$keyword%')) ORDER BY fileNo DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+                    $sqlstr_page="SELECT a.* FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number  LEFT JOIN FA.CheckStatus as p ON a.status=p.id LEFT JOIN FA.MMT_cycleTime as c ON a.fileCycle=c.cycleID  where (sdid=$sdid)and((a.fileDownloadDate='$end_date'or a.fileInsertDate = '$end_date' or a.checkdate = '$end_date')  and ( b.cname like '%$keyword%' or a.eqlocation like '%$keyword%' or p.checkName like '%$keyword%' or a.fileNo like '%$keyword%' or a.remark like '%$keyword%' or c.cycName like '%$keyword%')) ORDER BY a.fileDownloadDate DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
                     //總資料數量
                     $totalstr_num="SELECT COUNT(fileNo) FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number  LEFT JOIN FA.CheckStatus as p ON a.status=p.id LEFT JOIN FA.MMT_cycleTime as c ON a.fileCycle=c.cycleID  where (sdid=$sdid)and((a.fileDownloadDate='$end_date'or a.fileInsertDate = '$end_date' or a.checkdate = '$end_date')  and ( b.cname like '%$keyword%' or a.eqlocation like '%$keyword%' or p.checkName like '%$keyword%' or a.fileNo like '%$keyword%' or a.remark like '%$keyword%' or c.cycName like '%$keyword%'))";
                     break;
@@ -212,7 +253,7 @@ session_start();
                     //所有的資料 (check_manager IS NULL or check_manager=0) and
                     $sqlstr_total=" SELECT a.* FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number  LEFT JOIN FA.CheckStatus as p ON a.status=p.id LEFT JOIN FA.MMT_cycleTime as c ON a.fileCycle=c.cycleID  where (sdid=$sdid)and( (a.fileDownloadDate between '$start_date' and '$end_date' or a.fileInsertDate between '$start_date' and '$end_date' or a.checkdate between '$start_date' and '$end_date')and ( b.cname like '%$keyword%' or a.eqlocation like '%$keyword%' or p.checkName like '%$keyword%' or a.fileNo like '%$keyword%' or a.remark like '%$keyword%' or c.cycName like '%$keyword%'))";
                     //篩選後給每頁的筆數
-                    $sqlstr_page="SELECT a.* FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number  LEFT JOIN FA.CheckStatus as p ON a.status=p.id LEFT JOIN FA.MMT_cycleTime as c ON a.fileCycle=c.cycleID  where (sdid=$sdid)and( (a.fileDownloadDate between '$start_date' and '$end_date' or a.fileInsertDate between '$start_date' and '$end_date' or a.checkdate between '$start_date' and '$end_date')and ( b.cname like '%$keyword%' or a.eqlocation like '%$keyword%' or p.checkName like '%$keyword%' or a.fileNo like '%$keyword%' or a.remark like '%$keyword%' or c.cycName like '%$keyword%')) ORDER BY fileNo DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+                    $sqlstr_page="SELECT a.* FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number  LEFT JOIN FA.CheckStatus as p ON a.status=p.id LEFT JOIN FA.MMT_cycleTime as c ON a.fileCycle=c.cycleID  where (sdid=$sdid)and( (a.fileDownloadDate between '$start_date' and '$end_date' or a.fileInsertDate between '$start_date' and '$end_date' or a.checkdate between '$start_date' and '$end_date')and ( b.cname like '%$keyword%' or a.eqlocation like '%$keyword%' or p.checkName like '%$keyword%' or a.fileNo like '%$keyword%' or a.remark like '%$keyword%' or c.cycName like '%$keyword%')) ORDER BY a.fileDownloadDate DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
                     //總資料數量
                     $totalstr_num="SELECT COUNT(fileNo) FROM FA.MMA_getFile as a LEFT JOIN FA.Employee as b on a.fileDownloadUserID=b.e_number or a.checkempId=b.e_number  LEFT JOIN FA.CheckStatus as p ON a.status=p.id LEFT JOIN FA.MMT_cycleTime as c ON a.fileCycle=c.cycleID  where (sdid=$sdid)and( (a.fileDownloadDate between '$start_date' and '$end_date' or a.fileInsertDate between '$start_date' and '$end_date' or a.checkdate between '$start_date' and '$end_date')and ( b.cname like '%$keyword%' or a.eqlocation like '%$keyword%' or p.checkName like '%$keyword%' or a.fileNo like '%$keyword%' or a.remark like '%$keyword%' or c.cycName like '%$keyword%'))";
                     break;
@@ -226,11 +267,7 @@ session_start();
             $sql_total=$pdo->query($sqlstr_total);
             $total_num=CURRENT($pdo->query($totalstr_num)->fetch());
             
-            //本業開始的筆數
-            $i=0;
-            $j=$i+1000;
-            $k=$i+2000;
-            $a=0;
+            //本業開始的筆數            
         ?>
         <table id="mmt_a" class="display table table-striped table-bordered table-hover col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12 table-sm order-table"  aria-describedby="dataTables-example_info" data-sort-name="tid" data-sort-order="desc" data-sortable ="true" width="80%"> <!--表格樣式：條紋行、帶框表格、可滑入行-->
             <thead  class="thead-light">
@@ -358,14 +395,14 @@ session_start();
                 echo '<tr>';
                     if ($page_num>1) {
                         @$prev=$page_num-1;
-                        echo "<td><a href='mtcheckfilter.php?page=1\"&startdate=\"".$start_date."\"&enddate=\"".$end_date."\"&keyword=\"".$keyword."\"&key=next_page'>"."[第一頁]".'</a></td>';
-                        echo "<td><a href='mtcheckfilter.php?page={$prev}\"&startdate=\"".$start_date."\"&enddate=\"".$end_date."\"&keyword=\"".$keyword."\"&key=next_page'>"."[<<<上一頁]".'</a></td>';
+                        echo "<td><a href=mmt_list_filter.php?page=1\"&startdate=\"".$start_date."\"&enddate=\"".$end_date."\"&keyword=\"".$keyword."\"&sdid=\"".$sdid."\"&key=next_page'>"."[第一頁]".'</a></td>';
+                        echo "<td><a href=mmt_list_filter.php?page={$prev}\"&startdate=\"".$start_date."\"&enddate=\"".$end_date."\"&keyword=\"".$keyword."\"&sdid=\"".$sdid."\"&key=next_page'>"."[<<<上一頁]".'</a></td>';
                         
                     }
                     if ($page_num<$total_page) {
                         @$next=$page_num+1;
-                        echo "<td>"."<a href='mtcheckfilter.php?page={$next}\"&startdate=\"".$start_date."\"&enddate=\"".$end_date."\"&keyword=\"".$keyword."\"&key=next_page'>"."[下一頁>>>]".'</a></td>';
-                        echo "<td><a href='mtcheckfilter.php?page=$total_page\"&startdate=\"".$start_date."\"&enddate=\"".$end_date."\"&keyword=\"".$keyword."\"&key=next_page'>".'[最末頁]'.'</a></td>';
+                        echo "<td>"."<a href=mmt_list_filter.php?page={$next}\"&startdate=\"".$start_date."\"&enddate=\"".$end_date."\"&keyword=\"".$keyword."\"&sdid=\"".$sdid."\"&key=next_page'>"."[下一頁>>>]".'</a></td>';
+                        echo "<td><a href=mmt_list_filter.php?page=$total_page\"&startdate=\"".$start_date."\"&enddate=\"".$end_date."\"&keyword=\"".$keyword."\"&sdid=\"".$sdid."\"&key=next_page'>".'[最末頁]'.'</a></td>';
                     }
                 echo '</tr>';
             echo '</table>';
@@ -394,7 +431,8 @@ session_start();
                 <a href='index.html' type='button' class="my-3 px-3 py-1 btn-outline-info text-dark">離開</a>
             </div>
         </div>
-    </section>    
+    </section>
+    <input type="hidden" name="sdid" value='<?= $sdid ?>'>    
     </form>
     <form action="mmt_list_filter.php" method="post" name="mtlist"> 
             <div>
@@ -407,7 +445,7 @@ session_start();
                 </div>           
             </div> 
             <input type="hidden" name="action" value="new_page">
-            <input type="hidden" name="sdid" value="1">           
+            <input type="hidden" name="sdid" value='<?= $sdid ?>'>           
         </form>
     <script>
         (function(document) {
