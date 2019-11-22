@@ -74,9 +74,9 @@
     $num=num("SELECT COUNT(equipCheckID) FROM FA.Equipment_Check WHERE b_number='$buildNo' and sysID=$sysNo");
     $checkName=array();//用來放equipCheckName的陣列
     //早中晚班資料的撈取
-    $ans1=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=1)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckID");
-    $ans2=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=2)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckID");
-    $ans3=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=3)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckID");
+    $ans1=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark,B.equipCheckID,A.ref,A.answerMode FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=1)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckID");
+    $ans2=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark,B.equipCheckID,A.ref,A.answerMode FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=2)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckID");
+    $ans3=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark,B.equipCheckID,A.ref,A.answerMode FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=3)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckID");
     $user_1No=$ans1[0]["r_member"];
     $user_2No=$ans2[0]["r_member"];
     $user_3No=$ans3[0]["r_member"];
@@ -226,17 +226,17 @@
                     <tbody class="text-primary">
                     <?php                         
                         for ($a=0; $a < $num; $a++) {    //拿該表單所點檢項目的數量做迴圈用num                    
-                        $checkName[$a]=sql_database('equipCheckName',$equipTable,'equipCheckID',$item[$a]["equipCheckID"]);//找出對應equipCheckID的equipCheckName的名稱                        
+                        $checkName[$a]=sql_database('equipCheckName',$equipTable,'equipCheckID',$ans1[$a]["equipCheckID"]);//找出對應equipCheckID的equipCheckName的名稱                        
                     //問號結尾
                     echo '<tr>';
                         //檢查項目<!--檢查項目-->
                         echo '<td><h10>'.$checkName[$a].'</h10></td>';
                         //參考值<!--參考值-->
-                        echo '<td><h10>'.$item[$a]["ref"].'</h10></td>';
+                        echo '<td><h10>'.$ans1[$a]["ref"].'</h10></td>';
                         $q=$a+200;
                             $an=$a;//結果答案
                             //$type=$a+400;
-                            $answerMode=$item[$a]["answerMode"];
+                            $answerMode=$ans1[$a]["answerMode"];
                             if (is_null($ans1[$a]["recordDetailID"])) {                               
                                 echo "<td id='tfresult1'><input type=\"text\" name=\"$an\" maxlength=\"20\" value=\"無該筆紀錄，此紀錄無法修改\" DISABLED></td>";
                             }else{                                                              
@@ -605,6 +605,7 @@
             <?php
                 @$checkman=sql_database('cname','FA.Employee','e_number',$checkmanID);
                 @$manager=sql_database('cname','FA.Employee','e_number',$managerID);
+                ECHO $checksum;
                 switch ($checksum) {
                     case '1'://登入者為主管時，有兩種狀態，(1.主管未審核。2.主管已審核)+檢查者已審核
                         echo '<div class="row my-3">';

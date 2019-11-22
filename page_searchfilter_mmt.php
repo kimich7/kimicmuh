@@ -1,4 +1,5 @@
 <?php
+//保養系統搜索後的分頁程式
 function page($page,$total,$phpfile,$startDate,$endDate,$keyword,$sdid,$hidden,$pagesize=10,$pagelen=7){
     $pagecode = '';//定義變數，存放分頁生成的HTML
     $page = intval($page);//避免非數字頁碼
