@@ -8,7 +8,7 @@ $username=$_SESSION["login_member"] ;//登錄人員名稱
 $MMT_AtableMid=$_GET['id'] ;//主表id
 
 //主表的資料
-$M_data_str="SELECT * FROM FA.MMT_BtableM WHERE id='$MMT_AtableMid'";
+$M_data_str="SELECT * FROM FA.MMT_HtableM WHERE id='$MMT_AtableMid'";
 $M_data=$pdo->query($M_data_str);
 while ($row = $M_data->fetch()) {
     $Mdata[]=array(
@@ -22,13 +22,13 @@ while ($row = $M_data->fetch()) {
         'sremp'=>$row['sremp'],
         'cemp'=>$row['cemp'],
         'status'=>$row['status']
+
     );
-} 
-    
+}
+   
     //$mmtsysName=sql_database('sName','FA.MMT_sys','id',$mmtsysNo);//系統名稱    
     $mmtbuildName=sql_database('bName','FA.MMT_build','id',$Mdata[0]['bid']);//大樓名稱
     $remp=sql_database('cname','FA.Employee','e_number',$Mdata[0]['emp']);//保養人員
-    
     (int)$tid=$Mdata[0]['tid'] ;
     
     if ($Mdata[0]['cemp']=='' or $Mdata[0]['cemp']==null) {
@@ -41,7 +41,6 @@ while ($row = $M_data->fetch()) {
     } else {
         $sremp=sql_database('cname','FA.Employee','e_number',$Mdata[0]['sremp']);//專責人員
     }
-
     $reportdatastr="SELECT * FROM FA.MMT_KIND WHERE id=$tid";
     $reportdata=$pdo->query($reportdatastr);
     while ($row = $reportdata->fetch()) {
@@ -55,7 +54,7 @@ while ($row = $M_data->fetch()) {
     
 
 //明細表資料
-// $D_data_str="SELECT * FROM FA.MMT_BtableD WHERE mid='$MMT_AtableMid'";
+// $D_data_str="SELECT * FROM FA.MMT_HtableD WHERE mid='$MMT_AtableMid'";
 // $D_data=$pdo->query($D_data_str);
 // while ($row = $D_data->fetch()) {
 //     $Ddata[]=array(
@@ -67,19 +66,62 @@ while ($row = $M_data->fetch()) {
 // }
 // $num = count($Ddata);
 
-$Q_A_str="SELECT a.checkName,a.checkKind,a.ref,d.ans FROM FA.MMT_A AS a LEFT JOIN FA.MMT_BtableD as d ON a.id=d.checkid WHERE d.mid='$MMT_AtableMid' ORDER BY a.id";
+$Q_A_str="SELECT d.id,a.checkName,a.checkKind,a.ref,d.ans,d.cause,d.improvement FROM FA.MMT_A AS a LEFT JOIN FA.MMT_HtableD as d ON a.id=d.checkid WHERE d.mid='$MMT_AtableMid' ORDER BY a.id";
 $Q_A=$pdo->query($Q_A_str);
 while ($row = $Q_A->fetch()) {
     $Q_A_data[]=array(
+        'id'=>$row['id'],
         'checkName'=>$row['checkName'],
         'checkKind'=>$row['checkKind'],
         'ref'=>$row['ref'],
-        'ans'=>$row['ans']
+        'ans'=>$row['ans'],
+        'cause'=>$row['cause'],
+        'improvement'=>$row['improvement']
     ); 
 }
+
 $num=count($Q_A_data);
 
+if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
+    $num=$_POST["num"];//迴圈數量
+    $rmark=$_POST["remark"];//備註
+    @$rdatekind_Array=$_POST['b'];//保養週期答案    
+    @$rdatekind= implode(",", $rdatekind_Array);
+    $MMT_AtableMid=$_POST['mid'] ;//主表id
+    
+    $MasterStr="UPDATE FA.MMT_HtableM SET datekind=:datekind,remark=:remark WHERE id=:mid";
+    $stmtM = $pdo->prepare($MasterStr);
+    $stmtM->bindParam(':datekind',$rdatekind,PDO::PARAM_STR);
+    $stmtM->bindParam(':remark',$rmark,PDO::PARAM_STR);
+    $stmtM->bindParam(':mid',$MMT_AtableMid,PDO::PARAM_STR);
+    $stmtM->execute();
+
+    for ($i=0; $i < $num; $i++) { 
+        $did=$i+200;//保養項目id
+        $causenum=$i+300;//故障原因id
+        $improvementnum=$i+400;//故障修復結果追蹤id
+
+        $d_id = $_POST["$did"];//明細表ID
+        $ans=$_POST["$i"];//答案
+        $cause = $_POST["$causenum"];//故障原因id
+        $improvement= $_POST["$improvementnum"];//故障修復結果追蹤id
+        $sql="UPDATE FA.MMT_HtableD SET ans=:checkResult,cause=:cause,improvement=:improvement WHERE id=:ID";
+        $stmt = $pdo->prepare($sql);        
+        $stmt->bindParam(':checkResult',$ans,PDO::PARAM_STR);
+        $stmt->bindParam(':cause',$cause,PDO::PARAM_STR);
+        $stmt->bindParam(':improvement',$improvement,PDO::PARAM_STR);
+        $stmt->bindParam(':ID',$d_id,PDO::PARAM_INT);
+        $stmt->execute();
+    }
+    $pdo=null;
+    header("Location: mmt_list_h.php");
+}
+
 ?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -104,7 +146,7 @@ $num=count($Q_A_data);
 
 <body class="table_bg">
     <div class="container border border-info mt-5">
-    <form action="" method="post" name="mmt_Detailtable_a">
+    <form action="" method="post" name="mmt_Edittable_a">
         <h2 class="text-center font-weight-bold"><?= $report[0]['tName']; ?></h2>
         <div class="row my-3">
             <div class="col">
@@ -121,24 +163,24 @@ $num=count($Q_A_data);
                 switch ($datekind) {
                     case 'M,Y':
                         if($Mdata[0]['datekind']=='M'){?>
-                            <p class="d-inline font-weight-bold">保養區分:&nbsp&nbsp<input type='checkbox' name="b[]" value='M' checked disabled>&nbsp月&nbsp&nbsp
-                            <input type='checkbox' name="b[]" value='Y' disabled>&nbsp年</p>
+                            <p class="d-inline font-weight-bold">保養區分:&nbsp&nbsp<input type='checkbox' name="b[]" value='M' checked >&nbsp月&nbsp&nbsp
+                            <input type='checkbox' name="b[]" value='Y' >&nbsp年</p>
                         <?PHP }elseif($Mdata[0]['datekind']=='Y'){?>
-                            <p class="d-inline font-weight-bold">保養區分:&nbsp&nbsp<input type='checkbox' name="b[]" value='M' disabled>&nbsp月&nbsp&nbsp
-                            <input type='checkbox' name="b[]" value='Y' checked disabled>&nbsp年</p>
+                            <p class="d-inline font-weight-bold">保養區分:&nbsp&nbsp<input type='checkbox' name="b[]" value='M' >&nbsp月&nbsp&nbsp
+                            <input type='checkbox' name="b[]" value='Y' checked >&nbsp年</p>
                         <?PHP }elseif($Mdata[0]['datekind']=='M,Y' or $Mdata[0]['datekind']=='Y,M'){?>
-                            <p class="d-inline font-weight-bold">保養區分:&nbsp&nbsp<input type='checkbox' name="b[]" value='M' checked disabled>&nbsp月&nbsp&nbsp
-                            <input type='checkbox' name="b[]" value='Y' checked disabled>&nbsp年</p>
+                            <p class="d-inline font-weight-bold">保養區分:&nbsp&nbsp<input type='checkbox' name="b[]" value='M' checked >&nbsp月&nbsp&nbsp
+                            <input type='checkbox' name="b[]" value='Y' checked >&nbsp年</p>
                         <?PHP }else{?>
-                            <p class="d-inline font-weight-bold">保養區分:&nbsp&nbsp<input type='checkbox' name="b[]" value='M' disabled>&nbsp月&nbsp&nbsp
-                            <input type='checkbox' name="b[]" value='Y' disabled>&nbsp年</p>
+                            <p class="d-inline font-weight-bold">保養區分:&nbsp&nbsp<input type='checkbox' name="b[]" value='M' >&nbsp月&nbsp&nbsp
+                            <input type='checkbox' name="b[]" value='Y' >&nbsp年</p>
                         <?php } 
                         break;
                     case 'Y':
                         if($Mdata[0]['datekind']=='Y'){?>
-                            <p class="d-inline font-weight-bold">保養區分:&nbsp&nbsp<input type='checkbox' name="b[]" value='Y' checked disabled>&nbsp年&nbsp&nbsp</p>
+                            <p class="d-inline font-weight-bold">保養區分:&nbsp&nbsp<input type='checkbox' name="b[]" value='Y' checked >&nbsp年&nbsp&nbsp</p>
                         <?php }else{?>
-                            <p class="d-inline font-weight-bold">保養區分:&nbsp&nbsp<input type='checkbox' name="b[]" value='Y' disabled>&nbsp年&nbsp&nbsp</p>
+                            <p class="d-inline font-weight-bold">保養區分:&nbsp&nbsp<input type='checkbox' name="b[]" value='Y' >&nbsp年&nbsp&nbsp</p>
             <?PHP        }
                         break;                    
                 }
@@ -149,50 +191,59 @@ $num=count($Q_A_data);
         <table class="table my-5">
             <thead>
                 <th>項&nbsp&nbsp&nbsp&nbsp目</th>
-                <th>結&nbsp&nbsp&nbsp&nbsp果</th>                
+                <th>結&nbsp&nbsp&nbsp&nbsp果</th>
+                <th>故障原因及情形</th> 
+                <th>故障修復結果追蹤</th>                            
             </thead>
             <?php 
             for ($i=0; $i < $num; $i++) {?>
             <tbody class="text-primary">
             <?php 
-                $checkid=$i+200;
+                $did=$i+200;//檢查項目ID
+                $cause=$i+300;//故障原因id
+                $improvement=$i+400;//故障修復結果追蹤id
                 echo  '<td>'.$Q_A_data[$i]['checkName'].'</td>';
                 if ($Q_A_data[$i]['checkKind']=='檢查項目') {
                     echo '<td>';
                     if ($Q_A_data[$i]['ans']=='true') {
-                        echo "<input type='radio' name=\"".$i."\" value='true' checked disabled>是&nbsp&nbsp&nbsp&nbsp";
-                        echo "<input type='radio' name=\"".$i."\" value='false' disabled>否";
+                        echo "<input type='radio' name=\"".$i."\" value='true' checked >是&nbsp&nbsp&nbsp&nbsp";
+                        echo "<input type='radio' name=\"".$i."\" value='false' >否";
                     } elseif($Q_A_data[$i]['ans']=='false') {
-                        echo "<input type='radio' name=\"".$i."\" value='true' disabled>是&nbsp&nbsp&nbsp&nbsp";
-                        echo "<input type='radio' name=\"".$i."\" value='false' checked disabled>否";
+                        echo "<input type='radio' name=\"".$i."\" value='true' >是&nbsp&nbsp&nbsp&nbsp";
+                        echo "<input type='radio' name=\"".$i."\" value='false' checked >否";
                     } else {
-                        echo "<input type='radio' name=\"".$i."\" value='true' disabled>是&nbsp&nbsp&nbsp&nbsp";
-                        echo "<input type='radio' name=\"".$i."\" value='false' disabled>否";
+                        echo "<input type='radio' name=\"".$i."\" value='true' >是&nbsp&nbsp&nbsp&nbsp";
+                        echo "<input type='radio' name=\"".$i."\" value='false' >否";
                     }  
                     echo '</td>'; 
                         
                 } elseif ($Q_A_data[$i]['ref']=='單相/三相') {
                     echo '<td>';
                     if ($Q_A_data[$i]['ans']=='single') {
-                        echo "<input type='radio' name=\"".$i."\" value='single' checked disabled>單相&nbsp&nbsp&nbsp&nbsp";
-                        echo "<input type='radio' name=\"".$i."\" value='three' disabled>三相";
+                        echo "<input type='radio' name=\"".$i."\" value='single' checked >單相&nbsp&nbsp&nbsp&nbsp";
+                        echo "<input type='radio' name=\"".$i."\" value='three' >三相";
                     } elseif($Q_A_data[$i]['ans']=='three') {
-                        echo "<input type='radio' name=\"".$i."\" value='single' disabled>單相&nbsp&nbsp&nbsp&nbsp";
-                        echo "<input type='radio' name=\"".$i."\" value='three' checked disabled>三相";
+                        echo "<input type='radio' name=\"".$i."\" value='single' >單相&nbsp&nbsp&nbsp&nbsp";
+                        echo "<input type='radio' name=\"".$i."\" value='three' checked >三相";
                     } else {
-                        echo "<input type='radio' name=\"".$i."\" value='single' disabled>單相&nbsp&nbsp&nbsp&nbsp";
-                        echo "<input type='radio' name=\"".$i."\" value='three' disabled>三相";
+                        echo "<input type='radio' name=\"".$i."\" value='single' >單相&nbsp&nbsp&nbsp&nbsp";
+                        echo "<input type='radio' name=\"".$i."\" value='three' >三相";
                     }
                     echo '</td>'; 
                 }elseif ($Q_A_data[$i]['ref']=='單相') {
                     echo '<td>';
-                    echo "<input type='radio' name=\"".$i."\" value='single' checked disabled>單相";
+                    echo "<input type='radio' name=\"".$i."\" value='single' checked >單相";
                     echo '</td>'; 
                 }else{
-                    echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20' value=\"".$Q_A_data[$i]['ans']."\" disabled>".'</td>';
+                    echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20' value=\"".$Q_A_data[$i]['ans']."\" >".'</td>';
                 }
-                //echo "<input type='hidden' name=\"".$checkid."\" value=\"".$catarr[$i]['id']."\">";//檢查項目id                
-            }            
+                echo "<input type='hidden' name=\"".$did."\" value=\"".$Q_A_data[$i]['id']."\">";//檢查項目id
+                echo '<td>'."<input type='text' name=\"".$cause."\" maxlength='20' value=\"".$Q_A_data[$i]['cause']."\" >".'</td>';
+                echo '<td>'."<input type='text' name=\"".$improvement."\" maxlength='20' value=\"".$Q_A_data[$i]['improvement']."\" >".'</td>';            
+            }
+           
+            echo "<input type='hidden' name='mid' value=\"".$Mdata[0]['id']."\">"; //傳回主表id
+            echo "<input type='hidden' name='num' value=\"".$num."\">";//傳回資料數量(當迴圈用)   
             ?>
             </tbody>
         </table>
@@ -201,10 +252,11 @@ $num=count($Q_A_data);
             <div class="input-group-prepend">
                 <span class="input-group-text">備註：</span>
             </div>
-            <textarea class="form-control" name="remark" aria-label="With textarea" disabled><?= $Mdata[0]['remark'] ?></textarea>
+            <textarea class="form-control" name="remark" aria-label="With textarea" ><?= $Mdata[0]['remark'] ?></textarea>
         </div>
+        <input type="hidden" name="action" value="Edit">
         <div class="row my-3">
-            <div class="col text-left">
+            <div class="col">
                 <p class="d-inline font-weight-bold">工務室：<?= $check_emp ?></p>
             </div>
             <div class="col text-center">
@@ -217,7 +269,7 @@ $num=count($Q_A_data);
 
         <!-- 送出鈕 -->    
             <div class="d-flex justify-content-end">
-                <a href="mmt_list_b.php" type="button" class="btn btn-primary mt-4 rounded d-block mr-3">離開</a>
+                <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>
             </div>
     </form>
     </div>

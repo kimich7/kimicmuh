@@ -8,7 +8,7 @@ $username=$_SESSION["login_member"] ;//登錄人員名稱
 $MMT_AtableMid=$_GET['id'] ;//主表id
 
 //主表的資料
-$M_data_str="SELECT * FROM FA.MMT_BtableM WHERE id='$MMT_AtableMid'";
+$M_data_str="SELECT * FROM FA.MMT_HtableM WHERE id='$MMT_AtableMid'";
 $M_data=$pdo->query($M_data_str);
 while ($row = $M_data->fetch()) {
     $Mdata[]=array(
@@ -55,26 +55,30 @@ while ($row = $M_data->fetch()) {
     
 
 //明細表資料
-// $D_data_str="SELECT * FROM FA.MMT_BtableD WHERE mid='$MMT_AtableMid'";
+// $D_data_str="SELECT * FROM FA.MMT_HtableD WHERE mid='$MMT_AtableMid'";
 // $D_data=$pdo->query($D_data_str);
 // while ($row = $D_data->fetch()) {
 //     $Ddata[]=array(
 //         'id'=>$row['id'],
 //         'checkid'=>$row['checkid'],
 //         'ans'=>$row['ans'],
+//         'cause'=>$row['cause'],
+//         'improvement'=>$row['improvement'],
 //         'mid'=>$row['mid']
 //     ); 
 // }
 // $num = count($Ddata);
 
-$Q_A_str="SELECT a.checkName,a.checkKind,a.ref,d.ans FROM FA.MMT_A AS a LEFT JOIN FA.MMT_BtableD as d ON a.id=d.checkid WHERE d.mid='$MMT_AtableMid' ORDER BY a.id";
+$Q_A_str="SELECT a.checkName,a.checkKind,a.ref,d.ans,d.cause,d.improvement FROM FA.MMT_A AS a LEFT JOIN FA.MMT_HtableD as d ON a.id=d.checkid WHERE d.mid='$MMT_AtableMid' ORDER BY a.id";
 $Q_A=$pdo->query($Q_A_str);
 while ($row = $Q_A->fetch()) {
     $Q_A_data[]=array(
         'checkName'=>$row['checkName'],
         'checkKind'=>$row['checkKind'],
         'ref'=>$row['ref'],
-        'ans'=>$row['ans']
+        'ans'=>$row['ans'],
+        'cause'=>$row['cause'],
+        'improvement'=>$row['improvement']
     ); 
 }
 $num=count($Q_A_data);
@@ -149,13 +153,18 @@ $num=count($Q_A_data);
         <table class="table my-5">
             <thead>
                 <th>項&nbsp&nbsp&nbsp&nbsp目</th>
-                <th>結&nbsp&nbsp&nbsp&nbsp果</th>                
+                <th>結&nbsp&nbsp&nbsp&nbsp果</th>
+                <th>故障原因及情形</th> 
+                <th>故障修復結果追蹤</th>                
             </thead>
             <?php 
             for ($i=0; $i < $num; $i++) {?>
             <tbody class="text-primary">
             <?php 
-                $checkid=$i+200;
+                $checkid=$i+200;//檢查項目ID
+                $cause=$i+300;//故障原因id
+                $improvement=$i+400;//故障修復結果追蹤id
+
                 echo  '<td>'.$Q_A_data[$i]['checkName'].'</td>';
                 if ($Q_A_data[$i]['checkKind']=='檢查項目') {
                     echo '<td>';
@@ -191,6 +200,8 @@ $num=count($Q_A_data);
                 }else{
                     echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20' value=\"".$Q_A_data[$i]['ans']."\" disabled>".'</td>';
                 }
+                echo '<td>'."<input type='text' name=\"".$cause."\" maxlength='20' value=\"".$Q_A_data[$i]['cause']."\" disabled>".'</td>';
+                echo '<td>'."<input type='text' name=\"".$improvement."\" maxlength='20' value=\"".$Q_A_data[$i]['improvement']."\" disabled>".'</td>';
                 //echo "<input type='hidden' name=\"".$checkid."\" value=\"".$catarr[$i]['id']."\">";//檢查項目id                
             }            
             ?>
@@ -217,7 +228,7 @@ $num=count($Q_A_data);
 
         <!-- 送出鈕 -->    
             <div class="d-flex justify-content-end">
-                <a href="mmt_list_b.php" type="button" class="btn btn-primary mt-4 rounded d-block mr-3">離開</a>
+                <a href="mmt_list_h.php" type="button" class="btn btn-primary mt-4 rounded d-block mr-3">離開</a>
             </div>
     </form>
     </div>

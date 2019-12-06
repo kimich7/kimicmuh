@@ -2,8 +2,10 @@
     include("CMUHconndata.php");
     include("fun.php");
     $dataArray=array();
-    $dataArray1=array();    
-    $str="SELECT id,bName FROM FA.MMT_build WHERE sid ='B'";
+    $dataArray1=array();
+    $sid=$_REQUEST["sysID"] ;
+
+    $str="SELECT id,bName FROM FA.MMT_build WHERE sid ='$sid'";
     $query=item($str);
     foreach ($query as $datainfo) {
         $dataArray["id"] = $datainfo["id"];

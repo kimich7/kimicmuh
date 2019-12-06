@@ -20,16 +20,16 @@ if (isset($_GET['page'])) {
 $startRow_record=($page_num-1)*$pageRow_record;
 
 //所有的資料
-$ammtmstr="SELECT id,bid,title,rdate,datekind,tid,remark,emp,sremp,cemp,status FROM FA.MMT_BtableM ";//全部資料
+$ammtmstr="SELECT id,bid,title,rdate,datekind,tid,remark,emp,sremp,cemp,status FROM FA.MMT_HtableM ";//全部資料
 
 //總資料數量
-$ammtmnumstr="SELECT Count(id)FROM FA.MMT_BtableM ";
+$ammtmnumstr="SELECT Count(id)FROM FA.MMT_HtableM ";
 $ammtmnum=Current($pdo->query($ammtmnumstr)->fetch());//全部數量
 $total_num=$ammtmnum;
 
 //----還沒帶入----
 //篩選後給每頁的筆數
-$sqlstr_page="SELECT id,bid,title,rdate,datekind,tid,remark,emp,sremp,cemp,status FROM FA.MMT_BtableM  ORDER BY rdate DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+$sqlstr_page="SELECT id,bid,title,rdate,datekind,tid,remark,emp,sremp,cemp,status FROM FA.MMT_HtableM  ORDER BY rdate DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
 $sql_page=$pdo->query($sqlstr_page);
 
 
@@ -77,9 +77,9 @@ $ammtmAll=array();
             </a>
         </nav>
     </header>
-    <form action="mmtCreate_b_choice.php" method="post" name="mmtca">
+    <form action="mmtCreate_h_choice.php" method="post" name="mmtca">
         <div class="panel-heading">
-            <input type="hidden" name="mmtsysa" value='B'>
+            <input type="hidden" name="mmtsysa" value='H'>
             <div class="row my-3">                
                 <div class="col">                    
                     <p class="d-inline font-weight-bold">&nbsp&nbsp&nbsp&nbsp新增保養：
@@ -95,7 +95,7 @@ $ammtmAll=array();
         </div>
     </form>
     
-    <table id="mmt_b" class="display table table-striped table-bordered table-hover col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12 table-sm order-table"  aria-describedby="dataTables-example_info" data-sort-name="tid" data-sort-order="desc" data-sortable ="true"><!--表格樣式：條紋行、帶框表格、可滑入行-->
+    <table id="mmt_h" class="display table table-striped table-bordered table-hover col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12 table-sm order-table"  aria-describedby="dataTables-example_info" data-sort-name="tid" data-sort-order="desc" data-sortable ="true"><!--表格樣式：條紋行、帶框表格、可滑入行-->
         <thead  class="thead-light">
             <tr align="center">
             <th scope="col" width="15%" name="tid" sortable="true">單號</th><!--id：棟代號+日期ex.B20191127-->
@@ -155,7 +155,7 @@ $ammtmAll=array();
         ?>
             <tr align="center">
                 <th scope="row"><?= $ammtm[$i]['id']?></th><!--表單編號-->                
-                <td><a href="mmtDetail_b.php?id=<?= $ammtm[$i]['id']?>"><?= $ammtm[$i]['title'] ?></a></td><!--表單名稱-->
+                <td><a href="mmtDetail_h.php?id=<?= $ammtm[$i]['id']?>"><?= $ammtm[$i]['title'] ?></a></td><!--表單名稱-->
                 <input type='hidden' name='<?= $k ?>' value='<?= $ammtm[$i]['id'] ?>'><!--傳遞主表id-->
                 <td><?= $ammtm[$i]['rdate']?></td><!--保養日期-->  
                 <td><?= $ammtmemp?></td><!--保養者-->
@@ -165,7 +165,7 @@ $ammtmAll=array();
             if ($ammtmstatus!='審核完成') { ?>                
                 <td>
                     <span class="billBoardbuildL2 billBoardbuildL3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                    <a href="mmtcheck_b.php?id=<?= $ammtm[$i]['id']?>" class="buildL2 buildL3" Disabled><?= $ammtmstatus?></a>
+                    <a href="mmtcheck_h.php?id=<?= $ammtm[$i]['id']?>" class="buildL2 buildL3" Disabled><?= $ammtmstatus?></a>
                     </span>
                 </td><!--狀態-->                
             <?php } else { ?>
@@ -173,7 +173,7 @@ $ammtmAll=array();
             <?php } ?>                
                 <td>
                     <span class="billBoardbuildL2 billBoardbuildL3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                    <a href="mmtEdit_b.php?id=<?= $ammtm[$i]['id']?>" class="buildL2 buildL3" Disabled>內容編輯與修改</a>
+                    <a href="mmtEdit_h.php?id=<?= $ammtm[$i]['id']?>" class="buildL2 buildL3" Disabled>內容編輯與修改</a>
                     </span>
                 </td>                
             </tr>
@@ -192,18 +192,18 @@ $ammtmAll=array();
             echo '<tr>';
                 if ($page_num>1) {
                     $prev=$page_num-1;
-                    echo '<td><a href="mmt_list_b.php?page=1">'."[第一頁]".'</a></td>';
-                    echo "<td><a href=\"mmt_list_b.php?page={$prev}\">"."[<<<上一頁]".'</a></td>';
+                    echo '<td><a href="mmt_list_h.php?page=1">'."[第一頁]".'</a></td>';
+                    echo "<td><a href=\"mmt_list_h.php?page={$prev}\">"."[<<<上一頁]".'</a></td>';
                 }
                 if ($page_num<$total_page) {
                     $next=$page_num+1;
-                    echo "<td>"."<a href=\"mmt_list_b.php?page={$next}\">"."[下一頁>>>]".'</a></td>';
-                    echo "<td><a href=\"mmt_list_b.php?page=$total_page\">".'[最末頁]'.'</a></td>';
+                    echo "<td>"."<a href=\"mmt_list_h.php?page={$next}\">"."[下一頁>>>]".'</a></td>';
+                    echo "<td><a href=\"mmt_list_h.php?page=$total_page\">".'[最末頁]'.'</a></td>';
                 }
             echo '</tr>';
         echo '</table>';
         //分頁按鈕一次七頁
-            $phpfile = 'mmt_list_b.php';
+            $phpfile = 'mmt_list_h.php';
             $page= isset($_GET['page'])?$_GET['page']:1;        
             $getpageinfo = page($page,$total_num,$phpfile);
             echo '<div align="center">'; 
@@ -252,7 +252,7 @@ $ammtmAll=array();
         });
 
         //表格排序
-        $("#mmt_b").tablesorter();
+        $("#mmt_h").tablesorter();
     })(document);
 </script>
 </body>

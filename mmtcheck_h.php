@@ -9,9 +9,9 @@ $MMT_AtableMid=$_GET['id'] ;//主表id
 
 //20190703新增-判斷權限分類
     
-    $securityNoStr_emp="SELECT e.sid,e.e_number FROM FA.securityemp as e LEFT JOIN FA.securityKind as k on e.sid=k.id  WHERE e.e_number='$userID' and k.id = 13";
+    $securityNoStr_emp="SELECT e.sid,e.e_number FROM FA.securityemp as e LEFT JOIN FA.securityKind as k on e.sid=k.id  WHERE e.e_number='$userID' and k.id = 25";
     $securityNo_emp=$pdo->query($securityNoStr_emp)->fetch();
-    $securityNoStr_PM="SELECT e.sid,e.e_number FROM FA.securityemp as e LEFT JOIN FA.securityKind as k on e.sid=k.id  WHERE e.e_number='$userID' and k.id = 14";
+    $securityNoStr_PM="SELECT e.sid,e.e_number FROM FA.securityemp as e LEFT JOIN FA.securityKind as k on e.sid=k.id  WHERE e.e_number='$userID' and k.id = 26";
     $securityNo_PM=$pdo->query($securityNoStr_PM)->fetch();
     
     if (!empty($securityNo_emp) and $securityNo_emp!='') {
@@ -24,12 +24,12 @@ $MMT_AtableMid=$_GET['id'] ;//主表id
         echo "<script>";
         echo "alert('您沒有審核權限，請已有審核權限的身份登錄')";
         echo "</script>";
-        header("Location: mmt_list_b.php");
+        header("Location: mmt_list_h.php");
     }
     
 
 //主表的資料
-$M_data_str="SELECT * FROM FA.MMT_BtableM WHERE id='$MMT_AtableMid'";
+$M_data_str="SELECT * FROM FA.MMT_HtableM WHERE id='$MMT_AtableMid'";
 $M_data=$pdo->query($M_data_str);
 while ($row = $M_data->fetch()) {
     $Mdata[]=array(
@@ -70,26 +70,28 @@ while ($row = $M_data->fetch()) {
     
 
 //明細表資料
-$D_data_str="SELECT * FROM FA.MMT_BtableD WHERE mid='$MMT_AtableMid'";
-$D_data=$pdo->query($D_data_str);
-while ($row = $D_data->fetch()) {
-    $Ddata[]=array(
-        'id'=>$row['id'],
-        'checkid'=>$row['checkid'],
-        'ans'=>$row['ans'],
-        'mid'=>$row['mid']
-    ); 
-}
-$num = count($Ddata);
+// $D_data_str="SELECT * FROM FA.MMT_BtableD WHERE mid='$MMT_AtableMid'";
+// $D_data=$pdo->query($D_data_str);
+// while ($row = $D_data->fetch()) {
+//     $Ddata[]=array(
+//         'id'=>$row['id'],
+//         'checkid'=>$row['checkid'],
+//         'ans'=>$row['ans'],
+//         'mid'=>$row['mid']
+//     ); 
+// }
+// $num = count($Ddata);
 
-$Q_A_str="SELECT a.checkName,a.checkKind,a.ref,d.ans FROM FA.MMT_A AS a LEFT JOIN FA.MMT_BtableD as d ON a.id=d.checkid WHERE d.mid='$MMT_AtableMid' ORDER BY a.id";
+$Q_A_str="SELECT a.checkName,a.checkKind,a.ref,d.ans,d.cause,d.improvement FROM FA.MMT_A AS a LEFT JOIN FA.MMT_HtableD as d ON a.id=d.checkid WHERE d.mid='$MMT_AtableMid' ORDER BY a.id";
 $Q_A=$pdo->query($Q_A_str);
 while ($row = $Q_A->fetch()) {
     $Q_A_data[]=array(
         'checkName'=>$row['checkName'],
         'checkKind'=>$row['checkKind'],
         'ref'=>$row['ref'],
-        'ans'=>$row['ans']
+        'ans'=>$row['ans'],
+        'cause'=>$row['cause'],
+        'improvement'=>$row['improvement']
     ); 
 }
 $num=count($Q_A_data);
@@ -100,34 +102,34 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
         switch ($checksum) {
             case 1:
                 $cemp=null;
-                $MasterStr="UPDATE FA.MMT_BtableM SET status='M',cemp =:cemp WHERE id=:mid";
+                $MasterStr="UPDATE FA.MMT_HtableM SET status='M',cemp =:cemp WHERE id=:mid";
                 $stmtM = $pdo->prepare($MasterStr);
                 $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
                 $stmtM->bindParam(':cemp',$cemp,PDO::PARAM_STR);
                 $stmtM->execute();    
                 $pdo=null;
-                header("Location: mmt_list_b.php");
+                header("Location: mmt_list_h.php");
                 break;
             case 2:
                 $cemp=null;
-                $MasterStr="UPDATE FA.MMT_BtableM SET status='W',sremp =:cemp WHERE id=:mid";
+                $MasterStr="UPDATE FA.MMT_HtableM SET status='W',sremp =:cemp WHERE id=:mid";
                 $stmtM = $pdo->prepare($MasterStr);
                 $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
                 $stmtM->bindParam(':cemp',$cemp,PDO::PARAM_STR);
                 $stmtM->execute();    
                 $pdo=null;
-                header("Location: mmt_list_b.php");
+                header("Location: mmt_list_h.php");
                 break;
             case 3:   
                 $cemp=null;             
-                $MasterStr="UPDATE FA.MMT_BtableM SET status='W',sremp =:sremp,cemp =:cemp WHERE id=:mid";
+                $MasterStr="UPDATE FA.MMT_HtableM SET status='W',sremp =:sremp,cemp =:cemp WHERE id=:mid";
                 $stmtM = $pdo->prepare($MasterStr);
                 $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
                 $stmtM->bindParam(':cemp',$cemp,PDO::PARAM_STR);
                 $stmtM->bindParam(':sremp',$cemp,PDO::PARAM_STR);
                 $stmtM->execute();    
                 $pdo=null;
-                header("Location: mmt_list_b.php");
+                header("Location: mmt_list_h.php");
                 break;            
         }
     } else {
@@ -135,26 +137,26 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
             case 1:                
                 @$check_ans=$_POST["mmt_a_Check"];//審核
                 $cemp=$_POST["memp"];//審核者(當下登入的)                
-                $MasterStr="UPDATE FA.MMT_BtableM SET status=:status,cemp=:cemp WHERE id=:mid";
+                $MasterStr="UPDATE FA.MMT_HtableM SET status=:status,cemp=:cemp WHERE id=:mid";
                 $stmtM = $pdo->prepare($MasterStr);
                 $stmtM->bindParam(':status',$check_ans,PDO::PARAM_STR);
                 $stmtM->bindParam(':cemp',$cemp,PDO::PARAM_STR);
                 $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
                 $stmtM->execute();    
                 $pdo=null;
-                header("Location: mmt_list_b.php");
+                header("Location: mmt_list_h.php");
                 break;
             case 2:                
                 @$check_ans=$_POST["mmt_a_Check"];//審核
                 $cemp=$_POST["memp"];//審核者(當下登入的)                
-                $MasterStr="UPDATE FA.MMT_BtableM SET status=:status,sremp=:cemp WHERE id=:mid";
+                $MasterStr="UPDATE FA.MMT_HtableM SET status=:status,sremp=:cemp WHERE id=:mid";
                 $stmtM = $pdo->prepare($MasterStr);
                 $stmtM->bindParam(':status',$check_ans,PDO::PARAM_STR);
                 $stmtM->bindParam(':cemp',$cemp,PDO::PARAM_STR);
                 $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
                 $stmtM->execute();    
                 $pdo=null;
-                header("Location: mmt_list_b.php");
+                header("Location: mmt_list_h.php");
                 break;
             case 3:
                 $check_ansArray=$_POST["mmt_a_Check"];//審核
@@ -162,17 +164,17 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
                 $check_ans= implode(",", $check_ansArray);
                 echo $check_ans;
                 if ($check_ans=='M') {
-                    $MasterStr="UPDATE FA.MMT_BtableM SET status=:status,sremp=:cemp WHERE id=:mid";
+                    $MasterStr="UPDATE FA.MMT_HtableM SET status=:status,sremp=:cemp WHERE id=:mid";
                     $stmtM = $pdo->prepare($MasterStr);
                     $stmtM->bindParam(':status',$check_ans,PDO::PARAM_STR);
                     $stmtM->bindParam(':cemp',$cemp,PDO::PARAM_STR);
                     $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
                     $stmtM->execute();    
                     $pdo=null;
-                    header("Location: mmt_list_b.php");
+                    header("Location: mmt_list_h.php");
                 }
                 if ($check_ans=='F,M' or $check_ans=='F' or $check_ans=='M,F') {
-                    $MasterStr="UPDATE FA.MMT_BtableM SET status='F',sremp=:sremp,cemp=:cemp WHERE id=:mid";
+                    $MasterStr="UPDATE FA.MMT_HtableM SET status='F',sremp=:sremp,cemp=:cemp WHERE id=:mid";
                     $stmtM = $pdo->prepare($MasterStr);
                     // $stmtM->bindParam(':status',$check_ans,PDO::PARAM_STR);
                     $stmtM->bindParam(':sremp',$cemp,PDO::PARAM_STR);
@@ -180,7 +182,7 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
                     $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
                     $stmtM->execute();    
                     $pdo=null;
-                    header("Location: mmt_list_b.php");
+                    header("Location: mmt_list_h.php");
                 }                
                 break;
         }        
@@ -256,13 +258,17 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
         <table class="table my-5">
             <thead>
                 <th>項&nbsp&nbsp&nbsp&nbsp目</th>
-                <th>結&nbsp&nbsp&nbsp&nbsp果</th>                
+                <th>結&nbsp&nbsp&nbsp&nbsp果</th>
+                <th>故障原因及情形</th>
+                <th>故障修復結果追蹤</th>
             </thead>
             <?php 
             for ($i=0; $i < $num; $i++) {?>
             <tbody class="text-primary">
             <?php 
-                $checkid=$i+200;
+                $checkid=$i+200;//檢查項目ID
+                $cause=$i+300;//故障原因id
+                $improvement=$i+400;//故障修復結果追蹤id
                 echo  '<td>'.$Q_A_data[$i]['checkName'].'</td>';
                 if ($Q_A_data[$i]['checkKind']=='檢查項目') {
                     echo '<td>';
@@ -298,6 +304,8 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
                 }else{
                     echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20' value=\"".$Q_A_data[$i]['ans']."\" disabled>".'</td>';
                 }
+                echo '<td>'."<input type='text' name=\"".$cause."\" maxlength='20' value=\"".$Q_A_data[$i]['cause']."\" disabled>".'</td>';
+                echo '<td>'."<input type='text' name=\"".$improvement."\" maxlength='20' value=\"".$Q_A_data[$i]['improvement']."\" disabled>".'</td>';
                 //echo "<input type='hidden' name=\"".$checkid."\" value=\"".$catarr[$i]['id']."\">";//檢查項目id                
             }            
             ?>
@@ -394,7 +402,7 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
         <!-- 送出鈕 -->
             <div class="d-flex justify-content-end">
                 <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">確認審核</button>&nbsp&nbsp&nbsp
-                <a href="mmt_list_b.php" type="button" class="my-3 px-3 py-1 btn-outline-info text-dark">返回離開</a>
+                <a href="mmt_list_h.php" type="button" class="my-3 px-3 py-1 btn-outline-info text-dark">返回離開</a>
             </div>    
             
             

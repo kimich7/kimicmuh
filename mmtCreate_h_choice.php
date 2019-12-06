@@ -4,6 +4,7 @@ include("php/fun.php");
 $mmtsysNo=$_POST["mmtsysa"];
 $mmtsysName=sql_database('sName','FA.MMT_sys','id',$mmtsysNo);
 
+
 ?>
 
 <!DOCTYPE html>
@@ -35,13 +36,13 @@ $mmtsysName=sql_database('sName','FA.MMT_sys','id',$mmtsysNo);
             </a>
         </nav>
     </header>
-    <form action="mmtCreate_b.php" method="get" name="formmmtchoiceb">
+    <form action="mmtCreate_h.php" method="get" name="formmmtchoiceh">
             <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-10 col-sm-10 col-12 back container w-50 my-4 rounded">
                     <div id="tablepanel" class="choice_table rounded text-white">                        
                         <div class="choice_table rounded text-white">
                             <!-- 副標題 -->
-                            <h2 class="text-center mb-4"><?= $mmtsysName ?>保養表單</h2>
+                            <h2 class="text-center mb-4"><?= $mmtsysName ?></br>電梯對講機測試紀錄保養表單</h2>
                             <!-- 單號 -->
                             <P>保養系統: </P>                            
                             <select class="form-control mb-3 mmtsysa" name="mmtsysa" id="mmtsysa" >
@@ -72,15 +73,24 @@ $mmtsysName=sql_database('sName','FA.MMT_sys','id',$mmtsysNo);
 <script language="JavaScript"> 
 //20191127
     //載入建築表養的大樓資訊
+
     $.getJSON("php/mmtsys_b_data.php", {
-        sysID:'B'
-    }, function (data) {
+        sysID:'H'
+    },function (data) {
         var html = '<option value="" selected> 請選擇大樓 </option>';
         for (let i = 0; i < data.length; i++) {
             html += "<option value=\"" + data[i]["id"] + "\">" + data[i]["bName"] + "</option>";
             $("#mmtbuildb").html(html);
         }
-    });
+    });    
+
+    // $.getJSON("php/mmtsys_b_data.php", function (data) {
+    //     var html = '<option value="" selected> 請選擇大樓 </option>';
+    //     for (let i = 0; i < data.length; i++) {
+    //         html += "<option value=\"" + data[i]["id"] + "\">" + data[i]["bName"] + "</option>";
+    //         $("#mmtbuildb").html(html);
+    //     }
+    // });
 
 
 
