@@ -8,7 +8,7 @@ $username=$_SESSION["login_member"] ;//登錄人員名稱
 $MMT_AtableMid=$_GET['id'] ;//主表id
 
 //主表的資料
-$M_data_str="SELECT * FROM FA.MMT_AtableM WHERE id='$MMT_AtableMid'";
+$M_data_str="SELECT * FROM FA.MMT_QtableM WHERE id='$MMT_AtableMid'";
 $M_data=$pdo->query($M_data_str);
 while ($row = $M_data->fetch()) {
     $Mdata[]=array(
@@ -59,7 +59,7 @@ while ($row = $M_data->fetch()) {
     
 
 //明細表資料
-// $D_data_str="SELECT * FROM FA.MMT_AtableD WHERE mid='$MMT_AtableMid'";
+// $D_data_str="SELECT * FROM FA.MMT_QtableD WHERE mid='$MMT_AtableMid'";
 // $D_data=$pdo->query($D_data_str);
 // while ($row = $D_data->fetch()) {
 //     $Ddata[]=array(
@@ -71,7 +71,7 @@ while ($row = $M_data->fetch()) {
 // }
 // $num = count($Ddata);
 
-$Q_A_str="SELECT d.id,a.checkName,a.checkKind,a.ref,d.ans FROM FA.MMT_A AS a LEFT JOIN FA.MMT_AtableD as d ON a.id=d.checkid WHERE d.mid='$MMT_AtableMid' ORDER BY a.id";
+$Q_A_str="SELECT d.id,a.checkName,a.checkKind,a.ref,d.ans FROM FA.MMT_A AS a LEFT JOIN FA.MMT_QtableD as d ON a.id=d.checkid WHERE d.mid='$MMT_AtableMid' ORDER BY a.id";
 $Q_A=$pdo->query($Q_A_str);
 while ($row = $Q_A->fetch()) {
     $Q_A_data[]=array(
@@ -92,7 +92,7 @@ if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
     $rdatekind= implode(",", $rdatekind_Array);
     $MMT_AtableMid=$_POST['mid'] ;//主表id
     
-    $MasterStr="UPDATE FA.MMT_AtableM SET datekind=:datekind,remark=:remark WHERE id=:mid";
+    $MasterStr="UPDATE FA.MMT_QtableM SET datekind=:datekind,remark=:remark WHERE id=:mid";
     $stmtM = $pdo->prepare($MasterStr);
     $stmtM->bindParam(':datekind',$rdatekind,PDO::PARAM_STR);
     $stmtM->bindParam(':remark',$rmark,PDO::PARAM_STR);
@@ -103,14 +103,14 @@ if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
         $did=$i+200;//保養項目id   
         $d_id = $_POST["$did"];//明細表ID 
         $ans=$_POST["$i"];//答案
-        $sql="UPDATE FA.MMT_AtableD SET ans=:checkResult WHERE id=:ID";
+        $sql="UPDATE FA.MMT_QtableD SET ans=:checkResult WHERE id=:ID";
         $stmt = $pdo->prepare($sql);        
         $stmt->bindParam(':checkResult',$ans,PDO::PARAM_STR);
         $stmt->bindParam(':ID',$d_id,PDO::PARAM_INT);
         $stmt->execute();
     }
     $pdo=null;
-    header("Location: mmt_list_a.php");
+    header("Location: mmt_list_q.php");
 }
 
 ?>
@@ -137,7 +137,7 @@ if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- 連結自己的JS -->
     <script src="./js/main.js"></script>
-    <title>設備保養表單</title>
+    <title>揚水泵電壓電流紀錄表</title>
 </head>
 
 <body class="table_bg">

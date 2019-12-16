@@ -8,29 +8,30 @@ $checkuser=$_SESSION["login_member"];
 $checkuserID=sql_database('e_number','FA.Employee','cname',$checkuser);
 $str_member="SELECT * FROM FA.Employee WHERE e_number='$checkuserID'";
 $member=$pdo->query($str_member)->fetch();
-//總資料
-//$ammtmstr="SELECT * FROM FA.MMT_GtableM ";
 
+//總資料
 $pageRow_record=10;//每頁的筆數
 $page_num=1;//預設的頁數
+
 //更新$page_num        
 if (isset($_GET['page'])) {
     $page_num=$_GET['page'];
 }
 $startRow_record=($page_num-1)*$pageRow_record;
+
 //所有的資料
-$ammtmstr="SELECT id,bid,fid,eid,rdate,datekind,tid,macNo,remark,emp,sremp,cemp,status FROM FA.MMT_GtableM ";//全部資料
+$ammtmstr="SELECT id,bid,title,boilerNo,rdate,datekind,tid,remark,emp,sremp,cemp,status FROM FA.MMT_BLtableM ";//全部資料
+
 //總資料數量
-$ammtmnumstr="SELECT Count(id)FROM FA.MMT_GtableM ";
+$ammtmnumstr="SELECT Count(id)FROM FA.MMT_BLtableM ";
 $ammtmnum=Current($pdo->query($ammtmnumstr)->fetch());//全部數量
 $total_num=$ammtmnum;
 
 //----還沒帶入----
 //篩選後給每頁的筆數
-$sqlstr_page="SELECT id,bid,fid,eid,rdate,datekind,tid,macNo,remark,emp,sremp,cemp,status FROM FA.MMT_GtableM  ORDER BY rdate DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+$sqlstr_page="SELECT id,bid,title,boilerNo,rdate,datekind,tid,remark,emp,sremp,cemp,status FROM FA.MMT_BLtableM  ORDER BY rdate DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
 $sql_page=$pdo->query($sqlstr_page);
-// $sql_total=$pdo->query($sqlstr_total);
-//$total_num=CURRENT($pdo->query($totalstr_num)->fetch());
+
 
 //本頁開始的筆數
 $i=0;        
@@ -60,21 +61,12 @@ $ammtmAll=array();
     <script src="./node_modules/popper.js/dist/umd/popper.min.js"></script>
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <!--新加入20190815表格排序-->
-    <script src="./js/jquery.tablesorter.min.js" type="text/javascript"></script>
-
-    <!-- <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <link rel="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"> -->
-
+    <script src="./js/jquery.tablesorter.min.js" type="text/javascript"></script>  
 
     <!-- 連結自己的JS -->
     <script src="./js/main.js"></script>
-    <title>工程專案清單</title>
-    <!--測試-->
-        <style>
-            
-        </style>
-    <!--測試end-->
+    <title>建築-不便設施</title>
+    
 </head>
 <body>
      <!-- header網頁標題 -->
@@ -85,22 +77,17 @@ $ammtmAll=array();
             </a>
         </nav>
     </header>
-    <form action="mmtCreate_g_choice.php" method="post" name="mmtca">
+    <form action="mmtCreate_bl_choice.php" method="post" name="mmtca">
         <div class="panel-heading">
-            <input type="hidden" name="mmtsysg" value='G'>
-            <div class="row my-3">
-
-                <div class="col">
-
+            <input type="hidden" name="mmtsysa" value='N'>
+            <div class="row my-3">                
+                <div class="col">                    
                     <p class="d-inline font-weight-bold">&nbsp&nbsp&nbsp&nbsp新增保養：
-                        <span class="billBoardairL1 billBoardairL3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                        <button type='submit' name="mmtsysabtn" class="btn btn-primary" >新增</button></p>
+                        <span class="billBoardwaterL1 billBoardwaterL3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
+                        <button type='submit' name="mmtsysabtn" class="btn btn-primary waterL1 waterL3" Disabled  >新增</button>
                         </span>
-                    </p>
-
+                    </p>                    
                 </div>
-
-                    <!-- <h4>&nbsp&nbsp&nbsp&nbsp新增保養：<a class="btn btn-primary" href="mmtCreate_a_choice.php" class="text-dark">新增</a></h4>    -->
                 <div class="col text-right">
                     <p class="d-inline font-weight-bold">Search:&nbsp&nbsp<input type="search" class="light-table-filter" data-table="order-table" placeholder="請輸入關鍵字"></p>
                 </div>
@@ -108,11 +95,11 @@ $ammtmAll=array();
         </div>
     </form>
     
-    <table id="MMT_G" class="display table table-striped table-bordered table-hover col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12 table-sm order-table" aria-describedby="dataTables-example_info" data-sort-name="tid" data-sort-order="desc" data-sortable ="true"><!--表格樣式：條紋行、帶框表格、可滑入行-->
+    <table id="mmt_bl" class="display table table-striped table-bordered table-hover col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12 table-sm order-table"  aria-describedby="dataTables-example_info" data-sort-name="tid" data-sort-order="desc" data-sortable ="true"><!--表格樣式：條紋行、帶框表格、可滑入行-->
         <thead  class="thead-light">
             <tr align="center">
-            <th scope="col" width="15%" name="tid" sortable="true">單號</th>
-            <th scope="col" width="32%">標單名稱</th>
+            <th scope="col" width="15%" name="tid" sortable="true">單號</th><!--id：棟代號+日期ex.B20191127-->
+            <th scope="col" width="32%">標單名稱</th><!--title：棟別名稱+行動不便者設施設備檢查記錄表+日期 ex.2018-11-27第一醫療大樓-行動不便者設施設備檢查記錄表-->
             <th scope="col" width="10%">保養日期</th>
             <th scope="col" width="8%">保養人</th>
             <th scope="col" width="8%">專責</th>
@@ -126,14 +113,12 @@ $ammtmAll=array();
         //while ($row=$ammtmQuery->fetch()) {
         while ($row=$sql_page->fetch()) {
             $ammtm[]=array(
-                'id'=>$row["id"],//案件單號
-                'tableNo'=>$row["tid"],//報表編號
-                'macNo'=>$row["macNo"],//設備機台編號
+                'id'=>$row["id"],//案件單號。id：棟代號+日期ex.B20191127                
+                'title'=>$row["title"],//title
                 'bid'=>$row["bid"],//棟別id
-                'fid'=>$row["fid"],//樓層id
-                'eid'=>$row["eid"],//設備編號
                 'rdate'=>$row["rdate"],//紀錄日期
                 'datekind'=>$row["datekind"],//保養週期
+                'tableNo'=>$row["tid"],//報表編號。48~54
                 'remark'=>$row["remark"],//備註
                 'emp'=>$row["emp"],//保養者員工編號
                 'sremp'=>$row['sremp'],//專責員工編號
@@ -159,43 +144,38 @@ $ammtmAll=array();
                         break;
                     case '':
                         $ammtmstatus='未審核';
-                        break;
+                        break;  
                     case 'M':
                         $ammtmstatus='進行中';
-                        break;                    
+                        break;              
                     case 'F':
                         $ammtmstatus='審核完成';
                         break;
                 }
-            $macNo=$ammtm[$i]['macNo'];
         ?>
             <tr align="center">
                 <th scope="row"><?= $ammtm[$i]['id']?></th><!--表單編號-->                
-                <td><a href="mmtDetail_g.php?id=<?= $ammtm[$i]['id']?>"><?= $ammtmtabletitle.'('.$macNo.')' ?></a></td><!--表單名稱-->
+                <td><a href="mmtDetail_bl.php?id=<?= $ammtm[$i]['id']?>"><?= $ammtm[$i]['title'] ?></a></td><!--表單名稱-->
                 <input type='hidden' name='<?= $k ?>' value='<?= $ammtm[$i]['id'] ?>'><!--傳遞主表id-->
                 <td><?= $ammtm[$i]['rdate']?></td><!--保養日期-->  
                 <td><?= $ammtmemp?></td><!--保養者-->
-                <td><?= $ammtmsremp?></td><!--專責-->                
+                <td><?= $ammtmsremp?></td><!--專責-->
                 <td><?= $ammtmcemp?></td><!--審核者--> 
-                <?php 
-                if ($ammtmstatus!='審核完成') { ?>
-
-                    <td>
-                        <span class="billBoardairL2 billBoardairL3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                        <a href="mmtcheck_g.php?id=<?= $ammtm[$i]['id']?>"><?= $ammtmstatus?></a>
-                        </span>
-                    </td><!--狀態-->
-
-                <?php } else { ?>
-                    <td><?= $ammtmstatus?></td>
-                <?php } ?>
-
+            <?php 
+            if ($ammtmstatus!='審核完成') { ?>                
                 <td>
-                    <span class="billBoardairL2 billBoardairL3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                    <a href="mmtEdit_g.php?id=<?= $ammtm[$i]['id']?>">內容編輯與修改</a>
+                    <span class="billBoardwaterL2 billBoardwaterL3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
+                    <a href="mmtcheck_bl.php?id=<?= $ammtm[$i]['id']?>" class="waterL2 waterL3" Disabled><?= $ammtmstatus?></a>
                     </span>
-                </td>
-
+                </td><!--狀態-->                
+            <?php } else { ?>
+                <td><?= $ammtmstatus?></td>
+            <?php } ?>                
+                <td>
+                    <span class="billBoardwaterL2 billBoardwaterL3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
+                    <a href="mmtEdit_bl.php?id=<?= $ammtm[$i]['id']?>" class="waterL2 waterL3" Disabled>內容編輯與修改</a>
+                    </span>
+                </td>                
             </tr>
         <?php }?>
         </tbody>
@@ -212,37 +192,24 @@ $ammtmAll=array();
             echo '<tr>';
                 if ($page_num>1) {
                     $prev=$page_num-1;
-                    echo '<td><a href="mmt_list_a.php?page=1">'."[第一頁]".'</a></td>';
-                    echo "<td><a href=\"mmt_list_a.php?page={$prev}\">"."[<<<上一頁]".'</a></td>';
+                    echo '<td><a href="mmt_list_bl.php?page=1">'."[第一頁]".'</a></td>';
+                    echo "<td><a href=\"mmt_list_bl.php?page={$prev}\">"."[<<<上一頁]".'</a></td>';
                 }
                 if ($page_num<$total_page) {
                     $next=$page_num+1;
-                    echo "<td>"."<a href=\"mmt_list_a.php?page={$next}\">"."[下一頁>>>]".'</a></td>';
-                    echo "<td><a href=\"mmt_list_a.php?page=$total_page\">".'[最末頁]'.'</a></td>';
+                    echo "<td>"."<a href=\"mmt_list_bl.php?page={$next}\">"."[下一頁>>>]".'</a></td>';
+                    echo "<td><a href=\"mmt_list_bl.php?page=$total_page\">".'[最末頁]'.'</a></td>';
                 }
             echo '</tr>';
         echo '</table>';
         //分頁按鈕一次七頁
-            $phpfile = 'mmt_list_g.php';
+            $phpfile = 'mmt_list_bl.php';
             $page= isset($_GET['page'])?$_GET['page']:1;        
             $getpageinfo = page($page,$total_num,$phpfile);
             echo '<div align="center">'; 
-            echo $getpageinfo['pagecode'];//顯示分頁的html語法
+            echo @$getpageinfo['pagecode'];//顯示分頁的html語法
             echo '</div>';
-        //分頁按鈕end
-        // echo '<div class="container">';
-        //     echo '<nav aria-label="Page navigation example" >';
-        //             echo '<ul class="pagination justify-content-center">';
-        //                     for ($i=1; $i <= $total_page; $i++) {
-        //                         if ($i==$page_num) {
-        //                             echo "<li class=\"page-item\"><span class='page-link text-danger' href=#><b>{$i}</b></span></li>";
-        //                         } else {
-        //                             echo "<li class=\"page-item\"><a class='page-link' href=\"mmt_list_a.php?page={$i}\">{$i}</a></li>";
-        //                         }
-        //                     }
-        //             echo '</ul>';
-        //     echo '</nav>';
-        // echo '</div>'
+        //分頁按鈕end        
 ?>
 <input type="hidden" name="total_num" value="<?= $total_num?>">;
 <input type="hidden" name="action" value="new_page"> 
@@ -285,7 +252,7 @@ $ammtmAll=array();
         });
 
         //表格排序
-        $("#mmt_a").tablesorter();
+        $("#mmt_bl").tablesorter();
     })(document);
 </script>
 </body>

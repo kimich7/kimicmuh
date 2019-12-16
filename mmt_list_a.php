@@ -27,7 +27,7 @@ $total_num=$ammtmnum;
 
 //----還沒帶入----
 //篩選後給每頁的筆數
-$sqlstr_page="SELECT id,bid,fid,eid,rdate,datekind,tid,macNo,remark,emp,sremp,cemp,status FROM FA.MMT_AtableM  ORDER BY rdate ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+$sqlstr_page="SELECT id,bid,fid,eid,rdate,datekind,tid,macNo,remark,emp,sremp,cemp,status FROM FA.MMT_AtableM  ORDER BY rdate DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
 $sql_page=$pdo->query($sqlstr_page);
 // $sql_total=$pdo->query($sqlstr_total);
 //$total_num=CURRENT($pdo->query($totalstr_num)->fetch());

@@ -150,7 +150,7 @@
                 echo  '<td>'.$catarr[$i]['ref'].'</td>';
                 
                 echo '<td>';
-                echo "<input type='radio' name=\"".$i."\" value='true'>是&nbsp&nbsp&nbsp&nbsp";
+                echo "<input type='radio' name=\"".$i."\" value='true' checked>是&nbsp&nbsp&nbsp&nbsp";
                 echo "<input type='radio' name=\"".$i."\" value='false'>否";  
                 echo '</td>'; 
                 echo "<input type='hidden' name=\"".$checkid."\" value=\"".$catarr[$i]['id']."\">";//檢查項目id                

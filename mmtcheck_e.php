@@ -9,13 +9,13 @@ $MMT_AtableMid=$_GET['id'] ;//主表id
 
 //20190703新增-判斷權限分類
     
-    $securityNoStr_emp="SELECT e.sid,e.e_number FROM FA.securityemp as e LEFT JOIN FA.securityKind as k on e.sid=k.id  WHERE e.e_number='$userID' and k.id = 10";
+    $securityNoStr_emp="SELECT e.sid,e.e_number FROM FA.securityemp as e LEFT JOIN FA.securityKind as k on e.sid=k.id  WHERE e.e_number='$userID' and k.id = 31";
     $securityNo_emp=$pdo->query($securityNoStr_emp)->fetch();
-    $securityNoStr_PM="SELECT e.sid,e.e_number FROM FA.securityemp as e LEFT JOIN FA.securityKind as k on e.sid=k.id  WHERE e.e_number='$userID' and k.id = 11";
+    $securityNoStr_PM="SELECT e.sid,e.e_number FROM FA.securityemp as e LEFT JOIN FA.securityKind as k on e.sid=k.id  WHERE e.e_number='$userID' and k.id = 32";
     $securityNo_PM=$pdo->query($securityNoStr_PM)->fetch();
     
     if (!empty($securityNo_emp) and $securityNo_emp!='') {
-        $checksum=2;//可簽核-專責        
+        $checksum=2;//可簽核-專責          
     } 
     if(!empty($securityNo_PM) and $securityNo_PM!=''){
         $checksum=1;//可簽核-主管
@@ -24,36 +24,33 @@ $MMT_AtableMid=$_GET['id'] ;//主表id
         echo "<script>";
         echo "alert('您沒有審核權限，請已有審核權限的身份登錄')";
         echo "</script>";
-        header("Location: mmt_list_a.php");
+        header("Location: mmt_list_e.php");
     }
     
 
 //主表的資料
-$M_data_str="SELECT * FROM FA.MMT_AtableM WHERE id='$MMT_AtableMid'";
+$M_data_str="SELECT * FROM FA.MMT_EtableM WHERE id='$MMT_AtableMid'";
 $M_data=$pdo->query($M_data_str);
 while ($row = $M_data->fetch()) {
     $Mdata[]=array(
         'id'=>$row['id'],
         'bid'=>$row['bid'],
-        'fid'=>$row['fid'],
-        'eid'=>$row['eid'],
+        'floor'=>$row['floor'],
         'rdate'=>$row['rdate'],
         'datekind'=>$row['datekind'],
         'tid'=>$row['tid'],
-        'macNo'=>$row['macNo'],
         'remark'=>$row['remark'],
         'emp'=>$row['emp'],
         'sremp'=>$row['sremp'],
         'cemp'=>$row['cemp'],
         'status'=>$row['status']
-
     );
 } 
     
     //$mmtsysName=sql_database('sName','FA.MMT_sys','id',$mmtsysNo);//系統名稱    
-    $mmtbuildName=sql_database('bName','FA.MMT_build','id',$Mdata[0]['bid']);//大樓名稱    
-    $mmtfloorName=sql_database('fName','FA.MMT_floor','fid',$Mdata[0]['fid']);//樓層名稱    
-    $mmtequipName=sql_database('eName','FA.MMT_equip','id',$Mdata[0]['eid']);//設備名稱
+    $mmtbuildName=sql_database('bName','FA.MMT_build','id',$Mdata[0]['bid']);//大樓名稱
+    $mmtfloorNo=$Mdata[0]['floor'];//樓層代號
+    $mmtfloorName=sql_database('fName','FA.MMT_floor','fid',$mmtfloorNo);//樓層名稱
     $remp=sql_database('cname','FA.Employee','e_number',$Mdata[0]['emp']);//保養人員
     @$sremp=sql_database('cname','FA.Employee','e_number',$Mdata[0]['sremp']);//保養人員
     (int)$tid=$Mdata[0]['tid'] ;
@@ -76,19 +73,19 @@ while ($row = $M_data->fetch()) {
     
 
 //明細表資料
-// $D_data_str="SELECT * FROM FA.MMT_AtableD WHERE mid='$MMT_AtableMid'";
-// $D_data=$pdo->query($D_data_str);
-// while ($row = $D_data->fetch()) {
-//     $Ddata[]=array(
-//         'id'=>$row['id'],
-//         'checkid'=>$row['checkid'],
-//         'ans'=>$row['ans'],
-//         'mid'=>$row['mid']
-//     ); 
-// }
-// $num = count($Ddata);
+$D_data_str="SELECT * FROM FA.MMT_EtableD WHERE mid='$MMT_AtableMid'";
+$D_data=$pdo->query($D_data_str);
+while ($row = $D_data->fetch()) {
+    $Ddata[]=array(
+        'id'=>$row['id'],
+        'checkid'=>$row['checkid'],
+        'ans'=>$row['ans'],
+        'mid'=>$row['mid']
+    ); 
+}
+$num = count($Ddata);
 
-$Q_A_str="SELECT a.checkName,a.checkKind,a.ref,d.ans FROM FA.MMT_A AS a LEFT JOIN FA.MMT_AtableD as d ON a.id=d.checkid WHERE d.mid='$MMT_AtableMid' ORDER BY a.id";
+$Q_A_str="SELECT a.checkName,a.checkKind,a.ref,d.ans FROM FA.MMT_A AS a LEFT JOIN FA.MMT_EtableD as d ON a.id=d.checkid WHERE d.mid='$MMT_AtableMid' ORDER BY a.id";
 $Q_A=$pdo->query($Q_A_str);
 while ($row = $Q_A->fetch()) {
     $Q_A_data[]=array(
@@ -106,34 +103,34 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
         switch ($checksum) {
             case 1:
                 $cemp=null;
-                $MasterStr="UPDATE FA.MMT_AtableM SET status='M',cemp =:cemp WHERE id=:mid";
+                $MasterStr="UPDATE FA.MMT_EtableM SET status='M',cemp =:cemp WHERE id=:mid";
                 $stmtM = $pdo->prepare($MasterStr);
                 $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
                 $stmtM->bindParam(':cemp',$cemp,PDO::PARAM_STR);
                 $stmtM->execute();    
                 $pdo=null;
-                header("Location: mmt_list_a.php");
+                header("Location: mmt_list_e.php");
                 break;
             case 2:
                 $cemp=null;
-                $MasterStr="UPDATE FA.MMT_AtableM SET status='W',sremp =:cemp WHERE id=:mid";
+                $MasterStr="UPDATE FA.MMT_EtableM SET status='W',sremp =:cemp WHERE id=:mid";
                 $stmtM = $pdo->prepare($MasterStr);
                 $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
                 $stmtM->bindParam(':cemp',$cemp,PDO::PARAM_STR);
                 $stmtM->execute();    
                 $pdo=null;
-                header("Location: mmt_list_a.php");
+                header("Location: mmt_list_e.php");
                 break;
             case 3:   
                 $cemp=null;             
-                $MasterStr="UPDATE FA.MMT_AtableM SET status='W',sremp =:sremp,cemp =:cemp WHERE id=:mid";
+                $MasterStr="UPDATE FA.MMT_EtableM SET status='W',sremp =:sremp,cemp =:cemp WHERE id=:mid";
                 $stmtM = $pdo->prepare($MasterStr);
                 $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
                 $stmtM->bindParam(':cemp',$cemp,PDO::PARAM_STR);
                 $stmtM->bindParam(':sremp',$cemp,PDO::PARAM_STR);
                 $stmtM->execute();    
                 $pdo=null;
-                header("Location: mmt_list_a.php");
+                header("Location: mmt_list_e.php");
                 break;            
         }
     } else {
@@ -141,26 +138,26 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
             case 1:                
                 @$check_ans=$_POST["mmt_a_Check"];//審核
                 $cemp=$_POST["memp"];//審核者(當下登入的)                
-                $MasterStr="UPDATE FA.MMT_AtableM SET status=:status,cemp=:cemp WHERE id=:mid";
+                $MasterStr="UPDATE FA.MMT_EtableM SET status=:status,cemp=:cemp WHERE id=:mid";
                 $stmtM = $pdo->prepare($MasterStr);
                 $stmtM->bindParam(':status',$check_ans,PDO::PARAM_STR);
                 $stmtM->bindParam(':cemp',$cemp,PDO::PARAM_STR);
                 $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
                 $stmtM->execute();    
                 $pdo=null;
-                header("Location: mmt_list_a.php");
+                header("Location: mmt_list_e.php");
                 break;
             case 2:                
                 @$check_ans=$_POST["mmt_a_Check"];//審核
                 $cemp=$_POST["memp"];//審核者(當下登入的)                
-                $MasterStr="UPDATE FA.MMT_AtableM SET status=:status,sremp=:cemp WHERE id=:mid";
+                $MasterStr="UPDATE FA.MMT_EtableM SET status=:status,sremp=:cemp WHERE id=:mid";
                 $stmtM = $pdo->prepare($MasterStr);
                 $stmtM->bindParam(':status',$check_ans,PDO::PARAM_STR);
                 $stmtM->bindParam(':cemp',$cemp,PDO::PARAM_STR);
                 $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
                 $stmtM->execute();    
                 $pdo=null;
-                header("Location: mmt_list_a.php");
+                header("Location: mmt_list_e.php");
                 break;
             case 3:
                 $check_ansArray=$_POST["mmt_a_Check"];//審核
@@ -168,17 +165,17 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
                 $check_ans= implode(",", $check_ansArray);
                 echo $check_ans;
                 if ($check_ans=='M') {
-                    $MasterStr="UPDATE FA.MMT_AtableM SET status=:status,sremp=:cemp WHERE id=:mid";
+                    $MasterStr="UPDATE FA.MMT_EtableM SET status=:status,sremp=:cemp WHERE id=:mid";
                     $stmtM = $pdo->prepare($MasterStr);
                     $stmtM->bindParam(':status',$check_ans,PDO::PARAM_STR);
                     $stmtM->bindParam(':cemp',$cemp,PDO::PARAM_STR);
                     $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
                     $stmtM->execute();    
                     $pdo=null;
-                    header("Location: mmt_list_a.php");
+                    header("Location: mmt_list_e.php");
                 }
                 if ($check_ans=='F,M' or $check_ans=='F' or $check_ans=='M,F') {
-                    $MasterStr="UPDATE FA.MMT_AtableM SET status='F',sremp=:sremp,cemp=:cemp WHERE id=:mid";
+                    $MasterStr="UPDATE FA.MMT_EtableM SET status='F',sremp=:sremp,cemp=:cemp WHERE id=:mid";
                     $stmtM = $pdo->prepare($MasterStr);
                     // $stmtM->bindParam(':status',$check_ans,PDO::PARAM_STR);
                     $stmtM->bindParam(':sremp',$cemp,PDO::PARAM_STR);
@@ -186,7 +183,7 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
                     $stmtM->bindParam(':mid',$mid,PDO::PARAM_STR);
                     $stmtM->execute();    
                     $pdo=null;
-                    header("Location: mmt_list_a.php");
+                    header("Location: mmt_list_e.php");
                 }                
                 break;
         }        
@@ -212,13 +209,13 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- 連結自己的JS -->
     <script src="./js/main.js"></script>
-    <title>設備保養表單</title>
+    <title>中國醫藥大學附設醫院<?= $mmtbuildName.$mmtfloorName ?>分電盤保養紀錄表</title>
 </head>
 
 <body class="table_bg">
     <div class="container border border-info mt-5">
     <form action="" method="post" name="mmt_check_a">
-        <h2 class="text-center font-weight-bold"><?= $report[0]['tName']; ?></h2>
+        <h2 class="text-center font-weight-bold"><?= $report[0]['tName']."(".$mmtfloorName.")" ?></h2>
         <div class="row my-3">
             <div class="col">
                 <p class="d-inline font-weight-bold">棟別：<?= $mmtbuildName ?></p>
@@ -226,16 +223,13 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
             <div class="col text-right">
                 <p class="d-inline font-weight-bold">保養日期：<?= $Mdata[0]['rdate'] ?></p>
             </div>
-        </div>
+        </div>  
         <div class="row my-3">
             <div class="col">  
                 <p class="d-inline font-weight-bold">樓層：<?= $mmtfloorName ?></p>
             </div>
-        </div>
-        <div class="row my-3">
-            <div class="col">  
-                <p class="d-inline font-weight-bold">機器編號：<?= $Mdata[0]['macNo'] ?></p>
-            </div>
+        </div>       
+        <div class="row my-3">            
             <div class="col text-right">
             <?php
                 $datekind=$report[0]['datekind'] ;
@@ -310,7 +304,7 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
                     echo "<input type='radio' name=\"".$i."\" value='single' checked disabled>單相";
                     echo '</td>'; 
                 }else{
-                    echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20' value=\"".$Q_A_data[$i]['ans']."\" disabled>".'</td>';
+                    echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20' value=\"".$Q_A_data[$i]['ans']."\" disabled>".'&nbsp&nbsp℃</td>';
                 }
                 //echo "<input type='hidden' name=\"".$checkid."\" value=\"".$catarr[$i]['id']."\">";//檢查項目id                
             }            
@@ -408,7 +402,7 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
         <!-- 送出鈕 -->
             <div class="d-flex justify-content-end">
                 <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">確認審核</button>&nbsp&nbsp&nbsp
-                <a href="mmt_list_a.php" type="button" class="my-3 px-3 py-1 btn-outline-info text-dark">返回離開</a>
+                <a href="mmt_list_e.php" type="button" class="my-3 px-3 py-1 btn-outline-info text-dark">返回離開</a>
             </div>    
             
             

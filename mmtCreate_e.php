@@ -10,40 +10,41 @@
     $mmtsysName=sql_database('sName','FA.MMT_sys','id',$mmtsysNo);//系統名稱
     $mmtbuildNo=$_GET["mmtbuilda"];//大樓代號
     $mmtbuildName=sql_database('bName','FA.MMT_build','id',$mmtbuildNo);//大樓名稱
-    
+    $mmtfloorNo=$_GET["mmtfloora"];//樓層代號
+    $mmtfloorName=sql_database('fName','FA.MMT_floor','fid',$mmtfloorNo);//樓層名稱
     
     
     $check_date=date("Y-m-d");//準備寫入的保養時間
     $idnum=date("Ymd");//用來當主表id的時間戳記
     //$macnum=$mmtsysNo.'-'.$mmtbuildNo.'-';//設備編號
-    $mmt_a_m_id=$mmtsysNo.$mmtbuildNo.$idnum;//主表id
+    $mmt_a_m_id=$mmtsysNo.$mmtbuildNo.$mmtfloorNo.$idnum;//主表id
 
     switch ($mmtbuildNo) {
         case 'A':
-            $tid=48;
+            $tid=67;
             break;
         case 'B':
-            $tid=49;
+            $tid=68;
             break;
         case 'C':
-            $tid=50;
+            $tid=69;
             break;
         case 'E':
-            $tid=51;
+            $tid=70;
             break;
         case 'G':
-            $tid=52;
+            $tid=71;
             break;
         case 'H':
-            $tid=53;
+            $tid=72;
             break;
         case 'I':
-            $tid=54;
+            $tid=73;
             break;        
     }
     $reportName=item("SELECT k.id,k.tableName,k.dateKind FROM FA.MMT_KIND AS k LEFT JOIN FA.MMT_A AS a ON k.id=a.tid WHERE k.id=$tid ");
     //撈取檢查項目
-     $str="SELECT a.id,a.checkName,a.ref,a.checkKind,a.tid FROM FA.MMT_A AS a LEFT JOIN FA.MMT_KIND as k ON a.tid=k.id WHERE k.id=$tid";      
+     $str="SELECT a.id,a.checkName,a.ref,a.checkKind,a.tid FROM FA.MMT_A AS a LEFT JOIN FA.MMT_KIND as k ON a.tid=k.id WHERE k.id=$tid and a.ref='$mmtfloorNo'";      
      $catquery=$pdo->query($str) ;
 
     //寫入資料庫
@@ -56,7 +57,8 @@
         @$rdatekind= implode(",", $rdatekind_Array);
         $title=$_POST["title"];//Title
         $MMT_AtableMid=$_POST['mid'] ;//主表id
-        $bid=$_POST['bid'] ;//大樓id        
+        $bid=$_POST['bid'] ;//大樓id  
+        $floor=$_POST['fid'] ;//大樓id
         $rdate=$_POST['rdate'] ;//保養日期
         $remp=$_POST['emp'] ;//保養人員 
         
@@ -67,31 +69,31 @@
             $check_id = $_POST["$checkid"];//點檢項目ID 
             $ans=$_POST["$i"];//答案            
 
-            $reportCheck="SELECT COUNT(id) FROM FA.MMT_BtableM WHERE id='$MMT_AtableMid' ";//id='$mmt_a_m_id' 
+            $reportCheck="SELECT COUNT(id) FROM FA.MMT_EtableM WHERE id='$MMT_AtableMid' ";//id='$mmt_a_m_id' 
             $reportCheck_query=Current($pdo->query($reportCheck)->fetch());
             if (empty($ans)) {
                 $ans_no=null;
                 $err=$err+1;//判斷有多少欄位沒有填寫
             }
             if ($reportCheck_query ==0) {                    
-                $insert_master_str="INSERT INTO FA.MMT_BtableM(id,bid,title,rdate,datekind,tid,remark,emp,status) VALUES ('$MMT_AtableMid','$bid','$title','$rTime','$rdatekind','$tid','$rmark','$remp','W') ";
+                $insert_master_str="INSERT INTO FA.MMT_EtableM(id,bid,floor,title,rdate,datekind,tid,remark,emp,status) VALUES ('$MMT_AtableMid','$bid','$floor','$title','$rTime','$rdatekind','$tid','$rmark','$remp','W') ";
                 $insert_master =$pdo->exec($insert_master_str);                    
                 
-                $insert_detail_str="INSERT INTO FA.MMT_BtableD(checkid,ans,mid) VALUES ($check_id,'$ans','$MMT_AtableMid')";
+                $insert_detail_str="INSERT INTO FA.MMT_EtableD(checkid,ans,mid) VALUES ($check_id,'$ans','$MMT_AtableMid')";
                 $insert_detail =$pdo->exec($insert_detail_str);
             } else {
-                $insert_detail_str="INSERT INTO FA.MMT_BtableD(checkid,ans,mid) VALUES ($check_id,'$ans','$MMT_AtableMid')";
+                $insert_detail_str="INSERT INTO FA.MMT_EtableD(checkid,ans,mid) VALUES ($check_id,'$ans','$MMT_AtableMid')";
                 $insert_detail =$pdo->exec($insert_detail_str);
             } 
         }
         $pdo=null;
         if ($err>=1) {//如果欄位沒有填寫就做下面的處理
             echo "<script>alert('有部分項目未填寫就送出，下次要補上時請選擇修改的方式')</script>";
-            header("Location: mmt_list_b.php");
+            header("Location: mmt_list_e.php");
             //header("refresh:3;url= mtinsert.html");
             //echo "<script>window.close();</script>";
         } else {
-            header("Location: mmt_list_b.php");
+            header("Location: mmt_list_e.php");
             //echo "<script>window.close();</script>";
         }
     }
@@ -115,19 +117,24 @@
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- 連結自己的JS -->
     <script src="./js/main.js"></script>
-    <title>行動不便者設施設備檢查記錄表單</title>
+    <title>中國醫藥大學附設醫院<?= $mmtbuildName.$mmtfloorName ?>分電盤保養紀錄表</title>
 </head>
 
 <body class="table_bg">
     <div class="container border border-info mt-5">
     <form action="" method="post" name="mmt_table_a">
-        <h2 class="text-center font-weight-bold"><?= $reportName[0]['tableName']; ?></h2>
+        <h2 class="text-center font-weight-bold"><?= $reportName[0]['tableName']."(".$mmtfloorName.")" ?></h2>
         <div class="row my-3">
             <div class="col">
                 <p class="d-inline font-weight-bold">棟別：<?= $mmtbuildName ?></p>
             </div>
             <div class="col text-right">
                 <p class="d-inline font-weight-bold">保養日期：<?= $check_date ?></p>
+            </div>
+        </div>
+        <div class="row my-3">
+            <div class="col">  
+                <p class="d-inline font-weight-bold">樓層：<?= $mmtfloorName ?></p>
             </div>
         </div>       
         
@@ -138,7 +145,7 @@
                 <th>結&nbsp&nbsp&nbsp&nbsp果</th>                
             </thead>
             <?php //a.id,a.checkName,a.ref,a.checkKind,a.tid
-            $title=$mmtbuildNo.'棟行動不便者設施設備檢查記錄表'.$idnum;
+            $title=$mmtfloorName.'分電盤保養溫度記錄表'.$idnum;
             while ($row =$catquery -> fetch()) {
                 $catarr[] = array(
                     'id' => $row['id'],
@@ -170,16 +177,18 @@
                     echo "<input type='radio' name=\"".$i."\" value='single' checked>單相";
                     echo '</td>'; 
                 }else{
-                    echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20'>".'</td>';
+                    echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20'>".'&nbsp&nbsp℃</td>';
                 }
                 echo "<input type='hidden' name=\"".$checkid."\" value=\"".$catarr[$i]['id']."\">";//檢查項目id                
             }
             echo "<input type='hidden' name='mid' value=\"".$mmt_a_m_id."\">";//主表id
             echo "<input type='hidden' name='bid' value=\"".$mmtbuildNo."\">";//大樓id
+            echo "<input type='hidden' name='fid' value=\"".$mmtfloorNo."\">";//樓層id
             echo "<input type='hidden' name='tableid' value=\"".$tid."\">";//大樓tableid
             echo "<input type='hidden' name='rdate' value=\"".$check_date."\">";//保養日期
             echo "<input type='hidden' name='emp' value=\"".$userID."\">";//保養人員
             echo "<input type='hidden' name='title' value=\"".$title."\">";//title
+            
             //echo "<input type='hidden' name='macNo' value=\"".$macnum."\">";//設備完整編號
             ?>
             </tbody>

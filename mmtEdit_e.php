@@ -8,18 +8,16 @@ $username=$_SESSION["login_member"] ;//登錄人員名稱
 $MMT_AtableMid=$_GET['id'] ;//主表id
 
 //主表的資料
-$M_data_str="SELECT * FROM FA.MMT_AtableM WHERE id='$MMT_AtableMid'";
+$M_data_str="SELECT * FROM FA.MMT_EtableM WHERE id='$MMT_AtableMid'";
 $M_data=$pdo->query($M_data_str);
 while ($row = $M_data->fetch()) {
     $Mdata[]=array(
         'id'=>$row['id'],
         'bid'=>$row['bid'],
-        'fid'=>$row['fid'],
-        'eid'=>$row['eid'],
+        'floor'=>$row['floor'],
         'rdate'=>$row['rdate'],
         'datekind'=>$row['datekind'],
         'tid'=>$row['tid'],
-        'macNo'=>$row['macNo'],
         'remark'=>$row['remark'],
         'emp'=>$row['emp'],
         'sremp'=>$row['sremp'],
@@ -27,12 +25,12 @@ while ($row = $M_data->fetch()) {
         'status'=>$row['status']
 
     );
-} 
+}
    
     //$mmtsysName=sql_database('sName','FA.MMT_sys','id',$mmtsysNo);//系統名稱    
-    $mmtbuildName=sql_database('bName','FA.MMT_build','id',$Mdata[0]['bid']);//大樓名稱    
-    $mmtfloorName=sql_database('fName','FA.MMT_floor','fid',$Mdata[0]['fid']);//樓層名稱    
-    $mmtequipName=sql_database('eName','FA.MMT_equip','id',$Mdata[0]['eid']);//設備名稱
+    $mmtbuildName=sql_database('bName','FA.MMT_build','id',$Mdata[0]['bid']);//大樓名稱
+    $mmtfloorNo=$Mdata[0]['floor'];//樓層代號
+    $mmtfloorName=sql_database('fName','FA.MMT_floor','fid',$mmtfloorNo);//樓層名稱
     $remp=sql_database('cname','FA.Employee','e_number',$Mdata[0]['emp']);//保養人員
     (int)$tid=$Mdata[0]['tid'] ;
     
@@ -59,19 +57,19 @@ while ($row = $M_data->fetch()) {
     
 
 //明細表資料
-// $D_data_str="SELECT * FROM FA.MMT_AtableD WHERE mid='$MMT_AtableMid'";
-// $D_data=$pdo->query($D_data_str);
-// while ($row = $D_data->fetch()) {
-//     $Ddata[]=array(
-//         'id'=>$row['id'],
-//         'checkid'=>$row['checkid'],
-//         'ans'=>$row['ans'],
-//         'mid'=>$row['mid']
-//     ); 
-// }
-// $num = count($Ddata);
+$D_data_str="SELECT * FROM FA.MMT_EtableD WHERE mid='$MMT_AtableMid'";
+$D_data=$pdo->query($D_data_str);
+while ($row = $D_data->fetch()) {
+    $Ddata[]=array(
+        'id'=>$row['id'],
+        'checkid'=>$row['checkid'],
+        'ans'=>$row['ans'],
+        'mid'=>$row['mid']
+    ); 
+}
+$num = count($Ddata);
 
-$Q_A_str="SELECT d.id,a.checkName,a.checkKind,a.ref,d.ans FROM FA.MMT_A AS a LEFT JOIN FA.MMT_AtableD as d ON a.id=d.checkid WHERE d.mid='$MMT_AtableMid' ORDER BY a.id";
+$Q_A_str="SELECT d.id,a.checkName,a.checkKind,a.ref,d.ans FROM FA.MMT_A AS a LEFT JOIN FA.MMT_EtableD as d ON a.id=d.checkid WHERE d.mid='$MMT_AtableMid' ORDER BY a.id";
 $Q_A=$pdo->query($Q_A_str);
 while ($row = $Q_A->fetch()) {
     $Q_A_data[]=array(
@@ -88,11 +86,11 @@ $num=count($Q_A_data);
 if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
     $num=$_POST["num"];//迴圈數量
     $rmark=$_POST["remark"];//備註
-    $rdatekind_Array=$_POST['b'];//保養週期答案    
-    $rdatekind= implode(",", $rdatekind_Array);
+    @$rdatekind_Array=$_POST['b'];//保養週期答案    
+    @$rdatekind= implode(",", $rdatekind_Array);
     $MMT_AtableMid=$_POST['mid'] ;//主表id
     
-    $MasterStr="UPDATE FA.MMT_AtableM SET datekind=:datekind,remark=:remark WHERE id=:mid";
+    $MasterStr="UPDATE FA.MMT_EtableM SET datekind=:datekind,remark=:remark WHERE id=:mid";
     $stmtM = $pdo->prepare($MasterStr);
     $stmtM->bindParam(':datekind',$rdatekind,PDO::PARAM_STR);
     $stmtM->bindParam(':remark',$rmark,PDO::PARAM_STR);
@@ -103,14 +101,14 @@ if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
         $did=$i+200;//保養項目id   
         $d_id = $_POST["$did"];//明細表ID 
         $ans=$_POST["$i"];//答案
-        $sql="UPDATE FA.MMT_AtableD SET ans=:checkResult WHERE id=:ID";
+        $sql="UPDATE FA.MMT_EtableD SET ans=:checkResult WHERE id=:ID";
         $stmt = $pdo->prepare($sql);        
         $stmt->bindParam(':checkResult',$ans,PDO::PARAM_STR);
         $stmt->bindParam(':ID',$d_id,PDO::PARAM_INT);
         $stmt->execute();
     }
     $pdo=null;
-    header("Location: mmt_list_a.php");
+    header("Location: mmt_list_e.php");
 }
 
 ?>
@@ -137,13 +135,13 @@ if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- 連結自己的JS -->
     <script src="./js/main.js"></script>
-    <title>設備保養表單</title>
+    <title>中國醫藥大學附設醫院<?= $mmtbuildName.$mmtfloorName ?>分電盤保養紀錄表</title>
 </head>
 
 <body class="table_bg">
     <div class="container border border-info mt-5">
     <form action="" method="post" name="mmt_Edittable_a">
-        <h2 class="text-center font-weight-bold"><?= $report[0]['tName']; ?></h2>
+        <h2 class="text-center font-weight-bold"><?= $report[0]['tName']."(".$mmtfloorName.")" ?></h2>
         <div class="row my-3">
             <div class="col">
                 <p class="d-inline font-weight-bold">棟別：<?= $mmtbuildName ?></p>
@@ -151,16 +149,13 @@ if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
             <div class="col text-right">
                 <p class="d-inline font-weight-bold">保養日期：<?= $Mdata[0]['rdate'] ?></p>
             </div>
-        </div>
+        </div>        
         <div class="row my-3">
             <div class="col">  
                 <p class="d-inline font-weight-bold">樓層：<?= $mmtfloorName ?></p>
             </div>
-        </div>
-        <div class="row my-3">
-            <div class="col">  
-                <p class="d-inline font-weight-bold">機器編號：<?= $Mdata[0]['macNo'] ?></p>
-            </div>
+        </div> 
+        <div class="row my-3">            
             <div class="col text-right">
             <?php
                 $datekind=$report[0]['datekind'] ;
@@ -235,7 +230,7 @@ if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
                     echo "<input type='radio' name=\"".$i."\" value='single' checked >單相";
                     echo '</td>'; 
                 }else{
-                    echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20' value=\"".$Q_A_data[$i]['ans']."\" >".'</td>';
+                    echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20' value=\"".$Q_A_data[$i]['ans']."\" >".'&nbsp&nbsp℃</td>';
                 }
                 echo "<input type='hidden' name=\"".$did."\" value=\"".$Q_A_data[$i]['id']."\">";//檢查項目id                
             }

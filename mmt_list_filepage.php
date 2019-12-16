@@ -70,7 +70,7 @@ $total_num=$ammtmnum;
 
 //----還沒帶入----
 //篩選後給每頁的筆數
-$sqlstr_page="SELECT fileNo,sdid,fileDownloadUserID,checkempId,fileDownloadDate,fileInsertDate,checkdate,eqlocation,fileCycle,filePath,remark,status FROM FA.MMA_getFile WHERE sdid=$sdid ORDER BY fileInsertDate ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+$sqlstr_page="SELECT fileNo,sdid,fileDownloadUserID,checkempId,fileDownloadDate,fileInsertDate,checkdate,eqlocation,fileCycle,filePath,remark,status FROM FA.MMA_getFile WHERE sdid=$sdid ORDER BY fileInsertDate DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
 $sql_page=$pdo->query($sqlstr_page);
 // $sql_total=$pdo->query($sqlstr_total);
 //$total_num=CURRENT($pdo->query($totalstr_num)->fetch());

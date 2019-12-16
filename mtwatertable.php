@@ -207,26 +207,26 @@
                             switch ($equipinfo["answerMode"]) {
                                 case 'choiceTF':
                                     echo '<td>';
-                                        echo "<input type='radio' name=\"".$i."\" value='true'>合格";
+                                        echo "<input type='radio' name=\"".$i."\" value='true' checked>合格";
                                         echo "<input type='radio' name=\"".$i."\" value='false'>不合格";
                                     echo '</td>';
                                     break;
                                 case 'choiceHA':
                                     echo '<td>';                                        
-                                        echo "<input type='radio' name=\"".$i."\" value='auto'>自動";
+                                        echo "<input type='radio' name=\"".$i."\" value='auto' checked>自動";
                                         echo "<input type='radio' name=\"".$i."\" value='handle'>手動";
                                     echo '</td>';
                                     break;
                                 case 'choiceFN':
                                     echo '<td>';
-                                        echo "<input type='radio' name=\"".$i."\" value='ON'>ON";
+                                        echo "<input type='radio' name=\"".$i."\" value='ON' checked>ON";
                                         echo "<input type='radio' name=\"".$i."\" value='OFF'>OFF";                                        
                                     echo '</td>';
                                     break;
                                 case 'choiceRL':
-                                    echo '<td>';                                        
-                                        echo "<input type='radio' name=\"".$i."\" value='local'>本地";
-                                        echo "<input type='radio' name=\"".$i."\" value='remote'>遠端";
+                                    echo '<td>';
+                                        echo "<input type='radio' name=\"".$i."\" value='remote' checked>遠端";                                        
+                                        echo "<input type='radio' name=\"".$i."\" value='local'>本地";                                        
                                     echo '</td>';
                                     break;
                                 case 'choiceS12':
@@ -237,7 +237,7 @@
                                     break;
                                 case 'choiceRG':
                                     echo '<td>';                                        
-                                        echo "<input type='radio' name=\"".$i."\" value='green'>綠";
+                                        echo "<input type='radio' name=\"".$i."\" value='green' checked>綠";
                                         echo "<input type='radio' name=\"".$i."\" value='red'>紅";
                                     echo '</td>';
                                     break;

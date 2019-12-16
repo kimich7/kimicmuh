@@ -169,7 +169,7 @@
                 echo  '<td>'.$catarr[$i]['checkName'].'</td>';
                 if ($catarr[$i]['checkKind']=='檢查項目') {
                     echo '<td>';
-                    echo "<input type='radio' name=\"".$i."\" value='true'>是&nbsp&nbsp&nbsp&nbsp";
+                    echo "<input type='radio' name=\"".$i."\" value='true' checked>是&nbsp&nbsp&nbsp&nbsp";
                     echo "<input type='radio' name=\"".$i."\" value='false'>否";  
                     echo '</td>';          
                 } elseif ($catarr[$i]['ref']=='單相/三相') {

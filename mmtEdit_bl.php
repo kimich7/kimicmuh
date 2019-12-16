@@ -8,18 +8,16 @@ $username=$_SESSION["login_member"] ;//登錄人員名稱
 $MMT_AtableMid=$_GET['id'] ;//主表id
 
 //主表的資料
-$M_data_str="SELECT * FROM FA.MMT_AtableM WHERE id='$MMT_AtableMid'";
+$M_data_str="SELECT * FROM FA.MMT_BLtableM WHERE id='$MMT_AtableMid'";
 $M_data=$pdo->query($M_data_str);
 while ($row = $M_data->fetch()) {
     $Mdata[]=array(
         'id'=>$row['id'],
         'bid'=>$row['bid'],
-        'fid'=>$row['fid'],
-        'eid'=>$row['eid'],
+        'boilerNo'=>$row['boilerNo'],
         'rdate'=>$row['rdate'],
         'datekind'=>$row['datekind'],
         'tid'=>$row['tid'],
-        'macNo'=>$row['macNo'],
         'remark'=>$row['remark'],
         'emp'=>$row['emp'],
         'sremp'=>$row['sremp'],
@@ -27,12 +25,10 @@ while ($row = $M_data->fetch()) {
         'status'=>$row['status']
 
     );
-} 
+}
    
     //$mmtsysName=sql_database('sName','FA.MMT_sys','id',$mmtsysNo);//系統名稱    
-    $mmtbuildName=sql_database('bName','FA.MMT_build','id',$Mdata[0]['bid']);//大樓名稱    
-    $mmtfloorName=sql_database('fName','FA.MMT_floor','fid',$Mdata[0]['fid']);//樓層名稱    
-    $mmtequipName=sql_database('eName','FA.MMT_equip','id',$Mdata[0]['eid']);//設備名稱
+    $mmtbuildName=sql_database('bName','FA.MMT_build','id',$Mdata[0]['bid']);//大樓名稱
     $remp=sql_database('cname','FA.Employee','e_number',$Mdata[0]['emp']);//保養人員
     (int)$tid=$Mdata[0]['tid'] ;
     
@@ -59,19 +55,19 @@ while ($row = $M_data->fetch()) {
     
 
 //明細表資料
-// $D_data_str="SELECT * FROM FA.MMT_AtableD WHERE mid='$MMT_AtableMid'";
-// $D_data=$pdo->query($D_data_str);
-// while ($row = $D_data->fetch()) {
-//     $Ddata[]=array(
-//         'id'=>$row['id'],
-//         'checkid'=>$row['checkid'],
-//         'ans'=>$row['ans'],
-//         'mid'=>$row['mid']
-//     ); 
-// }
-// $num = count($Ddata);
+$D_data_str="SELECT * FROM FA.MMT_BLtableD WHERE mid='$MMT_AtableMid'";
+$D_data=$pdo->query($D_data_str);
+while ($row = $D_data->fetch()) {
+    $Ddata[]=array(
+        'id'=>$row['id'],
+        'checkid'=>$row['checkid'],
+        'ans'=>$row['ans'],
+        'mid'=>$row['mid']
+    ); 
+}
+$num = count($Ddata);
 
-$Q_A_str="SELECT d.id,a.checkName,a.checkKind,a.ref,d.ans FROM FA.MMT_A AS a LEFT JOIN FA.MMT_AtableD as d ON a.id=d.checkid WHERE d.mid='$MMT_AtableMid' ORDER BY a.id";
+$Q_A_str="SELECT d.id,a.checkName,a.checkKind,a.ref,d.ans FROM FA.MMT_A AS a LEFT JOIN FA.MMT_BLtableD as d ON a.id=d.checkid WHERE d.mid='$MMT_AtableMid' ORDER BY a.id";
 $Q_A=$pdo->query($Q_A_str);
 while ($row = $Q_A->fetch()) {
     $Q_A_data[]=array(
@@ -88,29 +84,30 @@ $num=count($Q_A_data);
 if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
     $num=$_POST["num"];//迴圈數量
     $rmark=$_POST["remark"];//備註
-    $rdatekind_Array=$_POST['b'];//保養週期答案    
-    $rdatekind= implode(",", $rdatekind_Array);
+    @$rdatekind_Array=$_POST['b'];//保養週期答案    
+    @$rdatekind= implode(",", $rdatekind_Array);
     $MMT_AtableMid=$_POST['mid'] ;//主表id
-    
-    $MasterStr="UPDATE FA.MMT_AtableM SET datekind=:datekind,remark=:remark WHERE id=:mid";
+    $blNo=(INT)$_POST['blNo'];//鍋爐編號
+    $MasterStr="UPDATE FA.MMT_BLtableM SET datekind=:datekind,remark=:remark,boilerNo=:blNo WHERE id=:mid";
     $stmtM = $pdo->prepare($MasterStr);
     $stmtM->bindParam(':datekind',$rdatekind,PDO::PARAM_STR);
     $stmtM->bindParam(':remark',$rmark,PDO::PARAM_STR);
     $stmtM->bindParam(':mid',$MMT_AtableMid,PDO::PARAM_STR);
+    $stmtM->bindParam(':blNo',$blNo,PDO::PARAM_INT);
     $stmtM->execute();
 
     for ($i=0; $i < $num; $i++) { 
         $did=$i+200;//保養項目id   
         $d_id = $_POST["$did"];//明細表ID 
         $ans=$_POST["$i"];//答案
-        $sql="UPDATE FA.MMT_AtableD SET ans=:checkResult WHERE id=:ID";
+        $sql="UPDATE FA.MMT_BLtableD SET ans=:checkResult WHERE id=:ID";
         $stmt = $pdo->prepare($sql);        
         $stmt->bindParam(':checkResult',$ans,PDO::PARAM_STR);
         $stmt->bindParam(':ID',$d_id,PDO::PARAM_INT);
         $stmt->execute();
     }
     $pdo=null;
-    header("Location: mmt_list_a.php");
+    header("Location: mmt_list_bl.php");
 }
 
 ?>
@@ -153,14 +150,14 @@ if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
             </div>
         </div>
         <div class="row my-3">
-            <div class="col">  
-                <p class="d-inline font-weight-bold">樓層：<?= $mmtfloorName ?></p>
+            <div class="col">
+                <p class="d-inline font-weight-bold">運轉編號：<input type='text' name="blNo" maxlength='20' VALUE="<?= $Mdata[0]['boilerNo']?>">號爐</p>
+            </div>            
+            <div class="col text-right">
+                <p class="d-inline font-weight-bold">型&nbsp&nbsp式：直立型貫流式鍋爐</p>
             </div>
-        </div>
-        <div class="row my-3">
-            <div class="col">  
-                <p class="d-inline font-weight-bold">機器編號：<?= $Mdata[0]['macNo'] ?></p>
-            </div>
+        </div>        
+        <div class="row my-3">            
             <div class="col text-right">
             <?php
                 $datekind=$report[0]['datekind'] ;

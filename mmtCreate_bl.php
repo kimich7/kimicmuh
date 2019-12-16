@@ -16,30 +16,15 @@
     $check_date=date("Y-m-d");//準備寫入的保養時間
     $idnum=date("Ymd");//用來當主表id的時間戳記
     //$macnum=$mmtsysNo.'-'.$mmtbuildNo.'-';//設備編號
-    $mmt_a_m_id=$mmtsysNo.$mmtbuildNo.$idnum;//主表id
+    $mmt_a_m_id='BL'.$mmtbuildNo.$idnum;//主表id
 
     switch ($mmtbuildNo) {
-        case 'A':
-            $tid=48;
-            break;
-        case 'B':
-            $tid=49;
-            break;
         case 'C':
-            $tid=50;
-            break;
-        case 'E':
-            $tid=51;
-            break;
-        case 'G':
-            $tid=52;
-            break;
-        case 'H':
-            $tid=53;
-            break;
-        case 'I':
-            $tid=54;
+            $tid=65;
             break;        
+        case 'H':
+            $tid=66;
+            break;                
     }
     $reportName=item("SELECT k.id,k.tableName,k.dateKind FROM FA.MMT_KIND AS k LEFT JOIN FA.MMT_A AS a ON k.id=a.tid WHERE k.id=$tid ");
     //撈取檢查項目
@@ -59,7 +44,7 @@
         $bid=$_POST['bid'] ;//大樓id        
         $rdate=$_POST['rdate'] ;//保養日期
         $remp=$_POST['emp'] ;//保養人員 
-        
+        $blNo=(INT)$_POST['blNo'];//鍋爐運轉編號
         $err=0;//未填寫欄位的數量歸0
         for ($i=0; $i < $num; $i++) {                                    
             
@@ -67,31 +52,31 @@
             $check_id = $_POST["$checkid"];//點檢項目ID 
             $ans=$_POST["$i"];//答案            
 
-            $reportCheck="SELECT COUNT(id) FROM FA.MMT_BtableM WHERE id='$MMT_AtableMid' ";//id='$mmt_a_m_id' 
+            $reportCheck="SELECT COUNT(id) FROM FA.MMT_BLtableM WHERE id='$MMT_AtableMid' ";//id='$mmt_a_m_id' 
             $reportCheck_query=Current($pdo->query($reportCheck)->fetch());
             if (empty($ans)) {
                 $ans_no=null;
                 $err=$err+1;//判斷有多少欄位沒有填寫
             }
             if ($reportCheck_query ==0) {                    
-                $insert_master_str="INSERT INTO FA.MMT_BtableM(id,bid,title,rdate,datekind,tid,remark,emp,status) VALUES ('$MMT_AtableMid','$bid','$title','$rTime','$rdatekind','$tid','$rmark','$remp','W') ";
+                $insert_master_str="INSERT INTO FA.MMT_BLtableM(id,bid,title,boilerNo,rdate,datekind,tid,remark,emp,status) VALUES ('$MMT_AtableMid','$bid','$title',$blNo,'$rTime','$rdatekind','$tid','$rmark','$remp','W') ";
                 $insert_master =$pdo->exec($insert_master_str);                    
                 
-                $insert_detail_str="INSERT INTO FA.MMT_BtableD(checkid,ans,mid) VALUES ($check_id,'$ans','$MMT_AtableMid')";
+                $insert_detail_str="INSERT INTO FA.MMT_BLtableD(checkid,ans,mid) VALUES ($check_id,'$ans','$MMT_AtableMid')";
                 $insert_detail =$pdo->exec($insert_detail_str);
             } else {
-                $insert_detail_str="INSERT INTO FA.MMT_BtableD(checkid,ans,mid) VALUES ($check_id,'$ans','$MMT_AtableMid')";
+                $insert_detail_str="INSERT INTO FA.MMT_BLtableD(checkid,ans,mid) VALUES ($check_id,'$ans','$MMT_AtableMid')";
                 $insert_detail =$pdo->exec($insert_detail_str);
             } 
         }
         $pdo=null;
         if ($err>=1) {//如果欄位沒有填寫就做下面的處理
             echo "<script>alert('有部分項目未填寫就送出，下次要補上時請選擇修改的方式')</script>";
-            header("Location: mmt_list_b.php");
+            header("Location: mmt_list_bl.php");
             //header("refresh:3;url= mtinsert.html");
             //echo "<script>window.close();</script>";
         } else {
-            header("Location: mmt_list_b.php");
+            header("Location: mmt_list_bl.php");
             //echo "<script>window.close();</script>";
         }
     }
@@ -125,11 +110,19 @@
         <div class="row my-3">
             <div class="col">
                 <p class="d-inline font-weight-bold">棟別：<?= $mmtbuildName ?></p>
-            </div>
+            </div>            
             <div class="col text-right">
                 <p class="d-inline font-weight-bold">保養日期：<?= $check_date ?></p>
             </div>
-        </div>       
+        </div>
+        <div class="row my-3">
+            <div class="col">
+                <p class="d-inline font-weight-bold">運轉編號：<input type='text' name="blNo" maxlength='20'>號爐</p>
+            </div>            
+            <div class="col text-right">
+                <p class="d-inline font-weight-bold">型&nbsp&nbsp式：直立型貫流式鍋爐</p>
+            </div>
+        </div>        
         
         <!--表格主體-->
         <table class="table my-5">
@@ -138,7 +131,7 @@
                 <th>結&nbsp&nbsp&nbsp&nbsp果</th>                
             </thead>
             <?php //a.id,a.checkName,a.ref,a.checkKind,a.tid
-            $title=$mmtbuildNo.'棟行動不便者設施設備檢查記錄表'.$idnum;
+            $title=$reportName[0]['tableName'].$idnum;
             while ($row =$catquery -> fetch()) {
                 $catarr[] = array(
                     'id' => $row['id'],
