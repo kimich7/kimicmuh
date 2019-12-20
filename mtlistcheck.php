@@ -20,7 +20,6 @@
     } else {
         $checksum=3;//只能看
     }
-    echo $checksum;
     /**
      * 理論上不會有$checksum=3的情況出現，因為在進這頁面的按鈕在之前的首頁index.html，
      * 我已經設定權限排除checksum=1與2之外的人無法按，所以不會有全縣相關以外的人進來此頁面

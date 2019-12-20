@@ -16,7 +16,7 @@ session_start();
         $sNumber=$securityNo['sid'];//權限區域
         if ($sNumber>4 and $sNumber<9) {
             $checksum=1;//可簽核-身分主管
-            $condition="WHERE (e.e_number='$checkuserID' and check_number=1) and(";                       
+            $condition="WHERE (e.e_number='$checkuserID' and check_number=1) and(";
         } 
         if($sNumber>=1 and $sNumber<=4){
             $checksum=2;//可簽核-檢查者
@@ -55,7 +55,7 @@ session_start();
     }
     
     if ((isset($_POST["action"])&&($_POST["action"]=="new_page"))&&((!isset($start_date) or $start_date=='') && (!isset($end_date)or $end_date=='')&& (!isset($keyword) or $keyword==''))) {
-         header("Location: mtlistcheck.php");
+         header("Location: mmt_list_filepage.php?sdid=$sdid");
     }
     if ((!isset($start_date) or $start_date=='') && (!isset($end_date)or $end_date=='') && (isset($keyword)&&$keyword !='' )) {
         $x=1;//只有keyword沒有日期區間                    

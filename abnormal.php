@@ -7,6 +7,7 @@
     $erremp=$_POST["findemp"];//發現人
     $errtitle=$_POST["errortexttitle"];//主旨
     $errtext=$_POST["errortext"];//內容描述
+    $errtext=str_replace(chr(13).chr(10), "<br />",$errtext);
     
     if($_FILES['uploadfile']['error']>0){
         $insertStr="INSERT INTO FA.Abnormal_Notification_System_Master(case_title,case_location,case_time,case_userID,case_description)VALUES('$errtitle','$errloction','$errdate','$erremp','$errtext')";

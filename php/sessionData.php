@@ -5,8 +5,12 @@ $userID=$_SESSION["login_number"];
 $user=$_SESSION["login_member"];
 $loginAutho = $_SESSION["login_authority"];
 $login_success=$_SESSION["login_success"];
+$errSuperstr="SELECT * FROM FA.securityemp WHERE e_number='$userID' and sid=33";
+$errSuper=$pdo->query($errSuperstr)->fetchall();
+$num=Count($errSuper);
 $notice = 0;
-if ($userID=='A8240') {
+
+if ($num==1) {
     $notice=1;
 }
     $result = array();

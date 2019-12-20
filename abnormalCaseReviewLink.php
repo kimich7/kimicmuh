@@ -2,8 +2,12 @@
 /**本頁是異常事件待審核清單**/
     include("php/CMUHconndata.php");
     include("php/fun.php");
+    include("php/errfun.php");
+    include("page_err_app.php");
+    $filter=$_GET['filter'];
     session_start();
     $userID=$_SESSION["login_number"];
+
     if (isset($_POST["action"])&&($_POST["action"]=="check")) {
          $total_num=$_POST["total_num"];
          $confirmDate=date("Y-m-d");
@@ -52,7 +56,7 @@
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- 連結自己的JS -->
     <script src="./js/main.js"></script>
-    <title>尚未指派人員異常事件清單</title>
+    <title>帶審核異常事件清單</title>
 </head>
 <body>
     <!-- header網頁標題 -->
@@ -62,6 +66,13 @@
     <form action="" method="post" name="abnormallist">
     <section class="container-fluid">
         <h1 class="text-center">異常事件待審核清單</h1>
+        <?php
+        $href="abnormalCaseReviewLink.php?filter=no";
+        if ($filter=='yes') {?>
+         <div class="d-flex ">        
+            <a href='abnormalCaseReviewLink.php?filter=no' type="button" id="backlistmmt" class="btn btn-primary mt-4 rounded d-block mr-3">清除條件</a>
+        </div>
+        <?php }?> 
         <div class="list-group mx-5 my-5">
         <?php
         $pageRow_record=10;//每頁的筆數
@@ -69,15 +80,99 @@
         //更新$page_num        
         if (isset($_GET['page'])) {
             $page_num=$_GET['page'];
+            $page_num=str_replace("\"", "", $page_num);
         }
         $startRow_record=($page_num-1)*$pageRow_record;
+
+        if ($filter=='no') {
         //所有的資料
-        $sqlstr_total="SELECT a.case_id,a.case_time,a.case_location,a.case_title,a.case_userID,a.work_emp,a.manage_status,b.Detail_id,b.Detail_Start_Time,b.Detail_End_Time FROM FA.Abnormal_Notification_System_Master AS a INNER JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id  WHERE a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL";
+        $sqlstr_total="SELECT DISTINCT(a.case_id),a.case_time,a.case_location,a.case_title,a.case_userID,a.work_emp,a.manage_status,b.Detail_id,b.Detail_Start_Time,b.Detail_End_Time FROM FA.Abnormal_Notification_System_Master AS a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id  WHERE a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL";
         //篩選後給每頁的筆數
-        $sqlstr_page="SELECT a.case_id,a.case_time,a.case_location,a.case_title,a.case_userID,a.work_emp,a.manage_status,b.Detail_id,b.Detail_Start_Time,b.Detail_End_Time FROM FA.Abnormal_Notification_System_Master AS a INNER JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id  WHERE a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL ORDER BY a.case_id ASC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+        $sqlstr_page="SELECT  DISTINCT(a.case_id),a.case_time,a.case_location,a.case_title,a.case_userID,a.work_emp,a.manage_status,b.Detail_id,b.Detail_Start_Time,b.Detail_End_Time FROM FA.Abnormal_Notification_System_Master AS a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id  WHERE a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL ORDER BY a.case_id DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
         //總資料數量
-        $totalstr_num="SELECT COUNT(a.case_id) FROM FA.Abnormal_Notification_System_Master AS a INNER JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id  WHERE a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL";        
-    
+        $totalstr_num="SELECT COUNT(DISTINCT(a.case_id)) FROM FA.Abnormal_Notification_System_Master AS a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id  WHERE a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL";        
+        }else{
+            @$action=$_GET["action"];
+            @$action=str_replace("\"", "", $action);            
+            if ($action=='next_page') {
+                @$start_date=$_GET["start_date"];
+                @$start_date=str_replace("\"", "", $start_date);
+                @$end_date=$_GET["end_date"];
+                @$end_date=str_replace("\"", "", $end_date);
+                @$keyword=$_GET["keywordsearch"];
+                @$keyword=str_replace("\"", "", $keyword);
+            }
+            if (isset($_GET["action"])&&($_GET["action"]=="new_page")){//重新搜索
+                $action=='new_page';
+                @$start_date=$_GET["start_date"];
+                @$end_date=$_GET["end_date"];
+                @$keyword=$_GET["keywordsearch"];
+            }
+            
+            $x=errfilt($href,$start_date,$end_date,$keyword);
+            switch ($x) {
+                case 0://只有keyword
+                    header("Location:$href");
+                    break;
+                case 1://只有keyword
+                    //所有的資料 (check_manager IS NULL or check_manager=0) and
+                    $sqlstr_total="SELECT DISTINCT(a.case_id), a.*,b.Detail_id,b.Detail_Start_Time,b.Detail_End_Time FROM FA.Abnormal_Notification_System_Master as a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id LEFT JOIN FA.Employee as c on a.case_userID=c.e_number or a.case_manageID=c.e_number or a.work_emp=c.e_number where ( c.cname like '%$keyword%' or a.case_title like '%$keyword%' or a.case_location like '%$keyword%' or a.case_time like '%$keyword%' or a.confirm_date like '%$keyword%') AND (a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL)";
+                    //篩選後給每頁的筆數
+                    $sqlstr_page="SELECT DISTINCT(a.case_id), a.*,b.Detail_id,b.Detail_Start_Time,b.Detail_End_Time FROM FA.Abnormal_Notification_System_Master as a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id LEFT JOIN FA.Employee as c on a.case_userID=c.e_number or a.case_manageID=c.e_number or a.work_emp=c.e_number where ( c.cname like '%$keyword%' or a.case_title like '%$keyword%' or a.case_location like '%$keyword%' or a.case_time like '%$keyword%' or a.confirm_date like '%$keyword%') AND (a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL) ORDER BY a.case_time DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+                   //總資料數量
+                    $totalstr_num="SELECT COUNT(DISTINCT(a.case_id)) FROM FA.Abnormal_Notification_System_Master as a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id LEFT JOIN FA.Employee as c on a.case_userID=c.e_number or a.case_manageID=c.e_number or a.work_emp=c.e_number where ( c.cname like '%$keyword%' or a.case_title like '%$keyword%' or a.case_location like '%$keyword%' or a.case_time like '%$keyword%' or a.confirm_date like '%$keyword%') AND (a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL)";
+                    break;
+                case 2://只有日期區間
+                    //所有的資料 (check_manager IS NULL or check_manager=0) and
+                    $sqlstr_total=" SELECT DISTINCT(a.case_id), a.*,b.Detail_id,b.Detail_Start_Time,b.Detail_End_Time FROM FA.Abnormal_Notification_System_Master as a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id LEFT JOIN FA.Employee as c on a.case_userID=c.e_number or a.case_manageID=c.e_number or a.work_emp=c.e_number where (a.case_time between '$start_date' and '$end_date' or a.confirm_date between '$start_date' and '$end_date') AND (a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL)";
+                    //篩選後給每頁的筆數
+                    $sqlstr_page="SELECT DISTINCT(a.case_id), a.*,b.Detail_id,b.Detail_Start_Time,b.Detail_End_Time FROM FA.Abnormal_Notification_System_Master as a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id LEFT JOIN FA.Employee as c on a.case_userID=c.e_number or a.case_manageID=c.e_number or a.work_emp=c.e_number where (a.case_time between '$start_date' and '$end_date' or a.confirm_date between '$start_date' and '$end_date') AND (a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL) ORDER BY a.case_time DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+                    //總資料數量
+                    $totalstr_num="SELECT COUNT(DISTINCT(a.case_id)) FROM FA.Abnormal_Notification_System_Master as a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id LEFT JOIN FA.Employee as c on a.case_userID=c.e_number or a.case_manageID=c.e_number or a.work_emp=c.e_number where (a.case_time between '$start_date' and '$end_date' or a.confirm_date between '$start_date' and '$end_date') AND (a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL)";
+                    break;
+                case 3://只有開始時間
+                    //所有的資料 (check_manager IS NULL or check_manager=0) and
+                    $sqlstr_total=" SELECT DISTINCT(a.case_id),a.*,b.Detail_id,b.Detail_Start_Time,b.Detail_End_Time FROM FA.Abnormal_Notification_System_Master as a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id LEFT JOIN FA.Employee as c on a.case_userID=c.e_number or a.case_manageID=c.e_number or a.work_emp=c.e_number  where (a.case_time ='$start_date' or a.confirm_date ='$start_date') AND (a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL)";
+                    //篩選後給每頁的筆數
+                    $sqlstr_page="SELECT DISTINCT(a.case_id), a.*,b.Detail_id,b.Detail_Start_Time,b.Detail_End_Time FROM FA.Abnormal_Notification_System_Master as a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id LEFT JOIN FA.Employee as c on a.case_userID=c.e_number or a.case_manageID=c.e_number or a.work_emp=c.e_number where (a.case_time ='$start_date' or a.confirm_date ='$start_date') AND (a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL) ORDER BY a.case_time DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+                    //總資料數量
+                    $totalstr_num="SELECT COUNT(DISTINCT(a.case_id)) FROM FA.Abnormal_Notification_System_Master as a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id LEFT JOIN FA.Employee as c on a.case_userID=c.e_number or a.case_manageID=c.e_number or a.work_emp=c.e_number where (a.case_time ='$start_date' or a.confirm_date ='$start_date') AND (a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL)";
+                    break;
+                case 4://只有結束時間
+                    //所有的資料 (check_manager IS NULL or check_manager=0) and
+                    $sqlstr_total=" SELECT DISTINCT(a.case_id), a.*,b.Detail_id,b.Detail_Start_Time,b.Detail_End_Time FROM FA.Abnormal_Notification_System_Master as a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id LEFT JOIN FA.Employee as c on a.case_userID=c.e_number or a.case_manageID=c.e_number or a.work_emp=c.e_number where (a.case_time ='$end_date' or a.confirm_date ='$end_date') AND (a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL)";
+                    //篩選後給每頁的筆數
+                    $sqlstr_page="SELECT DISTINCT(a.case_id), a.*,b.Detail_id,b.Detail_Start_Time,b.Detail_End_Time FROM FA.Abnormal_Notification_System_Master as a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id LEFT JOIN FA.Employee as c on a.case_userID=c.e_number or a.case_manageID=c.e_number or a.work_emp=c.e_number where (a.case_time ='$end_date' or a.confirm_date ='$end_date') AND (a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL) ORDER BY a.case_time DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+                    //總資料數量
+                    $totalstr_num="SELECT COUNT(DISTINCT(a.case_id)) FROM FA.Abnormal_Notification_System_Master as a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id LEFT JOIN FA.Employee as c on a.case_userID=c.e_number or a.case_manageID=c.e_number or a.work_emp=c.e_number where (a.case_time ='$end_date' or a.confirm_date ='$end_date') AND (a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL)";
+                    break;
+                case 5://開始+keyword
+                    //所有的資料 (check_manager IS NULL or check_manager=0) and
+                    $sqlstr_total=" SELECT DISTINCT(a.case_id), a.*,b.Detail_id,b.Detail_Start_Time,b.Detail_End_Time FROM FA.Abnormal_Notification_System_Master as a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id LEFT JOIN FA.Employee as c on a.case_userID=c.e_number or a.case_manageID=c.e_number or a.work_emp=c.e_number where ((a.case_time ='$start_date'or a.confirm_date= '$start_date') and ( c.cname like '%$keyword%' or a.case_title like '%$keyword%'  or a.case_location like '%$keyword%')) AND (a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL)";
+                    //篩選後給每頁的筆數
+                    $sqlstr_page="SELECT DISTINCT(a.case_id), a.*,b.Detail_id,b.Detail_Start_Time,b.Detail_End_Time FROM FA.Abnormal_Notification_System_Master as a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id LEFT JOIN FA.Employee as c on a.case_userID=c.e_number or a.case_manageID=c.e_number or a.work_emp=c.e_number where ((a.case_time ='$start_date'or a.confirm_date = '$start_date') and ( c.cname like '%$keyword%' or a.case_title like '%$keyword%'  or a.case_location like '%$keyword%')) AND (a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL) ORDER BY a.case_time DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+                    //總資料數量
+                    $totalstr_num="SELECT COUNT(DISTINCT(a.case_id)) FROM FA.Abnormal_Notification_System_Master as a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id LEFT JOIN FA.Employee as c on a.case_userID=c.e_number or a.case_manageID=c.e_number or a.work_emp=c.e_number where ((a.case_time ='$start_date'or a.confirm_date = '$start_date') and ( c.cname like '%$keyword%' or a.case_title like '%$keyword%'  or a.case_location like '%$keyword%')) AND (a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL)";
+                    break;
+                case 6://結束+keyword
+                    //所有的資料 (check_manager IS NULL or check_manager=0) and
+                    $sqlstr_total=" SELECT DISTINCT(a.case_id), a.*,b.Detail_id,b.Detail_Start_Time,b.Detail_End_Time FROM FA.Abnormal_Notification_System_Master as a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id LEFT JOIN FA.Employee as c on a.case_userID=c.e_number or a.case_manageID=c.e_number or a.work_emp=c.e_number where ((a.case_time='$end_date'or a.confirm_date = '$end_date')  and ( c.cname like '%$keyword%' or a.case_title like '%$keyword%'  or a.case_location like '%$keyword%')) AND (a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL)";
+                    //篩選後給每頁的筆數
+                    $sqlstr_page="SELECT DISTINCT(a.case_id), a.*,b.Detail_id,b.Detail_Start_Time,b.Detail_End_Time FROM FA.Abnormal_Notification_System_Master as a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id LEFT JOIN FA.Employee as c on a.case_userID=c.e_number or a.case_manageID=c.e_number or a.work_emp=c.e_number where ((a.case_time='$end_date'or a.confirm_date = '$end_date')  and ( c.cname like '%$keyword%' or a.case_title like '%$keyword%'  or a.case_location like '%$keyword%')) AND (a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL) ORDER BY a.case_time DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+                    //總資料數量
+                    $totalstr_num="SELECT COUNT(DISTINCT(a.case_id)) FROM FA.Abnormal_Notification_System_Master as a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id LEFT JOIN FA.Employee as c on a.case_userID=c.e_number or a.case_manageID=c.e_number or a.work_emp=c.e_number where ((a.case_time='$end_date'or a.confirm_date = '$end_date')  and ( c.cname like '%$keyword%' or a.case_title like '%$keyword%'  or a.case_location like '%$keyword%')) AND (a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL)";
+                    break;
+                case 7://日期區間+keyword
+                    //所有的資料 (check_manager IS NULL or check_manager=0) and
+                    $sqlstr_total=" SELECT DISTINCT(a.case_id), a.*,b.Detail_id,b.Detail_Start_Time,b.Detail_End_Time FROM FA.Abnormal_Notification_System_Master as a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id LEFT JOIN FA.Employee as c on a.case_userID=c.e_number or a.case_manageID=c.e_number or a.work_emp=c.e_number where ( (a.case_time between '$start_date' and '$end_date' or a.confirm_date between '$start_date' and '$end_date')and (c.cname like '%$keyword%' or a.case_title like '%$keyword%'  or a.case_location like '%$keyword%')) AND (a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL)";
+                    //篩選後給每頁的筆數
+                    $sqlstr_page="SELECT DISTINCT(a.case_id), a.*,b.Detail_id,b.Detail_Start_Time,b.Detail_End_Time FROM FA.Abnormal_Notification_System_Master as a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id LEFT JOIN FA.Employee as c on a.case_userID=c.e_number or a.case_manageID=c.e_number or a.work_emp=c.e_number where ( (a.case_time between '$start_date' and '$end_date' or a.confirm_date between '$start_date' and '$end_date')and (c.cname like '%$keyword%' or a.case_title like '%$keyword%'  or a.case_location like '%$keyword%')) AND (a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL) ORDER BY a.case_time DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+                    //總資料數量
+                    $totalstr_num="SELECT COUNT(DISTINCT(a.case_id)) FROM FA.Abnormal_Notification_System_Master as a LEFT JOIN FA.Abnormal_Notification_System_Detail AS b ON a.case_id=b.case_id LEFT JOIN FA.Employee as c on a.case_userID=c.e_number or a.case_manageID=c.e_number or a.work_emp=c.e_number where ( (a.case_time between '$start_date' and '$end_date' or a.confirm_date between '$start_date' and '$end_date')and (c.cname like '%$keyword%' or a.case_title like '%$keyword%'  or a.case_location like '%$keyword%')) AND (a.manage_status IS NULL AND b.Detail_End_Time IS NOT NULL)";
+                    break;                
+            }
+        }
+
         $sql_page=$pdo->query($sqlstr_page);
         $sql_total=$pdo->query($sqlstr_total);
         $total_num=CURRENT($pdo->query($totalstr_num)->fetch());
@@ -86,16 +181,18 @@
         $i=0;  
         $j=$i+1000;      
         $k=$i+2000;
-        echo '<table border="1" align="center" width="80%">';
-        echo '<thead align="center">';
-        echo '<th width="10%">發現日期</th>';
-        echo '<th width="15%">發現地點</th>';
-        echo '<th width="36%">標   題</th>';
-        echo '<th width="7%">發現人員</th>';
-        echo '<th width="7%">指派人員</th>';
-        echo '<th width="10%">指派日期</th>';
-        echo '<th width="10%">完成日期</th>';
-        echo '<th width="5%">審   核</th>';     
+        echo '<table id="abnormaCRlD" class="display table table-striped table-bordered table-hover col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12 table-sm order-table"  aria-describedby="dataTables-example_info" data-sort-name="tid" data-sort-order="desc" data-sortable ="true">';
+        echo '<thead class="thead-light">';
+        echo '<tr align="center">';
+        echo '<th scope="col" width="10%" name="tid" sortable="true">發現日期</th>';
+        echo '<th scope="col" width="15%">發現地點</th>';
+        echo '<th scope="col" width="36%">標   題</th>';
+        echo '<th scope="col" width="7%">發現人員</th>';
+        echo '<th scope="col" width="7%">指派人員</th>';
+        echo '<th scope="col" width="10%">指派日期</th>';
+        echo '<th scope="col" width="10%">回報完成日期</th>';
+        echo '<th scope="col" width="5%">審   核</th>';
+        echo '</tr>';     
         echo '</thead>';
         echo '<tbody>';
         $mgcheck="mgcheck";
@@ -112,11 +209,9 @@
             $detail=$data_page["Detail_id"];//明細表id
             $userFindName=sql_database('cname','FA.Employee','e_number',$csaeFindEmpID);//發現人員
             $userDesName=sql_database('cname','FA.Employee','e_number',$userDesID);//被指派人員
-            echo '<tr>';            
+            echo '<tr align="center">';            
                 //顯示發現日期
-                echo '<td align="center">';
-                    echo $case_date;
-                echo '</td>';
+                echo '<th scope="row" align="center">'.$case_date.'</th>';
                 //顯示發現地點
                 echo '<td align="center">';
                     echo $case_Location;
@@ -158,38 +253,67 @@
         echo '</tbody>';
         echo '</table>';
         
-        //計算總頁數
+         //計算總頁數
         $total_page=ceil($total_num/$pageRow_record);
-        echo '<table border="0" align="center">';    
+        if ($filter=='no') {
+            echo '<table border="0" align="center">';    
             echo '<tr>';
-                echo '<td><h5>'.'您尚未完成的異常處理事件共'.$total_num.'件(共'.$total_page.'頁)'.'</h5></td>';
+                echo '<td><h5>'.'尚未審核的異常處理事件共'.$total_num.'筆(共'.$total_page.'頁)'.'</h5></td>';
             echo '</tr>';
         echo '</table>';
         echo '<table border="0" align="center">';
             echo '<tr>';
                 if ($page_num>1) {
                     $prev=$page_num-1;
-                    echo '<td><a href="abnormalLink.php?page=1">'."[第一頁]".'</a></td>';
-                    echo "<td><a href=\"abnormalLink.php?page={$prev}\">"."[<<<上一頁]".'</a></td>';
+                    echo '<td><a href="abnormalCaseReviewLink.php?filter=no&page=1">'."[第一頁]".'</a></td>';
+                    echo "<td><a href=\"abnormalCaseReviewLink.php?page={$prev}\">"."[<<<上一頁]".'</a></td>';
                 }
                 if ($page_num<$total_page) {
                     $next=$page_num+1;
-                    echo "<td>"."<a href=\"abnormalLink.php?page={$next}\">"."[下一頁>>>]".'</a></td>';
-                    echo "<td><a href=\"abnormalLink.php?page=$total_page\">".'[最末頁]'.'</a></td>';
+                    echo "<td>"."<a href=\"abnormalCaseReviewLink.php?filter=no&page={$next}\">"."[下一頁>>>]".'</a></td>';
+                    echo "<td><a href=\"abnormalCaseReviewLink.php?filter=no&page=$total_page\">".'[最末頁]'.'</a></td>';
                 }
             echo '</tr>';
         echo '</table>';
-        echo '<nav aria-label="Page navigation example" >';
-                echo '<ul class="pagination">';
-                        for ($i=1; $i <= $total_page; $i++) {
-                            if ($i==$page_num) {
-                                echo "<li class=\"page-item\"><span class='page-link text-danger' href=#><b>{$i}</b></span></li>";
-                            } else {
-                                echo "<li class=\"page-item\"><a class='page-link' href=\"abnormalLink.php?page={$i}\">{$i}</a></li>";
-                            }
-                        }
-                echo '</ul>';
-        echo '</nav>';
+         //分頁按鈕一次七頁
+            $phpfile = 'abnormalCaseReviewLink.php';
+            $page= isset($_GET['page'])?$_GET['page']:1;        
+            $getpageinfo = page($page,$total_num,$phpfile);
+            echo '<div align="center">'; 
+            echo $getpageinfo['pagecode'];//顯示分頁的html語法
+            echo '</div>';
+        } 
+        
+        if ($filter=='yes') {
+            echo '<table border="0" align="center">';    
+            echo '<tr>';
+                echo '<td><h5>'.'尚未審核的異常處理事件共'.$total_num.'筆(共'.$total_page.'頁)'.'</h5></td>';
+            echo '</tr>';
+        echo '</table>';
+        echo '<table border="0" align="center">';
+            echo '<tr>';
+                if ($page_num>1) {
+                    $prev=$page_num-1;
+                    echo "<td><a href='abnormalCaseReviewLink.php?filter=yes&page=1\"&start_date=\"".$start_date."\"&end_date=\"".$end_date."\"&keywordsearch=\"".$keyword."\"&action=next_page'>"."[第一頁]".'</a></td>';
+                    echo "<td><a href='abnormalCaseReviewLink.php?filter=yes&page={$prev}\"&start_date=\"".$start_date."\"&end_date=\"".$end_date."\"&keywordsearch=\"".$keyword."\"&action=next_page'>"."[<<<上一頁]".'</a></td>';
+                    
+                }
+                if ($page_num<$total_page) {
+                    $next=$page_num+1;
+                    echo "<td>"."<a href='abnormalCaseReviewLink.php?filter=yes&page={$next}\"&start_date=\"".$start_date."\"&end_date=\"".$end_date."\"&keywordsearch=\"".$keyword."\"&action=next_page'>"."[下一頁>>>]".'</a></td>';
+                    echo "<td><a href='abnormalCaseReviewLink.php?filter=yes&page=$total_page\"&start_date=\"".$start_date."\"&end_date=\"".$end_date."\"&keywordsearch=\"".$keyword."\"&action=next_page'>".'[最末頁]'.'</a></td>';
+                    
+                }
+            echo '</tr>';
+        echo '</table>';
+         //分頁按鈕一次七頁
+            $phpfile = 'abnormalCaseReviewLink.php';
+            $page= isset($_GET['page'])?$_GET['page']:1;        
+            $getpageinfo = pageerrapp($page,$total_num,$phpfile,$start_date,$end_date,$keyword);
+            echo '<div align="center">'; 
+            echo $getpageinfo['pagecode'];//顯示分頁的html語法
+            echo '</div>';
+        }
         ?>
         </div>
         <input type="hidden" name="total_num" value="<?= $total_num?>">;
@@ -200,7 +324,29 @@
             <a type="button" class="text-dark my-3 px-3 py-1 btn-outline-info" href="index.html">返回</a>
         </div>
     </section>
-    </form>    
+    </form>
+    <!--filter-->
+    <form action="abnormalCaseReviewLink.php" method="get" name="mtlist"> 
+        <div>
+            <div align="left">
+                日期區間搜索：</br>
+                開始時間：<input type="date" name="start_date">&nbsp&nbsp結束時間：<input type="date" name="end_date">            
+            </div>
+            <div align="left">
+                </br>關鍵字：<input type="text" name="keywordsearch">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="submit" value="查詢">
+            </div>           
+        </div>         
+        <input type="hidden" name="filter" value="yes">
+        <input type="hidden" name="action" value="new_page">
+        <input type="hidden" name="total_num" value="<?= $total_num?>">           
+    </form>
+    <!--filter end-->
+    <script>
+        (function(document) {
+            //表格排序
+            $("#abnormaCRlD").tablesorter();            
+        })(document);
+    </script>  
     <!-- footer網頁尾頁 -->
     <footer>
         <div id="footer"></div>

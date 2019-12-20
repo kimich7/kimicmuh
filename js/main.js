@@ -275,15 +275,15 @@ $(function () {
     })
     //異常案件明細通知
     $("#notice").click(function () {
-        $("#notice").attr("href", "./abnormalLink.php");
+        $("#notice").attr("href", "./abnormalLink.php?filter=no");
     })
     //被指派的異常案件明細通知
     $("#dseEmpNotice").click(function () {
-        $("#dseEmpNotice").attr("href", "./abnormalDesLink.php");
+        $("#dseEmpNotice").attr("href", "./abnormalDesLink.php?filter=no");
     })
     //待審核異常案件明細通知
     $("#caseReview").click(function () {
-        $("#caseReview").attr("href", "./abnormalCaseReviewLink.php");
+        $("#caseReview").attr("href", "./abnormalCaseReviewLink.php?filter=no");
     })
     //異常案件待指派人員清單
     $.getJSON("php/emp.php", function (data) {

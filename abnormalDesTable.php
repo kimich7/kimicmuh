@@ -20,12 +20,25 @@ foreach ($select_query as $abnormalTableInfo) {
     $abmanagerID=$abnormalTableInfo["case_manageID"];
 }
 $abFindEmpName=sql_database('cname','FA.Employee','e_number',$abFindEmpID);
+
+$selectD_str="SELECT * FROM FA.Abnormal_Notification_System_Detail WHERE case_id = $case_id";
+$selectD_query=$pdo->query($selectD_str)->fetchAll();
+foreach ($selectD_query as $abnormalTableInfoD) {
+    $Detail_id=$abnormalTableInfoD["Detail_id"];
+    $Detail_Start_Time=$abnormalTableInfoD["Detail_Start_Time"];
+    $Detail_End_Time=$abnormalTableInfoD["Detail_End_Time"];
+    $work_emp=$abnormalTableInfoD["work_emp"];
+    $Detail_description=$abnormalTableInfoD["Detail_description"];
+    $Detail_url=$abnormalTableInfoD["Detail_url"];    
+}
+
 if (isset($_POST["action"])&&($_POST["action"]=="check")) {    
         $case_id=$_POST["caseid"];//主表ID
         $endDate=date("Y-m-d");        
         $abmanagerID=$_POST["managerID"];
         if ($_POST["ans"]) {
             $ans=$_POST["ans"];
+            $ans=str_replace(chr(13).chr(10), "<br />",$ans);
             if($_FILES['file']['error']>0){
                 $location=NULL;
             }else{                
@@ -120,9 +133,10 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
                         echo"</tr>";
                     }                       
                 }
+                @$Detail_description=str_replace("<br />", "\n", $Detail_description);
                 echo '<tr>';    
                     echo '<td>問題處理描述</td>';
-                    echo '<td><textarea class="form-control" name="ans" aria-label="With textarea" rows="5" required></textarea></td>';
+                    echo '<td><textarea class="form-control" name="ans" aria-label="With textarea" rows="5" required>'.$Detail_description.'</textarea></td>';
                 echo '</tr>';
                 echo '<tr>';    
                     echo '<td><span>處理後檔案上傳(非必填)：</span></td>';
