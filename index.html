@@ -252,24 +252,37 @@
         <!-- 主選單:異常反應系統 -->
         <div class="mainMenu">
             <div class="text-muted">
-                <i class="fas fa-7x fa-bell my-3"></i>
+                <i class="fas fa-7x fa-file-alt my-3"></i>
                 <h2>異常反應/工程管理系統</h2>
-                <!--20190503修改--->
+                <!-- collapse -->
                 <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom"
                     title="請登入相應權限帳號已解鎖">
                     <button style="pointer-events: none;" type="button" class="mainBtn autho3" data-toggle="collapse"
                         data-target="#article3" id="mainBtn3" disabled>點我進入</button>
                 </span>
             </div>
+            <!-- 異常事件/工程管理 -->
             <div>
                 <article class="my-3 collapse" id="article3">
-                    <ul class="syslist list-group" id="syslist3"></ul>
-                    <li class="list-group-item">
-                        <a class="text-dark " id="errbtn" data-toggle="modal" href="#ModalCenter3">異常反應系統</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="pmc.php" class="text-dark">工程管理系統</a>
-                    </li>
+                    <ul class="syslist list-group" id="syslist2"></ul>
+
+                    <span tabindex="0" data-toggle="tooltip" data-placement="bottom">
+                        <li class="list-group-item">
+                            <div class="dropright">
+                                <button type="button" class="btn btn-light dropdown-toggle" id="abnormallist"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">異常反應系統</button>
+                                <div class="dropdown-menu" aria-labelledby="abnormallist">
+                                    <a class="dropdown-item" data-toggle="modal" href="#ModalCenter3">新增異常事件</a>
+                                    <a class="dropdown-item" href="abnormalOverview.php?filter=no">異常事件總覽</a>
+                                </div>
+                            </div>
+                        </li>
+                    </span>
+                    <span tabindex="0" data-toggle="tooltip" data-placement="bottom">
+                        <li class="list-group-item">
+                            <a href="pmc.php" class="text-dark">工程管理系統</a>
+                        </li>
+                    </span>
                 </article>
             </div>
         </div>

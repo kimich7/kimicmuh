@@ -40,7 +40,7 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
     $case_id=$_POST["caseid"];//主表ID
     $confirmDate=date("Y-m-d");
     if (isset($_POST["mgrCheck"])) {
-        $managerCheck=True;
+        $managerCheck='F';
     } else {
         $managerCheck=NULL;
     }
@@ -168,7 +168,7 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
             echo '<div class="row my-3">';
                 echo '<div class="col text-left">';
                 echo '<p class="d-inline font-weight-bold"><h4>主管審核：</h4></p>';
-                echo '<p class="d-inline text-primary"><h4>'.$manageName.'    '.'<input type="checkbox" name="mgrCheck" value="mgcheck" required>  主管確認</h4></p>';
+                echo '<p class="d-inline text-primary"><h4>'.$manageName.'    '.'<input type="checkbox" name="mgrCheck" value="F" required>  主管確認</h4></p>';
                 echo '</div>';
             echo '</div>';
         ?>
