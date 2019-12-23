@@ -201,6 +201,10 @@ $(function () {
                     $(".waterL3").removeAttr("disabled").removeAttr("style");
                     $(".billBoardwaterL3").tooltip('dispose');
                     break;
+                case "33": //異常系統主管
+                    $(".errL3").removeAttr("disabled").removeAttr("style");
+                    $(".billBoarderrL3").tooltip('dispose');
+                    break;
             }
         }
     });

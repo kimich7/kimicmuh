@@ -293,8 +293,13 @@
         <input type="hidden" name="action" value="check">
         <!-- 送出鈕 -->
         <div class="d-flex justify-content-end">
-            <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>
+            <span class="billBoarderrL3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入異常事件主管身分">
+            <button class="my-3 px-3 py-1 btn-outline-info text-dark errL3" type="submit"disabled>送出</button>&nbsp
+            </span>
+            <a type="button" class="text-dark my-3 px-3 py-1 btn-outline-info" href="abnormalOverview.php?filter=no">返回總覽清單</a>&nbsp
+            <a type="button" class="text-dark my-3 px-3 py-1 btn-outline-info" href="index.html">返回首頁</a>
         </div>
+        
     </section>
     </form>
     <!--filter-->

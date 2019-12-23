@@ -4,6 +4,12 @@ include("php/CMUHconndata.php");
 include("php/fun.php");
 session_start();
 $manageID=$_SESSION["login_number"];
+$str="SELECT sid FROM FA.securityemp as e Left join FA.securityKind as k on e.sid=k.id WHERE e.e_number = '$manageID' and k.id=33 ";
+$logLevel=item($str);
+if ($logLevel[0]['sid']!='33') {
+    echo '<h3>您並非主管到此頁面，稍後系統將回到首頁</h3>';
+    //header("Location:index.html");
+}
 $manageName=sql_database('cname','FA.Employee','e_number',$manageID);
 //取得資訊
 $case_id=$_GET['id'];

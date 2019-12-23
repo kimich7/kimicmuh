@@ -256,9 +256,14 @@
         ?>
         </div>
         <input type="hidden" name="total_num" value="<?= $total_num?>">;
-        <input type="hidden" name="action" value="check">        
+        <input type="hidden" name="action" value="check"> 
+        <div class="d-flex justify-content-end">
+        <a type="button" class="text-dark my-3 px-3 py-1 btn-outline-info" href="abnormalOverview.php?filter=no">返回總覽清單</a>&nbsp
+        <a type="button" class="text-dark my-3 px-3 py-1 btn-outline-info" href="index.html">返回首頁</a>
+        </div>       
     </section>
     </form>
+    
     <!--filter-->
     <form action="abnormalDesLink.php" method="get" name="mtlist"> 
         <div>

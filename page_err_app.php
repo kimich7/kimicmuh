@@ -58,8 +58,7 @@ function page($page,$total,$phpfile,$pagesize=10,$pagelen=7){
     $pagecode.='</div>';
     return array('pagecode'=>$pagecode,'sqllimit'=>' limit '.$offset.','.$pagesize);
 }
-?>
-<?php
+
 //保養系統搜索後的分頁程式
 function pageerrapp($page,$total,$phpfile,$startDate,$endDate,$keyword,$pagesize=10,$pagelen=7){
     $pagecode = '';//定義變數，存放分頁生成的HTML

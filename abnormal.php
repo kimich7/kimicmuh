@@ -10,11 +10,11 @@
     $errtext=str_replace(chr(13).chr(10), "<br />",$errtext);
     
     if($_FILES['uploadfile']['error']>0){
-        $insertStr="INSERT INTO FA.Abnormal_Notification_System_Master(case_title,case_location,case_time,case_userID,case_description)VALUES('$errtitle','$errloction','$errdate','$erremp','$errtext')";
+        $insertStr="INSERT INTO FA.Abnormal_Notification_System_Master(case_title,case_location,case_time,case_userID,case_description,manage_status)VALUES('$errtitle','$errloction','$errdate','$erremp','$errtext','W')";
     }else{
         move_uploaded_file($_FILES['uploadfile']['tmp_name'], 'abnormalPhoto/'.$_FILES['uploadfile']['name']);
         $location='abnormalPhoto/'.$_FILES['uploadfile']['name'];
-        $insertStr="INSERT INTO FA.Abnormal_Notification_System_Master(case_title,case_location,case_time,case_userID,case_description,case_url)VALUES('$errtitle','$errloction','$errdate','$erremp','$errtext','$location')";        
+        $insertStr="INSERT INTO FA.Abnormal_Notification_System_Master(case_title,case_location,case_time,case_userID,case_description,case_url,manage_status)VALUES('$errtitle','$errloction','$errdate','$erremp','$errtext','$location','W')";        
     }
     $insert_abnormal_master=$pdo->exec($insertStr);
      $pdo=null;

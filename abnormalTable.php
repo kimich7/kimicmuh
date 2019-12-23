@@ -25,7 +25,7 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
         $desDate=date("Y-m-d");
         if ($_POST["desemp"]) {
             $desEpmID=$_POST["desemp"];
-            $sql="UPDATE FA.Abnormal_Notification_System_Master SET  work_emp=:work_emp ,case_manageID=:case_manageID WHERE case_id=:ID";
+            $sql="UPDATE FA.Abnormal_Notification_System_Master SET manage_status='M' ,work_emp=:work_emp ,case_manageID=:case_manageID WHERE case_id=:ID";
             $stmt = $pdo->prepare($sql);
             $stmt->bindParam(':work_emp',$desEpmID,PDO::PARAM_STR);
             $stmt->bindParam(':case_manageID',$manageID,PDO::PARAM_STR);

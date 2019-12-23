@@ -191,7 +191,7 @@
         echo '<th scope="col" width="7%">指派人員</th>';
         echo '<th scope="col" width="10%">指派日期</th>';
         echo '<th scope="col" width="10%">回報完成日期</th>';
-        echo '<th scope="col" width="5%">審   核</th>';
+        echo '<th scope="col" width="5%">狀態</th>';
         echo '</tr>';     
         echo '</thead>';
         echo '<tbody>';
@@ -207,6 +207,7 @@
             $DesDate=$data_page["Detail_Start_Time"];//指派日期
             $EndDate=$data_page["Detail_End_Time"];//完成日期
             $detail=$data_page["Detail_id"];//明細表id
+            $status=$data_page["manage_status"];//狀態
             $userFindName=sql_database('cname','FA.Employee','e_number',$csaeFindEmpID);//發現人員
             $userDesName=sql_database('cname','FA.Employee','e_number',$userDesID);//被指派人員
             echo '<tr align="center">';            
@@ -217,7 +218,7 @@
                     echo $case_Location;
                 echo '</td>';
                 //顯示事件名稱，且需要的話可以點進去看詳細情形
-                echo "<td align='center'><a href='abnormalCaseReviewTable.php?id=\"".$case_id."\"&detailID=\"".$detail."\"' class=\".list-group-item list-group-item-action.\">".$case_title.'</a></td>';
+                echo "<td align='center'><a href='abnormalDesTable.php?id=\"".$case_id."\"&detailID=\"".$detail."\"' class=\".list-group-item list-group-item-action.\">".$case_title.'</a></td>';
                 //顯示發現異常事件人員
                 echo '<td align="center">';
                     echo $userFindName;
@@ -235,14 +236,39 @@
                     echo $EndDate;
                 echo '</td>';
                 //審核欄位
-                echo '<td align="center">';
-                    if ($data_page["manage_status"]) {
-                        echo "<input type='checkbox' class='employeeCheck' name=\"".$j."\" value=\"".$mgcheck."\" CHECK>";
-                    } else {
-                        echo "<input type='checkbox' class='employeeCheck' name=\"".$j."\" value=\"".$mgcheck."\" required>";
-                    }
-                    
-                echo '</td>';
+                switch ($status) {
+                    case 'W':
+                        $statustext='未審核';
+                        break;
+                    case '':
+                        $statustext='未審核';
+                        break;
+                    case NULL:
+                        $statustext='未審核';
+                        break;
+                    case 'M':
+                        if($EndDate){
+                            $statustext='待審核';
+                        }else{
+                            $statustext='進行中';
+                        }
+                        
+                        break;
+                    case 'F':
+                        $statustext='審核完成';
+                        break;                    
+                }               
+                if ($statustext=='待審核') {
+                    echo '<td>';
+                    echo '<span class="billBoarderrL3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">';
+                    echo "<a href='abnormalCaseReviewTable.php?id=\"".$case_id."\"&detailID=\"".$detail."\"' class='airconL3' Disabled>".$statustext.'</a>';
+                    echo '</span>';
+                    echo '</td>';
+                } elseif(($statustext=='待審核')and(is_null($EndDate)or$EndDate=='')){                    
+                    echo '<td>'.$statustext.'</td>';
+                }else{ 
+                    echo '<td>'.$statustext.'</td>';
+                }
                 $q=$case_id;
                 echo "<input type='hidden' name=\"".$k."\" value=\"".$q."\">";//傳遞case_id
             $i++;
@@ -319,8 +345,7 @@
         <input type="hidden" name="total_num" value="<?= $total_num?>">;
         <input type="hidden" name="action" value="check">
         <!-- 送出鈕 -->
-        <div class="d-flex justify-content-end">
-            <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>&nbsp;
+        <div class="d-flex justify-content-end">            
             <a type="button" class="text-dark my-3 px-3 py-1 btn-outline-info" href="index.html">返回</a>
         </div>
     </section>
