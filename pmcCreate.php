@@ -36,8 +36,7 @@ if (isset($_POST["pmcaction"])&&($_POST["pmcaction"]=="add")) {
     //echo '我是id'.$id;
     $insertstr="INSERT INTO FA.pmc(id,e_number,category,title,createdOn,building,status) VALUES ('$id','$empid','$pmctypname','$title','$rTime','$pmcfield','W') ";
     $insertquery =$pdo->exec($insertstr);
-    $pdo=null;
-    
+    $pdo=null;    
     header("Location: pmc.php");
 
 }
@@ -133,11 +132,11 @@ function time_rota()  //日期
     var h = (now.getHours()>9)  ? now.getHours()  : "0"+now.getHours();
     var mm = (now.getMinutes()>9)  ? now.getMinutes()  : "0"+now.getMinutes();
     var s = (now.getSeconds()>9)  ? now.getSeconds()  : "0"+now.getSeconds();
-    var id=y+m+d+h+mm+s; 
+    var id=y.toString()+m.toString()+d.toString()+h.toString()+mm.toString()+s.toString(); 
+    //var id=y&m&d&h&mm&s;
     //$("#pmcid").html(id);
     document.formpmc.pmcid.value = id;
-    document.formpmc.pmchidden.value = id;
-
+    document.formpmc.pmchidden.value = id;    
 } 
 </script> 
 </html>

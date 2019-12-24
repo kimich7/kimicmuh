@@ -54,6 +54,8 @@
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script src="./node_modules/popper.js/dist/umd/popper.min.js"></script>
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+     <!--新加入20190815表格排序-->
+    <script src="./js/jquery.tablesorter.min.js" type="text/javascript"></script>
     <!-- 連結自己的JS -->
     <script src="./js/main.js"></script>
     <title>異常事件清單總覽</title>

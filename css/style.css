@@ -109,6 +109,10 @@ body {
     border-style: none;
 }
 
+#right_area {
+    padding: 50px 30px 10px 50px;
+}
+
 /* 分頁設定 */
 /* body {
     font-family: Tahoma;
