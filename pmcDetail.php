@@ -481,7 +481,7 @@ function child_check($id,$pid){
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                <span style="font-weight:bold;"><font color="red">工程單號 [<?php echo $id; ?>] </font></span><a class="btn btn-success btn-sm" style="margin: 0 0 0 10px;" href="pmc.php">返回列表</a>
+                <span style="font-weight:bold;"><font color="red">工程單號 [<?php echo $id; ?>] </font></span><a class="btn btn-success btn-sm" style="margin: 0 0 0 10px;" href="pmc.php?filter=no">返回列表</a>
                 </div>
                 <input type="hidden" name="demandid" value="<?php echo $id; ?>">
                 <div class="panel-body">
@@ -522,9 +522,8 @@ function child_check($id,$pid){
                         <div class="col-lg-5">
                             
                             <div class="form-group">
-                            <a onclick="process_info(<?php echo $id; ?>,'','I')" class="btn btn-success btn-sm">新增回覆</a>
-                            </div>
-                                                       
+                                <a onclick="process_info(<?php echo $id; ?>,'','I')" class="btn btn-success btn-sm">新增回覆</a>
+                            </div>                                                       
                             <?php for($i = 1; $i < $pro_num; $i++){ ?>
                             <div class="process_box">
                                 <ul class="process_content">
