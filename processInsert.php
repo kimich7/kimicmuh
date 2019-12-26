@@ -12,6 +12,7 @@ $status = $_POST["status"];
 $content = $_POST["editor"];
 //$emailstatus = $_POST["email"];
 $e_number = $_POST["staffno"];
+$c=$_POST["choice"];//判斷回哪也頁面的依據
 $id = date('YmdHis');
 
 //createdUser
@@ -190,6 +191,19 @@ if($e_number == ""){
     // }
     $_SESSION["msg"] = "回覆建立完成";
 }
+switch ($c) {
+    case 'check':
+        header('Location:pmcheck.php?id='.$pmcid);
+        break;
+    case 'detail':
+        header('Location:pmcDetail.php?id='.$pmcid);
+        break;
+    case 'edit':
+        header('Location:pmcEdit.php?id='.$pmcid);
+        break;
+    default:
+        header('Location:pmc.php?filter=no');
+        break;
+}
 
-header('Location:pmcDetail.php?id='.$pmcid);
 ?>

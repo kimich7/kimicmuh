@@ -58,6 +58,8 @@
     if (isset($_POST["action"])&&($_POST["action"]=="check")) {
         $total_num=$_POST["total_num"];
         $checksum=$_POST["checksum"];
+        echo $checksum;
+        echo $total_num;
         for ($i=0; $i<$total_num ; $i++) { 
             $j=$i+1000;
             $k=$i+2000;                    
@@ -85,6 +87,7 @@
                 $stmt->bindParam(':managerID',$checkuserID,PDO::PARAM_STR);
             } 
             if($checksum==2) {
+                echo '我進來了';
                 $sql="UPDATE FA.Water_System_Record_Master SET  check_number=:check_number,r_member=:r_member WHERE recordID=:ID";
                 $stmt = $pdo->prepare($sql);
                 $stmt->bindParam(':check_number',$memberCheck,PDO::PARAM_STR);
@@ -223,6 +226,7 @@
             //分頁按鈕end
         ?>
         </div>
+        <input type="hidden" name="total_num" value="<?= $total_num?>">
         <input type="hidden" name="action" value="check">
         <input type="hidden" name="checksum" value="<?= $checksum ?>">
         <!-- 送出鈕 -->

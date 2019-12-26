@@ -24,7 +24,7 @@ while ($row=$pmcdetailstr -> fetch()) {
     $cname=$row['cname'];
 }
 
-$selectprocess = "select p.id,p.content,p.createdOn,p.createdUser,p.updatedOn,p.updatedUser,p.deletedOn,p.deletedUser,p.status,s.cname from FA.process as p LEFT JOIN FA.Employee as s ON p.createdUser=s.e_number where p.pmc_id='".$id."' and p.related_id='' and p.status='Y' order by p.createdOn asc";
+$selectprocess = "select p.id,p.content,p.createdOn,p.createdUser,p.updatedOn,p.updatedUser,p.deletedOn,p.deletedUser,p.status,s.cname from FA.process as p LEFT JOIN FA.Employee as s ON p.createdUser=s.e_number where p.pmc_id='".$id."' and p.related_id='' and p.status='Y' order by p.createdOn DESC";
 $processquery = $pdo-> query($selectprocess);
     if ($pmcemp==$userID) {
         $editor=1;
@@ -62,7 +62,7 @@ $GLOBALS["x"] = 1;
 $str=$pdo;
 //判斷是否有子層
 function child_check($id,$pid){
-    $selectchild = "select p.id,p.content,p.createdOn,p.createdUser,p.updatedOn,p.updatedUser,p.deletedOn,p.deletedUser,p.status,s.cname from FA.process as p LEFT JOIN FA.Employee as s ON p.createdUser=s.e_number where p.pmc_id='".$id."' and p.related_id='".$pid."' and p.status='Y' order by p.createdOn asc";
+    $selectchild = "select p.id,p.content,p.createdOn,p.createdUser,p.updatedOn,p.updatedUser,p.deletedOn,p.deletedUser,p.status,s.cname from FA.process as p LEFT JOIN FA.Employee as s ON p.createdUser=s.e_number where p.pmc_id='".$id."' and p.related_id='".$pid."' and p.status='Y' order by p.createdOn DESC";
     $childquery = $GLOBALS["str"] -> query($selectchild);
     $numstr="SELECT Count(*) from FA.process as p LEFT JOIN FA.Employee as s ON p.createdUser=s.e_number where p.pmc_id='".$id."' and p.related_id='".$pid."' and p.status='Y'";
     $childnum=Current($GLOBALS["str"]->query($numstr)->fetch());
@@ -132,8 +132,8 @@ if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
     $datetime1=$datetime.'.000';
     $compare=$_POST["compare"];    
     (string)$pid=date("YmdHis");
-
-    $MasterStr="UPDATE FA.pmc SET title=:title,process=:process,content=:content,contract=:contract,building=:building WHERE id=:id";
+    
+    $MasterStr="UPDATE FA.pmc SET title=:title,process=:process,content=:content,contract=:contract,building=:building,status='M' WHERE id=:id";
     $stmtM = $pdo->prepare($MasterStr);
     $stmtM->bindParam(':title',$title,PDO::PARAM_STR);
     $stmtM->bindParam(':process',$process,PDO::PARAM_STR);
@@ -231,11 +231,12 @@ if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
             -ms-box-sizing: border-box;
             -moz-box-sizing: border-box;
             box-sizing: border-box;
+            font-family: '微軟正黑體';
             
             <?php if ($editor==1) { ?>
                 background-color :#FFFFFF;
             <?php } else {?>
-                background-color :#D3D3D3;
+                background-color :#F0FFFF;
             <?php }?>
             /* background-color :#BBFFEE; */
         }
@@ -328,16 +329,18 @@ if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
             font-family: '微軟正黑體';
             letter-spacing: 1px;
             line-height: 21px;
-            border: 1px solid #eee;
+            border: 1px solid #000000;
             border-radius: 5px;
             -webkit-box-sizing: border-box;
             -ms-box-sizing: border-box;
             -moz-box-sizing: border-box;
             box-sizing: border-box;
-            background-color: #fff;
+            background-color: #f5f5f5;
+            /* background-color: #fff; */
         }
         .process_box:nth-child(odd) {
-            background-color:#fcfcfc;
+            background-color:#f5f5f5;
+            /* background-color:#fcfcfc */
         }
         .process_box ul.process_content {
             clear: both;
@@ -450,6 +453,7 @@ if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
             <input type="hidden" name="id" value="">
             <input type="hidden" name="rid" value="">
             <input type="hidden" name="status" value="">
+            <input type="hidden" name="choice" value="edit">
             <input type="hidden" name="staffno" value="<?php echo $_SESSION["login_number"]; ?>">
             <div class="form-group">
                 <label>回覆內容</label>
@@ -572,10 +576,10 @@ if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
                         <!-- 進度回報 -->
                         <div class="col-lg-5">
                             
-                            <div class="form-group">
-                                <a onclick="process_info(<?php echo $id; ?>,'','I')" class="btn btn-success btn-sm">新增回覆</a>
-                            </div>                                                       
-                            <?php for($i = 1; $i < $pro_num; $i++){ ?>
+                            <!-- <div class="form-group">
+                                <a onclick="process_info(<?php //echo $id; ?>,'','I')" class="btn btn-success btn-sm">新增回覆</a>
+                            </div>                                                        -->
+                            <?php for($i = 0; $i < $pro_num; $i++){ ?>
                             <div class="process_box">
                                 <ul class="process_content">
                                 <?php echo $pro_arr[$i]["content"]; ?>

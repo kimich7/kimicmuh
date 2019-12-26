@@ -7,6 +7,13 @@ if(isset($_GET["id"]) and $_GET["id"] != ''){
 }
 $userID=$_SESSION["login_number"];//登錄人員ID
 $username=$_SESSION["login_member"] ;//登錄人員名稱
+$str="SELECT sid FROM FA.securityemp as e Left join FA.securityKind as k on e.sid=k.id WHERE e.e_number = '$userID' and k.id=34 ";
+@$logLevel=item($str);
+if ($logLevel[0]['sid']!='34') {
+    echo '<h3>您並非主管到此頁面，稍後系統將回到首頁</h3>';
+    header("Refresh:3;url=pmc.php?filter=no");
+}
+
 $detail="SELECT d.id,d.e_number,d.category,d.title,d.createdOn,d.process,d.content,d.contract,d.building,d.endon,d.status,s.cname from FA.pmc as d LEFT JOIN FA.Employee as s ON d.e_number=s.e_number where d.id='$id'";
 $pmcdetailstr=$pdo->query($detail);
 while ($row=$pmcdetailstr -> fetch()) {
@@ -28,9 +35,14 @@ $process=str_replace(chr(13).chr(10), "<br/>", $process);
 $content=str_replace(chr(13).chr(10), "<br/>", $content);
 $contract=str_replace(chr(13).chr(10), "<br/>", $contract);
 $building=str_replace(chr(13).chr(10), "<br/>", $building);
-
 $selectprocess = "select p.id,p.content,p.createdOn,p.createdUser,p.updatedOn,p.updatedUser,p.deletedOn,p.deletedUser,p.status,s.cname from FA.process as p LEFT JOIN FA.Employee as s ON p.createdUser=s.e_number where p.pmc_id='".$id."' and p.related_id='' and p.status='Y' order by p.createdOn DESC";
 $processquery = $pdo-> query($selectprocess);
+    if ($pmcemp==$userID) {
+        $editor=1;
+    } else {
+        $editor=0;
+    }
+                            
 $pro_arr=array();
 while($prorow=$processquery -> fetch()){
         $pid = $prorow['id'];
@@ -120,8 +132,39 @@ function child_check($id,$pid){
         }
     }
 }
-//echo "SESSION:".$_SESSION["dept"].'<br>';
-//echo "ID:".$dept_id;
+if (isset($_POST["action"])&&($_POST["action"]=="Check")) {
+    $id=$_POST["demandid"];//pmcid工程單號
+    $pmcCheck=$_POST['pmcCheck'];//是否勾選審核欄位
+    $Status=$_POST['status'];//現狀狀態如何
+
+    if ($pmcCheck=='F') {
+        $sans='F';
+    } else {
+        if ($Status=='F' or $Status=='M') {
+            $sans='M';
+        } else {
+            $sans=$Status;
+        }
+        
+    }
+    
+    $datetime = date("Y-m-d H:i:s");
+    $datetime1=$datetime.'.000';
+    $compare=$_POST["compare"];    
+    (string)$pid=date("YmdHis");
+
+    $MasterStr="UPDATE FA.pmc SET status=:status WHERE id=:id";
+    $stmtM = $pdo->prepare($MasterStr);
+    $stmtM->bindParam(':status',$sans,PDO::PARAM_STR);
+    $stmtM->bindParam(':id',$id,PDO::PARAM_STR);
+    $stmtM->execute();    
+    $pdo=null;
+    
+    header("Location:pmc.php?filter=no");
+}
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -144,9 +187,12 @@ function child_check($id,$pid){
     <script src="./js/main.js"></script>    
     <title>工程專案內容</title>
     <!--牧宏引進的-->
+    <!-- 連結自己的CSS -->
+    
     <link href="css/menu.css" rel="stylesheet">
     <link href="css/mail.css" rel="stylesheet">
     <link href="css/reset.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
     <!-- SB Admin -->
     <!-- Bootstrap Core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -190,7 +236,7 @@ function child_check($id,$pid){
             margin: 0 0 20px 0;
             padding: 10px;
             overflow: hidden;
-            border: 1px solid #eee;
+            border: 2px solid #A9A9A9;
             border-radius: 5px;
             -webkit-box-sizing: border-box;
             -ms-box-sizing: border-box;
@@ -198,6 +244,7 @@ function child_check($id,$pid){
             box-sizing: border-box;
             font-family: '微軟正黑體';
             background-color :#F0FFFF;
+            /* background-color :#BBFFEE; */
         }
         .attachment_box {
             width: 45%;
@@ -295,9 +342,11 @@ function child_check($id,$pid){
             -moz-box-sizing: border-box;
             box-sizing: border-box;
             background-color: #f5f5f5;
+            /* background-color: #fff; */
         }
         .process_box:nth-child(odd) {
             background-color:#f5f5f5;
+            /* background-color:#fcfcfc */
         }
         .process_box ul.process_content {
             clear: both;
@@ -404,24 +453,26 @@ function child_check($id,$pid){
             </a>
         </nav>
     </header>
+    
+    <!--回覆視窗-->
     <div id="ckbox">
         <form method="post" name="process_form">
             <input type="hidden" name="id" value="">
             <input type="hidden" name="rid" value="">
             <input type="hidden" name="status" value="">
-            <input type="hidden" name="choice" value="detail">
+            <input type="hidden" name="choice" value="check">
             <input type="hidden" name="staffno" value="<?php echo $_SESSION["login_number"]; ?>">
             <div class="form-group">
                 <label>回覆內容</label>
                 <textarea name="editor" id="editor" class="form-control" rows="12"></textarea>
-            </div>
-            
+            </div>            
             <div class="form-group" style="border-top:1px solid #eee;">
                 <a class="btn btn-primary" id="submit">送出</a>
                 <a class="btn btn-warning" id="cancel" onclick="cancel_process()">取消</a>
             </div>
         </form>
     </div>
+    <!--回覆視窗end-->     
     
     <?php
         include_once "ckeditor/ckeditor.php";
@@ -429,89 +480,138 @@ function child_check($id,$pid){
         $CKEditor->basePath = 'ckeditor/';
         $CKEditor->replace("editor");
     ?>
+    
     <div id="right_area">
-    <!-- /.row -->
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                <span style="font-weight:bold;"><font color="red">工程單號 [<?php echo $id; ?>] </font></span><a class="btn btn-success btn-sm" style="margin: 0 0 0 10px;" href="pmc.php?filter=no">返回列表</a>
-                </div>
-                <input type="hidden" name="demandid" value="<?php echo $id; ?>">
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-lg-7">
-                            <div class="form-group">
-                            <label><span style="font-weight:bold;">工程類型：</span></label>
-                                <div class="content_box"><?php echo $category; ?></div>
-                            </div>
-                            <div class="form-group">
-                            <label><span style="font-weight:bold;">工程名稱：</span></label>                                
-                               <div class="content_box"><?php echo $title; ?></div>                              
-                            </div>
-                            <div class="form-group">
-                            <label><span style="font-weight:bold;">工程流程進度及金額：</span></label>
-                                <div class="content_box"><?php echo $process; ?></div>
-                            </div>
-                            <div class="form-group">
-                            <label><span style="font-weight:bold;">工程進度/異常說明：</span></label>
+        <div class="row">    
+            <div class="col-lg-12">            
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                    <span style="font-weight:bold;"><font color="red">工程單號 [<?php echo $id; ?>] </font></span><a class="btn btn-success btn-sm" style="margin: 0 0 0 10px;" href="pmc.php?filter=no">返回列表</a>
+                    </div>                    
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-7">
+                            <form action="" method="post" name="pmcEdit">
+                                <input type="hidden" name="demandid" value="<?php echo $id; ?>">
+                                <!--工程類型category-->
+                                <div class="form-group">
+                                <label><span style="font-weight:bold;">工程類型：</span></label>
+                                    <div class="content_box"><?php echo $category; ?></div>
+                                </div>
+                                <!--工程名稱title-->
+                                <div class="form-group">
+                                <label><span style="font-weight:bold;">工程名稱：</span></label>
+                                <div class="content_box"><?php echo $title; ?></div>
+                                </div>
+                                <!--工程流程進度及金額process-->
+                                <div class="form-group">
+                                <label><span style="font-weight:bold;">工程流程進度及金額：</span></label>
+                                <div class="content_box"><?php echo $process; ?></div>                                
+                                </div>
+                                
+                                <!--工程進度/異常說明content-->
+                                <input type="hidden" name="compare" value="<?php echo $content; ?>">
+                                <div class="form-group">
+                                <label><span style="font-weight:bold;">工程進度/異常說明：</span></label>
                                 <div class="content_box"><?php echo $content; ?></div>
-                            </div>
-                            <div class="form-group">
-                            <label><span style="font-weight:bold;">日期、決包廠商、金額：</span></label>
+                                </div>
+                                
+                                <!--日期、決包廠商、金額contract-->
+                                <div class="form-group">
+                                <label><span style="font-weight:bold;">日期、決包廠商、金額：</span></label>
                                 <div class="content_box"><?php echo $contract; ?></div>
+                                </div>
+                                
+                                <!--工程範圍(棟別)building-->
+                                <div class="form-group">
+                                <label><span style="font-weight:bold;">工程範圍(位置)：</span></label>
+                                <div class="content_box"><?= $building ?></div>
+                                </div>
+                                
+                                <!--承辦人-->                            
+                                <div class="form-group" style="clear:both;">
+                                <label><span style="font-weight:bold;">承辦人：</span></label>
+                                <div class="content_box"><?php echo $cname; ?></div>
+                                </div>
+                                
+                                <!--交辦日期-->
+                                <div class="form-group">
+                                <label><span style="font-weight:bold;">交辦日期：</span></label>
+                                <div class="content_box"><?php echo $createdOn; ?></div>
+                                </div> 
+                                <input type="hidden" name="action" value="Check">
+                                <input type="hidden" name="status" value="<?= $status ?>">
+                                
+                                <!-- 審核確認 --> 
+                                <div class="form-group">   
+                                <?php if ($status=='W'or $status=='' or $status==null or $logLevel[0]['sid']!='34') {?>
+                                    <label><span style="font-weight:bold;" title="非主管身分或案件尚未開始進行無法審核">工程專案主管：<?= $username?>&nbsp&nbsp&nbsp<input type="checkbox" name="pmcCheck" value='F' disabled>審核</span></label>
+                                <?PHP } ?>
+                                <?php if ($status =='M') {?>
+                                    <label><span style="font-weight:bold;">工程專案主管：<?= $username?>&nbsp&nbsp&nbsp<input type="checkbox" name="pmcCheck" value='F'>審核</span></label>
+                                <?PHP } ?>
+                                <?php if ($status =='F') {?>
+                                    <label><span style="font-weight:bold;">工程專案主管：<?= $username?>&nbsp&nbsp&nbsp<input type="checkbox" name="pmcCheck" value='F' checked>審核</span></label>
+                                <?PHP } ?>
+                                </div>
+                                <!-- 送出鈕 -->
+                                <!-- <div class="form-group">  -->
+                                    <div class="d-flex justify-content-end">
+                                    <?php if ($logLevel[0]['sid']=='34'&& ($status =='M' or $status =='F')) {?>
+                                        <button type="submit"
+                                            class="btn btn-primary" formtarget="_self">送出</button>&nbsp&nbsp&nbsp
+                                    <?php } else {?>
+                                        <span data-toggle="tooltip" data-placement="bottom" title="非主管身分或案件尚未開始進行無法審核">
+                                        <button style="pointer-events: none;" type="submit"
+                                            class="btn btn-primary" formtarget="_self" disabled>送出</button>&nbsp&nbsp&nbsp
+                                        </span>
+                                    <?php }?>
+                                    <input type="button" value="返回離開" class="btn btn-primary" onclick="location.href='pmc.php?filter=no'">
+                                    </div>
+                                <!-- </div> -->
+                            </form>
                             </div>
-                            <div class="form-group">
-                            <label><span style="font-weight:bold;">工程範圍(棟別)：</span></label>
-                                <div class="content_box"><?php echo $building; ?></div>
-                            </div>                            
-                            <div class="form-group" style="clear:both;">
-                            <label><span style="font-weight:bold;">承辦人：</span></label>
-                            <div class="content_box"><?php echo $pmcemp; ?></div>
-                            <label><span style="font-weight:bold;">交辦日期：</span></label>
-                            <div class="content_box"><?php echo $createdOn; ?></div>
-                            </div>
-                        </div>
-                        <!-- 進度回報 -->
-                        <div class="col-lg-5">
-                            
-                            <div class="form-group">
+                        
+                            <!-- 進度回報 -->                           
+                            <div class="col-lg-5">
+                                <div class="form-group">
                                     <label><span style="font-weight:bold; float:left">工程內容履歷/主管意見或回覆：</span></label>
                                     <div style="float:right; position:relative;top:-15px"><a onclick="process_info(<?php echo $id; ?>,'','I')"   class="btn btn-success btn-sm">新增回覆</a></div>
-                            </div>                                                       
-                            <?php for($i = 0; $i < $pro_num; $i++){ ?>
-                            <div class="process_box">
-                                <ul class="process_content">
-                                <?php echo $pro_arr[$i]["content"]; ?>
-                                </ul>
-                                <ul class="process_info">
-                                    <li class="process_li">
-                                    <?php echo $pro_arr[$i]["cname"]; ?>
-                                    <?php if($pro_arr[$i]["status"] == 'Y' and $pro_arr[$i]["updatedUser"] == ''){ ?>
-                                     (建立時間: <?php echo $pro_arr[$i]["createdOn"]; ?>)
-                                    <?php }elseif($pro_arr[$i]["status"] == 'Y' and $pro_arr[$i]["updatedUser"] != ''){ ?>
-                                     (更新時間: <?php echo $pro_arr[$i]["updatedOn"]; ?>)
-                                    <?php } ?>
-                                    </li>
-                                    <li class="process_li">
-                                    <a onclick="process_info(<?php echo $id; ?>,<?php echo $pro_arr[$i]["id"]; ?>,'I')" class="btn btn-primary btn-sm" style="margin:0;">回覆</a>
-                                    </li>
-                                    <?php if($_SESSION["login_number"] == $pro_arr[$i]["createdUser"]){ ?>
-                                    <li class="process_li">
-                                    <a onclick="process_info(<?php echo $id; ?>,<?php echo $pro_arr[$i]['id']; ?>,'U')" class="btn btn-info btn-sm" style="margin:0;">修改</a>
-                                    </li>
-                                    <?php } ?>
-                                </ul>
+                                </div>
+                                
+                                <?php for($i = 0; $i < $pro_num; $i++){ ?>
+                                <div class="process_box">
+                                    <ul class="process_content">
+                                    <?php echo $pro_arr[$i]["content"]; ?>
+                                    </ul>
+                                    <ul class="process_info">
+                                        <li class="process_li">
+                                        <?php echo $pro_arr[$i]["cname"]; ?>
+                                        <?php if($pro_arr[$i]["status"] == 'Y' and $pro_arr[$i]["updatedUser"] == ''){ ?>
+                                        (建立時間: <?php echo $pro_arr[$i]["createdOn"]; ?>)
+                                        <?php }elseif($pro_arr[$i]["status"] == 'Y' and $pro_arr[$i]["updatedUser"] != ''){ ?>
+                                        (更新時間: <?php echo $pro_arr[$i]["updatedOn"]; ?>)
+                                        <?php } ?>
+                                        </li>
+                                        <li class="process_li">
+                                        <a onclick="process_info(<?php echo $id; ?>,<?php echo $pro_arr[$i]["id"]; ?>,'I')" class="btn btn-primary btn-sm" style="margin:0;">回覆</a>
+                                        </li>
+                                        <?php if($_SESSION["login_number"] == $pro_arr[$i]["createdUser"]){ ?>
+                                        <li class="process_li">
+                                        <a onclick="process_info(<?php echo $id; ?>,<?php echo $pro_arr[$i]['id']; ?>,'U')" class="btn btn-info btn-sm" style="margin:0;">修改</a>
+                                        </li>
+                                        <?php } ?>
+                                    </ul>
+                                </div>
+                                <?php echo child_check($id,$pro_arr[$i]["id"]); ?>
+                                <?php } ?>
                             </div>
-                            <?php echo child_check($id,$pro_arr[$i]["id"]); ?>
-                            <?php } ?>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-<!-- </div> -->
+</div>
 <!-- SB Admin -->
     <!-- jQuery -->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -820,6 +920,17 @@ $(function(){
         }
     });
 });
+//------20191226自動增長的TextArea
+    function autogrow(textarea) {
+        var adjustedHeight = textarea.clientHeight;
+
+        adjustedHeight = Math.max(textarea.scrollHeight, adjustedHeight);
+        if (adjustedHeight > textarea.clientHeight) {
+            textarea.style.height = adjustedHeight + 'px';
+        }
+
+    }
+    //------動增長的TextArea結束
 </script>
 <?php
 $_SESSION["msg"] = "";

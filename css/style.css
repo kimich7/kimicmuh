@@ -112,30 +112,3 @@ body {
 #right_area {
     padding: 50px 30px 10px 50px;
 }
-
-/* 分頁設定 */
-/* body {
-    font-family: Tahoma;
-}
-
-.page {
-    padding: 2px;
-    font-weight: bolder;
-    font-size: 12px;
-}
-
-.page a {
-    border: 1px solid #ccc;
-    padding: 0 5px 0 5px;
-    margin: 2px;
-    text-decoration: none;
-    color: #333;
-}
-
-.page span {
-    padding: 0 5px 0 5px;
-    margin: 2px;
-    background: #09f;
-    color: #fff;
-    border: 1px solid #09c;
-} */

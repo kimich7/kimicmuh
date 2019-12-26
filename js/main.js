@@ -205,9 +205,14 @@ $(function () {
                     $(".errL3").removeAttr("disabled").removeAttr("style");
                     $(".billBoarderrL3").tooltip('dispose');
                     break;
+                case "34": //工程系統主管
+                    $(".engL3").removeAttr("disabled").removeAttr("style");
+                    $(".billBoardengL3").tooltip('dispose');
+                    break;
             }
         }
     });
+
     //------20190902保養表單各系統權限設定
     $("#mmtbtn").click(function () {
         var mmtsys = $("#mmtchoice").val();

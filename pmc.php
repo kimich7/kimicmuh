@@ -186,9 +186,9 @@ $pmcnum=Count($pmc);
             <th scope="col" width="5%">承辦人</th>
             <th scope="col">工程名稱</th>
             <th scope="col">交辦日期</th>
-            <th scope="col">棟別</th>
-            <th scope="col">狀態</th>
-            <th scope="col"></th>
+            <th scope="col">地點</th>
+            <th scope="col">主管回覆及審核/狀態</th>
+            <th scope="col">進度更新</th>
             </tr>
         </thead>
         <tbody>
@@ -205,7 +205,7 @@ $pmcnum=Count($pmc);
                 case '':
                     $pmcstatus='尚未處理';
                     break;
-                case 'P':
+                case 'M':
                     $pmcstatus='處理中';
                     break;
                 case 'F':
@@ -219,8 +219,8 @@ $pmcnum=Count($pmc);
                 <td><a href="pmcDetail.php?id=<?= $pmc[$i]['id']?>"><?= $pmc[$i]['title']?></a></td>
                 <td><?= $pmc[$i]['createdOn']?></td>
                 <td><?= $pmc[$i]['building']?></td>
-                <td><?= $pmcstatus?></td>
-                <td><a href="pmcEdit.php?id=<?= $pmc[$i]['id']?>">內容編輯與修改</a></td>
+                <td><a href="pmcheck.php?id=<?= $pmc[$i]['id']?>" class="engL3" Disabled ><?= $pmcstatus?></td>
+                <td><a href="pmcEdit.php?id=<?= $pmc[$i]['id']?>">修改及更新</a></td>
             </tr>
         <?php }?>
         </tbody>
@@ -231,7 +231,7 @@ $pmcnum=Count($pmc);
         if ($filter=='no') {
             echo '<table border="0" align="center">';    
             echo '<tr>';
-                echo '<td><h5>'.'尚未審核的異常處理事件共'.$total_num.'筆(共'.$total_page.'頁)'.'</h5></td>';
+                echo '<td><h5>'.'工程管理專案共'.$total_num.'筆(共'.$total_page.'頁)'.'</h5></td>';
             echo '</tr>';
         echo '</table>';
         echo '<table border="0" align="center">';
