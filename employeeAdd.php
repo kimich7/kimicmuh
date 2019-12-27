@@ -43,7 +43,7 @@
                 }
             }          
             $pdo=null;
-            header("Location: employee.php");
+            header("Location: employee.php?filter=no");
         }
         
 
@@ -82,7 +82,7 @@
     </header>
     <!-- 表格內容 -->
     <h2 align="center">工務所人員管理系統-新增人員</h2>
-    <p align="center"><a href="employee.php">回主畫面</a></p>
+    <p align="center"><a href="employee.php?filter=no">回主畫面</a></p>
     <form action="" method="post" name="formAdd" id="formAdd">
     <?php
     echo '<table border="3" align="center" cellpadding="6" width="40%">';

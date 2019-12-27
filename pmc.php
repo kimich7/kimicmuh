@@ -132,7 +132,7 @@ while ($row=$sql_page->fetch()) {
         'status'=>$row["status"]//狀態(W/P/H/F/D 尚未受理/處理中/部分完成/完成/作廢)
     );    
 }
-$pmcnum=Count($pmc);
+@$pmcnum=Count($pmc);
 ?>
 
 <!DOCTYPE html>
@@ -251,7 +251,7 @@ $pmcnum=Count($pmc);
          //分頁按鈕一次七頁
             $phpfile = 'pmc.php';
             $page= isset($_GET['page'])?$_GET['page']:1;        
-            $getpageinfo = page($page,$total_num,$phpfile);
+            @$getpageinfo = page($page,$total_num,$phpfile);
             echo '<div align="center">'; 
             echo $getpageinfo['pagecode'];//顯示分頁的html語法
             echo '</div>';

@@ -24,7 +24,7 @@
         $stmt->bindParam(':cID',$_POST["cID"],PDO::PARAM_STR);      
         $stmt->execute();
         $pdo=null;
-        header("Location: employee.php");
+        header("Location: employee.php?filter=no");
     }
     $id=$_GET["id"];
     $sqlselect="SELECT e_number,cname,passcard,title,rank FROM FA.Employee WHERE e_number='$id'";

@@ -317,7 +317,7 @@ if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
             box-sizing: border-box;
         }
 
-        /* process */
+        /* process*/
         .process_box {
             clear:both;
             width: 100%;
@@ -574,11 +574,10 @@ if (isset($_POST["action"])&&($_POST["action"]=="Edit")) {
                     </div>
                     </form>
                         <!-- 進度回報 -->
-                        <div class="col-lg-5">
-                            
-                            <!-- <div class="form-group">
-                                <a onclick="process_info(<?php //echo $id; ?>,'','I')" class="btn btn-success btn-sm">新增回覆</a>
-                            </div>                                                        -->
+                        <div class="col-lg-5">                            
+                            <div class="form-group">
+                                <label><span style="font-weight:bold;">工程內容履歷/主管意見或回覆：</span></label>                                    
+                            </div>
                             <?php for($i = 0; $i < $pro_num; $i++){ ?>
                             <div class="process_box">
                                 <ul class="process_content">
