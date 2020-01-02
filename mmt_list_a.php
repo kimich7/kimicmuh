@@ -18,27 +18,17 @@ if (isset($_GET['page'])) {
     $page_num=$_GET['page'];
 }
 $startRow_record=($page_num-1)*$pageRow_record;
-//所有的資料
-$ammtmstr="SELECT id,bid,fid,eid,rdate,datekind,tid,macNo,remark,emp,sremp,cemp,status FROM FA.MMT_AtableM ";//全部資料
-//總資料數量
-$ammtmnumstr="SELECT Count(id)FROM FA.MMT_AtableM ";
-$ammtmnum=Current($pdo->query($ammtmnumstr)->fetch());//全部數量
-$total_num=$ammtmnum;
 
-//----還沒帶入----
 //篩選後給每頁的筆數
 $sqlstr_page="SELECT id,bid,fid,eid,rdate,datekind,tid,macNo,remark,emp,sremp,cemp,status FROM FA.MMT_AtableM  ORDER BY rdate DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+//總資料數量
+$ammtmnumstr="SELECT Count(id)FROM FA.MMT_AtableM ";
 $sql_page=$pdo->query($sqlstr_page);
-// $sql_total=$pdo->query($sqlstr_total);
-//$total_num=CURRENT($pdo->query($totalstr_num)->fetch());
-
+$ammtmnum=Current($pdo->query($ammtmnumstr)->fetch());//全部數量
+$total_num=$ammtmnum;
 //本頁開始的筆數
 $i=0;        
 $k=$i+2000;
-$ammtmQuery=$pdo->query($ammtmstr);
-$ammtmAll=array();
-//----還沒帶入END----
-
 ?>
 
 <!DOCTYPE html>
@@ -53,28 +43,16 @@ $ammtmAll=array();
     <link rel="stylesheet" href="./node_modules/normalize.css/normalize.css">
     <!-- 連結自己的CSS -->
     <link rel="stylesheet" href="./css/style.css">
-
-    
     <!-- 連結外部的JS -->
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script src="./node_modules/popper.js/dist/umd/popper.min.js"></script>
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
     <!--新加入20190815表格排序-->
     <script src="./js/jquery.tablesorter.min.js" type="text/javascript"></script>
-
-    <!-- <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <link rel="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"> -->
-
-
     <!-- 連結自己的JS -->
     <script src="./js/main.js"></script>
     <title>工程專案清單</title>
-    <!--測試-->
-        <style>
-            
-        </style>
-    <!--測試end-->
+    
 </head>
 <body>
      <!-- header網頁標題 -->
@@ -227,7 +205,7 @@ $ammtmAll=array();
             $page= isset($_GET['page'])?$_GET['page']:1;        
             $getpageinfo = page($page,$total_num,$phpfile);
             echo '<div align="center">'; 
-            echo $getpageinfo['pagecode'];//顯示分頁的html語法
+            echo @$getpageinfo['pagecode'];//顯示分頁的html語法
             echo '</div>';
         //分頁按鈕end
         // echo '<div class="container">';
