@@ -1,19 +1,58 @@
 /* 各個瀏覽器中,元素的總寬度和高度中包含填充和邊框： */
 
+/* 全域設定 */
+
 * {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
 }
 
+/* 針對Body進行設定 */
+
 body {
     max-width: 100%;
     overflow-x: hidden;
 }
 
-/* header網頁標題 */
+/* 登入頁背景設定 */
 
-#header {
+.login-bg {
+    height: 100vh;
+    background-image: url("../jpg/jon-flobrant-49795-unsplash.jpg");
+    background-size: cover;
+    background-position: center center;
+}
+
+/* 修改密碼設定 */
+
+.changepw {
+    height: 375px;
+    width: 400px;
+    background-color: rgba(0, 0, 0, 0.7);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -200px;
+    margin-top: -150px;
+}
+
+/* 登入表單設定 */
+
+.logintable {
+    height: 300px;
+    width: 400px;
+    background-color: rgba(0, 0, 0, 0.7);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -200px;
+    margin-top: -150px;
+}
+
+/* header網頁標題背景設定 */
+
+.header {
     height: 50vh;
     background-image: url("../jpg/dustin-lee-19667.jpg");
     background-size: cover;
@@ -21,6 +60,8 @@ body {
     position: relative;
     color: white;
 }
+
+/* header網頁標題透明黑幕設定 */
 
 .header-cover {
     width: 100%;
@@ -32,28 +73,42 @@ body {
     z-index: 1;
 }
 
+/* header網頁標題設定 */
+
 .header-content {
     position: relative;
     z-index: 3;
 }
 
-/* section網頁系統部分 */
-
-.system {
-    /* 對內的留白 padding: 上下 左右; */
-    padding-top: 15px;
-    margin-bottom: 30px;
-}
+/* 頁尾清單設定 */
 
 .footer-list {
     padding-left: 15px;
 }
 
+/* 選擇表單背景設定 */
+
+.back {
+    background-image: url("../jpg/erez-attias-58871-unsplash.jpg");
+    background-size: cover;
+    padding: 1em;
+}
+
+/* 選擇表單設定 */
+
 .choice_table {
-    background-color: #4792f5;
-    background-image: url("../jpg/28-512.jpg");
-    background-repeat: no-repeat;
-    background-position: center center;
+    background-color: rgba(0, 0, 0, 0.7);
     padding: 30px;
-    background-size: 100%;
+}
+
+/* 選擇表單設定 */
+
+.choice_table1 {
+    background-color: rgba(0, 0, 0, 0);
+    padding: 30px;
+    border-style: none;
+}
+
+#right_area {
+    padding: 50px 30px 10px 50px;
 }

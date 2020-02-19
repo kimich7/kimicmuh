@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- 連結外部的CSS -->
+    <!-- 新設 -->
+    <link href="./css/jquery-ui.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <link href="./node_modules/fontawesome-free-5.0.6/web-fonts-with-css/css/fontawesome-all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./node_modules/normalize.css/normalize.css">
+    <!-- 連結自己的CSS -->
+    <link rel="stylesheet" href="./css/style.css">
+    <!-- 連結外部的JS -->
+    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="./node_modules/popper.js/dist/umd/popper.min.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- 連結自己的JS -->
+    <script src="./js/main.js"></script>
+    <!-- 新設 -->
+    <script src="./js/jquery-ui.min.js"></script>
+    <title>設備保養表單選擇</title>
+</head>
+
+<body>
+    <!-- header網頁標題 -->
+    <header>
+        <div id="header"></div>
+    </header>
+    <!-- form表單連線到mtwatertable.php -->
+    <section>
+        <form action="mtwatertable.php" method="get" name="mttable">
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-10 col-sm-10 col-12 back container w-50 my-4 rounded">
+                    <div id="tablepanel" class="choice_table rounded text-white">
+                        <!-- 新增 -->
+                        <ul class="choice_table1">
+                            <li>
+                                <a href="#insert">新增表單</a>
+                            </li>
+                            <li>
+                                <a href="#updata">修改表單</a>
+                            </li>
+                        </ul>
+                        <div id="insert" class="choice_table rounded text-white">
+                            <!-- 副標題 -->
+                            <h2 class="text-center mb-4">選擇抄表表單</h2>
+                            <!-- 工作日期 -->
+                            <P>工作日期: </P>
+                            <input class="form-control mb-3" type="date" name="bday" id="bday">
+                            <!-- 院區選擇 -->
+                            <P>選擇院區: </P>
+                            <select class="form-control mb-3" name="courtyard" id="courtyard">
+                                <option selected>請選擇院區</option>
+                            </select>
+                            <!-- 選擇班別 -->
+                            <p>選擇班別：</p>
+                            <select class="form-control mb-3" name="class" id="Three_shifts">
+                                <option selected>請選擇班別</option>
+                            </select>
+                            <!-- 選擇棟別 -->
+                            <p>選擇棟別：</p>
+                            <select class="form-control mb-3" name="build" id="build">
+                                <!--f1-->
+                                <option selected>請選擇棟別</option>
+                            </select>
+                            <!-- 選擇樓層 -->
+                            <p>選擇設備樓層：</p>
+                            <select class="form-control mb-3" name="buildingfloor" id="buildingfloor">
+                                <option value="">請選擇樓層</option>
+                            </select>
+                            <!-- 選擇點檢系統 -->
+                            <!-- <p>選擇點檢系統：</p>
+                            <select class="form-control mb-3 f2 " name="system" id="system"> -->
+                            <!--f1-->
+                            <!-- <option value="" selected>請選擇系統</option>
+                            </select> -->
+                            <!-- 選擇點檢設備 -->
+                            <!-- <p>選擇點檢設備： </p>
+                            <select class="form-control mb-3" name="equipment" id="equipment">
+                                <option value="" selected>請選擇設備/區域</option>
+                            </select> -->
+                            <!-- 送出鍵 -->
+                            <div class="d-flex justify-content-end">
+                                <!-- <a href="#" type="button" id="reupdata" class="btn btn-primary mt-4 rounded d-block mr-3">修改</a> -->
+                                <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom"
+                                    title="請登入相應權限帳號已解鎖">
+                                    <button style="pointer-events: none;" type="submit"
+                                        class="btn btn-primary mt-4 autho3" formtarget="_self" disabled>送出</button>
+                                </span>
+                            </div>
+                        </div>
+                        <div id="updata" class="choice_table rounded text-white">
+                            <!-- 副標題 -->
+                            <h2 class="text-center mb-4">選擇修改表單</h2>
+                            <!-- 工作日期 -->
+                            <P>工作日期: </P>
+                            <input class="form-control mb-3" type="date" name="ubday" id="ubday">
+                            <!-- 院區選擇 -->
+                            <P>選擇院區: </P>
+                            <select class="form-control mb-3" name="ucourtyard" id="ucourtyard">
+                                <option selected>請選擇院區</option>
+                            </select>
+                            <!-- 選擇班別 -->
+                            <p>選擇班別：</p>
+                            <select class="form-control mb-3" name="uclass" id="uThree_shifts">
+                                <option selected>請選擇班別</option>
+                            </select>
+                            <!-- 選擇棟別 -->
+                            <p>選擇棟別：</p>
+                            <select class="form-control mb-3 f2" name="ubuild" id="ubuild">
+                                <!--f1-->
+                                <option selected>請選擇棟別</option>
+                            </select>
+                            <!-- 選擇樓層 -->
+                            <p>選擇設備樓層：</p>
+                            <select class="form-control mb-3 f2" name="ubuildingfloor" id="ubuildingfloor">
+                                <option value="">請選擇樓層</option>
+                            </select>
+                            <!-- 選擇點檢系統 -->
+                            <p>選擇點檢系統：</p>
+                            <select class="form-control mb-3 f2 " name="usystem" id="usystem">
+                                <!--f1-->
+                                <option value="" selected>請選擇系統</option>
+                            </select>
+                            <!-- 選擇點檢設備 -->
+                            <!-- <p>選擇點檢設備： </p>
+                            <select class="form-control mb-3" name="uequipment" id="uequipment">
+                                <option value="" selected>請選擇設備/區域</option>
+                            </select> -->
+                            <!-- 送出鍵 -->
+                            <div class="d-flex justify-content-end">
+                                <a href="#" type="button" id="reupdata"
+                                    class="btn btn-primary mt-4 rounded d-block mr-3">修改</a>
+                                <!-- <span class="billBoard3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
+                                    <button style="pointer-events: none;" type="submit" class="btn btn-primary mt-4 autho3" formtarget="_blank" disabled>送出</button>
+                                </span> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </section>
+    <!-- footer網頁尾頁 -->
+    <footer>
+        <div id="footer"></div>
+    </footer>
+
+</body>
+
+</html>

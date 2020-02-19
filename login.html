@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- 連結外部的CSS -->
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <link href="./node_modules/fontawesome-free-5.0.6/web-fonts-with-css/css/fontawesome-all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./node_modules/normalize.css/normalize.css">
+    <!-- 連結自己的CSS -->
+    <link rel="stylesheet" href="./css/style.css">
+    <!-- 連結外部的JS -->
+    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="./node_modules/popper.js/dist/umd/popper.min.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- 連結自己的JS -->
+    <script src="./js/main.js"></script>
+    <title>中國附醫工務系統登入頁面</title>
+</head>
+
+<body class="login-bg">
+    <!-- 登入頁面 -->
+    <section>
+        <div class="container logintable text-white align-middle">
+            <h2 class="text-center">中國附醫工務系統登入</h2>
+            <form action="php/tlogin.php" method="POST" id="logIn">
+                <p>使用者帳號:</p>
+                <input class="form-control my-2" type="text" placeholder="UserName" name="username" required/>
+                <p>使用者密碼:</p>
+                <input type="password" class="form-control my-2" name="password" placeholder="Password" required/>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-outline-muted my-2" type="submit">提交</button>
+                </div>
+            </form>
+            <p class="text-center text-danger" id="result"></p>
+        </div>
+    </section>
+</body>
+
+</html>

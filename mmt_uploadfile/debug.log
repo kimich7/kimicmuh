@@ -1,0 +1,85 @@
+
+2016-10-14 13:43:16 -- Major_----------------------- LogStart.
+2016-10-14 13:43:16 -- version = 7.6 date 2006 5.24
+2016-10-14 13:43:16 -- SysTemEnum-RegAllFilter
+2016-10-14 13:43:16 -- SysTemEnum-RegAllFilter End
+2016-10-14 13:43:16 -- Major_REGEDIT_Begin.
+2016-10-14 13:43:16 -- App_IsReg_Begin.
+2016-10-14 13:43:16 -- App_IsReg_End.
+2016-10-14 13:43:16 -- Major_REGEDIT_End.
+2016-10-14 13:43:17 -- Major_ fm_main Create Begin.
+2016-10-14 13:43:17 -- Major_ fm_main new MultiLangAutoForm.
+2016-10-14 13:43:17 -- Major_ fm_main Decorder_Begin.
+2016-10-14 13:43:17 -- SysTemEnum-GetMediaPlayer
+2016-10-14 13:43:17 -- SysTemEnum-GetMediaPlayer End
+2016-10-14 13:43:17 -- Major_ fm_main QueryWmDecode.
+2016-10-14 13:43:17 -- SysTemEnum-GetReal
+2016-10-14 13:43:17 -- SysTemEnum-GetReal End
+2016-10-14 13:43:17 -- Major_ fm_main QueryRmDecode.
+2016-10-14 13:43:17 -- SysTemEnum-GetQuikTime
+2016-10-14 13:43:17 -- SysTemEnum-GetQuikTime End
+2016-10-14 13:43:17 -- Major_ fm_main QueryQtDecode.
+2016-10-14 13:43:30 -- Major_ fm_main Decorder_End.
+2016-10-14 13:43:31 -- Major_ fm_main LoadSkin.
+2016-10-14 13:43:31 -- App_IsReg_Begin.
+2016-10-14 13:43:31 -- App_IsReg_End.
+2016-10-14 13:43:31 -- Major_ fm_main Create End.
+2016-10-14 13:43:31 -- Major_Run_Start.
+2016-10-14 13:45:24 -- Major_ fm_main_To AVI.
+2016-10-14 13:45:33 -- SysTemEnum-EnumCoder
+2016-10-14 13:45:34 -- SysTemEnum-EnumCoder End
+2016-10-14 13:45:34 -- SysTemEnum-EnumCoder
+2016-10-14 13:45:34 -- SysTemEnum-EnumCoder End
+2016-10-14 13:45:34 -- MediaConverter_InitInstance_Begin
+2016-10-14 13:45:34 -- MediaConverter_InitInstance_End
+2016-10-14 13:45:34 -- App_PRE->pRUN_Begin
+2016-10-14 13:45:34 -- PreRun_P_Run_EditFormat_Begin
+2016-10-14 13:45:34 -- PreRun_P_Run_EditFormat_End
+2016-10-14 13:45:34 -- PreRun_P_Run_SetEncoder_Begin
+2016-10-14 13:45:34 -- MediaConverter_SetEncoder_GetClassComponentCount
+2016-10-14 13:45:34 -- MediaConverter_SetEncoder_EncoderInit_Begin
+2016-10-14 13:45:34 -- MediaConverter_SetEncoder_EncoderInit_End
+2016-10-14 13:45:34 -- MediaConverter_SetEncoder_EncoderGetStreamCount_Begin
+2016-10-14 13:45:34 -- MediaConverter_SetEncoder_EncoderGetStreamCount_end
+2016-10-14 13:45:34 -- MediaConverter_SetEncoder_EncoderGetStreamFormat_Begin
+2016-10-14 13:45:34 -- MediaConverter_SetEncoder_EncoderGetStreamFormat_End
+2016-10-14 13:45:34 -- MediaConverter_SetEncoder_EncoderGetStreamFormat_Begin
+2016-10-14 13:45:34 -- MediaConverter_SetEncoder_EncoderGetStreamFormat_End
+2016-10-14 13:45:34 -- PreRun_P_Run_SetEncoder_End
+2016-10-14 13:45:34 -- PreRun_P_Run_AddSourceFile_Begin
+2016-10-14 13:45:34 -- VideoConverter-Init F:\FILE0394ÀËÁ|.mov
+2016-10-14 13:45:34 -- VideoConverter-Init Self Decode
+2016-10-14 13:45:34 -- DMT_InitInstance_SingleThread.
+2016-10-14 13:45:34 -- MMD_InitInstance.
+2016-10-14 13:45:34 -- SM: Start
+2016-10-14 13:45:34 -- DMT_Init.
+2016-10-14 13:45:34 -- DMT_Init_Info - AudioIndex: 1, DirectAC3: 1, SubIndex: 1.
+2016-10-14 13:45:34 -- DMT_Init_GetMeidaInfo.
+2016-10-14 13:45:34 -- DMT_Init_GetMeidaInfo_True.
+2016-10-14 13:45:34 -- MMD_Init.
+2016-10-14 13:45:34 -- DMT_Init_False.
+2016-10-14 13:45:34 -- DMT_Close_In.
+2016-10-14 13:45:34 -- MMD_Close.
+2016-10-14 13:45:34 -- MMD_Close_DecoderFinished.
+2016-10-14 13:45:34 -- MMD_Close_SplitterFinished.
+2016-10-14 13:45:34 -- DMT_Close_Out.
+2016-10-14 13:45:34 -- DMT_Release.
+2016-10-14 13:45:34 -- MMD_Release.
+2016-10-14 13:45:34 -- SM: End
+2016-10-14 13:45:34 -- CMediaInfo out
+2016-10-14 13:45:34 -- VideoConverter-Init Self Decode Over
+2016-10-14 13:45:34 -- VideoConverter-Init StartDecoder
+2016-10-14 13:45:36 -- VideoConverter-Close
+2016-10-14 13:45:36 -- VideoConverter-Close VideoCount = 0 AudioCount = 0
+2016-10-14 13:45:36 -- VideoConverter-Close End
+2016-10-14 13:45:36 -- VideoConverter Released
+2016-10-14 13:45:36 -- PreRun_P_Run_AddSourceFile_End
+2016-10-14 13:45:36 -- PreRun_P_Run_OUT_false
+2016-10-14 13:45:36 -- App_PRE->pRUN_End
+2016-10-14 13:45:36 -- AVIEncoder-Close
+2016-10-14 13:45:36 -- AVIEncoder-Close End
+2016-10-14 13:45:36 -- CMediaInfo out
+2016-10-14 13:45:41 -- Major_Run_End.
+2016-10-14 13:45:41 -- SysTemEnum-RegAllFilter
+2016-10-14 13:45:41 -- SysTemEnum-RegAllFilter End
+2016-10-14 13:45:42 -- Major_ -----------------------Release.

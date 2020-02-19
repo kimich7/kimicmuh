@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- 連結外部的CSS -->
+    <link rel="stylesheet" href="./css/bootstrap.css">
+    <link href="./node_modules/fontawesome-free-5.0.6/web-fonts-with-css/css/fontawesome-all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./node_modules/normalize.css/normalize.css">
+    <!-- 連結自己的CSS -->
+    <link rel="stylesheet" href="./css/style.css">
+    <!-- 連結外部的JS -->
+    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="./node_modules/popper.js/dist/umd/popper.min.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- 連結自己的JS -->
+    <script src="./js/main.js"></script>
+    <title>設備保養表單修改選擇</title>
+</head>
+
+<body>
+    <!-- header網頁標題 -->
+    <header>
+        <div id="header"></div>
+    </header>
+    <!-- form表單連線到mtlistupch.php -->
+    <section>
+        <form action="mtlistupch.php" method="post" name="mtlistupch">
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-10 col-sm-10 col-12 back container w-50 my-4 rounded">
+                    <div class="choice_table rounded text-white">
+                        <!-- 副標題 -->
+                        <h2 class="text-center mb-4">表單修改選擇</h2>
+                        <!-- 修改查詢起始日 -->
+                        <P>修改查詢起始日: </P>
+                        <input class="form-control mb-3" type="date" id="datestr" name="datestr">
+                        <!-- 修改查詢截止日 -->
+                        <P>修改查詢截止日: </P>
+                        <input class="form-control mb-3" type="date" id="dateend" name="dateend">
+                        <!-- 選擇棟別 -->
+                        <p>選擇棟別：</p>
+                        <select class="form-control mb-3" name="build" id="build_updata">
+                            <option selected>請選擇棟別</option>
+                        </select>
+                        <!-- 選擇點檢系統 -->
+                        <p>選擇點檢系統：</p>
+                        <select class="form-control mb-3 f1 f2" name="system" id="system_updata">
+                            <option selected>請選擇系統</option>
+                        </select>
+                        <!-- 送出鍵 -->
+                        <div class="d-flex justify-content-end">
+                            <span class="billBoard2" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
+                                <button style="pointer-events: none;" type="submit" class="btn btn-primary mt-4 autho2" disabled>送出</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </section>
+    <!-- footer網頁尾頁 -->
+    <footer>
+        <div id="footer"></div>
+    </footer>
+
+</body>
+
+</html>

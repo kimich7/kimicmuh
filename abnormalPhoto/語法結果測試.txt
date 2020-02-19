@@ -1,0 +1,244 @@
+
+
+Array ( [recordID] => 2 	[0] => 2 
+	[b_number] => A 	[1] => A 
+	[rDate] => 2018-03-06 	[2] => 2018-03-06 
+	[r_member] => 		[3] => 
+	[managerID] => 		[4] => 
+	[check_number] => 	[5] => 
+	[check_manager] => 	[6] => 
+)
+
+
+Array ( [0] => Array ( [b_number] => A [0] => A [rDate] => 2018-03-06 [1] => 2018-03-06 )
+	[1] => Array ( [b_number] => A [0] => A [rDate] => 2018-03-07 [1] => 2018-03-07 ) 
+	[2] => Array ( [b_number] => C [0] => C [rDate] => 2018-03-06 [1] => 2018-03-06 ) 
+	[3] => Array ( [b_number] => A [0] => A [rDate] => 2018-03-08 [1] => 2018-03-08 ) 
+	[4] => Array ( [b_number] => A1 [0] => A1 [rDate] => 2018-03-08 [1] => 2018-03-08 ) [5] => Array ( [b_number] => C [0] => C [rDate] => 2018-03-08 [1] => 2018-03-08 ) [6] => Array ( [b_number] => A [0] => A [rDate] => 2018-03-12 [1] => 2018-03-12 ) [7] => Array ( [b_number] => A1 [0] => A1 [rDate] => 2018-03-12 [1] => 2018-03-12 ) [8] => Array ( [b_number] => E [0] => E [rDate] => 2018-03-12 [1] => 2018-03-12 ) [9] => Array ( [b_number] => D [0] => D [rDate] => 2018-03-12 [1] => 2018-03-12 ) [10] => Array ( [b_number] => B [0] => B [rDate] => 2018-03-13 [1] => 2018-03-13 ) [11] => Array ( [b_number] => G [0] => G [rDate] => 2018-03-13 [1] => 2018-03-13 ) [12] => Array ( [b_number] => A [0] => A [rDate] => 2018-03-14 [1] => 2018-03-14 ) [13] => Array ( [b_number] => A1 [0] => A1 [rDate] => 2018-03-14 [1] => 2018-03-14 ) [14] => Array ( [b_number] => E [0] => E [rDate] => 2018-03-14 [1] => 2018-03-14 ) [15] => Array ( [b_number] => A [0] => A [rDate] => 2018-05-02 [1] => 2018-05-02 ) [16] => Array ( [b_number] => A1 [0] => A1 [rDate] => 2018-05-02 [1] => 2018-05-02 ) [17] => Array ( [b_number] => E [0] => E [rDate] => 2018-05-02 [1] => 2018-05-02 ) [18] => Array ( [b_number] => G [0] => G [rDate] => 2018-05-02 [1] => 2018-05-02 ) [19] => Array ( [b_number] => A [0] => A [rDate] => 2018-05-03 [1] => 2018-05-03 ) [20] => Array ( [b_number] => B [0] => B [rDate] => 2018-05-03 [1] => 2018-05-03 ) [21] => Array ( [b_number] => A [0] => A [rDate] => 2018-05-04 [1] => 2018-05-04 ) [22] => Array ( [b_number] => A [0] => A [rDate] => 2018-05-09 [1] => 2018-05-09 ) [23] => Array ( [b_number] => A [0] => A [rDate] => 2018-05-20 [1] => 2018-05-20 ) [24] => Array ( [b_number] => A [0] => A [rDate] => 2018-05-07 [1] => 2018-05-07 ) [25] => Array ( [b_number] => A [0] => A [rDate] => 2018-05-19 [1] => 2018-05-19 ) [26] => Array ( [b_number] => A [0] => A [rDate] => 2018-05-18 [1] => 2018-05-18 ) [27] => Array ( [b_number] => A [0] => A [rDate] => 2018-05-22 [1] => 2018-05-22 ) [28] => Array ( [b_number] => A [0] => A [rDate] => 2018-05-25 [1] => 2018-05-25 ) [29] => Array ( [b_number] => D [0] => D [rDate] => 2018-05-28 [1] => 2018-05-28 ) )
+
+
+Array ( [0] => Array ( [master] => FA.Water_System_Record_Master [detail] => FA.Water_System_Record_Detail [equip] => FA.Equipment_Check ) )
+
+
+
+Array ( [0] => Array ( [recordDetailID] => 477 [0] => 477 [equipCheckID] => 11 [1] => 11 [checkResult] => 60/100 [2] => 60/100 [r_member] => 3 [3] => 3 ) 
+	[1] => Array ( [recordDetailID] => 478 [0] => 478 [equipCheckID] => 13 [1] => 13 [checkResult] => true [2] => true [r_member] => 3 [3] => 3 ) 
+	[2] => Array ( [recordDetailID] => 479 [0] => 479 [equipCheckID] => 5 [1] => 5 [checkResult] => 40 [2] => 40 [r_member] => 3 [3] => 3 ) 
+	[3] => Array ( [recordDetailID] => 480 [0] => 480 [equipCheckID] => 6 [1] => 6 [checkResult] => 40 [2] => 40 [r_member] => 3 [3] => 3 ) 
+	[4] => Array ( [recordDetailID] => 481 [0] => 481 [equipCheckID] => 7 [1] => 7 [checkResult] => 10/30 [2] => 10/30 [r_member] => 3 [3] => 3 ) 
+	[5] => Array ( [recordDetailID] => 482 [0] => 482 [equipCheckID] => 8 [1] => 8 [checkResult] => true [2] => true [r_member] => 3 [3] => 3 ) 
+	[6] => Array ( [recordDetailID] => 483 [0] => 483 [equipCheckID] => 10 [1] => 10 [checkResult] => true [2] => true [r_member] => 3 [3] => 3 ) 
+	[7] => Array ( [recordDetailID] => 484 [0] => 484 [equipCheckID] => 14 [1] => 14 [checkResult] => true [2] => true [r_member] => 3 [3] => 3 ) 
+	[8] => Array ( [recordDetailID] => 485 [0] => 485 [equipCheckID] => 1 [1] => 1 [checkResult] => true [2] => true [r_member] => 3 [3] => 3 ) 
+	[9] => Array ( [recordDetailID] => 486 [0] => 486 [equipCheckID] => 2 [1] => 2 [checkResult] => 35 [2] => 35 [r_member] => 3 [3] => 3 ) 
+	[10] => Array ( [recordDetailID] => 487 [0] => 487 [equipCheckID] => 3 [1] => 3 [checkResult] => 35 [2] => 35 [r_member] => 3 [3] => 3 ) 
+	[11] => Array ( [recordDetailID] => 488 [0] => 488 [equipCheckID] => 4 [1] => 4 [checkResult] => 35 [2] => 35 [r_member] => 3 [3] => 3 ) 
+	[12] => Array ( [recordDetailID] => 489 [0] => 489 [equipCheckID] => 9 [1] => 9 [checkResult] => true [2] => true [r_member] => 3 [3] => 3 ) 
+	[13] => Array ( [recordDetailID] => 490 [0] => 490 [equipCheckID] => 12 [1] => 12 [checkResult] => true [2] => true [r_member] => 3 [3] => 3 ) 
+)
+
+
+
+
+
+equipCheckID,   ref,          shiftID,     r_member,    remark,       recordID,     checkResult,       zoneNo,          floorID,      rDate
+$equip_check,   '$ref_no',    $shift_no,   3,           '$remark',   $MasterID,     '$ans_no',         '$equip_no',     '$floorID',   '$date_ch'
+
+
+
+
+
+Array ( [0] => FRP空調水箱液位(>2/3) ) 
+Array ( [0] => FRP空調水箱液位(>2/3) [1] => 柴油櫃1號油位 ) 
+Array ( [0] => FRP空調水箱液位(>2/3) [1] => 柴油櫃1號油位 [2] => 柴油櫃1號油位 ) 
+Array ( [0] => FRP空調水箱液位(>2/3) [1] => 柴油櫃1號油位 [2] => 柴油櫃1號油位 [3] => 柴油櫃1號油位 ) 
+Array ( [0] => FRP空調水箱液位(>2/3) [1] => 柴油櫃1號油位 [2] => 柴油櫃1號油位 [3] => 柴油櫃1號油位 [4] => 柴油櫃2號油位 ) 
+Array ( [0] => FRP空調水箱液位(>2/3) [1] => 柴油櫃1號油位 [2] => 柴油櫃1號油位 [3] => 柴油櫃1號油位 [4] => 柴油櫃2號油位 [5] => 柴油櫃2號油位 )
+Array ( [0] => FRP空調水箱液位(>2/3) [1] => 柴油櫃1號油位 [2] => 柴油櫃1號油位 [3] => 柴油櫃1號油位 [4] => 柴油櫃2號油位 [5] => 柴油櫃2號油位 [6] => 柴油櫃2號油位 )
+ Array ( [0] => FRP空調水箱液位(>2/3) [1] => 柴油櫃1號油位 [2] => 柴油櫃1號油位 [3] => 柴油櫃1號油位 [4] => 柴油櫃2號油位 [5] => 柴油櫃2號油位 [6] => 柴油櫃2號油位 [7] => 柴油櫃3號油位 ) Array ( [0] => FRP空調水箱液位(>2/3) [1] => 柴油櫃1號油位 [2] => 柴油櫃1號油位 [3] => 柴油櫃1號油位 [4] => 柴油櫃2號油位 [5] => 柴油櫃2號油位 [6] => 柴油櫃2號油位 [7] => 柴油櫃3號油位 [8] => 柴油櫃3號油位 ) Array ( [0] => FRP空調水箱液位(>2/3) [1] => 柴油櫃1號油位 [2] => 柴油櫃1號油位 [3] => 柴油櫃1號油位 [4] => 柴油櫃2號油位 [5] => 柴油櫃2號油位 [6] => 柴油櫃2號油位 [7] => 柴油櫃3號油位 [8] => 柴油櫃3號油位 [9] => 柴油櫃3號油位 ) Array ( [0] => FRP空調水箱液位(>2/3) [1] => 柴油櫃1號油位 [2] => 柴油櫃1號油位 [3] => 柴油櫃1號油位 [4] => 柴油櫃2號油位 [5] => 柴油櫃2號油位 [6] => 柴油櫃2號油位 [7] => 柴油櫃3號油位 [8] => 柴油櫃3號油位 [9] => 柴油櫃3號油位 [10] => A棟回水溫度 ) Array ( [0] => FRP空調水箱液位(>2/3) [1] => 柴油櫃1號油位 [2] => 柴油櫃1號油位 [3] => 柴油櫃1號油位 [4] => 柴油櫃2號油位 [5] => 柴油櫃2號油位 [6] => 柴油櫃2號油位 [7] => 柴油櫃3號油位 [8] => 柴油櫃3號油位 [9] => 柴油櫃3號油位 [10] => A棟回水溫度 [11] => A棟回水溫度 ) Array ( [0] => FRP空調水箱液位(>2/3) [1] => 柴油櫃1號油位 [2] => 柴油櫃1號油位 [3] => 柴油櫃1號油位 [4] => 柴油櫃2號油位 [5] => 柴油櫃2號油位 [6] => 柴油櫃2號油位 [7] => 柴油櫃3號油位 [8] => 柴油櫃3號油位 [9] => 柴油櫃3號油位 [10] => A棟回水溫度 [11] => A棟回水溫度 [12] => A棟回水溫度 ) Array ( [0] => FRP空調水箱液位(>2/3) [1] => 柴油櫃1號油位 [2] => 柴油櫃1號油位 [3] => 柴油櫃1號油位 [4] => 柴油櫃2號油位 [5] => 柴油櫃2號油位 [6] => 柴油櫃2號油位 [7] => 柴油櫃3號油位 [8] => 柴油櫃3號油位 [9] => 柴油櫃3號油位 [10] => A棟回水溫度 [11] => A棟回水溫度 [12] => A棟回水溫度 [13] => 急診樓回水溫度 )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Array ( [0] => Array ( [equipCheckID] => 11 [0] => 11 [checkResult] => 20 [1] => 20 ) 
+	[1] => Array ( [equipCheckID] => 13 [0] => 13 [checkResult] => true [1] => true ) 
+	[2] => Array ( [equipCheckID] => 153 [0] => 153 [checkResult] => 4 [1] => 4 ) [3] => Array ( [equipCheckID] => 154 [0] => 154 [checkResult] => 9 [1] => 9 ) [4] => Array ( [equipCheckID] => 155 [0] => 155 [checkResult] => 1800 [1] => 1800 ) [5] => Array ( [equipCheckID] => 156 [0] => 156 [checkResult] => true [1] => true ) [6] => Array ( [equipCheckID] => 157 [0] => 157 [checkResult] => 1800 [1] => 1800 ) [7] => Array ( [equipCheckID] => 158 [0] => 158 [checkResult] => true [1] => true ) [8] => Array ( [equipCheckID] => 159 [0] => 159 [checkResult] => 50 [1] => 50 ) [9] => Array ( [equipCheckID] => 160 [0] => 160 [checkResult] => 500 [1] => 500 ) [10] => Array ( [equipCheckID] => 161 [0] => 161 [checkResult] => 500 [1] => 500 ) [11] => Array ( [equipCheckID] => 162 [0] => 162 [checkResult] => true [1] => true ) [12] => Array ( [equipCheckID] => 163 [0] => 163 [checkResult] => 50 [1] => 50 ) [13] => Array ( [equipCheckID] => 164 [0] => 164 [checkResult] => 500 [1] => 500 ) [14] => Array ( [equipCheckID] => 165 [0] => 165 [checkResult] => 500 [1] => 500 ) [15] => Array ( [equipCheckID] => 5 [0] => 5 [checkResult] => 40 [1] => 40 ) [16] => Array ( [equipCheckID] => 6 [0] => 6 [checkResult] => 40 [1] => 40 ) [17] => Array ( [equipCheckID] => 7 [0] => 7 [checkResult] => 20/20 [1] => 20/20 ) [18] => Array ( [equipCheckID] => 8 [0] => 8 [checkResult] => true [1] => true ) [19] => Array ( [equipCheckID] => 170 [0] => 170 [checkResult] => true [1] => true ) [20] => Array ( [equipCheckID] => 171 [0] => 171 [checkResult] => true [1] => true ) [21] => Array ( [equipCheckID] => 172 [0] => 172 [checkResult] => 40 [1] => 40 ) [22] => Array ( [equipCheckID] => 173 [0] => 173 [checkResult] => 40 [1] => 40 ) [23] => Array ( [equipCheckID] => 174 [0] => 174 [checkResult] => 40 [1] => 40 ) [24] => Array ( [equipCheckID] => 175 [0] => 175 [checkResult] => 40 [1] => 40 ) [25] => Array ( [equipCheckID] => 176 [0] => 176 [checkResult] => 40 [1] => 40 ) [26] => Array ( [equipCheckID] => 177 [0] => 177 [checkResult] => 40 [1] => 40 ) [27] => Array ( [equipCheckID] => 178 [0] => 178 [checkResult] => 40 [1] => 40 ) [28] => Array ( [equipCheckID] => 179 [0] => 179 [checkResult] => 40 [1] => 40 ) [29] => Array ( [equipCheckID] => 180 [0] => 180 [checkResult] => 40 [1] => 40 ) [30] => Array ( [equipCheckID] => 181 [0] => 181 [checkResult] => 40 [1] => 40 ) [31] => Array ( [equipCheckID] => 182 [0] => 182 [checkResult] => 40 [1] => 40 ) [32] => Array ( [equipCheckID] => 183 [0] => 183 [checkResult] => 40 [1] => 40 ) [33] => Array ( [equipCheckID] => 184 [0] => 184 [checkResult] => 40 [1] => 40 ) [34] => Array ( [equipCheckID] => 185 [0] => 185 [checkResult] => 40 [1] => 40 ) [35] => Array ( [equipCheckID] => 186 [0] => 186 [checkResult] => 40 [1] => 40 ) [36] => Array ( [equipCheckID] => 187 [0] => 187 [checkResult] => 40 [1] => 40 ) [37] => Array ( [equipCheckID] => 188 [0] => 188 [checkResult] => 40 [1] => 40 ) [38] => Array ( [equipCheckID] => 189 [0] => 189 [checkResult] => true [1] => true ) [39] => Array ( [equipCheckID] => 190 [0] => 190 [checkResult] => true [1] => true ) [40] => Array ( [equipCheckID] => 191 [0] => 191 [checkResult] => 40 [1] => 40 ) [41] => Array ( [equipCheckID] => 388 [0] => 388 [checkResult] => 40 [1] => 40 ) [42] => Array ( [equipCheckID] => 389 [0] => 389 [checkResult] => 40 [1] => 40 ) [43] => Array ( [equipCheckID] => 390 [0] => 390 [checkResult] => 40 [1] => 40 ) [44] => Array ( [equipCheckID] => 391 [0] => 391 [checkResult] => 40 [1] => 40 ) [45] => Array ( [equipCheckID] => 392 [0] => 392 [checkResult] => 40 [1] => 40 ) [46] => Array ( [equipCheckID] => 393 [0] => 393 [checkResult] => 40 [1] => 40 ) [47] => Array ( [equipCheckID] => 394 [0] => 394 [checkResult] => true [1] => true ) [48] => Array ( [equipCheckID] => 395 [0] => 395 [checkResult] => 40 [1] => 40 ) [49] => Array ( [equipCheckID] => 396 [0] => 396 [checkResult] => true [1] => true ) [50] => Array ( [equipCheckID] => 397 [0] => 397 [checkResult] => 40 [1] => 40 ) [51] => Array ( [equipCheckID] => 398 [0] => 398 [checkResult] => true [1] => true ) [52] => Array ( [equipCheckID] => 399 [0] => 399 [checkResult] => 40 [1] => 40 ) [53] => Array ( [equipCheckID] => 400 [0] => 400 [checkResult] => true [1] => true ) [54] => Array ( [equipCheckID] => 401 [0] => 401 [checkResult] => 40 [1] => 40 ) [55] => Array ( [equipCheckID] => 414 [0] => 414 [checkResult] => 40 [1] => 40 ) [56] => Array ( [equipCheckID] => 415 [0] => 415 [checkResult] => 40 [1] => 40 ) [57] => Array ( [equipCheckID] => 416 [0] => 416 [checkResult] => 40 [1] => 40 ) [58] => Array ( [equipCheckID] => 417 [0] => 417 [checkResult] => 40 [1] => 40 ) [59] => Array ( [equipCheckID] => 418 [0] => 418 [checkResult] => 40 [1] => 40 ) [60] => Array ( [equipCheckID] => 419 [0] => 419 [checkResult] => 40 [1] => 40 ) [61] => Array ( [equipCheckID] => 420 [0] => 420 [checkResult] => 40 [1] => 40 ) [62] => Array ( [equipCheckID] => 421 [0] => 421 [checkResult] => true [1] => true ) [63] => Array ( [equipCheckID] => 422 [0] => 422 [checkResult] => true [1] => true ) [64] => Array ( [equipCheckID] => 10 [0] => 10 [checkResult] => true [1] => true ) [65] => Array ( [equipCheckID] => 14 [0] => 14 [checkResult] => true [1] => true ) [66] => Array ( [equipCheckID] => 166 [0] => 166 [checkResult] => true [1] => true ) [67] => Array ( [equipCheckID] => 167 [0] => 167 [checkResult] => 160 [1] => 160 ) [68] => Array ( [equipCheckID] => 168 [0] => 168 [checkResult] => 250 [1] => 250 ) [69] => Array ( [equipCheckID] => 169 [0] => 169 [checkResult] => 250 [1] => 250 ) [70] => Array ( [equipCheckID] => 1 [0] => 1 [checkResult] => true [1] => true ) [71] => Array ( [equipCheckID] => 2 [0] => 2 [checkResult] => 35 [1] => 35 ) [72] => Array ( [equipCheckID] => 3 [0] => 3 [checkResult] => 35 [1] => 35 ) [73] => Array ( [equipCheckID] => 4 [0] => 4 [checkResult] => 35 [1] => 35 ) [74] => Array ( [equipCheckID] => 9 [0] => 9 [checkResult] => true [1] => true ) [75] => Array ( [equipCheckID] => 12 [0] => 12 [checkResult] => true [1] => true ) )
+
+
+
+
+
+
+
+
+
+<tr>
+                                <td>
+                                <input type='radio' name='<?= $a?>' value='true' <?PHP if( $ans1[$a]["checkResult"]=="true") echo "checked"; ?>>合格
+                                <input type='radio' name='<?= $a?>' value='false' <?PHP if($ans1[$a]["checkResult"]=="false") echo "checked"; ?>>不合格
+                                </td>
+                            </tr>
+                            <?php
+                                        } else {
+                            ?>              
+                            <tr>
+                                <td><input type="text" name='<?= $a?>' maxlength="20" value='<?= $ans1[$a]["checkResult"]?>'></td>
+                            </tr>
+                            <?php
+                                        }
+                                    //}
+                                }
+                            ?>
+
+
+
+
+
+
+
+Array ( 
+[0] => Array ( [recordID] => 250 [0] => 250 ) 
+[1] => Array ( [recordID] => 251 [0] => 251 ) 
+[2] => Array ( [recordID] => 252 [0] => 252 ) 
+[3] => Array ( [recordID] => 253 [0] => 253 ) ) 
+
+
+
+
+Array ( 
+[0] => Array ( [floorID] => 1A [0] => 1A ) 
+[1] => Array ( [floorID] => 9A [0] => 9A ) 
+[2] => Array ( [floorID] => B1A [0] => B1A ) 
+[3] => Array ( [floorID] => RFA [0] => RFA ) ) 
+250
+
+Array ( [0] => Array ( [floorID] => 1A [0] => 1A ) [1] => Array ( [floorID] => 9A [0] => 9A ) [2] => Array ( [floorID] => B1A [0] => B1A ) ) 
+251
+Array ( [0] => Array ( [floorID] => 1A [0] => 1A ) [1] => Array ( [floorID] => 9A [0] => 9A ) ) 
+252
+Array ( [0] => Array ( [floorID] => 9A [0] => 9A ) ) 
+253
+
+
+Array ( 
+[0] => Array ( [floorID] => 9A [0] => 9A ) ) 
+
+
+
+Array ( 
+ [0] => Array ( [floorID] => 1A [0] => 1A ) 
+ [1] => Array ( [floorID] => 9A [0] => 9A ) 
+ [2] => Array ( [floorID] => B1A [0] => B1A ) 
+ [3] => Array ( [floorID] => RFA [0] => RFA ) 
+) 
+
+
+Array ( 
+[0] => Array ( [floorID] => 1A [0] => 1A ) 
+[1] => Array ( [floorID] => 9A [0] => 9A ) 
+[2] => Array ( [floorID] => B1A [0] => B1A ) 
+[3] => Array ( [floorID] => RFA [0] => RFA ) 
+
+[4] => Array ( [floorID] => 1A [0] => 1A ) 
+[5] => Array ( [floorID] => 9A [0] => 9A ) 
+[6] => Array ( [floorID] => B1A [0] => B1A ) 
+
+[7] => Array ( [floorID] => 1A [0] => 1A ) 
+[8] => Array ( [floorID] => 9A [0] => 9A ) 
+
+[9] => Array ( [floorID] => 9A [0] => 9A ) 
+
+) 
+
+
+
+Array ( [0] => Array ( [0] => Array ( [floorID] => 1A [0] => 1A ) 
+		       [1] => Array ( [floorID] => 9A [0] => 9A ) 
+                       [2] => Array ( [floorID] => B1A [0] => B1A ) 
+                       [3] => Array ( [floorID] => RFA [0] => RFA ) 
+                     ) 
+        
+        [1] => Array ( [0] => Array ( [floorID] => 1A [0] => 1A ) 
+                       [1] => Array ( [floorID] => 9A [0] => 9A ) 
+                       [2] => Array ( [floorID] => B1A [0] => B1A ) 
+                     ) 
+        
+        [2] => Array ( [0] => Array ( [floorID] => 1A [0] => 1A ) 
+                       [1] => Array ( [floorID] => 9A [0] => 9A ) 
+                     ) 
+        
+        [3] => Array ( [0] => Array ( [floorID] => 9A [0] => 9A ) 
+                     ) 
+)
+
+
+
+Array ( [0] => Array ( [0] => Array ( [floorID] => 1A [0] => 1A )
+                       [1] => Array ( [floorID] => 9A [0] => 9A ) 
+                       [2] => Array ( [floorID] => B1A [0] => B1A ) 
+                       [3] => Array ( [floorID] => RFA [0] => RFA ) ) 
+        [1] => Array ( [0] => Array ( [floorID] => 1A [0] => 1A ) [1] => Array ( [floorID] => 9A [0] => 9A ) [2] => Array ( [floorID] => B1A [0] => B1A ) ) [2] => Array ( [0] => Array ( [floorID] => 1A [0] => 1A ) [1] => Array ( [floorID] => 9A [0] => 9A ) ) [3] => Array ( [0] => Array ( [floorID] => 9A [0] => 9A ) ) )
+
+
+
+Array ( [0] => Array ( [floorID] => 1A [0] => 1A ) 
+        [1] => Array ( [floorID] => 9A [0] => 9A ) 
+        [2] => Array ( [floorID] => B1A [0] => B1A ) 
+        [3] => Array ( [floorID] => RFA [0] => RFA ) 
+)
+
+
+
+
+
+
+Array ( [0] => Array ( [floorID] => 1A [floorName] => A棟1樓 第一醫療大樓 ) ) 
+
+Array ( [0] => Array ( [floorID] => 1A [floorName] => A棟1樓 第一醫療大樓 ) 
+        [1] => Array ( [floorID] => 9A [floorName] => A棟9樓 第一醫療大樓 ) ) 
+
+Array ( [0] => Array ( [floorID] => 1A [floorName] => A棟1樓 第一醫療大樓 ) 
+        [1] => Array ( [floorID] => 9A [floorName] => A棟9樓 第一醫療大樓 ) 
+        [2] => Array ( [floorID] => B1A [floorName] => A棟地下1樓 第一醫療大樓 ) ) 
+
+Array ( [0] => Array ( [floorID] => 1A [floorName] => A棟1樓 第一醫療大樓 ) 
+        [1] => Array ( [floorID] => 9A [floorName] => A棟9樓 第一醫療大樓 ) 
+        [2] => Array ( [floorID] => B1A [floorName] => A棟地下1樓 第一醫療大樓 ) 
+        [3] => Array ( [floorID] => RFA [floorName] => A棟RF頂樓 第一醫療大樓 ) ) 
+
+
+
+萬事問臉書，臉書大神請幫我，我想請問一下，我在某個案子裝用了如圖片所示這個組合方式，結果這個組合
+
+螢幕完全沒有反應，這個Solution是否有問題呢?
+
