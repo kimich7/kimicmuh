@@ -18,26 +18,19 @@ if (isset($_GET['page'])) {
     $page_num=$_GET['page'];
 }
 $startRow_record=($page_num-1)*$pageRow_record;
-//所有的資料
-$ammtmstr="SELECT id,bid,fid,eid,rdate,datekind,tid,macNo,remark,emp,sremp,cemp,status FROM FA.MMT_PtableM ";//全部資料
-//總資料數量
-$ammtmnumstr="SELECT Count(id)FROM FA.MMT_PtableM ";
-$ammtmnum=Current($pdo->query($ammtmnumstr)->fetch());//全部數量
-$total_num=$ammtmnum;
 
-//----還沒帶入----
 //篩選後給每頁的筆數
 $sqlstr_page="SELECT id,bid,fid,eid,rdate,datekind,tid,macNo,remark,emp,sremp,cemp,status FROM FA.MMT_PtableM  ORDER BY rdate DESC OFFSET $startRow_record ROWS FETCH NEXT $pageRow_record ROWS ONLY";
+//總資料數量
+$ammtmnumstr="SELECT Count(id)FROM FA.MMT_PtableM ";
+
 $sql_page=$pdo->query($sqlstr_page);
-// $sql_total=$pdo->query($sqlstr_total);
-//$total_num=CURRENT($pdo->query($totalstr_num)->fetch());
+$ammtmnum=Current($pdo->query($ammtmnumstr)->fetch());//全部數量
+$total_num=$ammtmnum;
 
 //本頁開始的筆數
 $i=0;        
 $k=$i+2000;
-$ammtmQuery=$pdo->query($ammtmstr);
-$ammtmAll=array();
-//----還沒帶入END----
 
 ?>
 
