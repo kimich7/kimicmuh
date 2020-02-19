@@ -22,9 +22,9 @@
     $checkName=array();//用來放equipCheckName的陣列
     //早中晚班資料的撈取
     //$ans1=item("SELECT recordDetailID,equipCheckID,checkResult,r_member FROM $systemTable WHERE recordID=$MasterID AND shiftID=1");
-    $ans1=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark,B.equipCheckID,A.ref,A.answerMode FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=1)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckID");
-    $ans2=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark,B.equipCheckID,A.ref,A.answerMode FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=2)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckID");
-    $ans3=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark,B.equipCheckID,A.ref,A.answerMode FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=3)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckID");
+    $ans1=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark,A.equipCheckID,A.ref,A.answerMode FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=1)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckID");
+    $ans2=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark,A.equipCheckID,A.ref,A.answerMode FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=2)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckID");
+    $ans3=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark,A.equipCheckID,A.ref,A.answerMode FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=3)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckID");
     $user_1No=$ans1[0]["r_member"];
     $user_2No=$ans2[0]["r_member"];
     $user_3No=$ans3[0]["r_member"];
@@ -139,7 +139,7 @@
                 }
                     break;
                 case 2:
-                    $an3=$a+2000;//晚班抄錶結果
+                    $an3=$i+2000;//晚班抄錶結果
                     $q3=$an3+200;//早班回傳RecordDetail ID的Name
                     $type3=$an3+400;//早班上傳參考值格式的Name
 

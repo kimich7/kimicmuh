@@ -74,9 +74,9 @@
     $num=num("SELECT COUNT(equipCheckID) FROM FA.Equipment_Check WHERE b_number='$buildNo' and sysID=$sysNo");
     $checkName=array();//用來放equipCheckName的陣列
     //早中晚班資料的撈取
-    $ans1=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark,B.equipCheckID,A.ref,A.answerMode FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=1)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckID");
-    $ans2=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark,B.equipCheckID,A.ref,A.answerMode FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=2)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckID");
-    $ans3=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark,B.equipCheckID,A.ref,A.answerMode FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=3)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckID");
+    $ans1=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark,A.equipCheckID,A.ref,A.answerMode FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=1)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckID");
+    $ans2=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark,A.equipCheckID,A.ref,A.answerMode FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=2)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckID");
+    $ans3=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark,A.equipCheckID,A.ref,A.answerMode FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=3)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckID");
     $user_1No=$ans1[0]["r_member"];
     $user_2No=$ans2[0]["r_member"];
     $user_3No=$ans3[0]["r_member"];
@@ -236,10 +236,10 @@
                         $q=$a+200;
                             $an=$a;//結果答案
                             //$type=$a+400;
-                            $answerMode=$ans1[$a]["answerMode"];
+                            $answerMode=$ans1[$a]["answerMode"]; 
                             if (is_null($ans1[$a]["recordDetailID"])) {                               
                                 echo "<td id='tfresult1'><input type=\"text\" name=\"$an\" maxlength=\"20\" value=\"無該筆紀錄，此紀錄無法修改\" DISABLED></td>";
-                            }else{                                                              
+                            }else{                                                       
                                 switch ($answerMode) {
                                     case 'choiceTF':
                                         echo "<td id='tfresult1'>";
@@ -354,7 +354,7 @@
                             if (is_null($ans2[$a]["recordDetailID"])) {
                                     echo "<td id='tfresult2'><input type=\"text\" name=\"$b\" maxlength=\"20\" value=\"無該筆紀錄，此紀錄無法修改\" DISABLED></td>";
                             }else{
-                                $answerMode=$item[$a]["answerMode"];
+                                //$answerMode=$item[$a]["answerMode"];
                                     switch ($answerMode) {
                                         case 'choiceTF':
                                             echo '<td id="tfresult2">';
@@ -469,7 +469,7 @@
                             if (is_null($ans3[$a]["recordDetailID"])) {
                                     echo "<td><input type=\"text\" name=\"$c\" maxlength=\"20\" value=\"無該筆紀錄，此紀錄無法修改\" Disabled></td>";
                             }else{
-                                $answerMode=$item[$a]["answerMode"];
+                                //$answerMode=$item[$a]["answerMode"];
                                         switch ($answerMode) {
                                             case 'choiceTF':
                                                 echo '<td id="tfresult3">';
