@@ -9,7 +9,7 @@
         
         //$view_select = "SELECT $col FROM $tbl WHERE $when = '$wheans' ";
         $view_query=$pdo->query($view_select)->fetch(PDO::FETCH_ASSOC);
-        $view=$view_query["$col"];
+        @$view=$view_query["$col"];
         $pdo=null;
         return $view;
     }
