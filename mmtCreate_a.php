@@ -20,6 +20,11 @@
     $idnum=date("Ymd");//用來當主表id的時間戳記
     $macnum=$mmtsysNo.'-'.$mmtbuildNo.'-'.$mmtfloorNo.'-'.$mmtequipNo.'-'.$mmtequipNum;//設備編號
     $mmt_a_m_id=$mmtsysNo.$mmtbuildNo.$mmtfloorNo.$mmtequipNo.$mmtequipNum.$idnum;//主表id
+
+    $idstr="SELECT Count(id) FROM FA.MMT_AtableM WHERE id='$mmt_a_m_id'";
+    $idcheck=Current($pdo->query($idstr)->fetch());
+    
+    
     //撈取檢查項目
      $str="SELECT a.id,a.checkName,a.ref,a.checkKind,a.tid FROM FA.MMT_A AS a LEFT JOIN FA.MMT_KIND as k ON a.tid=k.id LEFT JOIN  FA.MMT_equipNo as n ON n.tid=k.id WHERE n.id='$mmtequipNum' AND n.bid='$mmtbuildNo' AND n.fid='$mmtfloorNo' AND n.eid='$mmtequipNo' AND n.sid='$mmtsysNo'";      
      $catquery=$pdo->query($str) ;
@@ -101,6 +106,11 @@
 </head>
 
 <body class="table_bg">
+<?php 
+if ($idcheck!=0) {
+    echo "<script>alert('該表單已填寫過，請重新選擇，按下確認後3秒會返回列表')</script>";
+    header("Refresh:3;URL=mmt_list_a.php");
+} else {?>
     <div class="container border border-info mt-5">
     <form action="" method="post" name="mmt_table_a">
         <h2 class="text-center font-weight-bold"><?= $reportName[0]['tableName']; ?></h2>
@@ -177,7 +187,7 @@
                     echo "<input type='radio' name=\"".$i."\" value='single' checked>單相";
                     echo '</td>'; 
                 }else{
-                    echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20'>".'</td>';
+                    echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20' required>".'</td>';
                 }
                 echo "<input type='hidden' name=\"".$checkid."\" value=\"".$catarr[$i]['id']."\">";//檢查項目id                
             }
@@ -214,8 +224,9 @@
         <!-- 送出鈕 -->    
             <div class="d-flex justify-content-end">
                 <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>
-            </div>
+            </div>        
     </form>
     </div>
+    <?php } ?>
 </body>
 </html>
