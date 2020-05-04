@@ -605,7 +605,6 @@
             <?php
                 @$checkman=sql_database('cname','FA.Employee','e_number',$checkmanID);
                 @$manager=sql_database('cname','FA.Employee','e_number',$managerID);
-                ECHO $checksum;
                 switch ($checksum) {
                     case '1'://登入者為主管時，有兩種狀態，(1.主管未審核。2.主管已審核)+檢查者已審核
                         echo '<div class="row my-3">';
