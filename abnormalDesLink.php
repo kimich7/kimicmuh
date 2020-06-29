@@ -219,7 +219,7 @@
             $page= isset($_GET['page'])?$_GET['page']:1;        
             $getpageinfo = page($page,$total_num,$phpfile);
             echo '<div align="center">'; 
-            echo $getpageinfo['pagecode'];//顯示分頁的html語法
+            echo @$getpageinfo['pagecode'];//顯示分頁的html語法
             echo '</div>';
         } 
         

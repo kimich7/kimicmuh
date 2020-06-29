@@ -58,7 +58,7 @@ $k=$i+2000;
 
     <!-- 連結自己的JS -->
     <script src="./js/main.js"></script>
-    <title>工程專案清單</title>
+    <title>氣體設備</title>
     <!--測試-->
         <style>
             
@@ -78,20 +78,12 @@ $k=$i+2000;
         <div class="panel-heading">
             <input type="hidden" name="mmtsysg" value='G'>
             <div class="row my-3">
-
                 <div class="col">
-
                     <p class="d-inline font-weight-bold">&nbsp&nbsp&nbsp&nbsp新增保養：
                         <span class="billBoardairL1 billBoardairL3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
                         <button type='submit' name="mmtsysabtn" class="btn btn-primary" >新增</button></p>
                         </span>
                     </p>
-
-                </div>
-
-                    <!-- <h4>&nbsp&nbsp&nbsp&nbsp新增保養：<a class="btn btn-primary" href="mmtCreate_a_choice.php" class="text-dark">新增</a></h4>    -->
-                <div class="col text-right">
-                    <p class="d-inline font-weight-bold">Search:&nbsp&nbsp<input type="search" class="light-table-filter" data-table="order-table" placeholder="請輸入關鍵字"></p>
                 </div>
             </div>    
         </div>
@@ -171,7 +163,7 @@ $k=$i+2000;
 
                     <td>
                         <span class="billBoardairL2 billBoardairL3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                        <a href="mmtcheck_g.php?id=<?= $ammtm[$i]['id']?>"><?= $ammtmstatus?></a>
+                        <a href="mmtcheck_g.php?id=<?= $ammtm[$i]['id']?>" class="airL2 airL3" Disabled><?= $ammtmstatus?></a>
                         </span>
                     </td><!--狀態-->
 
@@ -181,7 +173,7 @@ $k=$i+2000;
 
                 <td>
                     <span class="billBoardairL2 billBoardairL3" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="請登入相應權限帳號已解鎖">
-                    <a href="mmtEdit_g.php?id=<?= $ammtm[$i]['id']?>">內容編輯與修改</a>
+                    <a href="mmtEdit_g.php?id=<?= $ammtm[$i]['id']?>" class="airL2 airL3" Disabled>內容編輯與修改</a>
                     </span>
                 </td>
 
@@ -235,44 +227,23 @@ $k=$i+2000;
 ?>
 <input type="hidden" name="total_num" value="<?= $total_num?>">;
 <input type="hidden" name="action" value="new_page"> 
+<!--filter-->
+<form action="mmt_list_g_filter.php" method="post" name="mtlist"> 
+    <div>
+        <div align="left">
+            日期區間搜索：</br>
+            開始時間：<input type="date" name="start_date">&nbsp&nbsp結束時間：<input type="date" name="end_date">            
+        </div>
+        <div align="left">
+            </br>關鍵字：<input type="text" name="keywordsearch" placeholder="請輸入關鍵字">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="submit" value="查詢">
+        </div>           
+    </div>
+    <input type="hidden" name="action" value="new_page">
+    <input type="hidden" name="total_num" value="<?= $total_num?>">           
+</form>
+<!--filter end-->
 <script>
     (function(document) {
-        'use strict';
-        // 建立 LightTableFilter
-        var LightTableFilter = (function(Arr) {
-            var _input;
-            // 資料輸入事件處理函數
-            function _onInputEvent(e) {
-                _input = e.target;
-                var tables = document.getElementsByClassName(_input.getAttribute('data-table'));
-                Arr.forEach.call(tables, function(table) {
-                    Arr.forEach.call(table.tBodies, function(tbody) {
-                    Arr.forEach.call(tbody.rows, _filter);
-                    });
-                });
-            }
-            // 資料篩選函數，顯示包含關鍵字的列，其餘隱藏
-            function _filter(row) {
-                var text = row.textContent.toLowerCase(), val = _input.value.toLowerCase();
-                row.style.display = text.indexOf(val) === -1 ? 'none' : 'table-row';
-            }
-            return {
-            // 初始化函數
-                init: function() {
-                    var inputs = document.getElementsByClassName('light-table-filter');
-                    Arr.forEach.call(inputs, function(input) {
-                    input.oninput = _onInputEvent;
-                    });
-                }
-            };
-        })(Array.prototype);
-        // 網頁載入完成後，啟動 LightTableFilter
-        document.addEventListener('readystatechange', function() {
-            if (document.readyState === 'complete') {
-                LightTableFilter.init();
-            }
-        });
-
         //表格排序
         $("#mmt_a").tablesorter();
     })(document);

@@ -213,9 +213,9 @@ if (isset($_POST["action"])&&($_POST["action"]=="check")) {
                 </div>
                 
                     <!-- <h4>&nbsp&nbsp&nbsp&nbsp新增保養：<a class="btn btn-primary" href="mmtCreate_a_choice.php" class="text-dark">新增</a></h4>    -->
-                <div class="col text-right">
+                <!-- <div class="col text-right">
                     <p class="d-inline font-weight-bold">Search:&nbsp&nbsp<input type="search" class="light-table-filter" data-table="order-table" placeholder="請輸入關鍵字"></p>
-                </div>
+                </div> -->
             </div>    
         </div>
     </form>

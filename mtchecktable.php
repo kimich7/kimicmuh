@@ -652,7 +652,8 @@
             <input type="hidden" name="action" value="update">
             <!-- 送出鈕 -->
             <div class="d-flex justify-content-end">
-                <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>
+                <button class="my-3 px-3 py-1 btn-outline-info text-dark" type="submit">送出</button>&nbsp&nbsp&nbsp
+                <a href='mtlistcheck.php' type='button' class="my-3 px-3 py-1 btn-outline-info text-dark">離開</a>
             </div>
         </form>
     </div>

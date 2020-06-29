@@ -87,7 +87,6 @@
                 $stmt->bindParam(':managerID',$checkuserID,PDO::PARAM_STR);
             } 
             if($checksum==2) {
-                echo '我進來了';
                 $sql="UPDATE FA.Water_System_Record_Master SET  check_number=:check_number,r_member=:r_member WHERE recordID=:ID";
                 $stmt = $pdo->prepare($sql);
                 $stmt->bindParam(':check_number',$memberCheck,PDO::PARAM_STR);
@@ -147,6 +146,7 @@
         echo '<table  id="checklist" class="display tablesorter table table-striped table-bordered table-hover col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12 table-sm order-table" align="center" width="80%">';
         echo '<thead align="center" class="thead-light">';
         echo '<th class="th-sm">項  目</th>';
+        echo '<th class="th-sm">不合格數量</th>';
         echo '<th class="th-sm">主  管</th>';
         echo '<th class="th-sm">檢查人</th>';
         echo '</thead>';
@@ -155,10 +155,16 @@
         $mbcheck="mbcheck";
         while ($data_page = $sql_page->fetch()) {
             $a=$i;
+            $mid=$data_page['recordID'];
+            $error = "SELECT COUNT(id) FROM FA.Water_System_Error WHERE mid = $mid and ans = 'FALSE' ";
+            $error_num=CURRENT($pdo->query($error)->fetch());
             echo '<tr>';
             $buildName=sql_database('B_name','FA.Building','b_number',$data_page['b_number']);
             $sysName=sql_database('sysName','FA.Equipment_System_Group','sysID',$data_page['sysID']);
-                echo "<td width='80%'><a href='mtchecktable.php?id=\"".$data_page['recordID']."\"&build=\"".$data_page['b_number']."\"&r_date=\"".$data_page['rDate']."\"&member=\"".$data_page['r_member']."\"&manage=\"".$data_page['managerID']."\"&checkMember=\"".$data_page['check_number']."\"&checkManager=\"".$data_page['check_manager']."\"&sysID=\"".$data_page['sysID']."\"' class=\".list-group-item list-group-item-action.\">".$buildName."-".$sysName."-".$data_page['rDate'].'</a></td>';
+                echo "<td width='70%'><a href='mtchecktable.php?id=\"".$data_page['recordID']."\"&build=\"".$data_page['b_number']."\"&r_date=\"".$data_page['rDate']."\"&member=\"".$data_page['r_member']."\"&manage=\"".$data_page['managerID']."\"&checkMember=\"".$data_page['check_number']."\"&checkManager=\"".$data_page['check_manager']."\"&sysID=\"".$data_page['sysID']."\"' class=\".list-group-item list-group-item-action.\">".$buildName."-".$sysName."-".$data_page['rDate'].'</a></td>';
+                echo '<td width="10%" align="center">';
+                echo $error_num;
+                echo '</td>';
                 echo '<td width="10%" align="center">';
                 if ($data_page['check_manager']==1) {
                     echo "<input type='checkbox'  name=\"".$a."\" value=\"".$mgcheck."\" checked disabled>";

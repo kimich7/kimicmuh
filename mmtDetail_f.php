@@ -87,7 +87,7 @@ while ($row = $M_data->fetch()) {
     $reportdatastrS2="SELECT a.checkid,d.ans,d.id,d.rDate,d.remark,d.checkUserid,d.checkmanid  FROM(SELECT * FROM FA.MMT_FtableD WHERE fseason='S1' AND   mid='$MMT_AtableMid') AS a  LEFT JOIN (SELECT * FROM FA.MMT_FtableD WHERE mid='$MMT_AtableMid' AND fseason='S2') AS d ON  a.checkid=d.checkid";
     $reportdataS2=$pdo->query($reportdatastrS2);
     while ($row = $reportdataS2->fetch()) {
-        $reportS2[]=array(
+        @$reportS2[]=array(
             'id'=>$row['id'],
             'checkid'=>$row['checkid'],
             'ans'=>$row['ans'],
@@ -101,7 +101,7 @@ while ($row = $M_data->fetch()) {
     $reportdatastrS3="SELECT a.checkid,d.ans,d.id,d.rDate,d.remark,d.checkUserid,d.checkmanid  FROM(SELECT * FROM FA.MMT_FtableD WHERE fseason='S1' AND   mid='$MMT_AtableMid') AS a  LEFT JOIN (SELECT * FROM FA.MMT_FtableD WHERE mid='$MMT_AtableMid' AND fseason='S3') AS d ON  a.checkid=d.checkid";
     $reportdataS3=$pdo->query($reportdatastrS3);
     while ($row = $reportdataS3->fetch()) {
-        $reportS3[]=array(
+        @$reportS3[]=array(
             'id'=>$row['id'],
             'checkid'=>$row['checkid'],
             'ans'=>$row['ans'],
@@ -115,7 +115,7 @@ while ($row = $M_data->fetch()) {
     $reportdatastrS4="SELECT a.checkid,d.ans,d.id,d.rDate,d.remark,d.checkUserid,d.checkmanid  FROM(SELECT * FROM FA.MMT_FtableD WHERE fseason='S1' AND   mid='$MMT_AtableMid') AS a  LEFT JOIN (SELECT * FROM FA.MMT_FtableD WHERE mid='$MMT_AtableMid' AND fseason='S4') AS d ON  a.checkid=d.checkid";
     $reportdataS4=$pdo->query($reportdatastrS4);
     while ($row = $reportdataS4->fetch()) {
-        $reportS4[]=array(
+        @$reportS4[]=array(
             'id'=>$row['id'],
             'checkid'=>$row['checkid'],
             'ans'=>$row['ans'],
@@ -127,14 +127,14 @@ while ($row = $M_data->fetch()) {
     }
 
     
-    $checkUser1=checkName($reportS1[0]['checkUserid']);
-    $checkUser2=checkName($reportS2[0]['checkUserid']);
-    $checkUser3=checkName($reportS3[0]['checkUserid']);
-    $checkUser4=checkName($reportS4[0]['checkUserid']);
-    $checkDouble1=checkName($reportS1[0]['checkmanid']);
-    $checkDouble2=checkName($reportS2[0]['checkmanid']);
-    $checkDouble3=checkName($reportS3[0]['checkmanid']);
-    $checkDouble4=checkName($reportS4[0]['checkmanid']);
+    @$checkUser1=checkName($reportS1[0]['checkUserid']);
+    @$checkUser2=checkName($reportS2[0]['checkUserid']);
+    @$checkUser3=checkName($reportS3[0]['checkUserid']);
+    @$checkUser4=checkName($reportS4[0]['checkUserid']);
+    @$checkDouble1=checkName($reportS1[0]['checkmanid']);
+    @$checkDouble2=checkName($reportS2[0]['checkmanid']);
+    @$checkDouble3=checkName($reportS3[0]['checkmanid']);
+    @$checkDouble4=checkName($reportS4[0]['checkmanid']);
     
     
 
@@ -149,7 +149,7 @@ while ($row = $M_data->fetch()) {
 //         'mid'=>$row['mid']
 //     ); 
 // }
-$num = count($reportS1);
+@$num = count($reportS1);
 
 // $Q_A_str="SELECT a.checkName,a.checkKind,a.ref,d.ans FROM FA.MMT_A AS a LEFT JOIN FA.MMT_AtableD as d ON a.id=d.checkid WHERE d.mid='$MMT_AtableMid' ORDER BY a.id";
 // $Q_A=$pdo->query($Q_A_str);
@@ -227,16 +227,16 @@ $num = count($reportS1);
             <tbody class="text-primary">
             <tr>
                 <td>檢查日期</td>
-                <td><?= $reportS1[0]['rDate'] ?></td>
-                <td><?= $reportS2[0]['rDate'] ?></td>
-                <td><?= $reportS3[0]['rDate'] ?></td>
-                <td><?= $reportS4[0]['rDate'] ?></td>
+                <td><?= @$reportS1[0]['rDate'] ?></td>
+                <td><?= @$reportS2[0]['rDate'] ?></td>
+                <td><?= @$reportS3[0]['rDate'] ?></td>
+                <td><?= @$reportS4[0]['rDate'] ?></td>
             </tr>
             <?php 
             for ($i=0; $i < $num; $i++) {
-            $checkrefS2=sql_database_int('ref','FA.MMT_A','id',$reportS2[$i]['checkid']);
-            $checkrefS3=sql_database_int('ref','FA.MMT_A','id',$reportS3[$i]['checkid']);
-            $checkrefS4=sql_database_int('ref','FA.MMT_A','id',$reportS4[$i]['checkid']);
+                @$checkrefS2=sql_database_int('ref','FA.MMT_A','id',$reportS2[$i]['checkid']);
+                @$checkrefS3=sql_database_int('ref','FA.MMT_A','id',$reportS3[$i]['checkid']);
+                @$checkrefS4=sql_database_int('ref','FA.MMT_A','id',$reportS4[$i]['checkid']);
             
                 $checkid=$i+1000;
                 $j=$i+200;
@@ -434,7 +434,7 @@ $num = count($reportS1);
                 <span class="input-group-text">備註：</span>
             </div>
             <?php if(!isset($Mdata[0]['remark'])or $Mdata[0]['remark']==""){?>
-            <textarea class="form-control" name="remark" aria-label="With textarea" ><?= $reportS1[0]['remark'].'|'.$reportS2[0]['remark'].'|'.$reportS3[0]['remark'].'|'.$reportS4[0]['remark'] ?></textarea>
+            <textarea class="form-control" name="remark" aria-label="With textarea" ><?= @$reportS1[0]['remark'].'|'.@$reportS2[0]['remark'].'|'.@$reportS3[0]['remark'].'|'.@$reportS4[0]['remark'] ?></textarea>
             <?php }else{ ?>  
             <textarea class="form-control" name="remark" aria-label="With textarea" ><?= $Mdata[0]['remark'] ?></textarea> 
             <?php } ?>    

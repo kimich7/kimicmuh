@@ -28,6 +28,8 @@
     <script src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script src="./node_modules/popper.js/dist/umd/popper.min.js"></script>
     <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!--新加入20190815表格排序-->
+    <script src="./js/jquery.tablesorter.min.js" type="text/javascript"></script>
     <!-- 連結自己的JS -->
     <script src="./js/main.js"></script>
 </head>
@@ -42,17 +44,39 @@
         <h1 class="text-center">設備保養表單修改清單</h1>
         <div class="list-group mx-5 my-5">
         <?php
+            echo '<table  id="checklist" class="display tablesorter table table-striped table-bordered table-hover col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12 table-sm order-table" align="center" width="50%">';
+            echo '<thead align="center" class="thead-light">';
+            echo '<th class="th-sm">項  目</th>';
+            echo '<th class="th-sm">不合格數量</th>';
+            echo '</thead>';
+            echo '<tbody>';
             $sql_select="SELECT recordID,rDate FROM FA.Water_System_Record_Master WHERE sysID=$system AND b_number='$build_no' AND rDate BETWEEN '$strDate' AND '$endDate'";
             $select_master =$pdo->query($sql_select);                
             while($row = $select_master->fetch()){
                 $MarsterID=$row['recordID'];
+                $error = "SELECT COUNT(id) FROM FA.Water_System_Error WHERE mid = $MarsterID and ans = 'FALSE' ";
+                $error_num=CURRENT($pdo->query($error)->fetch());                
                 $Date = $row['rDate'];
                 $build_name=sql_database('B_name','FA.Building','b_number',$build_no);
-                echo "<a href='mtupdatatable.php?sys=".$system."& id=".$MarsterID."& build=".$build_no."& r_date=".$Date."' class=\"list-group-item list-group-item-action\">".$Date.$build_name.'-'.$sysName.'</a>';
-                }        
+                echo '<tr>';
+                    echo "<td width='70%'><a href='mtupdatatable.php?sys=".$system."& id=".$MarsterID."& build=".$build_no."& r_date=".$Date."'>".$Date.$build_name.'-'.$sysName.'</a></td>';
+                    echo '<td width="30%" align="center">';
+                    echo $error_num;
+                    echo '</td>';
+                echo '</tr>';
+                }  
+                echo '</tbody>';
+                echo '</table>';      
         ?>          
         </div>
     </section>
+    <script>
+        (function(document) {
+            //表格排序
+            $("#checklist").tablesorter();            
+        })(document);
+    </script> 
+    <!-- footer網頁尾頁 -->
     <!-- footer網頁尾頁 -->
     <footer> 
         <div id="footer"></div>

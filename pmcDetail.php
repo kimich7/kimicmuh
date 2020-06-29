@@ -467,7 +467,7 @@ function child_check($id,$pid){
                             </div>                            
                             <div class="form-group" style="clear:both;">
                             <label><span style="font-weight:bold;">承辦人：</span></label>
-                            <div class="content_box"><?php echo $pmcemp; ?></div>
+                            <div class="content_box"><?php echo $cname; ?></div>
                             <label><span style="font-weight:bold;">交辦日期：</span></label>
                             <div class="content_box"><?php echo $createdOn; ?></div>
                             </div>

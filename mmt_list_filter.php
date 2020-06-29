@@ -186,9 +186,6 @@ session_start();
     <h1 class="text-center">建築-其他清單</h1>
         <div class="d-flex ">        
             <a href='mmt_list_filepage.php?sdid=<?= $sdid?>' type="button" id="backlistmmt" class="btn btn-primary mt-4 rounded d-block mr-3">清除條件</a>
-        
-             
-            <!-- <p class="d-inline font-weight-bold">Search:&nbsp&nbsp<input type="search" class="light-table-filter" data-table="order-table" placeholder="請輸入關鍵字"></p> -->
         </div> 
         <div class="list-group mx-5 my-5">         
         <?php
@@ -261,8 +258,6 @@ session_start();
                     # code...
                     break;
             }
-
-            
             $sql_page=$pdo->query($sqlstr_page);
             $sql_total=$pdo->query($sqlstr_total);
             $total_num=CURRENT($pdo->query($totalstr_num)->fetch());
