@@ -391,7 +391,7 @@
                                 default:
                                     echo '<td>'."<input type='text' name=\"".$i."\" maxlength='20'>".'</td>';
                                     echo '<td>';
-                                    echo "<input type='radio' name=\"".$check."\" value='true' >合格";
+                                    echo "<input type='radio' name=\"".$check."\" value='true' checked>合格";
                                     echo "<input type='radio' name=\"".$check."\" value='false'>不合格";
                                     echo '</td>';
                                     echo '<td>';

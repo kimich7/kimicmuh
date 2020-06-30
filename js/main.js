@@ -343,11 +343,11 @@ $(function () {
         });
     });
     //工務設備運轉抄表文件修改表單 mtupdata.html
-    $(".maindata1").click(function () {
-        $.getJSON("json/mainlist.json", function (data) {
-            $("#cardSendBtn1").attr("href", data[1].url);
-        });
-    });
+    // $(".maindata1").click(function () {
+    //     $.getJSON("json/mainlist.json", function (data) {
+    //         $("#cardSendBtn1").attr("href", data[1].url);
+    //     });
+    // });
 
 
 
