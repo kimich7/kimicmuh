@@ -74,7 +74,7 @@
                 $qf=$i+400;
                 $qID=$i+600;
                 $qMode=$i+800;
-                $check=$i+900;
+                $check=$i+1000;
 
                 @$ans_no=$_POST["$i"];
                 $sys_no=$_POST["$q"];//系統ID
@@ -82,6 +82,8 @@
                 $equip_check = $_POST["$qID"];//點檢項目ID
                 $equip_ansMode= $_POST["$qMode"];//點檢資料型態
                 @$check_ans = $_POST["$check"];
+
+                ECHO $check_ans.'<BR/>';
 
                 if(!isset($check_ans) or $check_ans==""){
                     if($ans_no=='false'){
@@ -128,7 +130,7 @@
 
 
                     $sql_insert_error="INSERT INTO FA.Water_System_Error(mid,rid,eid,ans) VALUES ($MasterID,$recordDetailID,$equip_check,'$check_insert')";
-                    $insert_error =$pdo->exec($sql_insert_error);
+                    // $insert_error =$pdo->exec($sql_insert_error);
                 } else {
                     $sql_select="SELECT recordID FROM FA.Water_System_Record_Master WHERE sysID=$sys_no AND rDate='$date_ch' AND b_number='$build_no'";
                     $select_master =$pdo->query($sql_select)->fetch();
@@ -143,7 +145,7 @@
 
 
                     $sql_insert_error="INSERT INTO FA.Water_System_Error(mid,rid,eid,ans) VALUES ($MasterID,$recordDetailID,$equip_check,'$check_insert')";
-                    $insert_error =$pdo->exec($sql_insert_error);
+                    // $insert_error =$pdo->exec($sql_insert_error);
                 } 
                 
 
@@ -248,7 +250,7 @@
                         $qf=$i+400;
                         $qID=$i+600;
                         $qMode=$i+800;
-                        $check=$i+900;
+                        $check=$i+1000;
                         $equipinfo=$query_equip->fetch(PDO::FETCH_ASSOC);
                         if ($lastAnsNum>0) {
                             $ansinfo=$query_check_last->fetch(PDO::FETCH_ASSOC);                        

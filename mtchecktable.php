@@ -77,9 +77,33 @@
     $ans1=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark,A.equipCheckID,A.ref,A.answerMode FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=1)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckID");
     $ans2=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark,A.equipCheckID,A.ref,A.answerMode FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=2)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckID");
     $ans3=item("SELECT B.recordDetailID,B.checkResult,B.r_member,B.remark,A.equipCheckID,A.ref,A.answerMode FROM FA.Equipment_Check AS A LEFT JOIN ( SELECT recordDetailID,equipCheckID,checkResult,r_member,shiftID,remark FROM $systemTable WHERE recordID=$MasterID AND shiftID=3)AS B ON A.equipCheckID = B.equipCheckID WHERE A.b_number='$buildNo' and A.sysID=$sysNo ORDER BY A.floorID,A.equipCheckID");
-    $user_1No=$ans1[0]["r_member"];
-    $user_2No=$ans2[0]["r_member"];
-    $user_3No=$ans3[0]["r_member"];
+    $num1=Count($ans1);
+    $num2=Count($ans2);
+    $num3=Count($ans3);
+    for ($i=0; $i < $num1; $i++) { 
+        if ($ans1[$i]["r_member"]) {
+            $user_1No=$ans1[$i]["r_member"];
+        break;
+        }else{
+            $user_1No='';
+        }
+    }
+    for ($i=0; $i < $num2; $i++) { 
+        if ($ans2[$i]["r_member"]) {
+            $user_2No=$ans2[$i]["r_member"];
+        break;
+        }else{
+            $user_2No='';
+        }
+    }
+    for ($i=0; $i < $num3; $i++) { 
+        if ($ans3[$i]["r_member"]) {
+            $user_3No=$ans3[$i]["r_member"];
+        break;
+        }else{
+            $user_3No='';
+        }
+    }
 
     //備註內容整合
     $remark='';
@@ -106,17 +130,17 @@
     if (!isset($user_1No)or $user_1No=='' ) {
         $user_1="該班無抄表紀錄";
     } else {
-        $user_1=sql_database('cname','FA.Employee','e_number',$ans1[0]['r_member']);
+        $user_1=sql_database('cname','FA.Employee','e_number',$user_1No);
     }
     if (!isset($user_2No)or $user_2No=='' ) {
         $user_2="該班無抄表紀錄";
     } else {
-        $user_2=sql_database('cname','FA.Employee','e_number',$ans2[0]['r_member']);
+        $user_2=sql_database('cname','FA.Employee','e_number',$user_2No);
     }
     if (!isset($user_3No)or $user_3No=='' ) {
         $user_3="該班無抄表紀錄";
     } else {
-        $user_3=sql_database('cname','FA.Employee','e_number',$ans3[0]['r_member']);
+        $user_3=sql_database('cname','FA.Employee','e_number',$user_3No);
     }
 
     if (isset($_POST["action"])&&($_POST["action"]=="update")) {   //要修正，判斷是否"沒有"做改變     
